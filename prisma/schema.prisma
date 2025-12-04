@@ -13,6 +13,7 @@ model User {
   name            String
   email           String  @unique
   passCode        String
+  pin             String? // Optional PIN for quick access
   companyId       String
   primaryColor    String
   secondaryColor  String?

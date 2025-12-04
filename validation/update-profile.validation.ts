@@ -4,6 +4,7 @@ export const UpdateProfileSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
   companyName: z.string().min(1, 'Company name cannot be empty').optional(),
   passCode: z.string().min(6, 'PassCode must be at least 6 characters').optional(),
+  pin: z.string().min(4, 'PIN must be at least 4 characters').max(8, 'PIN must be at most 8 characters').optional(),
   primaryColor: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid color format').optional(),
   secondaryColor: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid color format').optional(),
   companyRole: z.string().optional(),

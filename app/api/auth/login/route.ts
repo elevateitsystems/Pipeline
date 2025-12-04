@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) : Promise<NextResponse> {
       );
     }
 
-    const { email, passCode } = result.data;
+    const { email, passCode, pin } = result.data;
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -24,17 +24,37 @@ export async function POST(request: NextRequest) : Promise<NextResponse> {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid email or passCode" },
+        { error: "Invalid email or credentials" },
         { status: 401 }
       );
     }
 
-    const isValidPassCode = await bcrypt.compare(passCode, user.passCode);
-    if (!isValidPassCode) {
-      return NextResponse.json(
-        { error: "Invalid email or passCode" },
-        { status: 401 }
-      );
+    // Check passCode if provided
+    if (passCode) {
+      const isValidPassCode = await bcrypt.compare(passCode, user.passCode);
+      if (!isValidPassCode) {
+        return NextResponse.json(
+          { error: "Invalid email or passCode" },
+          { status: 401 }
+        );
+      }
+    }
+    // Check PIN if provided
+    else if (pin) {
+      const userPin = (user as any).pin;
+      if (!userPin) {
+        return NextResponse.json(
+          { error: "PIN not set for this account" },
+          { status: 401 }
+        );
+      }
+      const isValidPin = await bcrypt.compare(pin, userPin);
+      if (!isValidPin) {
+        return NextResponse.json(
+          { error: "Invalid email or PIN" },
+          { status: 401 }
+        );
+      }
     }
     const sessionId = await createSession(user);
     await setSessionCookie(sessionId);

@@ -35,14 +35,14 @@ export async function PATCH(request: NextRequest) : Promise<NextResponse> {
       );
     }
 
-    const { name, companyName, passCode, primaryColor, secondaryColor, companyRole, profileImageUrl: formProfileImageUrl, companyLogoUrl } = result.data;
+    const { name, companyName, passCode, pin, primaryColor, secondaryColor, companyRole, profileImageUrl: formProfileImageUrl, companyLogoUrl } = result.data;
 
     // Filter out empty strings
     const hasProfileImageUrl = formProfileImageUrl && formProfileImageUrl.trim() !== '';
     const hasCompanyLogoUrl = companyLogoUrl && companyLogoUrl.trim() !== '';
 
     // Check if there's anything to update
-    if (!name && !companyName && !passCode && !primaryColor && !secondaryColor && !companyRole && !hasProfileImageUrl && !hasCompanyLogoUrl) {
+    if (!name && !companyName && !passCode && !pin && !primaryColor && !secondaryColor && !companyRole && !hasProfileImageUrl && !hasCompanyLogoUrl) {
       return NextResponse.json(
         { error: 'No fields to update' },
         { status: 400 }
@@ -53,13 +53,15 @@ export async function PATCH(request: NextRequest) : Promise<NextResponse> {
     const updateData: Partial<{
       name: string;
       passCode: string;
+      pin: string | null;
       primaryColor: string;
       secondaryColor: string;
       companyRole: string;
       profileImageUrl: string;
     }> = {};
     if (name) updateData.name = name;
-    if (passCode) updateData.passCode = await bcrypt.hash(passCode, 10);
+    if (passCode && passCode.trim()) updateData.passCode = await bcrypt.hash(passCode, 10);
+    if (pin && pin.trim()) updateData.pin = await bcrypt.hash(pin, 10);
     if (primaryColor) updateData.primaryColor = primaryColor;
     if (secondaryColor) updateData.secondaryColor = secondaryColor;
     if (companyRole) updateData.companyRole = companyRole;
@@ -68,7 +70,7 @@ export async function PATCH(request: NextRequest) : Promise<NextResponse> {
     // Update user in database
     const updatedUser = await prisma.user.update({
       where: { id: session.id },
-      data: updateData,
+      data: updateData as any, // Type assertion needed until Prisma client is fully regenerated
       include: {
         company: true,
       },
@@ -171,8 +173,16 @@ export async function PATCH(request: NextRequest) : Promise<NextResponse> {
     );
   } catch (error) {
     console.error('Profile update error:', error);
+    // Check if error is related to missing PIN column
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    if (errorMessage.includes('pin') || errorMessage.includes('Unknown column')) {
+      return NextResponse.json(
+        { error: 'Database migration required. Please run: npx prisma migrate dev' },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Internal Server Error', details: errorMessage },
       { status: 500 }
     );
   }

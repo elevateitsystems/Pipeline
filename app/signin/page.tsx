@@ -11,9 +11,35 @@ export default function SigninPage() {
     email: '',
     passCode: '',
   });
+  const [pin, setPin] = useState(['', '', '', '']);
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [usePin, setUsePin] = useState(false);
   const loginMutation = useLogin();
+
+  const handlePinChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    if (!/^\d*$/.test(value)) return; // Only allow numbers
+    
+    const newPin = [...pin];
+    newPin[index] = value;
+    setPin(newPin);
+
+    // Auto-focus next input
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`pin-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !pin[index] && index > 0) {
+      const prevInput = document.getElementById(`pin-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
+
+  const getPinValue = () => pin.join('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,7 +51,11 @@ export default function SigninPage() {
     setMessage('');
 
     try {
-      const response = await loginMutation.mutateAsync(formData);
+      const loginData = usePin
+        ? { email: formData.email, pin: getPinValue() }
+        : { email: formData.email, passCode: formData.passCode };
+      
+      const response = await loginMutation.mutateAsync(loginData);
 
       if (response.success) {
         window.location.href = '/';
@@ -85,35 +115,60 @@ export default function SigninPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1">
-                Passcode
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="passCode"
-                  required
-                  value={formData.passCode}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                />
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-600">
+                  {usePin ? 'PIN' : 'Passcode'}
+                </label>
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => {
+                    setUsePin(!usePin);
+                    setFormData(prev => ({ ...prev, passCode: '' }));
+                    setPin(['', '', '', '']);
+                  }}
+                  className="text-xs text-blue-600 hover:text-blue-700 underline"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {usePin ? 'Use Passcode' : 'Use PIN'}
                 </button>
               </div>
-
-              {/* <div className="text-right mt-2">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-blue-500 hover:text-blue-600"
-                >
-                  Forgot Passcode?
-                </Link>
-              </div> */}
+              {usePin ? (
+                <div className="flex gap-2 justify-center">
+                  {pin.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`pin-${index}`}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handlePinChange(index, e.target.value)}
+                      onKeyDown={(e) => handlePinKeyDown(index, e)}
+                      className="w-10 h-10 text-center text-xl font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+                      required
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="passCode"
+                    required
+                    value={formData.passCode}
+                    onChange={handleInputChange}
+                    placeholder="Enter your passcode"
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              )}
+             
             </div>
 
             <button

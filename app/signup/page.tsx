@@ -23,6 +23,7 @@ export default function SignupPage() {
     name: "",
     email: "",
     passCode: "",
+    pin: "",
     companyName: "",
     primaryColor: "#456987" ,
     secondaryColor: "#F7AF41",
@@ -31,6 +32,33 @@ export default function SignupPage() {
     role: "USER",
     inviteToken: "",
   });
+  const [pinDigits, setPinDigits] = useState(['', '', '', '']);
+
+  const handlePinChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    if (!/^\d*$/.test(value)) return; // Only allow numbers
+    
+    const newPin = [...pinDigits];
+    newPin[index] = value;
+    setPinDigits(newPin);
+    
+    // Update formData pin
+    const pinValue = newPin.join('');
+    setFormData(prev => ({ ...prev, pin: pinValue }));
+
+    // Auto-focus next input
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`signup-pin-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !pinDigits[index] && index > 0) {
+      const prevInput = document.getElementById(`signup-pin-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
   const [message, setMessage] = useState("");
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [uploadingLogo, setUploadingLogo] = useState(false);
@@ -117,6 +145,7 @@ console.log(inviteData);
         name: formData.name,
         email: formData.email,
         passCode: formData.passCode,
+        pin: formData.pin || undefined,
         inviteToken: formData.inviteToken || token || undefined, // Use inviteToken to match validation schema
         // Only include company-related fields if not using token
         ...(token ? {} : {
@@ -262,6 +291,31 @@ console.log(inviteData);
                   )}
                 </button>
               </div>
+            </div>
+
+            {/* PIN */}
+            <div>
+              <label htmlFor="pin" className="block text-sm text-[#2d3e50] mb-2">
+                PIN (Optional - 4 digits)
+              </label>
+              <div className="flex gap-2 justify-center">
+                {pinDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`signup-pin-${index}`}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handlePinChange(index, e.target.value)}
+                    onKeyDown={(e) => handlePinKeyDown(index, e)}
+                    className="w-10 h-10 text-center text-xl font-semibold bg-[#f5f5f5] border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+                  />
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 mt-1 text-center">
+                You can use PIN instead of passcode for faster login
+              </p>
             </div>
 
             {/* Show additional fields only if no token */}

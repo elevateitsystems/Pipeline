@@ -27,12 +27,40 @@ export default function ProfilePage() {
     name: "",
     email: "",
     passCode: "",
+    pin: "",
     companyName: "",
     primaryColor:  "#456987",
     secondaryColor: "#F7AF41",
     profileImageUrl: "",
     companyLogoUrl: "",
   });
+  const [pinDigits, setPinDigits] = useState(['', '', '', '']);
+
+  const handlePinChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    if (!/^\d*$/.test(value)) return; // Only allow numbers
+    
+    const newPin = [...pinDigits];
+    newPin[index] = value;
+    setPinDigits(newPin);
+    
+    // Update formData pin
+    const pinValue = newPin.join('');
+    setFormData(prev => ({ ...prev, pin: pinValue }));
+
+    // Auto-focus next input
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`profile-pin-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+
+  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !pinDigits[index] && index > 0) {
+      const prevInput = document.getElementById(`profile-pin-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -40,6 +68,7 @@ export default function ProfilePage() {
         name: user.name || "",
         email: user.email || "",
         passCode: "",
+        pin: "",
         companyName: user.company?.name || "",
         primaryColor: user.primaryColor || "#456987",
         secondaryColor: user.secondaryColor || "#F7AF41",
@@ -152,6 +181,11 @@ export default function ProfilePage() {
       // Only include passCode if it's provided
       if (formData.passCode) {
         dataToSend.passCode = formData.passCode;
+      }
+
+      // Only include PIN if it's provided
+      if (formData.pin) {
+        dataToSend.pin = formData.pin;
       }
 
       // Only include profile image URL if it exists
@@ -271,6 +305,31 @@ export default function ProfilePage() {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* PIN */}
+          <div>
+            <label htmlFor="pin" className="block text-sm text-[#2d3e50] mb-2">
+              PIN (Optional - 4 digits)
+            </label>
+            <div className="flex gap-2 justify-center">
+              {pinDigits.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`profile-pin-${index}`}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handlePinChange(index, e.target.value)}
+                  onKeyDown={(e) => handlePinKeyDown(index, e)}
+                  className="w-10 h-10 text-center text-xl font-semibold bg-[#f5f5f5] border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+                />
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-1 text-center">
+              Enter new PIN (leave empty to keep current) - Use PIN for faster login
+            </p>
           </div>
 
           {/* Company Name - Hidden for invited users */}

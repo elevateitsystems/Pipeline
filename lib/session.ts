@@ -23,6 +23,7 @@ export async function createSession(user: SessionUser): Promise<string> {
     profileImageUrl: user.profileImageUrl,
     role: user.role,
     companyRole : user.companyRole,
+    pin: user.pin,
     company: user.company
       ? {
           id: user.company.id,

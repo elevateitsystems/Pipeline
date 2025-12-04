@@ -20,6 +20,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       name,
       email,
       passCode,
+      pin,
       companyName,
       primaryColor,
       secondaryColor,
@@ -29,6 +30,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } = parsed.data;
 
     const hashedPass = await bcrypt.hash(passCode, 10);
+    const hashedPin = pin ? await bcrypt.hash(pin, 10) : null;
     let user;
 
     if (inviteToken) {
@@ -72,6 +74,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           name,
           email: invitation.email,
           passCode: hashedPass,
+          pin: hashedPin,
           companyId: invitation.companyId,
           role: invitation.role,
           primaryColor: inviterPrimaryColor || primaryColor || "#456987",
@@ -131,6 +134,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           name,
           email: email!,
           passCode: hashedPass,
+          pin: hashedPin,
           role: "USER",
           primaryColor: primaryColor ??  "#456987",
           secondaryColor: secondaryColor ?? "#F7AF41",

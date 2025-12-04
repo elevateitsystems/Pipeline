@@ -7,6 +7,7 @@ export const SignupSchema = z
     name: z.string().min(1, "Name is required"),
     email: z.union([z.string().email("Invalid email address"), z.literal("")]).optional(),
     passCode: z.string().min(4, "Passcode must be at least 4 characters long"),
+    pin: z.string().min(4, "PIN must be at least 4 characters long").max(8, "PIN must be at most 8 characters long").optional(),
     companyName: z.union([z.string(), z.literal("")]).optional(),
     primaryColor: z.string().optional(),
     secondaryColor: z.string().optional(),

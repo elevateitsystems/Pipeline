@@ -28,7 +28,7 @@ export function useLogin() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data: { email: string; passCode: string }) => {
+    mutationFn: async (data: { email: string; passCode?: string; pin?: string }) => {
       const response = await apiClient.post<{ success: boolean; role?: string }>(
         '/auth/login',
         data
@@ -65,6 +65,7 @@ export function useRegister() {
       name: string;
       email?: string;
       passCode: string;
+      pin?: string;
       inviteToken?: string;
       companyName?: string;
       primaryColor?: string;
