@@ -28,8 +28,28 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const skip = (page - 1) * limit;
 
+    // Get all emails of users who were invited (have accepted invitations)
+    const acceptedInvitations = await prisma.invitation.findMany({
+      where: {
+        status: "ACCEPTED",
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    const invitedUserEmails = acceptedInvitations.map((inv) => inv.email);
+
+    // Build where condition - exclude invited users and apply search if provided
+    const baseCondition: any = {
+      email: {
+        notIn: invitedUserEmails.length > 0 ? invitedUserEmails : [],
+      },
+    };
+
     const whereCondition = search
       ? {
+          ...baseCondition,
           OR: [
             {
               name: {
@@ -53,7 +73,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             },
           ],
         }
-      : {};
+      : baseCondition;
 
     const users = await prisma.user.findMany({
       where: whereCondition,

@@ -7,6 +7,7 @@ export const adminKeys = {
   all: ['admin'] as const,
   users: (limit?: number, page?: number, search?: string) => [...adminKeys.all, 'users', { limit, page, search }] as const,
   audits: (limit?: number, page?: number, search?: string) => [...adminKeys.all, 'audits', { limit, page, search }] as const,
+  invitedUsers: (userId: string) => [...adminKeys.all, 'invited-users', userId] as const,
 };
 
 // Get all users (admin only)
@@ -52,6 +53,21 @@ export function useAllAudits(limit?: number, page?: number, search?: string) {
       );
       return response;
     },
+  });
+}
+
+// Get invited users for a specific user (admin only)
+export function useInvitedUsers(userId: string | null) {
+  return useQuery({
+    queryKey: adminKeys.invitedUsers(userId || ''),
+    queryFn: async () => {
+      if (!userId) throw new Error('User ID is required');
+      const response = await apiClient.get<{ users: User[] }>(
+        `/admin/invited-users/${userId}`
+      );
+      return response;
+    },
+    enabled: !!userId,
   });
 }
 

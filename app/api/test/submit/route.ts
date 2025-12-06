@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import { submitTestSchema } from "@/validation/test.validaton";
 import { NextRequest, NextResponse } from "next/server";
+import { invalidateCache } from "@/lib/cache";
 
 export async function POST(request: NextRequest) : Promise<NextResponse>  {
   try {
@@ -16,6 +17,40 @@ export async function POST(request: NextRequest) : Promise<NextResponse>  {
     }
 
     const { presentationId, userId, answers } = parsed.data;
+
+    // Get the presentation and find all users who need cache invalidation
+    const presentation = await prisma.presentation.findUnique({
+      where: { id: presentationId },
+      select: { userId: true },
+    });
+
+    // Get all users who have shared access to this presentation
+    const sharedAudits = await prisma.sharedAudit.findMany({
+      where: { presentationId },
+      select: { userId: true },
+    });
+    const sharedUserIds = sharedAudits.map(sa => sa.userId);
+
+    // Get all users with accepted invitations for this presentation
+    const acceptedInvitations = await prisma.invitation.findMany({
+      where: {
+        presentationId,
+        status: 'ACCEPTED',
+      },
+      select: {
+        email: true,
+      },
+    });
+    
+    // Get user IDs for users with accepted invitations
+    const invitedUserEmails = acceptedInvitations.map(inv => inv.email);
+    const invitedUsers = invitedUserEmails.length > 0
+      ? await prisma.user.findMany({
+          where: { email: { in: invitedUserEmails } },
+          select: { id: true },
+        })
+      : [];
+    const invitedUserIds = invitedUsers.map(u => u.id);
 
     const test = await prisma.test.create({
       data: { userId, presentationId },
@@ -68,6 +103,20 @@ export async function POST(request: NextRequest) : Promise<NextResponse>  {
       where: { id: test.id },
       data: { totalScore },
     });
+
+    // Invalidate audit cache for the test taker, presentation owner, shared users, and invited users
+    // This ensures all relevant users see updated scores
+    const userIdsToInvalidate = new Set([userId]);
+    if (presentation) {
+      userIdsToInvalidate.add(presentation.userId);
+    }
+    sharedUserIds.forEach(id => userIdsToInvalidate.add(id));
+    invitedUserIds.forEach(id => userIdsToInvalidate.add(id));
+    
+    // Invalidate all relevant caches in parallel
+    await Promise.all(
+      Array.from(userIdsToInvalidate).map(id => invalidateCache(`audit:${id}`))
+    );
 
     // 5. Respond
     return NextResponse.json({

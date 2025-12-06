@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuthCheck, useAllUsers, useAllAudits } from "@/lib/hooks";
 import toast from "react-hot-toast";
 import { Users, FileText, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import InvitedUsersModal from "@/components/InvitedUsersModal";
 
 export default function AdminDashboard() {
   const { user } = useUser();
@@ -23,6 +24,15 @@ export default function AdminDashboard() {
   const [auditsSearch, setAuditsSearch] = useState("");
   const [auditsSearchInput, setAuditsSearchInput] = useState("");
   const auditsLimit = 10;
+
+  // Invited users modal state
+  const [selectedUser, setSelectedUser] = useState<{
+    id: string;
+    name: string;
+    email: string;
+    companyId: string;
+  } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: usersData, isLoading: usersLoading } = useAllUsers(
     usersLimit,
@@ -193,7 +203,22 @@ export default function AdminDashboard() {
                       className="border-b border-[#E0E0E0] hover:bg-gray-50 transition-colors"
                     >
                       <td className="px-6 py-4 text-gray-800">{user.name}</td>
-                      <td className="px-6 py-4 text-gray-600">{user.email}</td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => {
+                            setSelectedUser({
+                              id: user.id,
+                              name: user.name,
+                              email: user.email,
+                              companyId: (user as any).companyId || '',
+                            });
+                            setIsModalOpen(true);
+                          }}
+                          className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                        >
+                          {user.email}
+                        </button>
+                      </td>
                       <td className="px-6 py-4 text-gray-600">
                         {(user as any).company?.name || "-"}
                       </td>
@@ -382,6 +407,21 @@ export default function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Invited Users Modal */}
+      {selectedUser && (
+        <InvitedUsersModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedUser(null);
+          }}
+          userId={selectedUser.id}
+          userName={selectedUser.name}
+          userEmail={selectedUser.email}
+          companyId={selectedUser.companyId}
+        />
+      )}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { invalidateCache } from "@/lib/cache";
 
 const updateScoreSchema = z.object({
   presentationId: z.string(),
@@ -32,6 +33,47 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const { presentationId, totalScore, categoryScores } = parsed.data;
 
+    // Get the presentation and find all users who need cache invalidation
+    const presentation = await prisma.presentation.findUnique({
+      where: { id: presentationId },
+      select: { userId: true },
+    });
+
+    if (!presentation) {
+      return NextResponse.json(
+        { success: false, message: "Presentation not found" },
+        { status: 404 }
+      );
+    }
+
+    // Get all users who have shared access to this presentation
+    const sharedAudits = await prisma.sharedAudit.findMany({
+      where: { presentationId },
+      select: { userId: true },
+    });
+    const sharedUserIds = sharedAudits.map(sa => sa.userId);
+
+    // Get all users with accepted invitations for this presentation
+    const acceptedInvitations = await prisma.invitation.findMany({
+      where: {
+        presentationId,
+        status: 'ACCEPTED',
+      },
+      select: {
+        email: true,
+      },
+    });
+    
+    // Get user IDs for users with accepted invitations
+    const invitedUserEmails = acceptedInvitations.map(inv => inv.email);
+    const invitedUsers = invitedUserEmails.length > 0
+      ? await prisma.user.findMany({
+          where: { email: { in: invitedUserEmails } },
+          select: { id: true },
+        })
+      : [];
+    const invitedUserIds = invitedUsers.map(u => u.id);
+
     // Find the latest test for this user and presentation
     const existingTest = await prisma.test.findFirst({
       where: {
@@ -45,10 +87,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     let test;
     if (existingTest) {
-      // Update existing test
+      // Update existing test - also update createdAt to make it appear as the latest test
       test = await prisma.test.update({
         where: { id: existingTest.id },
-        data: { totalScore },
+        data: { 
+          totalScore,
+          createdAt: new Date(), // Update createdAt so this test appears as the latest
+        },
       });
 
       // Delete existing category scores
@@ -78,6 +123,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
       categoryScoreRecords.push(categoryScore);
     }
+
+    // Invalidate audit cache for the test taker, presentation owner, shared users, and invited users
+    // This ensures all relevant users see updated scores
+    const userIdsToInvalidate = new Set([userId]);
+    userIdsToInvalidate.add(presentation.userId);
+    sharedUserIds.forEach(id => userIdsToInvalidate.add(id));
+    invitedUserIds.forEach(id => userIdsToInvalidate.add(id));
+    
+    // Log for debugging
+    console.log(`[UPDATE_TEST_SCORE] Invalidating caches for users:`, Array.from(userIdsToInvalidate));
+    
+    // Invalidate all relevant caches in parallel
+    await Promise.all(
+      Array.from(userIdsToInvalidate).map(id => invalidateCache(`audit:${id}`))
+    );
 
     return NextResponse.json({
       success: true,
