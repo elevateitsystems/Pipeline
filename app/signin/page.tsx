@@ -58,7 +58,12 @@ export default function SigninPage() {
       const response = await loginMutation.mutateAsync(loginData);
 
       if (response.success) {
-        window.location.href = '/';
+        // Redirect admins to dashboard, regular users to home
+        if (response.role === 'ADMIN') {
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/';
+        }
       } else {
         setMessage('Login failed');
       }

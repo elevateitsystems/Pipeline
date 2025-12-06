@@ -704,6 +704,11 @@ export default function Sidebar() {
       href: '/invited-users',
       icon: ''
     }]),
+    ...(user?.role === 'ADMIN' ? [{
+      name: 'ADMIN DASHBOARD',
+      href: '/admin',
+      icon: ''
+    }] : []),
   ];
 
   // When on add-new-audit, update-audit, summary, or test page, show Category 1-7 and hide ALL AUDITS button
