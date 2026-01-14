@@ -12,6 +12,11 @@ export async function withCache(
   fetcher: () => Promise<NextResponse>,
   ttl: number = 300 // 5 minutes default
 ): Promise<NextResponse> {
+  // If Redis is not available, just fetch without caching
+  if (!redis) {
+    return await fetcher();
+  }
+
   try {
     // Try to get from cache
     const cached = await redis.get(key);
@@ -56,6 +61,9 @@ export async function withCache(
 }
 
 export async function invalidateCache(key: string): Promise<void> {
+  if (!redis) {
+    return;
+  }
   try {
     await redis.del(key);
   } catch (error) {
@@ -64,6 +72,9 @@ export async function invalidateCache(key: string): Promise<void> {
 }
 
 export async function invalidateCachePattern(pattern: string): Promise<void> {
+  if (!redis) {
+    return;
+  }
   try {
     const keys = await redis.keys(pattern);
     if (keys.length > 0) {

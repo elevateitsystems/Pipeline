@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { redis } from '@/lib/redis';
 
 const COOKIE_NAME = 'session_id';
+const SESSION_DATA_COOKIE_NAME = 'session_data'; // Used as fallback when Redis is not available
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -31,18 +32,32 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(signinUrl);
     }
 
-    // Check if session exists in Redis
-    const sessionKey = `session:${sessionId}`;
-    const sessionData = await redis.get(sessionKey);
+    if (redis) {
+      // Check if session exists in Redis (production/preferred)
+      const sessionKey = `session:${sessionId}`;
+      const sessionData = await redis.get(sessionKey);
 
-    if (!sessionData) {
-      // Session doesn't exist or expired, redirect to signin
-      const signinUrl = new URL('/signin', request.url);
-      return NextResponse.redirect(signinUrl);
+      if (!sessionData) {
+        // Session doesn't exist or expired, redirect to signin
+        const signinUrl = new URL('/signin', request.url);
+        return NextResponse.redirect(signinUrl);
+      }
+
+      // User is authenticated, allow the request
+      return NextResponse.next();
+    } else {
+      // Fallback: Check if session data exists in cookie (development only)
+      const sessionDataCookie = request.cookies.get(SESSION_DATA_COOKIE_NAME)?.value;
+      
+      if (!sessionDataCookie) {
+        // No session data cookie, redirect to signin
+        const signinUrl = new URL('/signin', request.url);
+        return NextResponse.redirect(signinUrl);
+      }
+
+      // User is authenticated (cookie-based session), allow the request
+      return NextResponse.next();
     }
-
-    // User is authenticated, allow the request
-    return NextResponse.next();
   } catch (error) {
     console.error('Middleware error:', error);
     // On error, redirect to signin for safety
