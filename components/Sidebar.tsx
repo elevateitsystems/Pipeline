@@ -969,9 +969,9 @@ export default function Sidebar() {
                   e.stopPropagation();
                 }
               }}
-              className={`ml-4 h-[40px] cursor-pointer flex items-center ${
+              className={`ml-4 h-[40px]  cursor-pointer flex items-center ${
                 isActive   && !isEditing
-                  ? 'lg:w-[94.5%] mr-0 rounded-l-xl'  
+                  ? 'lg:w-[94.6%] mr-0 rounded-l-xl'  
                   : 'w-[88%] rounded-xl '
               } ${isDragging ? 'opacity-50' : ''} ${isDragOver ? 'border-2 border-dashed border-white' : ''} ${canDrag && !isSummaryItem ? 'cursor-move' : ''}`}
               style={{
