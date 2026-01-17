@@ -8,6 +8,7 @@ export const adminKeys = {
   users: (limit?: number, page?: number, search?: string) => [...adminKeys.all, 'users', { limit, page, search }] as const,
   audits: (limit?: number, page?: number, search?: string) => [...adminKeys.all, 'audits', { limit, page, search }] as const,
   invitedUsers: (userId: string) => [...adminKeys.all, 'invited-users', userId] as const,
+  teams: () => [...adminKeys.all, 'teams'] as const,
 };
 
 // Get all users (admin only)
@@ -68,6 +69,51 @@ export function useInvitedUsers(userId: string | null) {
       return response;
     },
     enabled: !!userId,
+  });
+}
+
+// Get all teams with members and audits (admin only)
+export function useAllTeams() {
+  return useQuery({
+    queryKey: adminKeys.teams(),
+    queryFn: async () => {
+      const response = await apiClient.get<{ 
+        teams: Array<{
+          id: string;
+          name: string;
+          logoUrl: string | null;
+          memberCount: number;
+          totalMembers: number;
+          members: Array<{
+            id: string;
+            name: string;
+            email: string;
+            role: string;
+            companyRole: string | null;
+            auditCount: number;
+            isInvited: boolean;
+          }>;
+          audits: Array<{
+            id: string;
+            title: string;
+            userId: string;
+            userName: string;
+            userEmail: string;
+            testCount: number;
+            latestScore?: number;
+            createdAt: Date;
+            assignedMembers: Array<{
+              id: string;
+              name: string;
+              email: string;
+            }>;
+          }>;
+          createdAt: Date;
+        }>;
+        total: number;
+      }>('/admin/teams');
+      return response;
+    },
   });
 }
 
