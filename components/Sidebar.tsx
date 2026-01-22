@@ -877,7 +877,7 @@ export default function Sidebar() {
               Array.from({ length: Math.max(actualCategoryCount, 4) }, (_, index) => (
                 <div
                   key={`sidebar-skeleton-${index}`}
-                  className="ml-4 h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                  className="ml-4 min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
                   style={{
                     marginLeft: 'clamp(0.75rem, 2vw, 1rem)',
                   }}
@@ -969,7 +969,7 @@ export default function Sidebar() {
                   e.stopPropagation();
                 }
               }}
-              className={`ml-4 min-h-[40px]  cursor-pointer flex items-center ${
+              className={`ml-4 ${isEditing ? 'h-[40px]' : 'min-h-[40px]'}  cursor-pointer flex items-center ${
                 isActive   && !isEditing
                   ? 'lg:w-[94.6%] mr-0 rounded-l-xl'  
                   : 'w-[88%] rounded-xl '
@@ -1146,7 +1146,7 @@ export default function Sidebar() {
                       className={`flex-1 cursor-pointer flex items-center gap-2 text-left text-sm break-words ${isActive || isEditing ? 'active-nav-item' : ''}`}
                       // style={{ color: 'inherit' }}
                     >
-                      <span className='flex-1 break-words leading-tight'>{item.name}</span>
+                      <span className='flex-1 break-words leading-normal'>{item.name}</span>
                     </button>
                   </div>
           
