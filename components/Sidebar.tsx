@@ -969,7 +969,7 @@ export default function Sidebar() {
                   e.stopPropagation();
                 }
               }}
-              className={`ml-4 h-[40px]  cursor-pointer flex items-center ${
+              className={`ml-4 min-h-[40px]  cursor-pointer flex items-center ${
                 isActive   && !isEditing
                   ? 'lg:w-[94.6%] mr-0 rounded-l-xl'  
                   : 'w-[88%] rounded-xl '
@@ -1113,9 +1113,9 @@ export default function Sidebar() {
                       </svg>
                     </div>
                   )}
-                  <div className="flex-1 h-9 flex items-center gap-2">
+                  <div className="flex-1 min-h-9 flex items-center gap-2">
                     {/* Category icon - view only until edit mode */}
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center shrink-0">
                       {isCategoryItem && itemCategoryNumber !== null && getCategoryIcon(itemCategoryNumber) ? (
                         renderIcon(getCategoryIcon(itemCategoryNumber))
                       ) : (
@@ -1143,11 +1143,10 @@ export default function Sidebar() {
                           console.log('Navigation blocked:', { isEditing, isSummaryItem, itemCategoryNumber, editingIconCategory });
                         }
                       }}
-                      className={`flex-1 h-full cursor-pointer flex items-center gap-2 text-left text-nowrap overflow-hidden text-ellipsis whitespace-nowrap ${isActive || isEditing ? 'active-nav-item' : ''}`}
+                      className={`flex-1 cursor-pointer flex items-center gap-2 text-left text-sm break-words ${isActive || isEditing ? 'active-nav-item' : ''}`}
                       // style={{ color: 'inherit' }}
                     >
-                      <span>{item.name}</span>
-               
+                      <span className='flex-1 break-words leading-tight'>{item.name}</span>
                     </button>
                   </div>
           
