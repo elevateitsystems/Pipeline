@@ -826,7 +826,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="pt-4 " style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.75rem, 2.5vw, 1.25rem)', display: 'flex', flexDirection: 'column' }}>
+      <nav className="pt-4 " style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
         {onResultPage ? (
           <>
             {/* Area Of Urgent Focus */}
@@ -969,7 +969,7 @@ export default function Sidebar() {
                   e.stopPropagation();
                 }
               }}
-              className={`ml-4 ${isEditing ? 'h-[40px]' : 'min-h-[40px]'}  cursor-pointer flex items-center ${
+              className={`ml-4 ${isEditing ? 'h-[40px]' : 'min-h-[50px]'}  cursor-pointer flex items-center ${
                 isActive   && !isEditing
                   ? 'lg:w-[94.6%] mr-0 rounded-l-xl'  
                   : 'w-[88%] rounded-xl '
@@ -1143,10 +1143,10 @@ export default function Sidebar() {
                           console.log('Navigation blocked:', { isEditing, isSummaryItem, itemCategoryNumber, editingIconCategory });
                         }
                       }}
-                      className={`flex-1 cursor-pointer flex items-center gap-2 text-left text-sm break-words ${isActive || isEditing ? 'active-nav-item' : ''}`}
+                      className={`flex-1 cursor-pointer flex items-center gap-2 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} break-words ${isActive || isEditing ? 'active-nav-item' : ''}`}
                       // style={{ color: 'inherit' }}
                     >
-                      <span className='flex-1 break-words leading-normal'>{item.name}</span>
+                      <span className='flex-1 break-words leading-normal line-clamp-2'>{item.name}</span>
                     </button>
                   </div>
           
@@ -1221,7 +1221,7 @@ export default function Sidebar() {
             <div className="flex items-center justify-center" style={{ marginBottom: 'clamp(0.75rem, 3vw, 1.25rem)' }}>
               {user.profileImageUrl ? (
                 <Image
-                  className="rounded-lg w-[180px]  h-[199px] object-cover cursor-pointer"
+                  className="rounded-lg  w-[180px]  h-[199px] object-cover cursor-pointer"
                   src={user.profileImageUrl}
                   alt="Profile"
                   width={180}
@@ -1229,7 +1229,8 @@ export default function Sidebar() {
                   onClick={() => router.push('/profile')}
                   style={{
                     width: 'clamp(60px, 15vw, 180px)',
-                    height: 'clamp(60px, 15vw, 199px)'
+                    height: 'clamp(60px, 15vh, 199px)',
+                    objectPosition: 'center 20%'
                   }}
                 />
               ) : (
@@ -1238,7 +1239,7 @@ export default function Sidebar() {
                   onClick={() => router.push('/profile')}
                   style={{
                     width: 'clamp(60px, 15vw, 180px)',
-                    height: 'clamp(60px, 15vw, 199px)'
+                    height: 'clamp(60px, 15vh, 199px)'
                   }}
                 >
                   <span className="font-medium text-gray-700" style={{ fontSize: 'clamp(1rem, 4vw, 1.5rem)' }}>
