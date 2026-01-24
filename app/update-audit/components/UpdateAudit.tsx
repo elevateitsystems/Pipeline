@@ -1029,13 +1029,13 @@ export default function UpdateAudit() {
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
           <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">GRADING SCALE (1-5)</p>
           <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
               1-2 URGENT ATTEN
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
               5 EXELLENT AUDIT
             </p>
           </div>

@@ -792,7 +792,7 @@ export default function Sidebar() {
 
   return (
     <div 
-      className="w-75 flex flex-col h-screen overflow-y-auto overflow-x-hidden relative hide-scrollbar" 
+      className="w-75 flex flex-col h-screen overflow-x-hidden relative hide-scrollbar" 
       style={{ 
         width: '300px',
         overflowX: 'hidden',
@@ -801,7 +801,7 @@ export default function Sidebar() {
       }}
     >
       {/* Logo/Brand or Summary Overview */}
-      <div className="py-12 border-b-2 border-[#456987] flex justify-center" style={{ position: 'relative', zIndex: 2 }}>
+      <div className="py-11 border-b-2 border-[#456987] flex justify-center shrink-0" style={{ position: 'relative', zIndex: 2 }}>
         {onResultPage ? (
           <div className="flex items-center gap-3 px-4">
            
@@ -825,8 +825,8 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Navigation */}
-      <nav className="py-4 " style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
+      {/* Navigation - Scrollable section */}
+      <nav className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar" style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
         {onResultPage ? (
           <>
             {/* Area Of Urgent Focus */}
@@ -869,7 +869,7 @@ export default function Sidebar() {
         ) : (
           <>
             {(onNewAuditPage || onUpdateAuditPage || onSummaryPage || onTestPage) && !onMainPage && (
-              <div className="px-4 mb-3 text-center font-medium text-[#fffef7]">
+              <div className="px-4 text-center font-medium text-[#fffef7]">
                 ALL AUDITS
               </div>
             )}
@@ -969,7 +969,7 @@ export default function Sidebar() {
                   e.stopPropagation();
                 }
               }}
-              className={`ml-4 ${isEditing ? 'h-[40px]' : 'min-h-[50px]'}  cursor-pointer flex items-center ${
+              className={`ml-4 ${isEditing ? 'h-[40px]' : ''}  cursor-pointer flex items-center ${
                 isActive   && !isEditing
                   ? 'lg:w-[94.6%] mr-0 rounded-l-xl'  
                   : 'w-[88%] rounded-xl '
@@ -1113,7 +1113,7 @@ export default function Sidebar() {
                       </svg>
                     </div>
                   )}
-                  <div className="flex-1 min-h-9 flex items-center gap-2">
+                  <div className="flex-1 flex items-center gap-2">
                     {/* Category icon - view only until edit mode */}
                     <div className="flex items-center justify-center shrink-0">
                       {isCategoryItem && itemCategoryNumber !== null && getCategoryIcon(itemCategoryNumber) ? (
@@ -1146,7 +1146,7 @@ export default function Sidebar() {
                       className={`flex-1 cursor-pointer flex items-center gap-2 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} break-words ${isActive || isEditing ? 'active-nav-item' : ''}`}
                       // style={{ color: 'inherit' }}
                     >
-                      <span className='flex-1 break-words leading-normal line-clamp-2'>{item.name}</span>
+                      <span className='flex-1 break-words leading-normal' style={{ maxHeight: '3em', overflow: 'hidden' }}>{item.name}</span>
                     </button>
                   </div>
           
@@ -1180,7 +1180,7 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile Section or Action Buttons */}
-      <div className="mt-auto overflow-hidden" style={{ position: 'relative', zIndex: 2, paddingBottom: 'clamp(1rem, 4vw, 2rem)' }}>
+      <div className="pt-2 mt-auto overflow-hidden shrink-0" style={{ position: 'relative', zIndex: 2, paddingBottom: 'clamp(.5rem, 3vw, .75rem)' }}>
         {onResultPage ? (
          <div>
             <div className="px-4 mt-6">
