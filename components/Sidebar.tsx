@@ -826,7 +826,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="pt-4 " style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
+      <nav className="py-4 " style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
         {onResultPage ? (
           <>
             {/* Area Of Urgent Focus */}
@@ -1218,7 +1218,7 @@ export default function Sidebar() {
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-center" style={{ marginBottom: 'clamp(0.75rem, 3vw, 1.25rem)' }}>
+            <div className="flex items-center justify-center" style={{ marginBottom: 'clamp(0.25rem, 1vw, 0.5rem)' }}>
               {user.profileImageUrl ? (
                 <Image
                   className="rounded-lg  w-[180px]  h-[199px] object-cover cursor-pointer"
@@ -1252,7 +1252,7 @@ export default function Sidebar() {
               className="font-medium text-white text-center underline cursor-pointer" 
               style={{ 
                 fontSize: 'clamp(0.875rem, 3vw, 1.125rem)',
-                marginTop: 'clamp(0.75rem, 3vw, 1.25rem)'
+                marginTop: 'clamp(0.25rem, 1vw, 0.5rem)'
               }} 
               onClick={handleLogout}
             >
