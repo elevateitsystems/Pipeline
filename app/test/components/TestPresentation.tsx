@@ -398,7 +398,7 @@ export default function TestPresentation() {
           </div>
         </div>
         {/* Category label */}
-        <p className="mt-2 text-xs text-[#2d3e50] text-center font-medium  leading-tight">
+        <p className="mt-2 text-xs text-[#2d3e50] text-center font-medium line-clamp-3 leading-tight">
           {label}
         </p>
       </div>
@@ -530,15 +530,15 @@ export default function TestPresentation() {
         )}
 
         <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">GRADING SCALE (1-5)</p>
+          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">GRADING SCALE (1-5)</p>
           <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-1.5 text-white rounded-tl-xl">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-1.5 text-white rounded-tl-xl line-clamp-1">
               1-2 URGENT ATTEN
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1.5 text-white ">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1.5 text-white line-clamp-1">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-1.5 text-white rounded-tr-xl">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-1.5 text-white rounded-tr-xl line-clamp-1  ">
               5 EXELLENT AUDIT
             </p>
           </div>
