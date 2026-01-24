@@ -398,7 +398,7 @@ export default function TestPresentation() {
           </div>
         </div>
         {/* Category label */}
-        <p className="mt-2 text-xs text-[#2d3e50] text-center font-medium line-clamp-3 leading-tight">
+        <p className="mt-0.5 text-[11px] text-[#2d3e50] text-center font-medium line-clamp-3 leading-tight">
           {label}
         </p>
       </div>
@@ -413,7 +413,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="bg-white pt-2 grid grid-cols-8 gap-6 w-full ">
+          <div className="bg-white pt-1 grid grid-cols-8 gap-1 w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -529,25 +529,25 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">GRADING SCALE (1-5)</p>
+        <div className="bg-white -mt-1 flex items-center justify-center gap-2 w-full ">
+          <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">GRADING SCALE (1-5)</p>
           <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-1.5 text-white rounded-tl-xl line-clamp-1">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-1 text-white rounded-tl-xl line-clamp-1">
               1-2 URGENT ATTEN
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1.5 text-white line-clamp-1">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1 text-white line-clamp-1">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-1.5 text-white rounded-tr-xl line-clamp-1  ">
+            <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-1 text-white rounded-tr-xl line-clamp-1  ">
               5 EXELLENT AUDIT
             </p>
           </div>
         </div>
 
 
-        <div className="px-24 flex items-center justify-between">
+        <div className="px-24 -mt-0.5 flex items-center justify-between">
           {["questions", "answers", "score"].map((item, i) => (
-            <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
+            <p key={i} className={`text-[20px] text-white capitalize font-500  leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
               {item}
             </p>
           ))}
