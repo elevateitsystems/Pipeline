@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useUser } from "@/contexts/UserContext";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useLogout } from "@/lib/hooks";
-import Image from "next/image";
-import logo from "@/public/logo.png";
-import { useState, useEffect } from "react";
-import { FiEdit } from "react-icons/fi";
-import summary from "@/public/summary.png";
-import { CustomButton } from "./common";
-import toast from "react-hot-toast";
-import IconPicker from "./IconPicker";
-import * as LucideIcons from "lucide-react";
+import { useUser } from '@/contexts/UserContext';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useLogout } from '@/lib/hooks';
+import Image from 'next/image';
+import logo from '@/public/logo.png';
+import { useState, useEffect } from 'react';
+import { FiEdit } from 'react-icons/fi';
+import summary from '@/public/summary.png';
+import { CustomButton } from './common';
+import toast from 'react-hot-toast';
+import IconPicker from './IconPicker';
+import * as LucideIcons from 'lucide-react';
 type NavigationItem = {
   name: string;
   href: string;
@@ -25,21 +25,11 @@ export default function Sidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [editingCategory, setEditingCategory] = useState<number | null>(null);
-  const [editingIconCategory, setEditingIconCategory] = useState<number | null>(
-    null,
-  );
-  const [categoryNames, setCategoryNames] = useState<Record<number, string>>(
-    {},
-  );
-  const [categoryIcons, setCategoryIcons] = useState<Record<number, string>>(
-    {},
-  );
-  const [draggedCategoryIndex, setDraggedCategoryIndex] = useState<
-    number | null
-  >(null);
-  const [dragOverCategoryIndex, setDragOverCategoryIndex] = useState<
-    number | null
-  >(null);
+  const [editingIconCategory, setEditingIconCategory] = useState<number | null>(null);
+  const [categoryNames, setCategoryNames] = useState<Record<number, string>>({});
+  const [categoryIcons, setCategoryIcons] = useState<Record<number, string>>({});
+  const [draggedCategoryIndex, setDraggedCategoryIndex] = useState<number | null>(null);
+  const [dragOverCategoryIndex, setDragOverCategoryIndex] = useState<number | null>(null);
   const [actualCategoryCount, setActualCategoryCount] = useState<number>(7);
   const [dragHandleCategory, setDragHandleCategory] = useState<number | null>(null);
   const [isTestSidebarLoading, setIsTestSidebarLoading] = useState<boolean>(false);
@@ -56,15 +46,15 @@ export default function Sidebar() {
   } | null>(null);
 
   // Get user's primary color with opacity
-  const primaryColor = user?.primaryColor || "#2B4055";
-  const secondaryColor = user?.secondaryColor || "#F7AF41";
+  const primaryColor = user?.primaryColor || '#2B4055';
+  const secondaryColor = user?.secondaryColor || '#F7AF41';
 
   // Load test result data for summary overview
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     const loadTestResult = () => {
       try {
-        const stored = sessionStorage.getItem("testResultData");
+        const stored = sessionStorage.getItem('testResultData');
         if (stored) {
           setTestResultData(JSON.parse(stored));
         } else {
@@ -75,26 +65,23 @@ export default function Sidebar() {
       }
     };
     loadTestResult();
-    window.addEventListener("testResultUpdated", loadTestResult);
-    return () =>
-      window.removeEventListener("testResultUpdated", loadTestResult);
+    window.addEventListener('testResultUpdated', loadTestResult);
+    return () => window.removeEventListener('testResultUpdated', loadTestResult);
   }, []);
 
   // Load category names from sessionStorage
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     const loadCategoryNames = () => {
       const names: Record<number, string> = {};
       for (let i = 1; i <= 7; i++) {
         try {
-          const storedName = sessionStorage.getItem(
-            `auditData:categoryName:${i}`,
-          );
+          const storedName = sessionStorage.getItem(`auditData:categoryName:${i}`);
           if (storedName && storedName.trim()) {
             names[i] = storedName;
           } else {
             // Try to get from auditData categories array
-            const raw = sessionStorage.getItem("auditData");
+            const raw = sessionStorage.getItem('auditData');
             if (raw) {
               const parsed = JSON.parse(raw);
               if (Array.isArray(parsed?.categories)) {
@@ -114,7 +101,7 @@ export default function Sidebar() {
 
     // Listen for storage changes from other components (cross-tab)
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key?.startsWith("auditData:categoryName:")) {
+      if (e.key?.startsWith('auditData:categoryName:')) {
         loadCategoryNames();
       }
     };
@@ -124,14 +111,11 @@ export default function Sidebar() {
       loadCategoryNames();
     };
 
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("categoryNameUpdated", handleCategoryNameUpdate);
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('categoryNameUpdated', handleCategoryNameUpdate);
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener(
-        "categoryNameUpdated",
-        handleCategoryNameUpdate,
-      );
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('categoryNameUpdated', handleCategoryNameUpdate);
     };
   }, []);
 
@@ -150,45 +134,32 @@ export default function Sidebar() {
         return;
       }
 
-
       try {
         let count = 0;
 
-
         if (onNewAuditPage) {
           // Create mode: Count categories with questions
-          const raw = sessionStorage.getItem("auditData");
+          const raw = sessionStorage.getItem('auditData');
           if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed?.categories)) {
-              const actualCategories = parsed.categories.filter(
-                (cat: { questions?: Array<{ text?: string }> }) => {
-                  return (
-                    cat.questions &&
-                    Array.isArray(cat.questions) &&
-                    cat.questions.some(
-                      (q: { text?: string }) =>
-                        q.text && q.text.trim().length > 0,
-                    )
-                  );
-                },
-              );
+              const actualCategories = parsed.categories.filter((cat: { questions?: Array<{ text?: string }> }) => {
+                return cat.questions && Array.isArray(cat.questions) && cat.questions.some((q: { text?: string }) => q.text && q.text.trim().length > 0);
+              });
               count = Math.max(1, actualCategories.length);
             }
           }
         } else if (onTestPage && presentationId) {
           // Test mode: Count categories with names
           for (let i = 1; i <= 7; i++) {
-            const categoryName = sessionStorage.getItem(
-              `auditData:categoryName:${i}`,
-            );
+            const categoryName = sessionStorage.getItem(`auditData:categoryName:${i}`);
             if (categoryName && categoryName.trim()) {
               count++;
             }
           }
           // Fallback to auditData if no names found
           if (count === 0) {
-            const raw = sessionStorage.getItem("auditData");
+            const raw = sessionStorage.getItem('auditData');
             if (raw) {
               const parsed = JSON.parse(raw);
               if (Array.isArray(parsed?.categories)) {
@@ -197,7 +168,6 @@ export default function Sidebar() {
             }
           }
         }
-
 
         if (count > 0) {
           setActualCategoryCount(count);
@@ -211,7 +181,6 @@ export default function Sidebar() {
 
     calculateCategoryCount();
 
-
     // Listen for category updates
     const handleCategoryUpdate = () => {
       calculateCategoryCount();
@@ -221,18 +190,18 @@ export default function Sidebar() {
     window.addEventListener('storage', handleCategoryUpdate);
 
     return () => {
-      window.removeEventListener("categoryNameUpdated", handleCategoryUpdate);
-      window.removeEventListener("storage", handleCategoryUpdate);
+      window.removeEventListener('categoryNameUpdated', handleCategoryUpdate);
+      window.removeEventListener('storage', handleCategoryUpdate);
     };
   }, [pathname, searchParams]);
 
   // Track loading state shared from TestPresentation for sidebar skeletons
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     const readLoadingState = () => {
-      const stored = sessionStorage.getItem("testSidebarLoading");
-      setIsTestSidebarLoading(stored === "true");
+      const stored = sessionStorage.getItem('testSidebarLoading');
+      setIsTestSidebarLoading(stored === 'true');
     };
 
     readLoadingState();
@@ -242,20 +211,17 @@ export default function Sidebar() {
     };
 
     const handleStorage = (event: StorageEvent) => {
-      if (event.key === "testSidebarLoading") {
+      if (event.key === 'testSidebarLoading') {
         readLoadingState();
       }
     };
 
-    window.addEventListener("testSidebarLoadingChanged", handleLoadingChange);
-    window.addEventListener("storage", handleStorage);
+    window.addEventListener('testSidebarLoadingChanged', handleLoadingChange);
+    window.addEventListener('storage', handleStorage);
 
     return () => {
-      window.removeEventListener(
-        "testSidebarLoadingChanged",
-        handleLoadingChange,
-      );
-      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener('testSidebarLoadingChanged', handleLoadingChange);
+      window.removeEventListener('storage', handleStorage);
     };
   }, []);
 
@@ -264,15 +230,13 @@ export default function Sidebar() {
     if (categoryNames[categoryNumber]) {
       return categoryNames[categoryNumber];
     }
-    if (typeof window === "undefined") return `Category ${categoryNumber}`;
+    if (typeof window === 'undefined') return `Category ${categoryNumber}`;
     try {
-      const storedName = sessionStorage.getItem(
-        `auditData:categoryName:${categoryNumber}`,
-      );
+      const storedName = sessionStorage.getItem(`auditData:categoryName:${categoryNumber}`);
       if (storedName && storedName.trim()) {
         return storedName;
       }
-      const raw = sessionStorage.getItem("auditData");
+      const raw = sessionStorage.getItem('auditData');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed?.categories)) {
@@ -291,15 +255,13 @@ export default function Sidebar() {
     if (categoryIcons[categoryNumber]) {
       return categoryIcons[categoryNumber];
     }
-    if (typeof window === "undefined") return undefined;
+    if (typeof window === 'undefined') return undefined;
     try {
-      const storedIcon = sessionStorage.getItem(
-        `auditData:categoryIcon:${categoryNumber}`,
-      );
+      const storedIcon = sessionStorage.getItem(`auditData:categoryIcon:${categoryNumber}`);
       if (storedIcon && storedIcon.trim()) {
         return storedIcon;
       }
-      const raw = sessionStorage.getItem("auditData");
+      const raw = sessionStorage.getItem('auditData');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed?.categories)) {
@@ -316,23 +278,14 @@ export default function Sidebar() {
   // Helper to render icon component
   const renderIcon = (iconName: string | undefined) => {
     if (!iconName) return null;
-    const IconComponent = (
-      LucideIcons as unknown as Record<
-        string,
-        React.ComponentType<{ className?: string; size?: number }>
-      >
-    )[iconName];
+    const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string; size?: number }>>)[iconName];
     if (!IconComponent) return null;
     return <IconComponent className="w-5 h-5" />;
   };
 
   // Handle category name update
-  const handleCategoryNameUpdate = (
-    categoryNumber: number,
-    newName: string,
-  ) => {
+  const handleCategoryNameUpdate = (categoryNumber: number, newName: string) => {
     const finalName = newName.trim() || `Category ${categoryNumber}`;
-
 
     // Update state
     setCategoryNames(prev => ({ ...prev, [categoryNumber]: finalName }));
@@ -343,19 +296,14 @@ export default function Sidebar() {
 
       // Also update auditData categories array
       try {
-        const raw = sessionStorage.getItem("auditData");
+        const raw = sessionStorage.getItem('auditData');
         const data = raw ? JSON.parse(raw) : { categories: [] };
         if (!Array.isArray(data.categories)) data.categories = [];
 
-
         const idx = categoryNumber - 1;
         while (data.categories.length < categoryNumber) {
-          data.categories.push({
-            name: `Category ${data.categories.length + 1}`,
-            questions: [],
-          });
+          data.categories.push({ name: `Category ${data.categories.length + 1}`, questions: [] });
         }
-
 
         if (data.categories[idx]) {
           data.categories[idx].name = finalName;
@@ -366,12 +314,11 @@ export default function Sidebar() {
         sessionStorage.setItem('auditData', JSON.stringify(data));
 
         // Dispatch custom event to notify other components
-        window.dispatchEvent(new Event("categoryNameUpdated"));
+        window.dispatchEvent(new Event('categoryNameUpdated'));
       } catch (e) {
-        console.error("Error updating category name:", e);
+        console.error('Error updating category name:', e);
       }
     }
-
 
     setEditingCategory(null);
   };
@@ -385,73 +332,52 @@ export default function Sidebar() {
 
       // Also update auditData categories array
       try {
-        const raw = sessionStorage.getItem("auditData");
+        const raw = sessionStorage.getItem('auditData');
         const data = raw ? JSON.parse(raw) : { categories: [] };
         if (!Array.isArray(data.categories)) data.categories = [];
 
-
         const idx = categoryNumber - 1;
         while (data.categories.length < categoryNumber) {
-          data.categories.push({
-            name: `Category ${data.categories.length + 1}`,
-            questions: [],
-          });
+          data.categories.push({ name: `Category ${data.categories.length + 1}`, questions: [] });
         }
-
 
         if (data.categories[idx]) {
           data.categories[idx].icon = iconName;
         } else {
-          data.categories[idx] = {
-            name: `Category ${categoryNumber}`,
-            icon: iconName,
-            questions: [],
-          };
+          data.categories[idx] = { name: `Category ${categoryNumber}`, icon: iconName, questions: [] };
         }
 
         sessionStorage.setItem('auditData', JSON.stringify(data));
 
         // Dispatch custom event to notify other components
-        window.dispatchEvent(new Event("categoryNameUpdated"));
+        window.dispatchEvent(new Event('categoryNameUpdated'));
       } catch (e) {
-        console.error("Error updating category icon:", e);
+        console.error('Error updating category icon:', e);
       }
     }
-
 
     setEditingIconCategory(null);
   };
 
   // Handle category drag and drop reordering (only on update-audit page)
-  const handleCategoryDragStart = (
-    e: React.DragEvent,
-    categoryIndex: number,
-  ) => {
-    if (pathname !== "/update-audit") return;
+  const handleCategoryDragStart = (e: React.DragEvent, categoryIndex: number) => {
+    if (pathname !== '/update-audit') return;
     // Don't start drag if clicking on input, button, or other interactive elements
     const target = e.target as HTMLElement;
-    if (
-      target.tagName === "INPUT" ||
-      target.tagName === "BUTTON" ||
-      target.closest("input") ||
-      target.closest("button")
-    ) {
+    if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.closest('input') || target.closest('button')) {
       e.preventDefault();
       return;
     }
     setDraggedCategoryIndex(categoryIndex);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", categoryIndex.toString());
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', categoryIndex.toString());
   };
 
-  const handleCategoryDragOver = (
-    e: React.DragEvent,
-    categoryIndex: number,
-  ) => {
-    if (pathname !== "/update-audit" || draggedCategoryIndex === null) return;
+  const handleCategoryDragOver = (e: React.DragEvent, categoryIndex: number) => {
+    if (pathname !== '/update-audit' || draggedCategoryIndex === null) return;
     e.preventDefault();
     e.stopPropagation();
-    e.dataTransfer.dropEffect = "move";
+    e.dataTransfer.dropEffect = 'move';
     if (categoryIndex !== draggedCategoryIndex) {
       setDragOverCategoryIndex(categoryIndex);
     }
@@ -462,7 +388,7 @@ export default function Sidebar() {
   };
 
   const handleCategoryDrop = (e: React.DragEvent, targetIndex: number) => {
-    if (pathname !== "/update-audit" || draggedCategoryIndex === null) {
+    if (pathname !== '/update-audit' || draggedCategoryIndex === null) {
       setDraggedCategoryIndex(null);
       setDragOverCategoryIndex(null);
       return;
@@ -481,50 +407,36 @@ export default function Sidebar() {
     }
 
     // Reorder categories in sessionStorage - move entire category with all its data
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       try {
-        const raw = sessionStorage.getItem("auditData");
+        const raw = sessionStorage.getItem('auditData');
         const data = raw ? JSON.parse(raw) : { categories: [] };
         if (!Array.isArray(data.categories)) data.categories = [];
 
         // Ensure we have 7 categories
         while (data.categories.length < 7) {
-          data.categories.push({
-            name: `Category ${data.categories.length + 1}`,
-            questions: [],
-          });
+          data.categories.push({ name: `Category ${data.categories.length + 1}`, questions: [] });
         }
 
         // Step 1: Save all data for all categories (old positions)
-        const categoryDataMap: Record<
-          number,
-          {
-            name: string;
-            categoryData: string | null;
-            questions: Record<number, string>;
-            statuses: Record<number, string>;
-            recommendation: string | null;
-          }
-        > = {};
+        const categoryDataMap: Record<number, {
+          name: string;
+          categoryData: string | null;
+          questions: Record<number, string>;
+          statuses: Record<number, string>;
+          recommendation: string | null;
+        }> = {};
 
         for (let catNum = 1; catNum <= 7; catNum++) {
-          const categoryData = sessionStorage.getItem(
-            `auditData:category:${catNum}`,
-          );
-          const categoryName = sessionStorage.getItem(
-            `auditData:categoryName:${catNum}`,
-          );
+          const categoryData = sessionStorage.getItem(`auditData:category:${catNum}`);
+          const categoryName = sessionStorage.getItem(`auditData:categoryName:${catNum}`);
           const questions: Record<number, string> = {};
           const statuses: Record<number, string> = {};
 
           // Save all questions for this category
           for (let qNum = 1; qNum <= 10; qNum++) {
-            const question = sessionStorage.getItem(
-              `auditData:question:${catNum}:${qNum}`,
-            );
-            const status = sessionStorage.getItem(
-              `auditData:status:${catNum}:${qNum}`,
-            );
+            const question = sessionStorage.getItem(`auditData:question:${catNum}:${qNum}`);
+            const status = sessionStorage.getItem(`auditData:status:${catNum}:${qNum}`);
             if (question) questions[qNum] = question;
             if (status) statuses[qNum] = status;
           }
@@ -534,9 +446,7 @@ export default function Sidebar() {
             categoryData,
             questions,
             statuses,
-            recommendation: sessionStorage.getItem(
-              `auditData:categoryRecommendation:${catNum}`,
-            ),
+            recommendation: sessionStorage.getItem(`auditData:categoryRecommendation:${catNum}`),
           };
         }
 
@@ -545,17 +455,14 @@ export default function Sidebar() {
         const newCategories = [...data.categories];
         const draggedCategory = newCategories[draggedCategoryIndex];
 
-
         // Calculate the correct target index for insertion
         // Remove the dragged item first
         newCategories.splice(draggedCategoryIndex, 1);
-
 
         // Calculate adjusted target index after removal
         // When dragging down (lower index to higher), after removal the target shifts down by 1
         // When dragging up (higher index to lower), the target position doesn't shift
         let adjustedTargetIndex: number;
-
 
         if (draggedCategoryIndex < finalTargetIndex) {
           // Dragging from lower index to higher index (dragging down in the list)
@@ -579,7 +486,6 @@ export default function Sidebar() {
           adjustedTargetIndex = finalTargetIndex;
         }
 
-
         // Insert at the adjusted target position
         newCategories.splice(adjustedTargetIndex, 0, draggedCategory);
         data.categories = newCategories;
@@ -588,16 +494,13 @@ export default function Sidebar() {
         // Build the mapping based on the actual reordering
         const oldToNewMap: Record<number, number> = {};
 
-
         // Create array of original indices [0, 1, 2, 3, 4, 5, 6]
         const originalIndices = Array.from({ length: 7 }, (_, i) => i);
-
 
         // Simulate the reordering to get final positions
         const finalIndices = [...originalIndices];
         finalIndices.splice(draggedCategoryIndex, 1);
         finalIndices.splice(adjustedTargetIndex, 0, draggedCategoryIndex);
-
 
         // Create mapping: old position -> new position
         originalIndices.forEach((originalIndex) => {
@@ -611,9 +514,7 @@ export default function Sidebar() {
         for (let catNum = 1; catNum <= 7; catNum++) {
           sessionStorage.removeItem(`auditData:category:${catNum}`);
           sessionStorage.removeItem(`auditData:categoryName:${catNum}`);
-          sessionStorage.removeItem(
-            `auditData:categoryRecommendation:${catNum}`,
-          );
+          sessionStorage.removeItem(`auditData:categoryRecommendation:${catNum}`);
           for (let qNum = 1; qNum <= 10; qNum++) {
             sessionStorage.removeItem(`auditData:question:${catNum}:${qNum}`);
             sessionStorage.removeItem(`auditData:status:${catNum}:${qNum}`);
@@ -626,21 +527,15 @@ export default function Sidebar() {
           const oldData = categoryDataMap[oldCatNum];
 
           // Write category name
-          sessionStorage.setItem(
-            `auditData:categoryName:${newCatNum}`,
-            oldData.name,
-          );
+          sessionStorage.setItem(`auditData:categoryName:${newCatNum}`, oldData.name);
           sessionStorage.setItem(
             `auditData:categoryRecommendation:${newCatNum}`,
-            oldData.recommendation || "",
+            oldData.recommendation || ""
           );
 
           // Write category data
           if (oldData.categoryData) {
-            sessionStorage.setItem(
-              `auditData:category:${newCatNum}`,
-              oldData.categoryData,
-            );
+            sessionStorage.setItem(`auditData:category:${newCatNum}`, oldData.categoryData);
           } else {
             // If no category data exists, create from questions and statuses
             const questionsArray = Object.keys(oldData.questions).map(qNum => {
@@ -661,26 +556,17 @@ export default function Sidebar() {
               recommendation: oldData.recommendation || "",
               questions: questionsArray,
             };
-            sessionStorage.setItem(
-              `auditData:category:${newCatNum}`,
-              JSON.stringify(categoryObj),
-            );
+            sessionStorage.setItem(`auditData:category:${newCatNum}`, JSON.stringify(categoryObj));
           }
 
           // Write all questions
-          Object.keys(oldData.questions).forEach((qNum) => {
-            sessionStorage.setItem(
-              `auditData:question:${newCatNum}:${qNum}`,
-              oldData.questions[Number(qNum)],
-            );
+          Object.keys(oldData.questions).forEach(qNum => {
+            sessionStorage.setItem(`auditData:question:${newCatNum}:${qNum}`, oldData.questions[Number(qNum)]);
           });
 
           // Write all statuses
-          Object.keys(oldData.statuses).forEach((qNum) => {
-            sessionStorage.setItem(
-              `auditData:status:${newCatNum}:${qNum}`,
-              oldData.statuses[Number(qNum)],
-            );
+          Object.keys(oldData.statuses).forEach(qNum => {
+            sessionStorage.setItem(`auditData:status:${newCatNum}:${qNum}`, oldData.statuses[Number(qNum)]);
           });
         }
 
@@ -688,9 +574,7 @@ export default function Sidebar() {
         // Rebuild categories array from sessionStorage to ensure consistency
         const reorderedCategories = newCategories.map((cat, index) => {
           const categoryNumber = index + 1;
-          const categoryDataStr = sessionStorage.getItem(
-            `auditData:category:${categoryNumber}`,
-          );
+          const categoryDataStr = sessionStorage.getItem(`auditData:category:${categoryNumber}`);
           if (categoryDataStr) {
             try {
               return JSON.parse(categoryDataStr);
@@ -702,39 +586,25 @@ export default function Sidebar() {
         });
 
         data.categories = reorderedCategories;
-        sessionStorage.setItem("auditData", JSON.stringify(data));
+        sessionStorage.setItem('auditData', JSON.stringify(data));
 
         // Step 7: Reorder summary data (categoryRecommendations) to match new category order
-        const summaryDataStr = sessionStorage.getItem("summaryData");
+        const summaryDataStr = sessionStorage.getItem('summaryData');
         if (summaryDataStr) {
           try {
             const summaryData = JSON.parse(summaryDataStr);
-            if (
-              summaryData.categoryRecommendations &&
-              Array.isArray(summaryData.categoryRecommendations)
-            ) {
-              const oldRecommendations: Array<{
-                categoryId: string;
-                recommendation: string;
-              }> = summaryData.categoryRecommendations;
-              const reorderedRecommendations: Array<{
-                categoryId: string;
-                recommendation: string;
-              }> = [];
+            if (summaryData.categoryRecommendations && Array.isArray(summaryData.categoryRecommendations)) {
+              const oldRecommendations: Array<{ categoryId: string; recommendation: string }> = summaryData.categoryRecommendations;
+              const reorderedRecommendations: Array<{ categoryId: string; recommendation: string }> = [];
 
               // Build new recommendations array based on oldToNewMap
-              for (
-                let oldPos = 1;
-                oldPos <= oldRecommendations.length;
-                oldPos++
-              ) {
+              for (let oldPos = 1; oldPos <= oldRecommendations.length; oldPos++) {
                 const recommendation = oldRecommendations[oldPos - 1];
                 if (!recommendation) continue;
 
                 const newPos = oldToNewMap[oldPos] ?? oldPos;
                 const newCategory = reorderedCategories[newPos - 1];
-                const newCategoryId =
-                  newCategory?.id || recommendation.categoryId || "";
+                const newCategoryId = newCategory?.id || recommendation.categoryId || '';
 
                 reorderedRecommendations[newPos - 1] = {
                   categoryId: newCategoryId,
@@ -746,21 +616,18 @@ export default function Sidebar() {
               for (let idx = 0; idx < reorderedCategories.length; idx++) {
                 if (!reorderedRecommendations[idx]) {
                   reorderedRecommendations[idx] = {
-                    categoryId: reorderedCategories[idx]?.id || "",
+                    categoryId: reorderedCategories[idx]?.id || '',
                     recommendation: "",
                   };
                 }
               }
 
               summaryData.categoryRecommendations = reorderedRecommendations;
-              sessionStorage.setItem(
-                "summaryData",
-                JSON.stringify(summaryData),
-              );
-              window.dispatchEvent(new Event("summaryDataUpdated"));
+              sessionStorage.setItem('summaryData', JSON.stringify(summaryData));
+              window.dispatchEvent(new Event('summaryDataUpdated'));
             }
           } catch (error) {
-            console.error("Error reordering summary data:", error);
+            console.error('Error reordering summary data:', error);
             // Don't fail the category reorder if summary update fails
           }
         }
@@ -791,22 +658,18 @@ export default function Sidebar() {
         // Find the new position of the currently viewed category
         const newCategoryPosition = oldToNewMap[currentCategory];
 
-
         if (newCategoryPosition && newCategoryPosition !== currentCategory) {
           // Navigate to the new category position to show the moved category
-          const newUrl = `/update-audit?${editId ? `edit=${editId}&` : ""}category=${newCategoryPosition}`;
+          const newUrl = `/update-audit?${editId ? `edit=${editId}&` : ''}category=${newCategoryPosition}`;
           router.push(newUrl);
-        } else if (
-          currentCategory === draggedCategoryIndex + 1 ||
-          currentCategory === finalTargetIndex + 1
-        ) {
+        } else if (currentCategory === draggedCategoryIndex + 1 || currentCategory === finalTargetIndex + 1) {
           // If viewing one of the directly moved categories, reload to refresh
           window.location.reload();
         }
         // Otherwise, no action needed - data is updated and sidebar will refresh via event
       } catch (e) {
-        console.error("Error reordering categories:", e);
-        toast.error("Failed to reorder categories. Please try again.");
+        console.error('Error reordering categories:', e);
+        toast.error('Failed to reorder categories. Please try again.');
       }
     }
 
@@ -819,10 +682,10 @@ export default function Sidebar() {
   const handleLogout = async () => {
     try {
       await logoutMutation.mutateAsync();
-      window.location.href = "/signin";
+      window.location.href = '/signin';
     } catch (error) {
-      console.error("Logout failed:", error);
-      window.location.href = "/signin";
+      console.error('Logout failed:', error);
+      window.location.href = '/signin';
     }
   };
 
@@ -832,64 +695,49 @@ export default function Sidebar() {
 
   const navigationItems: NavigationItem[] = [
     {
-      name: "ALL AUDITS",
-      href: "/",
-      icon: "",
+      name: 'ALL AUDITS',
+      href: '/',
+      icon: ''
     },
-    ...(isInvitedUser
-      ? []
-      : [
-        {
-          name: "ALL TEAM MEMBERS",
-          href: "/invited-users",
-          icon: "",
-        },
-      ]),
-    ...(user?.role === "ADMIN"
-      ? [
-        {
-          name: "ADMIN DASHBOARD",
-          href: "/admin",
-          icon: "",
-        },
-      ]
-      : []),
+    ...(isInvitedUser ? [] : [{
+      name: 'ALL TEAM MEMBERS',
+      href: '/invited-users',
+      icon: ''
+    }]),
+    ...(user?.role === 'ADMIN' ? [{
+      name: 'ADMIN DASHBOARD',
+      href: '/admin',
+      icon: ''
+    }] : []),
   ];
 
   // When on add-new-audit, update-audit, summary, or test page, show Category 1-7 and hide ALL AUDITS button
   // On main page (pathname === '/'), only show ALL AUDITS
-  const onNewAuditPage = pathname === "/add-new-audit";
-  const onUpdateAuditPage = pathname === "/update-audit";
-  const onSummaryPage = pathname === "/summary";
-  const onTestPage = pathname === "/test";
-  const onResultPage = pathname === "/test/result";
-  const onMainPage = pathname === "/";
-  const shouldShowTestSkeleton =
-    onTestPage && !!searchParams.get("presentationId") && isTestSidebarLoading;
+  const onNewAuditPage = pathname === '/add-new-audit';
+  const onUpdateAuditPage = pathname === '/update-audit';
+  const onSummaryPage = pathname === '/summary';
+  const onTestPage = pathname === '/test';
+  const onResultPage = pathname === '/test/result';
+  const onMainPage = pathname === '/';
+  const shouldShowTestSkeleton = onTestPage && !!searchParams.get('presentationId') && isTestSidebarLoading;
 
   // Calculate effectiveItems based on current page - always start fresh
   let effectiveItems: NavigationItem[] = [];
-
 
   // Only show categories and summary on specific audit pages, NOT on main page
   // Explicitly check that we're NOT on the main page first
   if (onMainPage) {
     // On main page, only show ALL AUDITS button
     effectiveItems = [...navigationItems];
-  } else if (
-    onNewAuditPage ||
-    onUpdateAuditPage ||
-    onSummaryPage ||
-    onTestPage
-  ) {
-    const editId = searchParams.get("edit");
-    const presentationId = searchParams.get("presentationId");
+  } else if (onNewAuditPage || onUpdateAuditPage || onSummaryPage || onTestPage) {
+    const editId = searchParams.get('edit');
+    const presentationId = searchParams.get('presentationId');
     // Determine the base path for categories - summary page should use update-audit if editId exists, otherwise add-new-audit
-    let basePath = "/add-new-audit";
-    if (onUpdateAuditPage) basePath = "/update-audit";
+    let basePath = '/add-new-audit';
+    if (onUpdateAuditPage) basePath = '/update-audit';
     if (onSummaryPage) {
       // On summary page, categories should link to update-audit if editId exists, otherwise add-new-audit
-      basePath = editId ? "/update-audit" : "/add-new-audit";
+      basePath = editId ? '/update-audit' : '/add-new-audit';
     }
     if (onTestPage) basePath = '/test';
 
@@ -903,52 +751,37 @@ export default function Sidebar() {
     const categoryItems = Array.from({ length: categoryCount }, (_, i) => {
       const categoryNumber = i + 1;
       const query = new URLSearchParams();
-      if (onUpdateAuditPage && editId) query.set("edit", editId);
-      if (onTestPage && presentationId)
-        query.set("presentationId", presentationId);
-      query.set("category", String(categoryNumber));
+      if (onUpdateAuditPage && editId) query.set('edit', editId);
+      if (onTestPage && presentationId) query.set('presentationId', presentationId);
+      query.set('category', String(categoryNumber));
       return {
         categoryNumber,
         name: getCategoryName(categoryNumber),
         href: `${basePath}?${query.toString()}`,
         icon: (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 7h4l2 2h10a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
-            />
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h4l2 2h10a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
           </svg>
         ),
       };
     });
 
     // Add Summary as 8th item (category=8 or summary parameter)
-    const summaryItem =
-      onNewAuditPage || onUpdateAuditPage
-        ? (() => {
-          const summaryQuery = new URLSearchParams();
-          if (onUpdateAuditPage && editId) summaryQuery.set("edit", editId);
-          summaryQuery.set("category", "8");
-          return {
-            name: "Summary",
-            href: `${basePath}?${summaryQuery.toString()}`,
-            icon: (
-              <Image src={summary} alt="Summary" width={20} height={20} />
-            ),
-          };
-        })()
-        : null;
+    const summaryItem = (onNewAuditPage || onUpdateAuditPage) ? (() => {
+      const summaryQuery = new URLSearchParams();
+      if (onUpdateAuditPage && editId) summaryQuery.set('edit', editId);
+      summaryQuery.set('category', '8');
+      return {
+        name: 'Summary',
+        href: `${basePath}?${summaryQuery.toString()}`,
+        icon: (
+          <Image src={summary} alt="Summary" width={20} height={20} />
+        ),
+      };
+    })() : null;
 
     // Build items array: categories + summary (no ALL AUDITS on create/update/test pages)
     // Don't show ALL AUDITS on create, update, or test/presentation pages
-    effectiveItems = summaryItem
     effectiveItems = summaryItem
       ? [...categoryItems, summaryItem]
       : [...categoryItems];
@@ -968,17 +801,12 @@ export default function Sidebar() {
       }}
     >
       {/* Logo/Brand or Summary Overview */}
-      <div
-        className="py-11 border-b-2 border-[#456987] flex justify-center shrink-0"
-        style={{ position: "relative", zIndex: 2 }}
-      >
+      <div className="py-11 border-b-2 border-[#456987] flex justify-center shrink-0" style={{ position: 'relative', zIndex: 2 }}>
         {onResultPage ? (
           <div className="flex items-center gap-3 px-4">
 
             <Image src={summary} alt="Logo" width={70} height={60} />
-            <span className="text-white font-normal text-3xl">
-              Summary Overview
-            </span>
+            <span className="text-white font-normal text-3xl">Summary Overview</span>
           </div>
         ) : (
           <Image
@@ -998,59 +826,40 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation - Scrollable section */}
-      <nav
-        className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          gap: "clamp(0.4rem, 1vw, 0.75rem)",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <nav className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar" style={{ position: 'relative', zIndex: 2, gap: 'clamp(0.4rem, 1vw, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
         {onResultPage ? (
           <>
             {/* Area Of Urgent Focus */}
             <div className="px-4 mt-4">
-              <h3 className="text-lg text-white mb-3 uppercase">
-                Area Of Urgent Focus
-              </h3>
+              <h3 className="text-lg text-white mb-3 uppercase">Area Of Urgent Focus</h3>
               <div className="space-y-3">
-                {testResultData &&
-                  (() => {
-                    const urgentCategories = [...testResultData.categoryScores]
-                      .filter(
-                        (cs) => cs.categoryName.toLowerCase() !== "summary",
-                      )
-                      .sort((a, b) => {
-                        const aPercentage =
-                          a.maxScore > 0 ? (a.score / a.maxScore) * 100 : 0;
-                        const bPercentage =
-                          b.maxScore > 0 ? (b.score / b.maxScore) * 100 : 0;
-                        return aPercentage - bPercentage;
-                      })
-                      .slice(0, 3);
+                {testResultData && (() => {
+                  const urgentCategories = [...testResultData.categoryScores]
+                    .filter(cs => cs.categoryName.toLowerCase() !== 'summary')
+                    .sort((a, b) => {
+                      const aPercentage = a.maxScore > 0 ? (a.score / a.maxScore) * 100 : 0;
+                      const bPercentage = b.maxScore > 0 ? (b.score / b.maxScore) * 100 : 0;
+                      return aPercentage - bPercentage;
+                    })
+                    .slice(0, 3);
 
-                    return urgentCategories.map((cs) => {
-                      const percentage =
-                        cs.maxScore > 0 ? (cs.score / cs.maxScore) * 100 : 0;
-                      return (
-                        <div key={cs.categoryId} className="mb-4">
-                          <div className="flex justify-between items-center mb-1">
-                            <span className="text-white text-sm text-nowrap">
-                              {cs.categoryName}
-                            </span>
-                          </div>
-                          <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#F65355] transition-all duration-500"
-                              style={{ width: `${Math.min(percentage, 100)}%` }}
-                            ></div>
-                          </div>
+                  return urgentCategories.map((cs) => {
+                    const percentage = cs.maxScore > 0 ? (cs.score / cs.maxScore) * 100 : 0;
+                    return (
+                      <div key={cs.categoryId} className="mb-4">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-white text-sm text-nowrap">{cs.categoryName}</span>
                         </div>
-                      );
-                    });
-                  })()}
+                        <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-[#F65355] transition-all duration-500"
+                            style={{ width: `${Math.min(percentage, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
 
@@ -1370,103 +1179,88 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile Section or Action Buttons */}
-      <div
-        className="pt-2 mt-auto overflow-hidden shrink-0"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          paddingBottom: "clamp(.5rem, 3vw, .75rem)",
-        }}
-      >
+      <div className="pt-2 mt-auto overflow-hidden shrink-0" style={{ position: 'relative', zIndex: 2, paddingBottom: 'clamp(.5rem, 3vw, .75rem)' }}>
         {onResultPage ? (
           <div>
-            <div>
-              <div className="px-4 mt-6">
-                <h3 className="text-lg text-white mb-3 uppercase text-center">Testimonials</h3>
-                <div className="space-y-4">
-                  <div className="bg-white/10 rounded-lg p-3  text-center">
-                    <p className="text-white text-xs leading-relaxed ">
-                      This audit system has transformed how we track and improve our processes. The comprehensive scoring and detailed recommendations help us identify areas for urgent attention.
-                    </p>
-                  </div>
-                  <div className="bg-white/10 rounded-lg p-3  text-center">
-                    <p className="text-white text-xs leading-relaxed ">
-                      The category-based assessment structure makes it easy to focus on specific areas. The summary overview provides clear insights for continuous improvement.
-                    </p>
-                  </div>
+            <div className="px-4 mt-6">
+              <h3 className="text-lg text-white mb-3 uppercase text-center">Testimonials</h3>
+              <div className="space-y-4">
+                <div className="bg-white/10 rounded-lg p-3  text-center">
+                  <p className="text-white text-xs leading-relaxed ">
+                    This audit system has transformed how we track and improve our processes. The comprehensive scoring and detailed recommendations help us identify areas for urgent attention.
+                  </p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3  text-center">
+                  <p className="text-white text-xs leading-relaxed ">
+                    The category-based assessment structure makes it easy to focus on specific areas. The summary overview provides clear insights for continuous improvement.
+                  </p>
                 </div>
               </div>
-              <div className="px-4 space-y-3 grid grid-cols-2 gap-4 mt-10">
-                <CustomButton
-                  onClick={handleLogout}
-                  className="w-full py-1 rounded-full font-semibold text-white transition-colors text-center"
-
-                >
-                  Logout
-                </CustomButton>
-
-                <button
-                  onClick={() => router.push('/')}
-                  className="w-full py-1 h-10 cursor-pointer rounded-full bg-transparent border border-white/50  font-semibold text-white transition-colors text-center"
-
-                >
-                  Exit
-                </button>
-              </div>
             </div>
-            ) : (
-            <>
-              <div
-                className="flex items-center justify-center"
-                style={{ marginBottom: "clamp(0.25rem, 1vw, 0.5rem)" }}
-              >
-                {user.profileImageUrl ? (
-                  <Image
-                    className="border   w-[180px]  h-[199px] object-cover cursor-pointer"
-                    src={user.profileImageUrl}
-                    alt="Profile"
-                    width={180}
-                    height={199}
-                    onClick={() => router.push("/profile")}
-                    style={{
-                      width: 'clamp(60px, 15vw, 180px)',
-                      height: 'clamp(60px, 25vh, 199px)',
-                      objectPosition: 'center 20%',
-                      border: `2px solid ${user.secondaryColor}`,
-                    }}
-                  />
-                ) : (
-                  <div
-                    <div
-                  className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
-                    onClick={() => router.push("/profile")}
-                    style={{
-                      width: "clamp(60px, 15vw, 180px)",
-                      height: "clamp(60px, 15vh, 199px)",
-                    }}
-                  >
-                    <span
-                      className="font-medium text-gray-700"
-                      style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}
-                    >
-                      {user.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <p
-                className="font-medium text-white text-center underline cursor-pointer"
-                style={{
-                  fontSize: 'clamp(0.875rem, 3vw, 1.125rem)',
-                  marginTop: 'clamp(0.25rem, 1vw, 0.5rem)'
-                }}
+            <div className="px-4 space-y-3 grid grid-cols-2 gap-4 mt-10">
+              <CustomButton
                 onClick={handleLogout}
+                className="w-full py-1 rounded-full font-semibold text-white transition-colors text-center"
+
               >
                 Logout
-              </p>
-            </>
-        )}
+              </CustomButton>
+
+              <button
+                onClick={() => router.push('/')}
+                className="w-full py-1 h-10 cursor-pointer rounded-full bg-transparent border border-white/50  font-semibold text-white transition-colors text-center"
+
+              >
+                Exit
+              </button>
+            </div>
           </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-center" style={{ marginBottom: 'clamp(0.25rem, 1vw, 0.5rem)' }}>
+              {user.profileImageUrl ? (
+                <Image
+                  className="border   w-[180px]  h-[199px] object-cover cursor-pointer"
+                  src={user.profileImageUrl}
+                  alt="Profile"
+                  width={180}
+                  height={199}
+                  onClick={() => router.push('/profile')}
+                  style={{
+                    width: 'clamp(60px, 15vw, 180px)',
+                    height: 'clamp(60px, 25vh, 199px)',
+                    objectPosition: 'center 20%',
+                    border: `2px solid ${user.secondaryColor}`,
+                  }}
+                />
+              ) : (
+                <div
+                  className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
+                  onClick={() => router.push('/profile')}
+                  style={{
+                    width: 'clamp(60px, 15vw, 180px)',
+                    height: 'clamp(60px, 15vh, 199px)'
+                  }}
+                >
+                  <span className="font-medium text-gray-700" style={{ fontSize: 'clamp(1rem, 4vw, 1.5rem)' }}>
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
+            <p
+              className="font-medium text-white text-center underline cursor-pointer"
+              style={{
+                fontSize: 'clamp(0.875rem, 3vw, 1.125rem)',
+                marginTop: 'clamp(0.25rem, 1vw, 0.5rem)'
+              }}
+              onClick={handleLogout}
+            >
+              Logout
+            </p>
+          </>
+        )}
+      </div>
     </div>
-      );
+  );
 }
