@@ -554,7 +554,7 @@ export default function TestPresentation() {
         </div>
 
       </header>
-      <main className="px-24 pt-3 bg-white flex-1 pb-10 overflow-y-auto">
+      <main className="px-24 pt-3 bg-white flex-1 pb-36 ">
         <div className="">
           <div className="w-full">
             <table className="w-full border-collapse  border-gray-300">
@@ -575,7 +575,7 @@ export default function TestPresentation() {
                         </div>
                       </td>
                       <td className="border-r border-gray-300 px-4 align-middle">
-                        <div className="relative py-1" data-question-id={question.id}>
+                        <div className="relative py-2.5" data-question-id={question.id}>
                           <Select
                             value={selectedOptionId || undefined}
                             onValueChange={(value) => handleAnswerChange(question.id, value)}
@@ -593,39 +593,39 @@ export default function TestPresentation() {
                               {[...question.options]
                                 .sort((a, b) => a.points - b.points)
                                 .map((option) => {
-                                const backgroundColor = getOptionBackgroundColor(option.points);
-                                const textColor = getOptionTextColor(option.points);
-                                return (
-                                  <SelectItem
-                                    key={option.id}
-                                    value={option.id}
-                                    className="cursor-pointer rounded-sm px-3 py-2 text-sm focus:outline-none"
-                                    style={{
-                                      backgroundColor: backgroundColor,
-                                      color: textColor,
-                                    }}
-                                    onMouseEnter={(e) => {
-                                      const target = e.currentTarget;
-                                      target.style.opacity = '0.9';
-                                      target.style.backgroundColor = backgroundColor;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      const target = e.currentTarget;
-                                      target.style.opacity = '1';
-                                      target.style.backgroundColor = backgroundColor;
-                                    }}
-                                    onFocus={(e) => {
-                                      e.currentTarget.style.backgroundColor = backgroundColor;
-                                    }}
-                                  >
-                                    <span style={{ color: textColor }}>{option.text}</span>
-                                  </SelectItem>
-                                );
-                              })}
+                                  const backgroundColor = getOptionBackgroundColor(option.points);
+                                  const textColor = getOptionTextColor(option.points);
+                                  return (
+                                    <SelectItem
+                                      key={option.id}
+                                      value={option.id}
+                                      className="cursor-pointer rounded-sm px-3 py-2 text-sm focus:outline-none"
+                                      style={{
+                                        backgroundColor: backgroundColor,
+                                        color: textColor,
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        const target = e.currentTarget;
+                                        target.style.opacity = '0.9';
+                                        target.style.backgroundColor = backgroundColor;
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        const target = e.currentTarget;
+                                        target.style.opacity = '1';
+                                        target.style.backgroundColor = backgroundColor;
+                                      }}
+                                      onFocus={(e) => {
+                                        e.currentTarget.style.backgroundColor = backgroundColor;
+                                      }}
+                                    >
+                                      <span style={{ color: textColor }}>{option.text}</span>
+                                    </SelectItem>
+                                  );
+                                })}
                             </SelectContent>
                           </Select>
                           <div
-                            className="absolute right-0 top-1 h-[80%] w-11 flex items-center justify-center rounded-md pointer-events-none"
+                            className="absolute right-0 top-3 h-[55%] w-11 flex items-center justify-center rounded-md pointer-events-none"
                             style={{
                               backgroundColor: selectedOption ? getOptionColor(selectedOption.points) : 'transparent',
                             }}
