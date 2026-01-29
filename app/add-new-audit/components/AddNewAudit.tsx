@@ -12,29 +12,38 @@ type OptionState = { text: string; points: number };
 export default function AddNewAudit() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentCategory = parseInt(searchParams.get('category') || '1', 10);
+  const currentCategory = parseInt(searchParams.get("category") || "1", 10);
   const createAuditMutation = useCreateAudit();
-  
+
   const [title, setTitle] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState<string>("");
-  const [tableQuestions, setTableQuestions] = useState<{ index: number; text: string }[]>([]);
+  const [tableQuestions, setTableQuestions] = useState<
+    { index: number; text: string }[]
+  >([]);
   const [statusMap, setStatusMap] = useState<Record<number, string[]>>({});
-  const [sessionStorageCategories, setSessionStorageCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>([]);
-  
+  const [sessionStorageCategories, setSessionStorageCategories] = useState<
+    Array<{ id: string; name: string; recommendation?: string }>
+  >([]);
+
   // Load categories from sessionStorage
   const loadCategoriesFromStorage = () => {
-    if (typeof window === 'undefined') return;
-    const auditData = sessionStorage.getItem('auditData');
+    if (typeof window === "undefined") return;
+    const auditData = sessionStorage.getItem("auditData");
     if (auditData) {
       try {
         const parsed = JSON.parse(auditData);
         if (Array.isArray(parsed.categories)) {
-          const categories = parsed.categories.map((cat: { id?: string; name?: string; recommendation?: string }, idx: number) => ({
-            id: cat.id || `temp-${idx}`,
-            name: cat.name || `Category ${idx + 1}`,
-            recommendation: cat.recommendation || "",
-          }));
+          const categories = parsed.categories.map(
+            (
+              cat: { id?: string; name?: string; recommendation?: string },
+              idx: number,
+            ) => ({
+              id: cat.id || `temp-${idx}`,
+              name: cat.name || `Category ${idx + 1}`,
+              recommendation: cat.recommendation || "",
+            }),
+          );
           setSessionStorageCategories(categories);
         }
       } catch {}
@@ -46,22 +55,22 @@ export default function AddNewAudit() {
     const handleStorageChange = () => {
       loadCategoriesFromStorage();
     };
-    window.addEventListener('categoryNameUpdated', handleStorageChange);
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("categoryNameUpdated", handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
     return () => {
-      window.removeEventListener('categoryNameUpdated', handleStorageChange);
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("categoryNameUpdated", handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
   // Hydrate title from sessionStorage on mount
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     try {
-      const raw = sessionStorage.getItem('auditData');
+      const raw = sessionStorage.getItem("auditData");
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed?.title && typeof parsed.title === 'string') {
+        if (parsed?.title && typeof parsed.title === "string") {
           setTitle(parsed.title);
         }
       }
@@ -70,24 +79,28 @@ export default function AddNewAudit() {
 
   // Hydrate category name and icon from sessionStorage on mount or category change
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const loadCategoryData = () => {
       try {
         // If category is 8, it's the summary
         if (currentCategory === 8) {
-          setCategoryName('Summary');
+          setCategoryName("Summary");
           setCategoryIcon("");
           return;
         }
         // Try to get from specific category storage
-        const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
-        const storedIcon = sessionStorage.getItem(`auditData:categoryIcon:${currentCategory}`);
-        
+        const storedName = sessionStorage.getItem(
+          `auditData:categoryName:${currentCategory}`,
+        );
+        const storedIcon = sessionStorage.getItem(
+          `auditData:categoryIcon:${currentCategory}`,
+        );
+
         if (storedName) {
           setCategoryName(storedName);
         } else {
           // Try to get from auditData categories array
-          const raw = sessionStorage.getItem('auditData');
+          const raw = sessionStorage.getItem("auditData");
           if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed?.categories)) {
@@ -104,13 +117,13 @@ export default function AddNewAudit() {
             setCategoryName(`Category ${currentCategory}`);
           }
         }
-        
+
         // Load icon
         if (storedIcon) {
           setCategoryIcon(storedIcon);
         } else {
           // Try to get from auditData categories array
-          const raw = sessionStorage.getItem('auditData');
+          const raw = sessionStorage.getItem("auditData");
           if (raw) {
             const parsed = JSON.parse(raw);
             if (Array.isArray(parsed?.categories)) {
@@ -128,7 +141,9 @@ export default function AddNewAudit() {
           }
         }
       } catch {
-        setCategoryName(currentCategory === 8 ? 'Summary' : `Category ${currentCategory}`);
+        setCategoryName(
+          currentCategory === 8 ? "Summary" : `Category ${currentCategory}`,
+        );
         setCategoryIcon("");
       }
     };
@@ -140,8 +155,9 @@ export default function AddNewAudit() {
       loadCategoryData();
     };
 
-    window.addEventListener('categoryNameUpdated', handleCategoryUpdate);
-    return () => window.removeEventListener('categoryNameUpdated', handleCategoryUpdate);
+    window.addEventListener("categoryNameUpdated", handleCategoryUpdate);
+    return () =>
+      window.removeEventListener("categoryNameUpdated", handleCategoryUpdate);
   }, [currentCategory]);
 
   const handleCategoryRecommendationChange = React.useCallback(
@@ -149,7 +165,7 @@ export default function AddNewAudit() {
       setSessionStorageCategories((prev) => {
         const next = [...prev];
         let targetIndex = next.findIndex((cat, idx) =>
-          cat.id ? cat.id === categoryId : idx === categoryIndex - 1
+          cat.id ? cat.id === categoryId : idx === categoryIndex - 1,
         );
         if (targetIndex === -1 && categoryIndex >= 1) {
           targetIndex = categoryIndex - 1;
@@ -170,13 +186,13 @@ export default function AddNewAudit() {
         return next;
       });
 
-      if (typeof window !== 'undefined' && categoryIndex >= 1) {
+      if (typeof window !== "undefined" && categoryIndex >= 1) {
         try {
           sessionStorage.setItem(
             `auditData:categoryRecommendation:${categoryIndex}`,
-            value
+            value,
           );
-          const raw = sessionStorage.getItem('auditData');
+          const raw = sessionStorage.getItem("auditData");
           const data = raw ? JSON.parse(raw) : { categories: [] };
           if (!Array.isArray(data.categories)) data.categories = [];
           const idx = categoryIndex - 1;
@@ -190,27 +206,35 @@ export default function AddNewAudit() {
             ...data.categories[idx],
             recommendation: value,
           };
-          sessionStorage.setItem('auditData', JSON.stringify(data));
+          sessionStorage.setItem("auditData", JSON.stringify(data));
         } catch (error) {
-          console.error('Error saving category recommendation:', error);
+          console.error("Error saving category recommendation:", error);
         }
       }
     },
-    []
+    [],
   );
 
   const buildAuditData = useMemo(() => {
-    const merged: { title?: string; categories?: Array<{ name?: string; icon?: string; questions: Array<Partial<{ text: string; options: OptionState[] }>> }>; } = {};
+    const merged: {
+      title?: string;
+      categories?: Array<{
+        name?: string;
+        icon?: string;
+        questions: Array<Partial<{ text: string; options: OptionState[] }>>;
+      }>;
+    } = {};
 
     // Start from any previously saved auditData (to keep other categories intact)
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
-        const raw = sessionStorage.getItem('auditData');
+        const raw = sessionStorage.getItem("auditData");
         if (raw) {
           const prev = JSON.parse(raw);
-          if (prev && typeof prev === 'object') {
-            if (typeof prev.title === 'string') merged.title = prev.title;
-            if (Array.isArray(prev.categories)) merged.categories = prev.categories;
+          if (prev && typeof prev === "object") {
+            if (typeof prev.title === "string") merged.title = prev.title;
+            if (Array.isArray(prev.categories))
+              merged.categories = prev.categories;
           }
         }
       } catch {}
@@ -220,21 +244,35 @@ export default function AddNewAudit() {
     if (trimmedTitle) merged.title = trimmedTitle;
 
     // Determine if any per-row inputs exist for current category
-    const hasAnyQuestion = tableQuestions.some(q => (q.text?.trim()?.length || 0) > 0);
+    const hasAnyQuestion = tableQuestions.some(
+      (q) => (q.text?.trim()?.length || 0) > 0,
+    );
     const hasAnyStatus = Object.keys(statusMap).length > 0;
 
     // Build the current category questions snapshot (even if empty, we will only write if there is something)
-    const questions: Array<Partial<{ text: string; options: OptionState[] }>> = [];
+    const questions: Array<Partial<{ text: string; options: OptionState[] }>> =
+      [];
     for (let qIdx = 0; qIdx < 10; qIdx++) {
       const rowIndex = qIdx + 1;
-      const qText = tableQuestions.find(q => q.index === rowIndex)?.text?.trim();
+      const qText = tableQuestions
+        .find((q) => q.index === rowIndex)
+        ?.text?.trim();
       const labels = statusMap[rowIndex];
       const question: Partial<{ text: string; options: OptionState[] }> = {};
       if (qText) question.text = qText;
       if (Array.isArray(labels) && labels.length === 5) {
-        const defaultLabels = ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"];
+        const defaultLabels = [
+          "Very Minimal",
+          "Just Starting",
+          "Good progress",
+          "Excellent",
+          "Very Excellent",
+        ];
         question.options = labels.map((t, i) => {
-          return { text: (t && t.trim()) ? t.trim() : defaultLabels[i], points: i + 1 };
+          return {
+            text: t && t.trim() ? t.trim() : defaultLabels[i],
+            points: i + 1,
+          };
         });
       }
       questions.push(question);
@@ -242,16 +280,29 @@ export default function AddNewAudit() {
 
     // If current category has anything, merge it into the categories array at its index
     // IMPORTANT: Only process categories 1-7, exclude summary (category 8)
-    if ((hasAnyQuestion || hasAnyStatus) && currentCategory >= 1 && currentCategory <= 7) {
+    if (
+      (hasAnyQuestion || hasAnyStatus) &&
+      currentCategory >= 1 &&
+      currentCategory <= 7
+    ) {
       const idx = Math.max(0, currentCategory - 1);
-      const existingCategories = Array.isArray(merged.categories) ? [...merged.categories] : [];
+      const existingCategories = Array.isArray(merged.categories)
+        ? [...merged.categories]
+        : [];
       // Ensure array has enough length (max 7 categories)
-      while (existingCategories.length < idx + 1 && existingCategories.length < 7) {
-        existingCategories.push({ name: `Category ${existingCategories.length + 1}`, questions: [] });
+      while (
+        existingCategories.length < idx + 1 &&
+        existingCategories.length < 7
+      ) {
+        existingCategories.push({
+          name: `Category ${existingCategories.length + 1}`,
+          questions: [],
+        });
       }
       // Only update if index is within valid range (0-6 for categories 1-7)
       if (idx < 7) {
-        const finalCategoryName = categoryName.trim() || `Category ${currentCategory}`;
+        const finalCategoryName =
+          categoryName.trim() || `Category ${currentCategory}`;
         const finalCategoryIcon = categoryIcon.trim() || undefined;
         const previousCategory = existingCategories[idx] || {};
         existingCategories[idx] = {
@@ -261,41 +312,60 @@ export default function AddNewAudit() {
           questions,
         };
         // Ensure we don't exceed 7 categories - filter out any items at index 7 or higher
-        merged.categories = existingCategories.filter((cat, index) => index < 7);
+        merged.categories = existingCategories.filter(
+          (cat, index) => index < 7,
+        );
       }
     }
 
     return merged;
-  }, [title, tableQuestions, statusMap, currentCategory, categoryName, categoryIcon]);
+  }, [
+    title,
+    tableQuestions,
+    statusMap,
+    currentCategory,
+    categoryName,
+    categoryIcon,
+  ]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     try {
       // Preserve summaryData before updating auditData
-      const existingSummaryData = sessionStorage.getItem('summaryData');
-      
+      const existingSummaryData = sessionStorage.getItem("summaryData");
+
       // Save category name and icon separately for sidebar access
-      const finalCategoryName = categoryName.trim() || `Category ${currentCategory}`;
+      const finalCategoryName =
+        categoryName.trim() || `Category ${currentCategory}`;
       const finalCategoryIcon = categoryIcon.trim() || "";
-      sessionStorage.setItem(`auditData:categoryName:${currentCategory}`, finalCategoryName);
+      sessionStorage.setItem(
+        `auditData:categoryName:${currentCategory}`,
+        finalCategoryName,
+      );
       if (finalCategoryIcon) {
-        sessionStorage.setItem(`auditData:categoryIcon:${currentCategory}`, finalCategoryIcon);
+        sessionStorage.setItem(
+          `auditData:categoryIcon:${currentCategory}`,
+          finalCategoryIcon,
+        );
       } else {
         sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
       }
-      
+
       const data = buildAuditData;
-      sessionStorage.setItem('auditData', JSON.stringify(data));
+      sessionStorage.setItem("auditData", JSON.stringify(data));
       if (Array.isArray(data.categories)) {
         data.categories.forEach((cat, i) => {
           const categoryNumber = i + 1;
-          sessionStorage.setItem(`auditData:category:${categoryNumber}`, JSON.stringify(cat));
+          sessionStorage.setItem(
+            `auditData:category:${categoryNumber}`,
+            JSON.stringify(cat),
+          );
         });
       }
-      
+
       // Restore summaryData if it existed (preserve it when navigating between pages)
       if (existingSummaryData) {
-        sessionStorage.setItem('summaryData', existingSummaryData);
+        sessionStorage.setItem("summaryData", existingSummaryData);
       }
     } catch (e) {
       console.error(e);
@@ -308,7 +378,7 @@ export default function AddNewAudit() {
       return;
     }
 
-    const questionTexts = tableQuestions.map(q => q.text).filter(Boolean);
+    const questionTexts = tableQuestions.map((q) => q.text).filter(Boolean);
     if (questionTexts.length === 0) {
       toast.error("Add at least one question in the table");
       return;
@@ -319,12 +389,15 @@ export default function AddNewAudit() {
 
     try {
       // Persist to sessionStorage (whole audit and per-category)
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('auditData', JSON.stringify(auditData));
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("auditData", JSON.stringify(auditData));
         if (Array.isArray(auditData.categories)) {
           auditData.categories.forEach((cat, i) => {
             const categoryNumber = i + 1;
-            sessionStorage.setItem(`auditData:category:${categoryNumber}`, JSON.stringify(cat));
+            sessionStorage.setItem(
+              `auditData:category:${categoryNumber}`,
+              JSON.stringify(cat),
+            );
           });
         }
       }
@@ -335,31 +408,38 @@ export default function AddNewAudit() {
       const allCategories = auditData.categories || [];
       const categories = allCategories
         .filter((cat, index) => index < 7) // Only include categories at index 0-6 (categories 1-7)
-        .map(cat => {
+        .map((cat) => {
           // Filter out empty questions and ensure each question has 5 options
           const questions = cat.questions
-            .filter(q => q.text && q.text.trim().length > 0)
-            .map(q => ({
+            .filter((q) => q.text && q.text.trim().length > 0)
+            .map((q) => ({
               text: q.text!.trim(),
-              options: (Array.isArray(q.options) && q.options.length === 5)
-                ? q.options.map(opt => ({
-                    text: opt.text.trim(),
-                    points: opt.points
-                  }))
-                : ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((text, i) => ({
-                    text: text,
-                    points: i + 1
-                  }))
+              options:
+                Array.isArray(q.options) && q.options.length === 5
+                  ? q.options.map((opt) => ({
+                      text: opt.text.trim(),
+                      points: opt.points,
+                    }))
+                  : [
+                      "Very Minimal",
+                      "Just Starting",
+                      "Good progress",
+                      "Excellent",
+                      "Very Excellent",
+                    ].map((text, i) => ({
+                      text: text,
+                      points: i + 1,
+                    })),
             }))
-            .filter(q => q.text.length > 0);
+            .filter((q) => q.text.length > 0);
 
           return {
-            name: cat.name || 'Category',
-            icon: (cat.icon && cat.icon.trim()) ? cat.icon.trim() : undefined,
-            questions
+            name: cat.name || "Category",
+            icon: cat.icon && cat.icon.trim() ? cat.icon.trim() : undefined,
+            questions,
           };
         })
-        .filter(cat => cat.questions.length > 0);
+        .filter((cat) => cat.questions.length > 0);
 
       if (categories.length === 0) {
         toast.error("Add at least one question in the table");
@@ -368,8 +448,8 @@ export default function AddNewAudit() {
 
       // Get summary data from sessionStorage if it exists
       let summaryData = null;
-      if (typeof window !== 'undefined') {
-        const summaryDataStr = sessionStorage.getItem('summaryData');
+      if (typeof window !== "undefined") {
+        const summaryDataStr = sessionStorage.getItem("summaryData");
         if (summaryDataStr) {
           try {
             const parsed = JSON.parse(summaryDataStr);
@@ -396,11 +476,11 @@ export default function AddNewAudit() {
       });
 
       toast.success("Audit created successfully");
-      
+
       // Store the created audit ID in sessionStorage before clearing
-      if (typeof window !== 'undefined' && createdAudit?.id) {
-        sessionStorage.setItem('createdAuditId', createdAudit.id);
-        
+      if (typeof window !== "undefined" && createdAudit?.id) {
+        sessionStorage.setItem("createdAuditId", createdAudit.id);
+
         // Map temp category IDs to real category IDs and update summary if needed
         if (summaryData && createdAudit.categories) {
           try {
@@ -408,35 +488,35 @@ export default function AddNewAudit() {
             createdAudit.categories.forEach((cat, idx) => {
               categoryMap[`temp-${idx}`] = cat.id;
             });
-            
+
             // Clear summary data from sessionStorage
-            sessionStorage.removeItem('summaryData');
+            sessionStorage.removeItem("summaryData");
           } catch (error) {
             console.error("Error updating summary with category IDs:", error);
             // Don't fail the audit creation if summary update fails
-            sessionStorage.removeItem('summaryData');
+            sessionStorage.removeItem("summaryData");
           }
         } else if (summaryData) {
           // Clear summary data from sessionStorage even if update fails
-          sessionStorage.removeItem('summaryData');
+          sessionStorage.removeItem("summaryData");
         }
       }
-      
+
       // Clear all state
       setTitle("");
       setCategoryName("");
       setCategoryIcon("");
       setTableQuestions([]);
       setStatusMap({});
-      
+
       // Clear full sessionStorage after successful creation
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         sessionStorage.clear();
-        
+
         // Dispatch event to update sidebar
-        window.dispatchEvent(new Event('categoryNameUpdated'));
+        window.dispatchEvent(new Event("categoryNameUpdated"));
       }
-      
+
       // Redirect to home page after successful creation
       setTimeout(() => {
         router.push("/");
@@ -451,7 +531,9 @@ export default function AddNewAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">GRADING SCALE (1-5)</p>
+          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">
+            GRADING SCALE (1-5)
+          </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
             <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
               1-2 URGENT ATTEN
@@ -464,16 +546,17 @@ export default function AddNewAudit() {
             </p>
           </div>
         </div>
-       
-     
-          <div className="px-24 flex items-center justify-between">
-            {["questions", "answers", "score"].map((item,i) => (
-              <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56":""}`}>
-                {item}
-              </p>
-            ))}
-          </div>
-       
+
+        <div className="px-24 flex items-center justify-between">
+          {["questions", "answers", "score"].map((item, i) => (
+            <p
+              key={i}
+              className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}
+            >
+              {item}
+            </p>
+          ))}
+        </div>
       </header>
       <main className="px-24 pt-5 bg-white h-[90vh] pb-10">
         <div className="flex gap items-center justify-between mb-4">
@@ -519,7 +602,9 @@ export default function AddNewAudit() {
             <AuditTable
               currentCategory={currentCategory}
               onQuestionsChange={setTableQuestions}
-              onStatusChange={(rowIndex, labels) => setStatusMap(prev => ({ ...prev, [rowIndex]: labels }))}
+              onStatusChange={(rowIndex, labels) =>
+                setStatusMap((prev) => ({ ...prev, [rowIndex]: labels }))
+              }
             />
           </div>
         )}
@@ -534,27 +619,37 @@ interface AuditTableProps {
   onStatusChange?: (rowIndex: number, labels: string[]) => void;
 }
 
-function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: AuditTableProps) {
+function AuditTable({
+  currentCategory,
+  onQuestionsChange,
+  onStatusChange,
+}: AuditTableProps) {
   const [activeRows, setActiveRows] = useState<Set<number>>(new Set());
   const [questions, setQuestions] = useState<{ [key: number]: string }>({});
-  const [statusLabels, setStatusLabels] = useState<Record<number, string[]>>({});
+  const [statusLabels, setStatusLabels] = useState<Record<number, string[]>>(
+    {},
+  );
 
   // Hydrate questions and status labels from sessionStorage on mount or category change
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     try {
       // Questions per row 1..10 for current category
       const qInit: { [key: number]: string } = {};
       for (let i = 1; i <= 10; i++) {
-        const qs = sessionStorage.getItem(`auditData:question:${currentCategory}:${i}`);
-        if (qs && typeof qs === 'string' && qs.length > 0) {
+        const qs = sessionStorage.getItem(
+          `auditData:question:${currentCategory}:${i}`,
+        );
+        if (qs && typeof qs === "string" && qs.length > 0) {
           qInit[i] = qs;
         }
       }
 
       // If not present, try from auditData (specific category)
       if (Object.keys(qInit).length === 0) {
-        const categoryData = sessionStorage.getItem(`auditData:category:${currentCategory}`);
+        const categoryData = sessionStorage.getItem(
+          `auditData:category:${currentCategory}`,
+        );
         if (categoryData) {
           const parsed = JSON.parse(categoryData);
           if (parsed?.questions?.length) {
@@ -571,25 +666,34 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
       // Status labels (options) per row 1..10 for current category
       const statusInit: Record<number, string[]> = {};
       for (let i = 1; i <= 10; i++) {
-        const st = sessionStorage.getItem(`auditData:status:${currentCategory}:${i}`);
+        const st = sessionStorage.getItem(
+          `auditData:status:${currentCategory}:${i}`,
+        );
         if (st) {
           const arr = JSON.parse(st) as unknown;
-          if (Array.isArray(arr) && arr.length) statusInit[i] = (arr as unknown[]).map((v) => String(v));
+          if (Array.isArray(arr) && arr.length)
+            statusInit[i] = (arr as unknown[]).map((v) => String(v));
         }
       }
 
       // If not present, try from auditData options of specific category
       if (Object.keys(statusInit).length === 0) {
-        const categoryData = sessionStorage.getItem(`auditData:category:${currentCategory}`);
+        const categoryData = sessionStorage.getItem(
+          `auditData:category:${currentCategory}`,
+        );
         if (categoryData) {
           const parsed = JSON.parse(categoryData);
           if (parsed?.questions?.length) {
-            parsed.questions.forEach((q: { options?: { text?: string }[] }, idx: number) => {
-              const rowIndex = idx + 1;
-              if (Array.isArray(q?.options) && q.options.length) {
-                statusInit[rowIndex] = q.options.map((o: { text?: string }) => String(o?.text ?? ''));
-              }
-            });
+            parsed.questions.forEach(
+              (q: { options?: { text?: string }[] }, idx: number) => {
+                const rowIndex = idx + 1;
+                if (Array.isArray(q?.options) && q.options.length) {
+                  statusInit[rowIndex] = q.options.map((o: { text?: string }) =>
+                    String(o?.text ?? ""),
+                  );
+                }
+              },
+            );
           }
         }
       }
@@ -599,7 +703,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
       // Auto-activate rows that have restored content (question or status)
       const rowsToActivate = new Set<number>();
       for (let i = 1; i <= 10; i++) {
-        const hasQ = typeof qInit[i] === 'string' && qInit[i].trim().length > 0;
+        const hasQ = typeof qInit[i] === "string" && qInit[i].trim().length > 0;
         const hasS = Array.isArray(statusInit[i]) && statusInit[i].length > 0;
         if (hasQ || hasS) rowsToActivate.add(i);
       }
@@ -610,14 +714,17 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
   useEffect(() => {
     if (!onQuestionsChange) return;
     const list = Object.keys(questions)
-      .map(k => ({ index: Number(k), text: questions[Number(k)]?.trim?.() || '' }))
-      .filter(q => q.text.length > 0)
+      .map((k) => ({
+        index: Number(k),
+        text: questions[Number(k)]?.trim?.() || "",
+      }))
+      .filter((q) => q.text.length > 0)
       .sort((a, b) => a.index - b.index);
     onQuestionsChange(list);
   }, [questions, onQuestionsChange]);
 
   const handleQuestionClick = (rowIndex: number) => {
-    setActiveRows(prev => {
+    setActiveRows((prev) => {
       const newSet = new Set(prev);
       newSet.add(rowIndex);
       return newSet;
@@ -631,43 +738,51 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
   };
 
   const setStatusValue = (rowIndex: number, idx: number, value: string) => {
-    setStatusLabels(prev => {
+    setStatusLabels((prev) => {
       const next = { ...prev };
-      const row = next[rowIndex] ? [...next[rowIndex]] : statusButtons.map(s => s.label);
+      const row = next[rowIndex]
+        ? [...next[rowIndex]]
+        : statusButtons.map((s) => s.label);
       row[idx] = value;
       next[rowIndex] = row;
-      
+
       // Save to sessionStorage and notify parent with the updated value
       try {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
           const key = `auditData:status:${currentCategory}:${rowIndex}`;
           sessionStorage.setItem(key, JSON.stringify(row));
           onStatusChange?.(rowIndex, row);
         }
       } catch {}
-      
+
       return next;
     });
   };
 
   const handleQuestionChange = (rowIndex: number, value: string) => {
-    setQuestions(prev => ({
+    setQuestions((prev) => ({
       ...prev,
-      [rowIndex]: value
+      [rowIndex]: value,
     }));
     try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem(`auditData:question:${currentCategory}:${rowIndex}`, value);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(
+          `auditData:question:${currentCategory}:${rowIndex}`,
+          value,
+        );
       }
     } catch {}
 
     // Auto-add options for this question if not present yet, using current status labels (defaults)
     if (!statusLabels[rowIndex] || statusLabels[rowIndex].length !== 5) {
-      const defaults = statusButtons.map(s => s.label);
-      setStatusLabels(prev => ({ ...prev, [rowIndex]: defaults }));
+      const defaults = statusButtons.map((s) => s.label);
+      setStatusLabels((prev) => ({ ...prev, [rowIndex]: defaults }));
       try {
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem(`auditData:status:${currentCategory}:${rowIndex}`, JSON.stringify(defaults));
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(
+            `auditData:status:${currentCategory}:${rowIndex}`,
+            JSON.stringify(defaults),
+          );
         }
       } catch {}
       onStatusChange?.(rowIndex, defaults);
@@ -675,11 +790,36 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
   };
 
   const statusButtons = [
-    { label: "Very Minimal", color: "bg-[#FFE2E380]", borderColor: "border-[#FFB7B9]", textColor: "text-pink-800" },
-    { label: "Just Starting", color: "bg-[#FFFCE280]", borderColor: "border-[#E3D668]", textColor: "text-yellow-800" },
-    { label: "Good progress", color: "bg-[#FFDBC2B2]", borderColor: "border-[#894B00E5]", textColor: "text-orange-800" },
-    { label: "Excellent", color: "bg-[#DCFCE7]", borderColor: "border-[#01673099]", textColor: "text-green-800" },
-    { label: "Very Excellent", color: "bg-[#DCF3F6]", borderColor: "border-[#01673099]", textColor: "text-blue-800" },
+    {
+      label: "Very Minimal",
+      color: "bg-[#FFE2E380]",
+      borderColor: "border-[#FFB7B9]",
+      textColor: "text-pink-800",
+    },
+    {
+      label: "Just Starting",
+      color: "bg-[#FFFCE280]",
+      borderColor: "border-[#E3D668]",
+      textColor: "text-yellow-800",
+    },
+    {
+      label: "Good progress",
+      color: "bg-[#FFDBC2B2]",
+      borderColor: "border-[#894B00E5]",
+      textColor: "text-orange-800",
+    },
+    {
+      label: "Excellent",
+      color: "bg-[#DCFCE7]",
+      borderColor: "border-[#01673099]",
+      textColor: "text-green-800",
+    },
+    {
+      label: "Very Excellent",
+      color: "bg-[#DCF3F6]",
+      borderColor: "border-[#01673099]",
+      textColor: "text-blue-800",
+    },
   ];
 
   return (
@@ -689,7 +829,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
           {Array.from({ length: 10 }, (_, index) => {
             const rowIndex = index + 1;
             const isActive = activeRows.has(rowIndex);
-            
+
             return (
               <tr key={rowIndex} className="border-b border-gray-300">
                 <td className="border-r border-gray-300 px-4 py-3 text-center align-middle w-16">
@@ -698,10 +838,12 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
                 <td className="border-r border-gray-300 px-4 py-3 align-middle w-full">
                   <input
                     type="text"
-                    value={questions[rowIndex] || ''}
-                    placeholder={`Question ${rowIndex.toString().padStart(2, '0')}`}
+                    value={questions[rowIndex] || ""}
+                    placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                     onClick={() => handleQuestionClick(rowIndex)}
-                    onChange={(e) => handleQuestionChange(rowIndex, e.target.value)}
+                    onChange={(e) =>
+                      handleQuestionChange(rowIndex, e.target.value)
+                    }
                     className="w-full bg-[#4569871A] px-4 h-[5vh] border border-[#3b5163] rounded-xl outline-none"
                   />
                 </td>
@@ -713,7 +855,9 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
                           key={button.label}
                           type="text"
                           value={getStatusValue(rowIndex, idx)}
-                          onChange={(e) => setStatusValue(rowIndex, idx, e.target.value)}
+                          onChange={(e) =>
+                            setStatusValue(rowIndex, idx, e.target.value)
+                          }
                           className={`${button.color} ${button.borderColor} ${button.textColor} pl-3 py-1.5 w-28 rounded-lg border font-medium text-sm outline-none`}
                         />
                       ))}
@@ -728,5 +872,5 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
         </tbody>
       </table>
     </div>
-  )
+  );
 }
