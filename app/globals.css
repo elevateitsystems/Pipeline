@@ -46,6 +46,7 @@
   font-weight: normal;
   font-style: normal;
 }
+
 @font-face {
   font-family: 'Acumin Variable Concept';
   src: url('/fonts/Acumin Variable Concept.ttf') format('truetype');
@@ -66,13 +67,17 @@
 
 /* Hide scrollbars */
 .hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
+
 .active-nav-item::before {
   content: '';
   position: absolute;
@@ -96,6 +101,7 @@
   border-top-right-radius: 15px;
   box-shadow: 5px -5px 0 5px #ffffff;
 }
+
 .active-nav-item2::before {
   content: '';
   position: absolute;
