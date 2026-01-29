@@ -25,26 +25,26 @@ export default function SignupPage() {
     passCode: "",
     pin: "",
     companyName: "",
-    primaryColor: "#456987" ,
+    primaryColor: "#456987",
     secondaryColor: "#F7AF41",
     profileImageUrl: "",
     companyLogoUrl: "",
     role: "USER",
     inviteToken: "",
   });
-  const [pinDigits, setPinDigits] = useState(['', '', '', '']);
+  const [pinDigits, setPinDigits] = useState(["", "", "", ""]);
 
   const handlePinChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single digit
     if (!/^\d*$/.test(value)) return; // Only allow numbers
-    
+
     const newPin = [...pinDigits];
     newPin[index] = value;
     setPinDigits(newPin);
-    
+
     // Update formData pin
-    const pinValue = newPin.join('');
-    setFormData(prev => ({ ...prev, pin: pinValue }));
+    const pinValue = newPin.join("");
+    setFormData((prev) => ({ ...prev, pin: pinValue }));
 
     // Auto-focus next input
     if (value && index < 3) {
@@ -53,8 +53,11 @@ export default function SignupPage() {
     }
   };
 
-  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !pinDigits[index] && index > 0) {
+  const handlePinKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Backspace" && !pinDigits[index] && index > 0) {
       const prevInput = document.getElementById(`signup-pin-${index - 1}`);
       prevInput?.focus();
     }
@@ -66,9 +69,13 @@ export default function SignupPage() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { data: inviteData, error: inviteQueryError, isLoading: inviteLoading } = useInvite(token);
+  const {
+    data: inviteData,
+    error: inviteQueryError,
+    isLoading: inviteLoading,
+  } = useInvite(token);
   const registerMutation = useRegister();
-console.log(inviteData);
+  console.log(inviteData);
   useEffect(() => {
     if (inviteData && token) {
       const inviteEmail = (inviteData as unknown as InvitationData).email;
@@ -78,14 +85,14 @@ console.log(inviteData);
         role: (inviteData as unknown as InvitationData).role,
         inviteToken: token,
         // Set a default name from email (extract name part before @) or use email
-        name: prev.name || inviteEmail.split('@')[0] || 'User',
+        name: prev.name || inviteEmail.split("@")[0] || "User",
       }));
     }
     // no-op for inviteQueryError: handled downstream via disabled inputs/messages if needed
   }, [inviteData, inviteQueryError, token]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -93,7 +100,7 @@ console.log(inviteData);
 
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "profile" | "company"
+    type: "profile" | "company",
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -126,12 +133,12 @@ console.log(inviteData);
     uploadData.append("file", file);
     uploadData.append(
       "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
     );
 
     const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      uploadData
+      uploadData,
     );
     return response.data.secure_url;
   };
@@ -148,13 +155,15 @@ console.log(inviteData);
         pin: formData.pin || undefined,
         inviteToken: formData.inviteToken || token || undefined, // Use inviteToken to match validation schema
         // Only include company-related fields if not using token
-        ...(token ? {} : {
-          companyName: formData.companyName || undefined,
-          companyLogoUrl: formData.companyLogoUrl || undefined,
-          // Only include colors if not using token (invited users get colors from inviter)
-          primaryColor: formData.primaryColor,
-          secondaryColor: formData.secondaryColor,
-        }),
+        ...(token
+          ? {}
+          : {
+              companyName: formData.companyName || undefined,
+              companyLogoUrl: formData.companyLogoUrl || undefined,
+              // Only include colors if not using token (invited users get colors from inviter)
+              primaryColor: formData.primaryColor,
+              secondaryColor: formData.secondaryColor,
+            }),
         // Profile image can be included for both cases
         profileImageUrl: formData.profileImageUrl || undefined,
       };
@@ -177,8 +186,8 @@ console.log(inviteData);
     <div
       className="relative min-h-screen flex items-center justify-center"
       style={{
-        backgroundImage: 'url(/bg-img.png)',
-        backgroundSize: 'contain'
+        backgroundImage: "url(/bg-img.png)",
+        backgroundSize: "contain",
       }}
     >
       {/* Overlay */}
@@ -205,7 +214,10 @@ console.log(inviteData);
               <>
                 {/* Name */}
                 <div>
-                  <label htmlFor="name" className="block text-sm text-[#2d3e50] mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm text-[#2d3e50] mb-2"
+                  >
                     Name
                   </label>
                   <input
@@ -223,7 +235,10 @@ console.log(inviteData);
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm text-[#2d3e50] mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm text-[#2d3e50] mb-2"
+              >
                 Email Address
               </label>
               <div>
@@ -242,7 +257,10 @@ console.log(inviteData);
 
             {/* Passcode */}
             <div>
-              <label htmlFor="passCode" className="block text-sm text-[#2d3e50] mb-2">
+              <label
+                htmlFor="passCode"
+                className="block text-sm text-[#2d3e50] mb-2"
+              >
                 Passcode
               </label>
               <div className="relative">
@@ -295,7 +313,10 @@ console.log(inviteData);
 
             {/* PIN */}
             <div>
-              <label htmlFor="pin" className="block text-sm text-[#2d3e50] mb-2">
+              <label
+                htmlFor="pin"
+                className="block text-sm text-[#2d3e50] mb-2"
+              >
                 PIN (Optional - 4 digits)
               </label>
               <div className="flex gap-2 justify-center">
@@ -323,7 +344,10 @@ console.log(inviteData);
               <>
                 {/* Company Name */}
                 <div>
-                  <label htmlFor="companyName" className="block text-sm text-[#2d3e50] mb-2">
+                  <label
+                    htmlFor="companyName"
+                    className="block text-sm text-[#2d3e50] mb-2"
+                  >
                     Company Name
                   </label>
                   <div>
@@ -418,7 +442,9 @@ console.log(inviteData);
                       </label>
                     </div>
                     {uploadingLogo && (
-                      <p className="text-xs text-[#2d3e50] mt-1">Uploading...</p>
+                      <p className="text-xs text-[#2d3e50] mt-1">
+                        Uploading...
+                      </p>
                     )}
                   </div>
 
@@ -448,7 +474,9 @@ console.log(inviteData);
                       </label>
                     </div>
                     {uploadingProfile && (
-                      <p className="text-xs text-[#2d3e50] mt-1">Uploading...</p>
+                      <p className="text-xs text-[#2d3e50] mt-1">
+                        Uploading...
+                      </p>
                     )}
                   </div>
                 </div>
@@ -466,8 +494,11 @@ console.log(inviteData);
 
             {message && (
               <p
-                className={`text-center text-sm mt-3 ${message.includes("success") ? "text-green-600" : "text-red-600"
-                  }`}
+                className={`text-center text-sm mt-3 ${
+                  message.includes("success")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
               >
                 {message}
               </p>
@@ -476,7 +507,10 @@ console.log(inviteData);
             {/* Login Link */}
             <p className="text-center text-sm text-gray-600 mt-4">
               Dont have an account?{" "}
-              <a href="/signin" className="text-[#2d3e50] hover:underline font-medium">
+              <a
+                href="/signin"
+                className="text-[#2d3e50] cursor-pointer hover:underline font-medium underline"
+              >
                 Login
               </a>
             </p>

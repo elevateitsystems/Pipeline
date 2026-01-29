@@ -39,9 +39,9 @@ export default function UpdateAudit() {
   const searchParams = useSearchParams();
   const currentCategory = parseInt(searchParams.get('category') || '1', 10);
   const editId = searchParams.get('edit');
-  
+
   const updateAuditMutation = useUpdateAudit();
-  
+
   const [formData, setFormData] = useState<FormData>({
     title: "",
     categories: [],
@@ -51,7 +51,7 @@ export default function UpdateAudit() {
   const [loading, setLoading] = useState(true);
   const [titleEditable, setTitleEditable] = useState(false);
   const [sessionStorageCategories, setSessionStorageCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>([]);
-  
+
   // Sync formData.summary with sessionStorage when it changes
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -77,7 +77,7 @@ export default function UpdateAudit() {
 
     // Listen for custom event when summary is updated
     window.addEventListener('summaryDataUpdated', handleSummaryUpdate);
-    
+
     // Also listen for storage events (cross-tab sync)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'summaryData') {
@@ -103,14 +103,14 @@ export default function UpdateAudit() {
           const categoryNumber = idx + 1;
           const categoryName = sessionStorage.getItem(`auditData:categoryName:${categoryNumber}`);
           const categoryIcon = sessionStorage.getItem(`auditData:categoryIcon:${categoryNumber}`);
-          
+
           return {
             ...cat,
             name: categoryName || cat.name,
             icon: categoryIcon || (categoryIcon === null ? undefined : cat.icon),
           };
         });
-        
+
         return {
           ...prev,
           categories: updatedCategories,
@@ -120,7 +120,7 @@ export default function UpdateAudit() {
 
     // Listen for category name updates from Sidebar
     window.addEventListener('categoryNameUpdated', handleCategoryNameUpdate);
-    
+
     // Also listen for storage events
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key?.startsWith('auditData:categoryName:') || e.key?.startsWith('auditData:categoryIcon:')) {
@@ -307,96 +307,96 @@ export default function UpdateAudit() {
       try {
         setLoading(true);
         const audit = await auditApi.getById(editId);
-        
+
         // Transform audit data to form data structure
         const categories: CategoryFormData[] = audit.categories.map(cat => ({
-            id: cat.id,
-            name: cat.name,
+          id: cat.id,
+          name: cat.name,
           icon: cat.icon || undefined,
-              questions: cat.questions.map(q => ({
-                id: q.id,
-                text: q.text,
-                options: q.options.map(opt => ({
-                  id: opt.id,
-                  text: opt.text,
-                  points: opt.points
-                }))
-              }))
-            }));
-            
+          questions: cat.questions.map(q => ({
+            id: q.id,
+            text: q.text,
+            options: q.options.map(opt => ({
+              id: opt.id,
+              text: opt.text,
+              points: opt.points
+            }))
+          }))
+        }));
+
         // Handle summary data
-        const auditWithSummary = audit as Presentation & { 
-          summary?: { 
-            categoryRecommendations?: string | Array<{ categoryId: string; recommendation: string }>; 
-            nextSteps?: string | Array<{ type: string; content: string; fileUrl?: string }>; 
-            overallDetails?: string | null 
-          } | null 
+        const auditWithSummary = audit as Presentation & {
+          summary?: {
+            categoryRecommendations?: string | Array<{ categoryId: string; recommendation: string }>;
+            nextSteps?: string | Array<{ type: string; content: string; fileUrl?: string }>;
+            overallDetails?: string | null
+          } | null
         };
 
         let summaryData = undefined;
-            if (auditWithSummary.summary) {
-              const summary = auditWithSummary.summary;
-              let categoryRecommendations = summary.categoryRecommendations 
-                ? (typeof summary.categoryRecommendations === 'string' 
-                    ? JSON.parse(summary.categoryRecommendations) 
-                    : summary.categoryRecommendations)
-                : [];
-              
-              // Map temp IDs to real category IDs if needed
-              if (Array.isArray(categoryRecommendations)) {
-                categoryRecommendations = categoryRecommendations.map((rec: { categoryId: string; recommendation: string }, index: number) => {
-                  if (rec.categoryId && rec.categoryId.startsWith('temp-')) {
-                    const tempIndex = parseInt(rec.categoryId.replace('temp-', ''), 10);
-                    if (!isNaN(tempIndex) && audit.categories[tempIndex]) {
-                      return {
-                        categoryId: audit.categories[tempIndex].id,
-                        recommendation: rec.recommendation || "",
-                      };
-                    }
-                  }
-                  const categoryExists = audit.categories.some(cat => cat.id === rec.categoryId);
-                  if (categoryExists) {
-                    return rec;
-                  }
-                  if (audit.categories[index]) {
-                    return {
-                      categoryId: audit.categories[index].id,
-                      recommendation: rec.recommendation || "",
-                    };
-                  }
-                  return rec;
-                });
+        if (auditWithSummary.summary) {
+          const summary = auditWithSummary.summary;
+          let categoryRecommendations = summary.categoryRecommendations
+            ? (typeof summary.categoryRecommendations === 'string'
+              ? JSON.parse(summary.categoryRecommendations)
+              : summary.categoryRecommendations)
+            : [];
+
+          // Map temp IDs to real category IDs if needed
+          if (Array.isArray(categoryRecommendations)) {
+            categoryRecommendations = categoryRecommendations.map((rec: { categoryId: string; recommendation: string }, index: number) => {
+              if (rec.categoryId && rec.categoryId.startsWith('temp-')) {
+                const tempIndex = parseInt(rec.categoryId.replace('temp-', ''), 10);
+                if (!isNaN(tempIndex) && audit.categories[tempIndex]) {
+                  return {
+                    categoryId: audit.categories[tempIndex].id,
+                    recommendation: rec.recommendation || "",
+                  };
+                }
               }
-              
-          // Ensure all categories have entries
-              const allCategoryRecommendations = audit.categories.map((cat) => {
-                const existing = Array.isArray(categoryRecommendations) 
-                  ? categoryRecommendations.find((rec: { categoryId: string }) => rec.categoryId === cat.id)
-                  : null;
-                return existing || {
-                  categoryId: cat.id,
-                  recommendation: "",
+              const categoryExists = audit.categories.some(cat => cat.id === rec.categoryId);
+              if (categoryExists) {
+                return rec;
+              }
+              if (audit.categories[index]) {
+                return {
+                  categoryId: audit.categories[index].id,
+                  recommendation: rec.recommendation || "",
                 };
-              });
-              
+              }
+              return rec;
+            });
+          }
+
+          // Ensure all categories have entries
+          const allCategoryRecommendations = audit.categories.map((cat) => {
+            const existing = Array.isArray(categoryRecommendations)
+              ? categoryRecommendations.find((rec: { categoryId: string }) => rec.categoryId === cat.id)
+              : null;
+            return existing || {
+              categoryId: cat.id,
+              recommendation: "",
+            };
+          });
+
           summaryData = {
-                categoryRecommendations: allCategoryRecommendations,
-                nextSteps: summary.nextSteps
-                  ? (typeof summary.nextSteps === 'string'
-                      ? JSON.parse(summary.nextSteps)
-                      : summary.nextSteps)
-                  : [],
-                overallDetails: summary.overallDetails || undefined,
-              };
-            } else {
+            categoryRecommendations: allCategoryRecommendations,
+            nextSteps: summary.nextSteps
+              ? (typeof summary.nextSteps === 'string'
+                ? JSON.parse(summary.nextSteps)
+                : summary.nextSteps)
+              : [],
+            overallDetails: summary.overallDetails || undefined,
+          };
+        } else {
           summaryData = {
-                categoryRecommendations: audit.categories.map((cat) => ({
-                  categoryId: cat.id,
-                  recommendation: "",
-                })),
-                nextSteps: [],
-                overallDetails: "",
-              };
+            categoryRecommendations: audit.categories.map((cat) => ({
+              categoryId: cat.id,
+              recommendation: "",
+            })),
+            nextSteps: [],
+            overallDetails: "",
+          };
         }
 
         const recommendationMap = new Map<string, string>();
@@ -477,11 +477,11 @@ export default function UpdateAudit() {
   // Update category name
   const updateCategoryName = (name: string) => {
     const finalName = name || `Category ${currentCategory}`;
-    
+
     setFormData(prev => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
-      
+
       // Ensure array is long enough
       while (newCategories.length <= categoryIndex) {
         newCategories.push({
@@ -489,50 +489,50 @@ export default function UpdateAudit() {
           questions: [],
         });
       }
-      
+
       newCategories[categoryIndex] = {
         ...newCategories[categoryIndex],
         name: finalName,
       };
-      
+
       return {
         ...prev,
         categories: newCategories,
       };
     });
-    
+
     // Update sessionStorage for sidebar
     if (typeof window !== 'undefined') {
       sessionStorage.setItem(`auditData:categoryName:${currentCategory}`, finalName);
-      
+
       // Also update auditData categories array in sessionStorage
       try {
         const raw = sessionStorage.getItem('auditData');
         const data = raw ? JSON.parse(raw) : { categories: [] };
         if (!Array.isArray(data.categories)) data.categories = [];
-        
+
         const idx = currentCategory - 1;
         while (data.categories.length < currentCategory) {
           data.categories.push({ name: `Category ${data.categories.length + 1}`, questions: [] });
         }
-        
+
         if (data.categories[idx]) {
           data.categories[idx].name = finalName;
         } else {
           data.categories[idx] = { name: finalName, questions: [] };
         }
-        
+
         sessionStorage.setItem('auditData', JSON.stringify(data));
       } catch (e) {
         console.error('Error updating auditData category name:', e);
       }
-      
+
       // Update sessionStorageCategories for SummarySection
       setSessionStorageCategories(prev => {
         const updated = [...prev];
         const categoryIndex = currentCategory - 1;
         const wasNewCategory = updated.length <= categoryIndex;
-        
+
         // Ensure array is long enough
         while (updated.length <= categoryIndex) {
           const catNum = updated.length + 1;
@@ -549,15 +549,15 @@ export default function UpdateAudit() {
           ...updated[categoryIndex],
           name: finalName,
         };
-        
+
         // If this was a new category, dispatch event to notify SummarySection
         if (wasNewCategory && typeof window !== 'undefined') {
           window.dispatchEvent(new Event('categoryNameUpdated'));
         }
-        
+
         return updated;
       });
-      
+
       // Dispatch event to notify Sidebar
       window.dispatchEvent(new Event('categoryNameUpdated'));
     }
@@ -568,7 +568,7 @@ export default function UpdateAudit() {
     setFormData(prev => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
-      
+
       // Ensure array is long enough
       while (newCategories.length <= categoryIndex) {
         newCategories.push({
@@ -576,23 +576,23 @@ export default function UpdateAudit() {
           questions: [],
         });
       }
-      
+
       newCategories[categoryIndex] = {
         ...newCategories[categoryIndex],
         icon: icon || undefined,
       };
-      
+
       return {
         ...prev,
         categories: newCategories,
       };
     });
-    
+
     // Update sessionStorage for sidebar
     if (typeof window !== 'undefined') {
       if (icon) {
         sessionStorage.setItem(`auditData:categoryIcon:${currentCategory}`, icon);
-          } else {
+      } else {
         sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
       }
       window.dispatchEvent(new Event('categoryNameUpdated'));
@@ -605,7 +605,7 @@ export default function UpdateAudit() {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
       const wasNewCategory = newCategories.length <= categoryIndex;
-      
+
       // Ensure array is long enough
       while (newCategories.length <= categoryIndex) {
         newCategories.push({
@@ -613,10 +613,10 @@ export default function UpdateAudit() {
           questions: [],
         });
       }
-      
+
       const category = { ...newCategories[categoryIndex] };
       const questions = [...category.questions];
-      
+
       // Ensure questions array is long enough
       while (questions.length < rowIndex) {
         questions.push({
@@ -624,7 +624,7 @@ export default function UpdateAudit() {
           options: [],
         });
       }
-      
+
       if (questions[rowIndex - 1]) {
         questions[rowIndex - 1] = {
           ...questions[rowIndex - 1],
@@ -639,10 +639,10 @@ export default function UpdateAudit() {
           })),
         };
       }
-      
+
       category.questions = questions;
       newCategories[categoryIndex] = category;
-      
+
       // If this is a new category with questions, update sessionStorageCategories
       if (wasNewCategory && text.trim().length > 0 && typeof window !== 'undefined') {
         // Update sessionStorageCategories to include the new category
@@ -666,17 +666,17 @@ export default function UpdateAudit() {
           }
           return updated;
         });
-        
+
         // Store category name in sessionStorage if not already stored
         const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
         if (!storedName) {
           sessionStorage.setItem(`auditData:categoryName:${currentCategory}`, category.name);
         }
-        
+
         // Dispatch event to notify SummarySection
         window.dispatchEvent(new Event('categoryNameUpdated'));
       }
-      
+
       return {
         ...prev,
         categories: newCategories,
@@ -689,7 +689,7 @@ export default function UpdateAudit() {
     setFormData(prev => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
-      
+
       // Ensure array is long enough
       while (newCategories.length <= categoryIndex) {
         newCategories.push({
@@ -697,10 +697,10 @@ export default function UpdateAudit() {
           questions: [],
         });
       }
-      
+
       const category = { ...newCategories[categoryIndex] };
       const questions = [...category.questions];
-      
+
       // Ensure questions array is long enough
       while (questions.length < rowIndex) {
         questions.push({
@@ -711,11 +711,11 @@ export default function UpdateAudit() {
           })),
         });
       }
-      
+
       if (questions[rowIndex - 1]) {
         const question = { ...questions[rowIndex - 1] };
         const options = [...question.options];
-        
+
         // Ensure options array has 5 items
         while (options.length < 5) {
           options.push({
@@ -723,12 +723,12 @@ export default function UpdateAudit() {
             points: options.length + 1,
           });
         }
-        
+
         options[optionIndex] = {
           ...options[optionIndex],
           text: text,
         };
-        
+
         question.options = options;
         questions[rowIndex - 1] = question;
       } else {
@@ -745,10 +745,10 @@ export default function UpdateAudit() {
           options: defaultOptions,
         };
       }
-      
+
       category.questions = questions;
       newCategories[categoryIndex] = category;
-      
+
       return {
         ...prev,
         categories: newCategories,
@@ -761,25 +761,25 @@ export default function UpdateAudit() {
     setFormData(prev => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
-      
+
       if (categoryIndex < 0 || categoryIndex >= newCategories.length) return prev;
-      
+
       const category = { ...newCategories[categoryIndex] };
       const questions = [...category.questions];
-      
-      if (draggedRowIndex < 1 || draggedRowIndex > questions.length || 
-          targetRowIndex < 1 || targetRowIndex > questions.length) {
+
+      if (draggedRowIndex < 1 || draggedRowIndex > questions.length ||
+        targetRowIndex < 1 || targetRowIndex > questions.length) {
         return prev;
       }
-      
+
       // Reorder questions
       const draggedQuestion = questions[draggedRowIndex - 1];
       questions.splice(draggedRowIndex - 1, 1);
       questions.splice(targetRowIndex - 1, 0, draggedQuestion);
-      
+
       category.questions = questions;
       newCategories[categoryIndex] = category;
-      
+
       return {
         ...prev,
         categories: newCategories,
@@ -849,16 +849,16 @@ export default function UpdateAudit() {
     }
 
     // Validate that at least one category has questions
-    const hasQuestions = formData.categories.some(cat => 
+    const hasQuestions = formData.categories.some(cat =>
       cat.questions.some(q => q.text && q.text.trim().length > 0)
     );
 
     if (!hasQuestions) {
       toast.error("Add at least one question in the table");
       return;
-      }
+    }
 
-      setSubmitting(true);
+    setSubmitting(true);
 
     try {
       const recommendationEntries = formData.categories
@@ -872,7 +872,7 @@ export default function UpdateAudit() {
       // This ensures names updated in Sidebar are included in the payload
       const latestCategoryNames: Record<number, string> = {};
       const latestCategoryIcons: Record<number, string | undefined> = {};
-      
+
       if (typeof window !== 'undefined') {
         for (let i = 1; i <= 7; i++) {
           const name = sessionStorage.getItem(`auditData:categoryName:${i}`);
@@ -887,7 +887,7 @@ export default function UpdateAudit() {
           }
         }
       }
-      
+
       // Transform form data to API format
       const categories = formData.categories
         .filter((cat, index) => index < 7) // Only categories 1-7
@@ -896,10 +896,10 @@ export default function UpdateAudit() {
           // Use latest name from sessionStorage if available, otherwise use formData name
           const categoryName = latestCategoryNames[categoryNumber] || cat.name || `Category ${categoryNumber}`;
           // Use latest icon from sessionStorage if available, otherwise use formData icon
-          const categoryIcon = latestCategoryIcons[categoryNumber] !== undefined 
-            ? latestCategoryIcons[categoryNumber] 
+          const categoryIcon = latestCategoryIcons[categoryNumber] !== undefined
+            ? latestCategoryIcons[categoryNumber]
             : ((cat.icon && cat.icon.trim()) ? cat.icon.trim() : undefined);
-          
+
           const questions = cat.questions
             .filter(q => q.text && q.text.trim().length > 0)
             .map(q => ({
@@ -907,14 +907,14 @@ export default function UpdateAudit() {
               text: q.text.trim(),
               options: (Array.isArray(q.options) && q.options.length === 5)
                 ? q.options.map((opt) => ({
-                    id: opt.id, // Include option ID if it exists
-                    text: opt.text.trim(),
-                    points: opt.points
-                  }))
+                  id: opt.id, // Include option ID if it exists
+                  text: opt.text.trim(),
+                  points: opt.points
+                }))
                 : ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((text, i) => ({
-                    text: text,
-                    points: i + 1
-                  }))
+                  text: text,
+                  points: i + 1
+                }))
             }))
             .filter(q => q.text.length > 0);
 
@@ -993,20 +993,20 @@ export default function UpdateAudit() {
       });
 
       toast.success("Audit updated successfully");
-      
+
       // Clear form data
       setFormData({
         title: "",
         categories: [],
         summary: undefined,
       });
-      
+
       // Clear sessionStorage
       if (typeof window !== 'undefined') {
         sessionStorage.clear();
         window.dispatchEvent(new Event('categoryNameUpdated'));
       }
-      
+
       // Redirect to home page
       setTimeout(() => {
         router.push("/");
@@ -1040,14 +1040,14 @@ export default function UpdateAudit() {
             </p>
           </div>
         </div>
-     
-          <div className="px-24 flex items-center justify-between">
-            {["questions", "answers", "score"].map((item,i) => (
-              <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56":""}`}>
-                {item}
-              </p>
-            ))}
-          </div>
+
+        <div className="px-24 flex items-center justify-between">
+          {["questions", "answers", "score"].map((item, i) => (
+            <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
+              {item}
+            </p>
+          ))}
+        </div>
       </header>
       <main className="px-24 pt-5 bg-white h-full pb-10">
         <div className="flex gap items-center justify-between mb-4">
@@ -1125,10 +1125,10 @@ interface AuditTableProps {
   onQuestionsReorder: (draggedRowIndex: number, targetRowIndex: number) => void;
 }
 
-function AuditTable({ 
-  currentCategory, 
-  categoryData, 
-  onQuestionChange, 
+function AuditTable({
+  currentCategory,
+  categoryData,
+  onQuestionChange,
   onOptionChange,
   onQuestionsReorder,
 }: AuditTableProps) {
@@ -1142,12 +1142,12 @@ function AuditTable({
   useEffect(() => {
     const rowsToActivate = new Set<number>();
     categoryData.questions.forEach((q, idx) => {
-              const rowIndex = idx + 1;
+      const rowIndex = idx + 1;
       if (q.text && q.text.trim().length > 0) {
         rowsToActivate.add(rowIndex);
       }
     });
-      setActiveRows(rowsToActivate);
+    setActiveRows(rowsToActivate);
   }, [categoryData, currentCategory]);
 
   const handleQuestionClick = (rowIndex: number) => {
@@ -1173,7 +1173,7 @@ function AuditTable({
 
   const handleQuestionChange = (rowIndex: number, value: string) => {
     onQuestionChange(rowIndex, value);
-    
+
     // Auto-add options if question has content and options don't exist
     const question = categoryData.questions[rowIndex - 1];
     if (value.trim().length > 0 && (!question || !question.options || question.options.length === 0)) {
@@ -1239,10 +1239,10 @@ function AuditTable({
             const isActive = activeRows.has(rowIndex);
             const isDragging = draggedRowIndex === rowIndex;
             const isDragOver = dragOverRowIndex === rowIndex;
-            
+
             return (
-              <tr 
-                key={rowIndex} 
+              <tr
+                key={rowIndex}
                 draggable={true}
                 onDragStart={(e) => handleRowDragStart(e, rowIndex)}
                 onDragOver={(e) => handleRowDragOver(e, rowIndex)}
@@ -1280,7 +1280,7 @@ function AuditTable({
                       aria-label={editableQuestions.has(rowIndex) ? "Disable editing question" : "Enable editing question"}
                     >
                       <FiEdit size={12} />
-                    </button>       
+                    </button>
                   </div>
                 </td>
                 <td className="border-r border-gray-300 px-4 py-3 align-middle ">
@@ -1293,7 +1293,7 @@ function AuditTable({
                             value={getOptionText(rowIndex, idx)}
                             onChange={(e) => handleOptionChange(rowIndex, idx, e.target.value)}
                             disabled={!((editableStatus[rowIndex]?.has(idx)) ?? false)}
-                            className={`${button.color} ${button.borderColor} ${button.textColor} pr-5 pl-3 py-1.5 w-28 rounded-lg border font-medium text-sm outline-none disabled:opacity-70`}
+                            className={`${button.color} ${button.borderColor} ${button.textColor} pr-5 pl-3 py-2.5 w-[5.8vw] rounded-lg border font-medium text-sm outline-none disabled:opacity-70`}
                           />
                           <button
                             type="button"
