@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useLogin } from '@/lib/hooks';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Eye, EyeOff } from 'lucide-react';
+import { useState } from "react";
+import { useLogin } from "@/lib/hooks";
+import Image from "next/image";
+import Link from "next/link";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SigninPage() {
   const [formData, setFormData] = useState({
-    email: '',
-    passCode: '',
+    email: "",
+    passCode: "",
   });
-  const [pin, setPin] = useState(['', '', '', '']);
-  const [message, setMessage] = useState('');
+  const [pin, setPin] = useState(["", "", "", ""]);
+  const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [usePin, setUsePin] = useState(false);
   const loginMutation = useLogin();
@@ -20,7 +20,7 @@ export default function SigninPage() {
   const handlePinChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single digit
     if (!/^\d*$/.test(value)) return; // Only allow numbers
-    
+
     const newPin = [...pin];
     newPin[index] = value;
     setPin(newPin);
@@ -32,44 +32,47 @@ export default function SigninPage() {
     }
   };
 
-  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !pin[index] && index > 0) {
+  const handlePinKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Backspace" && !pin[index] && index > 0) {
       const prevInput = document.getElementById(`pin-${index - 1}`);
       prevInput?.focus();
     }
   };
 
-  const getPinValue = () => pin.join('');
+  const getPinValue = () => pin.join("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     try {
       const loginData = usePin
         ? { email: formData.email, pin: getPinValue() }
         : { email: formData.email, passCode: formData.passCode };
-      
+
       const response = await loginMutation.mutateAsync(loginData);
 
       if (response.success) {
         // Redirect admins to dashboard, regular users to home
-        if (response.role === 'ADMIN') {
-          window.location.href = '/admin';
+        if (response.role === "ADMIN") {
+          window.location.href = "/admin";
         } else {
-          window.location.href = '/';
+          window.location.href = "/";
         }
       } else {
-        setMessage('Login failed');
+        setMessage("Login failed");
       }
     } catch (error: unknown) {
       const apiError = error as { message?: string };
-      setMessage(apiError.message || 'An error occurred');
+      setMessage(apiError.message || "An error occurred");
     }
   };
 
@@ -77,8 +80,8 @@ export default function SigninPage() {
     <div
       className="relative min-h-screen flex items-center justify-center"
       style={{
-        backgroundImage: 'url(/bg-img.png)',
-        backgroundSize: 'contain'
+        backgroundImage: "url(/bg-img.png)",
+        backgroundSize: "contain",
       }}
     >
       {/* Overlay */}
@@ -94,13 +97,27 @@ export default function SigninPage() {
           height={60}
           className="mb-4"
         />
-        <h2 className="text-white text-2xl font-semibold mb-6 tracking-wide">
-          WELCOME BACK
+        <h2
+          className="
+  font-['Acumin_Variable_Concept'] 
+  font-light 
+  text-[34px] 
+  leading-[39px] 
+  tracking-[0.006em] 
+  uppercase 
+  [text-box-trim:both] 
+  [text-box-edge:cap_alphabetic]
+  text-white
+  mb-6
+"
+        >
+          {/* WELCOME BACK */}
+          welcome back
         </h2>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl w-[380px] p-8">
-          <h3 className="text-center text-lg font-semibold text-gray-800 mb-6">
+          <h3 className="text-center t  font-['Acumin_Variable_Concept'] font-light text-[24px] leading-[39px] tracking-[0.006em] uppercase [text-box-trim:both] [text-box-edge:cap_alphabetic] text-gray-700 mb-6">
             LOGIN INTO YOUR ACCOUNT
           </h3>
 
@@ -122,18 +139,18 @@ export default function SigninPage() {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-sm font-medium text-gray-600">
-                  {usePin ? 'PIN' : 'Passcode'}
+                  {usePin ? "PIN" : "Passcode"}
                 </label>
                 <button
                   type="button"
                   onClick={() => {
                     setUsePin(!usePin);
-                    setFormData(prev => ({ ...prev, passCode: '' }));
-                    setPin(['', '', '', '']);
+                    setFormData((prev) => ({ ...prev, passCode: "" }));
+                    setPin(["", "", "", ""]);
                   }}
                   className="text-xs text-blue-600 hover:text-blue-700 underline"
                 >
-                  {usePin ? 'Use Passcode' : 'Use PIN'}
+                  {usePin ? "Use Passcode" : "Use PIN"}
                 </button>
               </div>
               {usePin ? (
@@ -156,7 +173,7 @@ export default function SigninPage() {
               ) : (
                 <div className="relative">
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     name="passCode"
                     required
                     value={formData.passCode}
@@ -173,7 +190,15 @@ export default function SigninPage() {
                   </button>
                 </div>
               )}
-             
+            </div>
+
+            <div className="text-right">
+              <Link
+                href="/forgot-password"
+                className="text-xs text-gray-500 hover:text-gray-700 underline"
+              >
+                Forgot your passcode?
+              </Link>
             </div>
 
             <button
@@ -181,21 +206,24 @@ export default function SigninPage() {
               disabled={loginMutation.isPending}
               className="w-full bg-linear-to-b from-yellow-400 to-yellow-500 text-gray-800 font-semibold py-2 rounded-lg shadow-md hover:opacity-90 transition-all disabled:opacity-70"
             >
-              {loginMutation.isPending ? 'Logging in...' : 'Login'}
+              {loginMutation.isPending ? "Logging in..." : "Login"}
             </button>
             <div className="text-center ">
-              Create an account ? 
-                <Link
-                  href="/signup"
-                  className="text-sm px-1 text-blue-500 hover:text-blue-600 underline"
-                >
-                   Signup
-                </Link>
-              </div>
+              Create an account ?
+              <Link
+                href="/signup"
+                className="text-sm px-1 text-blue-500 hover:text-blue-600 underline"
+              >
+                Signup
+              </Link>
+            </div>
             {message && (
               <p
-                className={`text-center text-sm ${(message.includes('failed') || message.includes('Invalid')) ? 'text-red-500' : 'text-green-500'
-                  }`}
+                className={`text-center text-sm ${
+                  message.includes("failed") || message.includes("Invalid")
+                    ? "text-red-500"
+                    : "text-green-500"
+                }`}
               >
                 {message}
               </p>

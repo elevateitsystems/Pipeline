@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/signin', '/signup'];
+  const publicRoutes = ['/signin', '/signup', '/forgot-password'];
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
   // API routes - let them handle their own authentication
