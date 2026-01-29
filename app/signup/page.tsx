@@ -509,7 +509,7 @@ export default function SignupPage() {
               Dont have an account?{" "}
               <a
                 href="/signin"
-                className="text-[#2d3e50] hover:underline font-medium underline"
+                className="text-[#2d3e50] cursor-pointer hover:underline font-medium underline"
               >
                 Login
               </a>

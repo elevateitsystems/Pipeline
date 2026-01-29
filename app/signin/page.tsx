@@ -148,7 +148,7 @@ export default function SigninPage() {
                     setFormData((prev) => ({ ...prev, passCode: "" }));
                     setPin(["", "", "", ""]);
                   }}
-                  className="text-xs text-blue-600 hover:text-blue-700 underline"
+                  className="text-xs text-[#2F68DF] cursor-pointer hover:text-[#2F68DF/50] underline"
                 >
                   {usePin ? "Use Passcode" : "Use PIN"}
                 </button>
@@ -195,9 +195,9 @@ export default function SigninPage() {
             <div className="text-right">
               <Link
                 href="/forgot-password"
-                className="text-xs text-gray-500 hover:text-gray-700 underline"
+                className="text-xs text-[#2F68DF] hover:text-[#2F68DF/50] underline"
               >
-                Forgot your passcode?
+                Forgot Passcode?
               </Link>
             </div>
 
@@ -212,7 +212,7 @@ export default function SigninPage() {
               Create an account ?
               <Link
                 href="/signup"
-                className="text-sm px-1 text-blue-500 hover:text-blue-600 underline"
+                className="text-sm px-1 text-[#2F68DF] hover:text-[#2F68DF/50] underline"
               >
                 Signup
               </Link>
