@@ -5,7 +5,12 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import notFoundImg from "@/public/notFound2.png";
 import Image from "next/image";
-import { useAuthCheck, useAudits, useDeleteAudit, useSendAuditInvite } from "@/lib/hooks";
+import {
+  useAuthCheck,
+  useAudits,
+  useDeleteAudit,
+  useSendAuditInvite,
+} from "@/lib/hooks";
 import { Presentation } from "@/lib/types";
 import { Edit, Trash2, Play, Mail } from "lucide-react";
 import toast from "react-hot-toast";
@@ -23,13 +28,20 @@ export default function Home() {
   const { user, isInvitedUser, setIsInvitedUser } = useUser();
   const router = useRouter();
   const { data: authData, isLoading: authLoading } = useAuthCheck();
-  const { data: auditsData, isLoading: auditsLoading, error: auditsError } = useAudits();
+  const {
+    data: auditsData,
+    isLoading: auditsLoading,
+    error: auditsError,
+  } = useAudits();
   const deleteAuditMutation = useDeleteAudit();
   const sendInviteMutation = useSendAuditInvite();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [auditToDelete, setAuditToDelete] = useState<string | null>(null);
   const [inviteModalOpen, setInviteModalOpen] = useState(false);
-  const [auditToInvite, setAuditToInvite] = useState<{ id: string; title: string } | null>(null);
+  const [auditToInvite, setAuditToInvite] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!authLoading && authData) {
@@ -79,15 +91,15 @@ export default function Home() {
   const formatDate = (dateString: string | Date) => {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
+    const month = date.toLocaleString("default", { month: "short" });
     return `${day} ${month}`;
   };
 
   const getScoreColor = (score?: number) => {
-    if (!score) return { bg: '#f3f4f6', text: '#6b7280' };
-    if (score < 30) return { bg: '#fee2e2', text: '#dc2626' }; // red
-    if (score < 40) return { bg: '#fed7aa', text: '#ea580c' }; // orange
-    return { bg: '#d1fae5', text: '#16a34a' }; // green
+    if (!score) return { bg: "#f3f4f6", text: "#6b7280" };
+    if (score < 30) return { bg: "#fee2e2", text: "#dc2626" }; // red
+    if (score < 40) return { bg: "#fed7aa", text: "#ea580c" }; // orange
+    return { bg: "#d1fae5", text: "#16a34a" }; // green
   };
 
   const handleDeleteClick = (id: string) => {
@@ -96,13 +108,14 @@ export default function Home() {
   };
 
   const clearAuditSessionStorage = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     try {
       // Clear full sessionStorage
       sessionStorage.clear();
 
+
       // Dispatch event to update sidebar
-      window.dispatchEvent(new Event('categoryNameUpdated'));
+      window.dispatchEvent(new Event("categoryNameUpdated"));
     } catch (error) {
       console.error("Error clearing sessionStorage:", error);
     }
@@ -115,6 +128,7 @@ export default function Home() {
 
   const handleDeleteConfirm = async () => {
     if (!auditToDelete) return;
+
 
     try {
       await deleteAuditMutation.mutateAsync(auditToDelete);
@@ -134,6 +148,7 @@ export default function Home() {
 
   const handleInvite = async (email: string) => {
     if (!auditToInvite) return;
+
 
     try {
       await sendInviteMutation.mutateAsync({
@@ -161,8 +176,11 @@ export default function Home() {
     return (
       <div className="p-14 bg-white h-full">
         <div className="">
-          <h1 className="text-gray-900 mb-2 font-normal" style={{ fontSize: 'clamp(1.25rem, 4vw, 1.6875rem)' }}>
-            Hello, {user.name}!
+          <h1
+            className="text-gray-900 mb-2 font-normal capitalize"
+            style={{ fontSize: "clamp(1.25rem, 4vw, 1.6875rem)" }}
+          >
+            Hello, {user.name.split(" ")[0]}!
           </h1>
           <div className="flex justify-center items-center h-[80vh]">
             <div className="flex flex-col justify-center items-center ">
@@ -172,29 +190,32 @@ export default function Home() {
                 width={380}
                 height={266}
                 style={{
-                  width: 'clamp(200px, 28vw, 480px)',
-                  height: 'clamp(140px, 20vw, 366px)',
-                  objectFit: 'contain'
+                  width: "clamp(200px, 28vw, 480px)",
+                  height: "clamp(140px, 20vw, 366px)",
+                  objectFit: "contain",
                 }}
               />
-              <p className="text-[#2D2D2D] mb-2 font-normal" style={{ fontSize: 'clamp(.5rem, 4vw, 2rem)' }}>
+              <p
+                className="text-[#2D2D2D] mb-2 font-normal"
+                style={{ fontSize: "clamp(.5rem, 4vw, 2rem)" }}
+              >
                 NO AUDIT CREATED
               </p>
               <p className="text-[#2D2D2D] mb-2 font-normal" style={{ fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
-                  : "Start your first audit to see your performance insights here."
-                }
+                  : "Start your first audit to see your performance insights here."}
               </p>
               {!isInvitedUser && (
                 <CustomButton
                   variant="primary"
                   size="lg"
                   style={{
-                    width: '318px',
-                    height: '50px',
-                    padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)',
-                    fontSize: 'clamp(0.875rem, 2.5vw, 1rem)'
+                    width: "318px",
+                    height: "50px",
+                    padding:
+                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
+                    fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
                   }}
                   onClick={() => {
                     clearAuditSessionStorage();
@@ -218,9 +239,12 @@ export default function Home() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-[#2d3e50] text-3xl font-bold mb-2">ALL AUDIT AUDITS</h1>
+            <h1 className="text-[#2d3e50] text-3xl font-bold mb-2">
+              ALL AUDIT AUDITS
+            </h1>
             <p className="text-gray-600 text-base">
-              Track and compare all your AUDIT audit reports in one place. View scores, dates, and improvement insights instantly.
+              Track and compare all your AUDIT audit reports in one place. View
+              scores, dates, and improvement insights instantly.
             </p>
           </div>
           <div className="flex gap-3">
@@ -246,19 +270,34 @@ export default function Home() {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">AUDIT Name</th>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">Creation Date</th>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">Score</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">Action</th>
+              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
+                AUDIT Name
+              </th>
+              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
+                Creation Date
+              </th>
+              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
+                Score
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
             {audits.map((audit) => {
               const scoreColor = getScoreColor(audit.latestScore);
               return (
-                <tr key={audit.id} className="border-b border-[#E0E0E0] hover:bg-gray-50">
-                  <td className="px-6 border-r py-4 text-gray-800">{audit.title}</td>
-                  <td className="px-6 border-r py-4 text-gray-600">{formatDate(audit.createdAt)}</td>
+                <tr
+                  key={audit.id}
+                  className="border-b border-[#E0E0E0] hover:bg-gray-50"
+                >
+                  <td className="px-6 border-r py-4 text-gray-800">
+                    {audit.title}
+                  </td>
+                  <td className="px-6 border-r py-4 text-gray-600">
+                    {formatDate(audit.createdAt)}
+                  </td>
                   <td
                     className="px-6 border-r py-4"
                     style={
@@ -283,7 +322,11 @@ export default function Home() {
                       {!isInvitedUser && (
                         <>
                           <button
-                            onClick={() => router.push(`/update-audit/?edit=${audit.id}&category=1`)}
+                            onClick={() =>
+                              router.push(
+                                `/update-audit/?edit=${audit.id}&category=1`,
+                              )
+                            }
                             className="px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 text-sm rounded-md  flex items-center justify-center gap-1"
                           >
                             <Edit size={14} />
@@ -302,7 +345,11 @@ export default function Home() {
                         </>
                       )}
                       <button
-                        onClick={() => router.push(`/test?presentationId=${audit.id}&category=1`)}
+                        onClick={() =>
+                          router.push(
+                            `/test?presentationId=${audit.id}&category=1`,
+                          )
+                        }
                         className="px-3 cursor-pointer py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 flex justify-center items-center gap-1"
                       >
                         <Play size={14} />
