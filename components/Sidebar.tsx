@@ -1211,9 +1211,9 @@ export default function Sidebar() {
                         }
                       }}
                       className={`ml-4 ${isEditing ? "h-[40px]" : ""}  cursor-pointer flex items-center ${
-                        isActive && !isEditing
-                          ? "lg:w-[94.6%] mr-0 rounded-l-xl"
-                          : "w-[93%] rounded-xl "
+                        onTestPage || (isActive && !isEditing)
+                          ? "w-[calc(100%-1rem+2px)] mr-0 rounded-l-xl border-r-0"
+                          : "w-[93.5%] rounded-xl "
                       } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
                       style={{
                         padding:
@@ -1222,6 +1222,10 @@ export default function Sidebar() {
                         backgroundColor: backgroundColor,
                         color: textColor,
                         border: useSecondary ? "2px solid #899AA9" : "none",
+                        borderRight:
+                          onTestPage || (isActive && !isEditing)
+                            ? "none"
+                            : undefined,
                       }}
                     >
                       {isEditing && itemCategoryNumber !== null ? (
