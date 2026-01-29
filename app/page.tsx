@@ -50,9 +50,9 @@ export default function Home() {
   // Extract isInvitedUser flag from audits response
   useEffect(() => {
     if (!auditsData) return;
-    
+
     const responseData = auditsData as { data?: Presentation[]; isInvitedUser?: boolean } | Presentation[];
-    
+
     if (responseData && typeof responseData === 'object' && !Array.isArray(responseData) && 'isInvitedUser' in responseData) {
       setIsInvitedUser(responseData.isInvitedUser || false);
     }
@@ -61,12 +61,12 @@ export default function Home() {
   // Process audits to include latest score
   const audits = useMemo<AuditWithScore[]>(() => {
     if (!auditsData) return [];
-    
+
     const responseData = auditsData as { data?: Presentation[]; isInvitedUser?: boolean } | Presentation[];
-    const auditsList = Array.isArray(responseData) 
-      ? responseData 
+    const auditsList = Array.isArray(responseData)
+      ? responseData
       : responseData?.data || [];
-    
+
     return auditsList.map((audit: Presentation & { tests?: Array<{ totalScore: number }> }) => ({
       ...audit,
       latestScore: audit.tests && audit.tests.length > 0 ? audit.tests[0].totalScore : undefined,
@@ -100,7 +100,7 @@ export default function Home() {
     try {
       // Clear full sessionStorage
       sessionStorage.clear();
-      
+
       // Dispatch event to update sidebar
       window.dispatchEvent(new Event('categoryNameUpdated'));
     } catch (error) {
@@ -115,7 +115,7 @@ export default function Home() {
 
   const handleDeleteConfirm = async () => {
     if (!auditToDelete) return;
-    
+
     try {
       await deleteAuditMutation.mutateAsync(auditToDelete);
       toast.success("Audit deleted successfully");
@@ -134,7 +134,7 @@ export default function Home() {
 
   const handleInvite = async (email: string) => {
     if (!auditToInvite) return;
-    
+
     try {
       await sendInviteMutation.mutateAsync({
         email,
@@ -142,8 +142,8 @@ export default function Home() {
       });
       toast.success("Invitation sent successfully!");
     } catch (error) {
-      const errorMessage = (error as { response?: { data?: { error?: string } }; message?: string })?.response?.data?.error 
-        || (error as { message?: string })?.message 
+      const errorMessage = (error as { response?: { data?: { error?: string } }; message?: string })?.response?.data?.error
+        || (error as { message?: string })?.message
         || "Failed to send invitation";
       toast.error(errorMessage);
       throw error;
@@ -152,7 +152,7 @@ export default function Home() {
 
   if (isLoading || loadingAudits || !user) {
     return (
-     <HomeSkeleton />
+      <HomeSkeleton />
     );
   }
 
@@ -166,11 +166,11 @@ export default function Home() {
           </h1>
           <div className="flex justify-center items-center h-[80vh]">
             <div className="flex flex-col justify-center items-center ">
-              <Image 
-                src={notFoundImg} 
-                alt="Logo" 
-                width={380} 
-                height={266} 
+              <Image
+                src={notFoundImg}
+                alt="Logo"
+                width={380}
+                height={266}
                 style={{
                   width: 'clamp(200px, 28vw, 480px)',
                   height: 'clamp(140px, 20vw, 366px)',
@@ -181,7 +181,7 @@ export default function Home() {
                 NO AUDIT CREATED
               </p>
               <p className="text-[#2D2D2D] mb-2 font-normal" style={{ fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>
-                {isInvitedUser 
+                {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
                   : "Start your first audit to see your performance insights here."
                 }
@@ -236,7 +236,7 @@ export default function Home() {
                 Create New AUDIT
               </CustomButton>
             )}
-           
+
           </div>
         </div>
       </div>

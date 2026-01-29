@@ -23,16 +23,16 @@ interface SummarySectionProps {
 
 export default function SummarySection({ editId, isCreateMode, sessionStorageCategories, onRecommendationChange }: SummarySectionProps) {
   const [presentationId, setPresentationId] = useState<string | null>(null);
-  
+
   // Fetch audit data to get categories (only if not available in sessionStorage)
   const hasSessionStorageData = typeof window !== 'undefined' && sessionStorage.getItem('auditData');
   const { data: auditData, isLoading: auditLoading } = useAudit(
     !hasSessionStorageData && presentationId ? presentationId : null
   );
-  
+
   // Fetch summary data (only if not available in sessionStorage)
   const summaryData = typeof window !== 'undefined' && sessionStorage.getItem('summaryData')
-  
+
   const [categoryRecommendations, setCategoryRecommendations] = useState<Record<string, string>>({});
   const [nextSteps, setNextSteps] = useState<NextStep[]>([
     { type: "text", content: "" },
@@ -68,7 +68,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
             if (category?.name) {
               return category.name;
             }
-          } catch {}
+          } catch { }
         }
       }
 
@@ -99,7 +99,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
             if (category?.recommendation !== undefined) {
               return category.recommendation;
             }
-          } catch {}
+          } catch { }
         }
       }
 
@@ -186,7 +186,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
             if (parsed.id) {
               setPresentationId(parsed.id);
             }
-          } catch {}
+          } catch { }
         }
       }
     }
@@ -201,16 +201,16 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
       hasInitializedRef.current = false;
       initializationKeyRef.current = currentKey;
     }
-    
+
     if (hasInitializedRef.current) return;
-    
+
     // Always try to load from sessionStorage first (for both create and update mode)
     if (typeof window !== 'undefined') {
       const summaryDataStr = sessionStorage.getItem('summaryData');
       if (summaryDataStr) {
         try {
           const parsed = JSON.parse(summaryDataStr);
-          
+
           // Load category recommendations (initialize empty if not present)
           const recs: Record<string, string> = {};
           if (parsed.categoryRecommendations && Array.isArray(parsed.categoryRecommendations)) {
@@ -220,7 +220,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
               }
             );
           }
-          
+
           // Get categories from sessionStorageCategories or fallback to auditData
           let categoriesToUse = sessionStorageCategories;
           if (categoriesToUse.length === 0 && typeof window !== 'undefined') {
@@ -234,22 +234,22 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
                     name: cat.name || `Category ${cat.id}`,
                   }));
                 }
-              } catch {}
+              } catch { }
             }
           }
-          
+
           const normalizedInitialCategories = normalizeCategories(categoriesToUse);
           normalizedInitialCategories.forEach((cat) => {
             if (!recs[cat.id]) {
               recs[cat.id] = "";
             }
           });
-          
+
           // Always set recommendations if we have any data
           if (Object.keys(recs).length > 0 || normalizedInitialCategories.length > 0) {
             setCategoryRecommendations(recs);
           }
-          
+
           // Load next steps
           if (parsed.nextSteps && Array.isArray(parsed.nextSteps)) {
             const steps = parsed.nextSteps as NextStep[];
@@ -261,7 +261,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
             const newSelections: Array<NextStepType | null> = [null, null, null];
             const newImages: (string | null)[] = [null, null, null];
             const newFileUrls: (string | null)[] = [null, null, null];
-            
+
             steps.forEach((step, idx) => {
               if (idx < 3) {
                 newNextSteps[idx] = step;
@@ -274,29 +274,29 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
                 }
               }
             });
-            
+
             setNextSteps(newNextSteps);
             setSelections(newSelections);
             setImages(newImages);
             setFileUrls(newFileUrls);
           }
-          
+
           // Load overall details
           if (parsed.overallDetails !== undefined) {
             setOverallDetails(parsed.overallDetails || "");
           }
-          
+
           hasInitializedRef.current = true;
           // If we loaded from sessionStorage, don't load from API
           return;
-        } catch {}
+        } catch { }
       }
     }
-    
+
     // Fallback to API only if no sessionStorage data exists and not in create mode
     if (!isCreateMode && summaryData && !hasInitializedRef.current) {
       const summary = JSON.parse(summaryData);
-      
+
       if (summary) {
         // Load category recommendations (initialize empty if not present)
         const recs: Record<string, string> = {};
@@ -314,8 +314,8 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
         }
         // Initialize empty for categories that don't have recommendations
         // Use sessionStorageCategories or auditData for categories
-        const categoriesToUse = sessionStorageCategories.length > 0 
-          ? sessionStorageCategories 
+        const categoriesToUse = sessionStorageCategories.length > 0
+          ? sessionStorageCategories
           : (auditData?.categories?.map((cat: { id: string; name: string }) => ({ id: cat.id, name: cat.name })) || []);
         normalizeCategories(categoriesToUse).forEach((cat: { id: string }) => {
           if (!recs[cat.id]) {
@@ -323,7 +323,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
           }
         });
         setCategoryRecommendations(recs);
-        
+
         // Load next steps
         if (summary.nextSteps) {
           const steps = typeof summary.nextSteps === 'string'
@@ -337,7 +337,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
           const newSelections: Array<NextStepType | null> = [null, null, null];
           const newImages: (string | null)[] = [null, null, null];
           const newFileUrls: (string | null)[] = [null, null, null];
-          
+
           if (Array.isArray(steps)) {
             steps.forEach((step: NextStep, idx: number) => {
               if (idx < 3) {
@@ -352,24 +352,24 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
               }
             });
           }
-          
+
           setNextSteps(newNextSteps);
           setSelections(newSelections);
           setImages(newImages);
           setFileUrls(newFileUrls);
         }
-        
+
         // Load overall details
         if (summary.overallDetails !== undefined) {
           setOverallDetails(summary.overallDetails || "");
         }
-        
+
         hasInitializedRef.current = true;
       } else {
         // No summary exists - initialize empty for all categories only if we have categories
         // Use sessionStorageCategories or auditData for categories
-        const categoriesToUse = sessionStorageCategories.length > 0 
-          ? sessionStorageCategories 
+        const categoriesToUse = sessionStorageCategories.length > 0
+          ? sessionStorageCategories
           : (auditData?.categories?.map((cat: { id: string; name: string }) => ({ id: cat.id, name: cat.name })) || []);
         if (categoriesToUse.length > 0) {
           const emptyRecs: Record<string, string> = {};
@@ -395,12 +395,12 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
   // This handles the case where categories load after recommendations are already set
   useEffect(() => {
     if (!hasInitializedRef.current) return;
-    
+
     const normalizedSessionCategories = normalizeCategories(sessionStorageCategories);
     setCategoryRecommendations((prev) => {
       const updated = { ...prev };
       let hasChanges = false;
-      
+
       normalizedSessionCategories.forEach((cat: { id: string }, index: number) => {
         if (!(cat.id in updated)) {
           const placeholderKey = `temp-${index}`;
@@ -413,7 +413,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
           hasChanges = true;
         }
       });
-      
+
       return hasChanges ? updated : prev;
     });
   }, [sessionStorageCategories, normalizeCategories]);
@@ -422,12 +422,12 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
   useEffect(() => {
     const handleSummaryDataUpdate = () => {
       if (typeof window === 'undefined') return;
-      
+
       const summaryDataStr = sessionStorage.getItem('summaryData');
       if (summaryDataStr) {
         try {
           const parsed = JSON.parse(summaryDataStr);
-          
+
           // Reload category recommendations from updated summary data
           const recs: Record<string, string> = {};
           if (parsed.categoryRecommendations && Array.isArray(parsed.categoryRecommendations)) {
@@ -437,32 +437,32 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
               }
             );
           }
-          
+
           // Ensure all categories have entries (even if empty)
-          const categoriesToUse = sessionStorageCategories.length > 0 
-            ? sessionStorageCategories 
+          const categoriesToUse = sessionStorageCategories.length > 0
+            ? sessionStorageCategories
             : (() => {
-                const auditDataStr = sessionStorage.getItem('auditData');
-                if (auditDataStr) {
-                  try {
-                    const auditData = JSON.parse(auditDataStr);
-                    if (auditData.categories && Array.isArray(auditData.categories)) {
-                      return auditData.categories.map((cat: { id: string; name: string }) => ({
-                        id: cat.id,
-                        name: cat.name || `Category ${cat.id}`,
-                      }));
-                    }
-                  } catch {}
-                }
-                return [];
-              })();
-          
+              const auditDataStr = sessionStorage.getItem('auditData');
+              if (auditDataStr) {
+                try {
+                  const auditData = JSON.parse(auditDataStr);
+                  if (auditData.categories && Array.isArray(auditData.categories)) {
+                    return auditData.categories.map((cat: { id: string; name: string }) => ({
+                      id: cat.id,
+                      name: cat.name || `Category ${cat.id}`,
+                    }));
+                  }
+                } catch { }
+              }
+              return [];
+            })();
+
           normalizeCategories(categoriesToUse).forEach((cat: { id: string }) => {
             if (!recs[cat.id]) {
               recs[cat.id] = "";
             }
           });
-          
+
           setCategoryRecommendations(recs);
         } catch (error) {
           console.error('Error reloading summary data:', error);
@@ -478,7 +478,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
 
   // Listen for category name updates and refresh categories from sessionStorage
   const [refreshedCategories, setRefreshedCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>(sessionStorageCategories);
-  
+
   // Update refreshedCategories when sessionStorageCategories prop changes
   useEffect(() => {
     if (sessionStorageCategories.length > 0) {
@@ -501,14 +501,14 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
       setRefreshedCategories(updatedCategories);
     }
   }, [sessionStorageCategories]);
-  
+
   useEffect(() => {
     const handleCategoryNameUpdate = () => {
       if (typeof window === 'undefined') return;
-      
+
       // Refresh categories from sessionStorage to get updated names
       const updatedCategories: Array<{ id: string; name: string; recommendation?: string }> = [];
-      
+
       // Try to get from sessionStorageCategories prop first (has real IDs)
       if (sessionStorageCategories.length > 0) {
         sessionStorageCategories.forEach((cat, index) => {
@@ -544,9 +544,9 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
               });
             }
           }
-        } catch {}
+        } catch { }
       }
-      
+
       if (updatedCategories.length > 0) {
         setRefreshedCategories(updatedCategories);
       }
@@ -557,7 +557,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
 
     // Listen for category name updates
     window.addEventListener('categoryNameUpdated', handleCategoryNameUpdate);
-    
+
     // Also listen for storage events (cross-tab sync)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key?.startsWith('auditData:categoryName:')) {
@@ -759,10 +759,10 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
   // Helper function to save summary data to sessionStorage
   const saveSummaryToStorage = React.useCallback(() => {
     if (typeof window === 'undefined' || !hasInitializedRef.current) return;
-    
+
     try {
       let categoryRecs: Array<{ categoryId: string; recommendation: string }> = [];
-      
+
       categoryRecs = categories.map((cat) => ({
         categoryId: cat.id,
         recommendation: categoryRecommendations[cat.id] || "",
@@ -796,7 +796,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
   // Use a debounce to batch multiple rapid changes
   useEffect(() => {
     if (typeof window === 'undefined' || !hasInitializedRef.current) return;
-    
+
     // Small delay to batch multiple rapid changes
     const timeoutId = setTimeout(() => {
       saveSummaryToStorage();
@@ -818,7 +818,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
   }
 
   return (
-    <div className="bg-white overflow-hidden h-[77vh] flex flex-col">
+    <div className="bg-white pb-10 overflow-hidden flex flex-col">
       <main className="flex-1 flex flex-wrap lg:flex-nowrap overflow-hidden px-6 py-4">
         {/* Left Side */}
         <div className="w-full lg:w-1/2 pr-0 lg:pr-6 flex flex-col overflow-hidden">
@@ -841,7 +841,7 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
                     );
                   }}
                   placeholder="Recommendation"
-                  className="w-full h-[5vh] min-h-[40px] p-2 text-sm text-[#2B4055] tracking-[0.4px] font-extralight border border-[#AAA] rounded-lg resize-none outline-none"
+                  className="w-full h-[60px] min-h-[40px] p-2 text-sm text-[#2B4055] tracking-[0.4px] font-extralight border border-[#AAA] rounded-lg resize-none outline-none"
                 />
               </div>
             ))}
@@ -862,11 +862,10 @@ export default function SummarySection({ editId, isCreateMode, sessionStorageCat
               {[0, 1, 2].map((index) => (
                 <div
                   key={index}
-                  className={`flex-1 relative rounded-lg border transition-all duration-200 overflow-hidden ${
-                    selections[index]
-                      ? "border border-[#2B4055]"
-                      : "border border-[#CCC]"
-                  } bg-[#E8E8E8]`}
+                  className={`flex-1 relative rounded-lg border transition-all duration-200 overflow-hidden ${selections[index]
+                    ? "border border-[#2B4055]"
+                    : "border border-[#CCC]"
+                    } bg-[#E8E8E8]`}
                   style={{ aspectRatio: "1", minHeight: "100px" }}
                 >
                   {selections[index] === "file" && images[index] && (

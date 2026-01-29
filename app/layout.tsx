@@ -8,6 +8,8 @@ import Sidebar from "@/components/Sidebar";
 import BackgroundWrapper from "@/components/BackgroundWrapper";
 import { Toaster } from "react-hot-toast";
 
+import ScalingWrapper from "@/components/ScalingWrapper";
+
 
 export const metadata: Metadata = {
   title: "Pipeline Conversation",
@@ -28,20 +30,22 @@ export default async function RootLayout({
           <UserProvider user={session}>
             <ThemeProvider>
               <BackgroundWrapper>
-                {session ? (
-                  <div className="flex min-h-screen h-screen">
-                    <Sidebar />
-                    <main className="flex-1 overflow-auto">
+                <ScalingWrapper>
+                  {session ? (
+                    <div className="flex h-full w-full">
+                      <Sidebar />
+                      <main className="flex-1">
+                        {children}
+                      </main>
+                    </div>
+                  ) : (
+                    <main className="h-full w-full">
                       {children}
                     </main>
-                  </div>
-                ) : (
-                  <main className="min-h-screen">
-                    {children}
-                  </main>
-                )}
+                  )}
+                </ScalingWrapper>
               </BackgroundWrapper>
-              <Toaster 
+              <Toaster
                 position="top-right"
                 toastOptions={{
                   duration: 3000,

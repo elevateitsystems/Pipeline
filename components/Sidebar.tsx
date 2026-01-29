@@ -792,7 +792,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className="w-75 flex flex-col h-screen overflow-x-hidden relative hide-scrollbar"
+      className="w-75 flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
       style={{
         width: '300px',
         overflowX: 'hidden',

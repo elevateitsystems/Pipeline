@@ -14,14 +14,14 @@ export default function AddNewAudit() {
   const searchParams = useSearchParams();
   const currentCategory = parseInt(searchParams.get('category') || '1', 10);
   const createAuditMutation = useCreateAudit();
-  
+
   const [title, setTitle] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState<string>("");
   const [tableQuestions, setTableQuestions] = useState<{ index: number; text: string }[]>([]);
   const [statusMap, setStatusMap] = useState<Record<number, string[]>>({});
   const [sessionStorageCategories, setSessionStorageCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>([]);
-  
+
   // Load categories from sessionStorage
   const loadCategoriesFromStorage = () => {
     if (typeof window === 'undefined') return;
@@ -37,7 +37,7 @@ export default function AddNewAudit() {
           }));
           setSessionStorageCategories(categories);
         }
-      } catch {}
+      } catch { }
     }
   };
 
@@ -65,7 +65,7 @@ export default function AddNewAudit() {
           setTitle(parsed.title);
         }
       }
-    } catch {}
+    } catch { }
   }, []);
 
   // Hydrate category name and icon from sessionStorage on mount or category change
@@ -82,7 +82,7 @@ export default function AddNewAudit() {
         // Try to get from specific category storage
         const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
         const storedIcon = sessionStorage.getItem(`auditData:categoryIcon:${currentCategory}`);
-        
+
         if (storedName) {
           setCategoryName(storedName);
         } else {
@@ -104,7 +104,7 @@ export default function AddNewAudit() {
             setCategoryName(`Category ${currentCategory}`);
           }
         }
-        
+
         // Load icon
         if (storedIcon) {
           setCategoryIcon(storedIcon);
@@ -213,7 +213,7 @@ export default function AddNewAudit() {
             if (Array.isArray(prev.categories)) merged.categories = prev.categories;
           }
         }
-      } catch {}
+      } catch { }
     }
 
     const trimmedTitle = title.trim();
@@ -273,7 +273,7 @@ export default function AddNewAudit() {
     try {
       // Preserve summaryData before updating auditData
       const existingSummaryData = sessionStorage.getItem('summaryData');
-      
+
       // Save category name and icon separately for sidebar access
       const finalCategoryName = categoryName.trim() || `Category ${currentCategory}`;
       const finalCategoryIcon = categoryIcon.trim() || "";
@@ -283,7 +283,7 @@ export default function AddNewAudit() {
       } else {
         sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
       }
-      
+
       const data = buildAuditData;
       sessionStorage.setItem('auditData', JSON.stringify(data));
       if (Array.isArray(data.categories)) {
@@ -292,7 +292,7 @@ export default function AddNewAudit() {
           sessionStorage.setItem(`auditData:category:${categoryNumber}`, JSON.stringify(cat));
         });
       }
-      
+
       // Restore summaryData if it existed (preserve it when navigating between pages)
       if (existingSummaryData) {
         sessionStorage.setItem('summaryData', existingSummaryData);
@@ -343,13 +343,13 @@ export default function AddNewAudit() {
               text: q.text!.trim(),
               options: (Array.isArray(q.options) && q.options.length === 5)
                 ? q.options.map(opt => ({
-                    text: opt.text.trim(),
-                    points: opt.points
-                  }))
+                  text: opt.text.trim(),
+                  points: opt.points
+                }))
                 : ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((text, i) => ({
-                    text: text,
-                    points: i + 1
-                  }))
+                  text: text,
+                  points: i + 1
+                }))
             }))
             .filter(q => q.text.length > 0);
 
@@ -396,11 +396,11 @@ export default function AddNewAudit() {
       });
 
       toast.success("Audit created successfully");
-      
+
       // Store the created audit ID in sessionStorage before clearing
       if (typeof window !== 'undefined' && createdAudit?.id) {
         sessionStorage.setItem('createdAuditId', createdAudit.id);
-        
+
         // Map temp category IDs to real category IDs and update summary if needed
         if (summaryData && createdAudit.categories) {
           try {
@@ -408,7 +408,7 @@ export default function AddNewAudit() {
             createdAudit.categories.forEach((cat, idx) => {
               categoryMap[`temp-${idx}`] = cat.id;
             });
-            
+
             // Clear summary data from sessionStorage
             sessionStorage.removeItem('summaryData');
           } catch (error) {
@@ -421,22 +421,22 @@ export default function AddNewAudit() {
           sessionStorage.removeItem('summaryData');
         }
       }
-      
+
       // Clear all state
       setTitle("");
       setCategoryName("");
       setCategoryIcon("");
       setTableQuestions([]);
       setStatusMap({});
-      
+
       // Clear full sessionStorage after successful creation
       if (typeof window !== 'undefined') {
         sessionStorage.clear();
-        
+
         // Dispatch event to update sidebar
         window.dispatchEvent(new Event('categoryNameUpdated'));
       }
-      
+
       // Redirect to home page after successful creation
       setTimeout(() => {
         router.push("/");
@@ -464,18 +464,18 @@ export default function AddNewAudit() {
             </p>
           </div>
         </div>
-       
-     
-          <div className="px-24 flex items-center justify-between">
-            {["questions", "answers", "score"].map((item,i) => (
-              <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56":""}`}>
-                {item}
-              </p>
-            ))}
-          </div>
-       
+
+
+        <div className="px-24 flex items-center justify-between">
+          {["questions", "answers", "score"].map((item, i) => (
+            <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
+              {item}
+            </p>
+          ))}
+        </div>
+
       </header>
-      <main className="px-24 pt-5 bg-white h-[90vh] pb-10">
+      <main className="px-24 pt-5 bg-white  pb-10">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1">
             <input
@@ -604,7 +604,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
         if (hasQ || hasS) rowsToActivate.add(i);
       }
       setActiveRows(rowsToActivate);
-    } catch {}
+    } catch { }
   }, [currentCategory]);
 
   useEffect(() => {
@@ -636,7 +636,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
       const row = next[rowIndex] ? [...next[rowIndex]] : statusButtons.map(s => s.label);
       row[idx] = value;
       next[rowIndex] = row;
-      
+
       // Save to sessionStorage and notify parent with the updated value
       try {
         if (typeof window !== 'undefined') {
@@ -644,8 +644,8 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
           sessionStorage.setItem(key, JSON.stringify(row));
           onStatusChange?.(rowIndex, row);
         }
-      } catch {}
-      
+      } catch { }
+
       return next;
     });
   };
@@ -659,7 +659,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
       if (typeof window !== 'undefined') {
         sessionStorage.setItem(`auditData:question:${currentCategory}:${rowIndex}`, value);
       }
-    } catch {}
+    } catch { }
 
     // Auto-add options for this question if not present yet, using current status labels (defaults)
     if (!statusLabels[rowIndex] || statusLabels[rowIndex].length !== 5) {
@@ -669,7 +669,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
         if (typeof window !== 'undefined') {
           sessionStorage.setItem(`auditData:status:${currentCategory}:${rowIndex}`, JSON.stringify(defaults));
         }
-      } catch {}
+      } catch { }
       onStatusChange?.(rowIndex, defaults);
     }
   };
@@ -689,7 +689,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
           {Array.from({ length: 10 }, (_, index) => {
             const rowIndex = index + 1;
             const isActive = activeRows.has(rowIndex);
-            
+
             return (
               <tr key={rowIndex} className="border-b border-gray-300">
                 <td className="border-r border-gray-300 px-4 py-3 text-center align-middle w-16">
@@ -702,7 +702,7 @@ function AuditTable({ currentCategory, onQuestionsChange, onStatusChange }: Audi
                     placeholder={`Question ${rowIndex.toString().padStart(2, '0')}`}
                     onClick={() => handleQuestionClick(rowIndex)}
                     onChange={(e) => handleQuestionChange(rowIndex, e.target.value)}
-                    className="w-full bg-[#4569871A] px-4 h-[5vh] border border-[#3b5163] rounded-xl outline-none"
+                    className="w-full bg-[#4569871A] px-4 h-[60px] border border-[#3b5163] rounded-xl outline-none"
                   />
                 </td>
                 <td className="border-r border-gray-300 px-4 py-3 align-middle ">

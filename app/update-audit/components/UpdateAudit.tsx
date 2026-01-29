@@ -1267,7 +1267,7 @@ function AuditTable({
                       onClick={() => handleQuestionClick(rowIndex)}
                       onChange={(e) => handleQuestionChange(rowIndex, e.target.value)}
                       disabled={!editableQuestions.has(rowIndex)}
-                      className="w-full bg-[#4569871A] pr-12 pl-4 h-[5vh] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+                      className="w-full bg-[#4569871A] pr-12 pl-4 h-[60px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
                     />
                     <button
                       type="button"
