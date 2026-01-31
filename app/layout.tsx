@@ -10,7 +10,6 @@ import { Toaster } from "react-hot-toast";
 
 import ScalingWrapper from "@/components/ScalingWrapper";
 
-
 export const metadata: Metadata = {
   title: "Pipeline Conversation",
   description: "Simple Quiz App that summarizes you in a few questions",
@@ -24,8 +23,8 @@ export default async function RootLayout({
   const session = await getSession();
 
   return (
-    <html lang="en" >
-      <body >
+    <html lang="en">
+      <body>
         <ReactQueryProvider>
           <UserProvider user={session}>
             <ThemeProvider>
@@ -34,12 +33,10 @@ export default async function RootLayout({
                   {session ? (
                     <div className="flex h-full w-full">
                       <Sidebar />
-                      <main className="flex-1">
-                        {children}
-                      </main>
+                      <main className="flex-1">{children}</main>
                     </div>
                   ) : (
-                    <main className="h-full w-full">
+                    <main className="h-full w-full bg-[#2B4055B2]">
                       {children}
                     </main>
                   )}
@@ -50,20 +47,20 @@ export default async function RootLayout({
                 toastOptions={{
                   duration: 3000,
                   style: {
-                    background: '#fff',
-                    color: '#333',
-                    fontFamily: 'Acumin Variable Concept',
+                    background: "#fff",
+                    color: "#333",
+                    fontFamily: "Acumin Variable Concept",
                   },
                   success: {
                     iconTheme: {
-                      primary: '#16a34a',
-                      secondary: '#fff',
+                      primary: "#16a34a",
+                      secondary: "#fff",
                     },
                   },
                   error: {
                     iconTheme: {
-                      primary: '#dc2626',
-                      secondary: '#fff',
+                      primary: "#dc2626",
+                      secondary: "#fff",
                     },
                   },
                 }}

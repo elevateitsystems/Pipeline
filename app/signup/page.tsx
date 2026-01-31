@@ -183,17 +183,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div
-      className="relative min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: "url(/bg-img.png)",
-        backgroundSize: "contain",
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-[rgba(43,64,85,0.70)] z-0"></div>
-
-      <div className="flex flex-col items-center relative z-10 p-16">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center relative z-10 w-full px-4 py-16 lg:px-8 xl:px-12">
         {/* Logo */}
         <Image
           src="/logo.png"
@@ -203,7 +194,7 @@ export default function SignupPage() {
           className="mb-4"
         />
         {/* Form Card */}
-        <div className="max-w-[764px] bg-white rounded-2xl shadow-2xl p-8">
+        <div className="w-full max-w-[90%] sm:max-w-[500px] lg:max-w-[540px] xl:max-w-[580px] 2xl:max-w-[620px] bg-white rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-9">
           <h2 className="text-2xl text-[#2d3e50] mb-8 tracking-wide">
             CREATE YOUR ACCOUNT
           </h2>

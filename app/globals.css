@@ -78,6 +78,12 @@
   /* Chrome, Safari, Opera */
 }
 
+/* Active nav item: subtle rounded left corners only (no pseudo-elements to avoid bracket artifact) */
+.active-nav-rounded {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
 .active-nav-item::before {
   content: '';
   position: absolute;

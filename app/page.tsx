@@ -63,9 +63,16 @@ export default function Home() {
   useEffect(() => {
     if (!auditsData) return;
 
-    const responseData = auditsData as { data?: Presentation[]; isInvitedUser?: boolean } | Presentation[];
+    const responseData = auditsData as
+      | { data?: Presentation[]; isInvitedUser?: boolean }
+      | Presentation[];
 
-    if (responseData && typeof responseData === 'object' && !Array.isArray(responseData) && 'isInvitedUser' in responseData) {
+    if (
+      responseData &&
+      typeof responseData === "object" &&
+      !Array.isArray(responseData) &&
+      "isInvitedUser" in responseData
+    ) {
       setIsInvitedUser(responseData.isInvitedUser || false);
     }
   }, [auditsData, setIsInvitedUser]);
@@ -74,15 +81,22 @@ export default function Home() {
   const audits = useMemo<AuditWithScore[]>(() => {
     if (!auditsData) return [];
 
-    const responseData = auditsData as { data?: Presentation[]; isInvitedUser?: boolean } | Presentation[];
+    const responseData = auditsData as
+      | { data?: Presentation[]; isInvitedUser?: boolean }
+      | Presentation[];
     const auditsList = Array.isArray(responseData)
       ? responseData
       : responseData?.data || [];
 
-    return auditsList.map((audit: Presentation & { tests?: Array<{ totalScore: number }> }) => ({
-      ...audit,
-      latestScore: audit.tests && audit.tests.length > 0 ? audit.tests[0].totalScore : undefined,
-    }));
+    return auditsList.map(
+      (audit: Presentation & { tests?: Array<{ totalScore: number }> }) => ({
+        ...audit,
+        latestScore:
+          audit.tests && audit.tests.length > 0
+            ? audit.tests[0].totalScore
+            : undefined,
+      }),
+    );
   }, [auditsData]);
 
   const isLoading = authLoading || !user;
@@ -113,7 +127,6 @@ export default function Home() {
       // Clear full sessionStorage
       sessionStorage.clear();
 
-
       // Dispatch event to update sidebar
       window.dispatchEvent(new Event("categoryNameUpdated"));
     } catch (error) {
@@ -128,7 +141,6 @@ export default function Home() {
 
   const handleDeleteConfirm = async () => {
     if (!auditToDelete) return;
-
 
     try {
       await deleteAuditMutation.mutateAsync(auditToDelete);
@@ -149,7 +161,6 @@ export default function Home() {
   const handleInvite = async (email: string) => {
     if (!auditToInvite) return;
 
-
     try {
       await sendInviteMutation.mutateAsync({
         email,
@@ -157,18 +168,22 @@ export default function Home() {
       });
       toast.success("Invitation sent successfully!");
     } catch (error) {
-      const errorMessage = (error as { response?: { data?: { error?: string } }; message?: string })?.response?.data?.error
-        || (error as { message?: string })?.message
-        || "Failed to send invitation";
+      const errorMessage =
+        (
+          error as {
+            response?: { data?: { error?: string } };
+            message?: string;
+          }
+        )?.response?.data?.error ||
+        (error as { message?: string })?.message ||
+        "Failed to send invitation";
       toast.error(errorMessage);
       throw error;
     }
   };
 
   if (isLoading || loadingAudits || !user) {
-    return (
-      <HomeSkeleton />
-    );
+    return <HomeSkeleton />;
   }
 
   // Empty state - no audits
@@ -201,7 +216,10 @@ export default function Home() {
               >
                 NO AUDIT CREATED
               </p>
-              <p className="text-[#2D2D2D] mb-2 font-normal" style={{ fontSize: 'clamp(1rem, 4vw, 1.2rem)' }}>
+              <p
+                className="text-[#2D2D2D] mb-2 font-normal"
+                style={{ fontSize: "clamp(1rem, 4vw, 1.2rem)" }}
+              >
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
                   : "Start your first audit to see your performance insights here."}
@@ -239,10 +257,24 @@ export default function Home() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-[#2d3e50] text-3xl font-bold mb-2">
+            <h1
+              className="text-[#2d3e50] text-3xl mb-2"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontWeight: 700,
+                fontVariationSettings: "'wdth' 85, 'wght' 700",
+              }}
+            >
               ALL AUDIT AUDITS
             </h1>
-            <p className="text-gray-600 text-base">
+            <p
+              className="text-gray-600 text-base"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontWeight: 400,
+                fontVariationSettings: "'wdth' 85, 'wght' 400",
+              }}
+            >
               Track and compare all your AUDIT audit reports in one place. View
               scores, dates, and improvement insights instantly.
             </p>
@@ -256,30 +288,62 @@ export default function Home() {
                   clearAuditSessionStorage();
                   router.push("/add-new-audit/?category=1");
                 }}
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 600,
+                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                }}
               >
                 Create New AUDIT
               </CustomButton>
             )}
-
           </div>
         </div>
       </div>
 
       {/* Table */}
-      <div className="border overflow-hidden">
+      <div className="border overflow-hidden rounded-lg">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
+              <th
+                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 600,
+                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                }}
+              >
                 AUDIT Name
               </th>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
+              <th
+                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 600,
+                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                }}
+              >
                 Creation Date
               </th>
-              <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
-                Score
+              <th
+                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 600,
+                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                }}
+              >
+                Audit Score
               </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
+              <th
+                className="px-6 py-4 text-left text-sm text-gray-700 border-b"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 600,
+                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                }}
+              >
                 Action
               </th>
             </tr>
@@ -291,11 +355,36 @@ export default function Home() {
                 <tr
                   key={audit.id}
                   className="border-b border-[#E0E0E0] hover:bg-gray-50"
+                  style={{
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
+                    fontWeight: 400,
+                    fontVariationSettings: "'wdth' 85, 'wght' 400",
+                  }}
                 >
-                  <td className="px-6 border-r py-4 text-gray-800">
+                  <td
+                    className="px-6 border-r py-4 text-gray-800"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 400,
+                      fontSize: "23px",
+                      lineHeight: "100%",
+                      letterSpacing: "-0.025em",
+                      fontVariationSettings: "'wdth' 85, 'wght' 400",
+                    }}
+                  >
                     {audit.title}
                   </td>
-                  <td className="px-6 border-r py-4 text-gray-600">
+                  <td
+                    className="px-6 border-r py-4 text-gray-600"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 400,
+                      fontSize: "23px",
+                      lineHeight: "100%",
+                      letterSpacing: "-0.025em",
+                      fontVariationSettings: "'wdth' 85, 'wght' 400",
+                    }}
+                  >
                     {formatDate(audit.createdAt)}
                   </td>
                   <td
@@ -308,8 +397,16 @@ export default function Home() {
                   >
                     {audit.latestScore !== undefined ? (
                       <span
-                        className="px-3 py-2 text-center rounded text-sm font-medium"
-                        style={{ color: scoreColor.text }}
+                        className="px-3 py-2 text-center rounded font-medium"
+                        style={{
+                          color: scoreColor.text,
+                          fontFamily: "'Acumin Variable Concept', sans-serif",
+                          fontWeight: 400,
+                          fontSize: "23px",
+                          lineHeight: "100%",
+                          letterSpacing: "-0.025em",
+                          fontVariationSettings: "'wdth' 85, 'wght' 400",
+                        }}
                       >
                         {audit.latestScore}
                       </span>
@@ -327,7 +424,16 @@ export default function Home() {
                                 `/update-audit/?edit=${audit.id}&category=1`,
                               )
                             }
-                            className="px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 text-sm rounded-md  flex items-center justify-center gap-1"
+                            className="px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md  flex items-center justify-center gap-1"
+                            style={{
+                              fontFamily:
+                                "'Acumin Variable Concept', sans-serif",
+                              fontWeight: 400,
+                              fontSize: "24px",
+                              lineHeight: "100%",
+                              letterSpacing: "-0.025em",
+                              fontVariationSettings: "'wdth' 85, 'wght' 400",
+                            }}
                           >
                             <Edit size={14} />
                             Edit
@@ -339,6 +445,15 @@ export default function Home() {
                             fullRounded={false}
                             leftIcon={<Trash2 size={14} />}
                             onClick={() => handleDeleteClick(audit.id)}
+                            style={{
+                              fontFamily:
+                                "'Acumin Variable Concept', sans-serif",
+                              fontWeight: 400,
+                              fontSize: "24px",
+                              lineHeight: "100%",
+                              letterSpacing: "-0.025em",
+                              fontVariationSettings: "'wdth' 85, 'wght' 400",
+                            }}
                           >
                             Delete
                           </CustomButton>
@@ -350,7 +465,15 @@ export default function Home() {
                             `/test?presentationId=${audit.id}&category=1`,
                           )
                         }
-                        className="px-3 cursor-pointer py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 flex justify-center items-center gap-1"
+                        className="px-3 cursor-pointer py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1"
+                        style={{
+                          fontFamily: "'Acumin Variable Concept', sans-serif",
+                          fontWeight: 400,
+                          fontSize: "24px",
+                          lineHeight: "100%",
+                          letterSpacing: "-0.025em",
+                          fontVariationSettings: "'wdth' 85, 'wght' 400",
+                        }}
                       >
                         <Play size={14} />
                         Start Audit
@@ -358,7 +481,15 @@ export default function Home() {
                       {!isInvitedUser && (
                         <button
                           onClick={() => handleInviteClick(audit)}
-                          className="px-3 cursor-pointer py-1.5 text-center bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 flex justify-center items-center gap-1"
+                          className="px-3 cursor-pointer py-1.5 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1"
+                          style={{
+                            fontFamily: "'Acumin Variable Concept', sans-serif",
+                            fontWeight: 400,
+                            fontSize: "24px",
+                            lineHeight: "100%",
+                            letterSpacing: "-0.025em",
+                            fontVariationSettings: "'wdth' 85, 'wght' 400",
+                          }}
                         >
                           <Mail size={14} />
                           Invite

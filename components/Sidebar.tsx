@@ -282,7 +282,7 @@ export default function Sidebar() {
         }
       }
     } catch {}
-    return `Category ${categoryNumber}`;
+    return `CATEGORIES 0${categoryNumber}`;
   };
 
   // Helper to get category icon
@@ -1006,7 +1006,7 @@ export default function Sidebar() {
         style={{
           position: "relative",
           zIndex: 2,
-          gap: "clamp(0.4rem, 1vw, 0.75rem)",
+          gap: "clamp(0.5rem, 1.25vw, 1rem)",
           display: "flex",
           flexDirection: "column",
         }}
@@ -1015,7 +1015,10 @@ export default function Sidebar() {
           <>
             {/* Area Of Urgent Focus */}
             <div className="px-4 mt-4">
-              <h3 className="text-lg text-white mb-3 uppercase">
+              <h3
+                className="text-lg text-white mb-3 uppercase"
+                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+              >
                 Area Of Urgent Focus
               </h3>
               <div className="space-y-3">
@@ -1040,7 +1043,13 @@ export default function Sidebar() {
                       return (
                         <div key={cs.categoryId} className="mb-4">
                           <div className="flex justify-between items-center mb-1">
-                            <span className="text-white text-sm text-nowrap">
+                            <span
+                              className="text-white text-sm text-nowrap"
+                              style={{
+                                fontFamily:
+                                  "'Acumin Variable Concept', sans-serif",
+                              }}
+                            >
                               {cs.categoryName}
                             </span>
                           </div>
@@ -1064,12 +1073,22 @@ export default function Sidebar() {
             {(onNewAuditPage ||
               onUpdateAuditPage ||
               onSummaryPage ||
-              onTestPage) &&
-              !onMainPage && (
-                <div className="px-4 text-center font-medium text-[#fffef7]">
-                  ALL AUDITS
-                </div>
-              )}
+              onTestPage) && (
+              <div
+                className="px-8 text-left text-[#fffef7] uppercase"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "clamp(20px, 1.8vw, 27px)",
+                  lineHeight: "1",
+                  letterSpacing: "0.006em",
+                  textAlign: "center",
+                  fontVariationSettings: "'wdth' 65, 'wght' 500",
+                }}
+              >
+                AUDIT CATGORIES
+              </div>
+            )}
             {shouldShowTestSkeleton
               ? Array.from(
                   { length: Math.max(actualCategoryCount, 4) },
@@ -1212,7 +1231,7 @@ export default function Sidebar() {
                       }}
                       className={`ml-4 ${isEditing ? "h-[40px]" : ""}  cursor-pointer flex items-center ${
                         onTestPage || (isActive && !isEditing)
-                          ? "w-[calc(100%-1rem+2px)] mr-0 rounded-l-xl border-r-0"
+                          ? "w-[calc(100%-1rem+2px)] mr-0 border-r-0 active-nav-rounded"
                           : "w-[93.5%] rounded-xl "
                       } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
                       style={{
@@ -1221,11 +1240,19 @@ export default function Sidebar() {
                         marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                         backgroundColor: backgroundColor,
                         color: textColor,
-                        border: useSecondary ? "2px solid #899AA9" : "none",
-                        borderRight:
+                        border:
                           onTestPage || (isActive && !isEditing)
                             ? "none"
-                            : undefined,
+                            : useSecondary
+                              ? "2px solid #899AA9"
+                              : "none",
+                        borderRight: "none",
+                        ...(onTestPage || (isActive && !isEditing)
+                          ? {
+                              borderRadius: "0.75rem 0 0 0.75rem",
+                              overflow: "hidden",
+                            }
+                          : {}),
                       }}
                     >
                       {isEditing && itemCategoryNumber !== null ? (
@@ -1310,7 +1337,11 @@ export default function Sidebar() {
                               }}
                               onClick={(e) => e.stopPropagation()}
                               className="flex-1 bg-transparent outline-none border-none"
-                              style={{ color: "inherit" }}
+                              style={{
+                                color: "inherit",
+                                fontFamily:
+                                  "'Acumin Variable Concept', sans-serif",
+                              }}
                             />
                           </div>
 
@@ -1348,37 +1379,20 @@ export default function Sidebar() {
                           )}
                         </div>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-between relative">
-                          {canDrag && (
-                            <div
-                              className="w-4 h-4 mr-2 shrink-0 cursor-grab"
-                              onMouseDown={() => {
-                                if (itemCategoryNumber !== null) {
-                                  setDragHandleCategory(itemCategoryNumber);
+                        <div
+                          className="w-full h-full flex items-center justify-between relative"
+                          style={
+                            onTestPage || (isActive && !isEditing)
+                              ? {
+                                  borderRadius: "0.75rem 0 0 0.75rem",
+                                  overflow: "hidden",
                                 }
-                              }}
-                              onMouseUp={() => setDragHandleCategory(null)}
-                              onMouseLeave={() => setDragHandleCategory(null)}
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                style={{ color: "inherit", opacity: 0.6 }}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M4 8h16M4 16h16"
-                                />
-                              </svg>
-                            </div>
-                          )}
+                              : undefined
+                          }
+                        >
                           <div className="flex-1 flex items-center gap-2">
                             {/* Category icon - view only until edit mode */}
-                            <div className="flex items-center justify-center shrink-0">
+                            <div className="flex items-center justify-center shrink-0 text-white">
                               {isCategoryItem &&
                               itemCategoryNumber !== null &&
                               getCategoryIcon(itemCategoryNumber)
@@ -1416,10 +1430,21 @@ export default function Sidebar() {
                                   });
                                 }
                               }}
-                              className={`flex-1 cursor-pointer flex items-center gap-2 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} break-words ${isActive || isEditing ? "active-nav-item" : ""}`}
+                              className={`flex-1 cursor-pointer flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} break-words ${isActive || isEditing ? "active-nav-rounded " : ""}`}
                               // style={{ color: 'inherit' }}
                             >
-                              <span className="flex-1 break-words leading-normal line-clamp-1">
+                              <span
+                                className="flex-1 text-left uppercase break-words leading-none line-clamp-1"
+                                style={{
+                                  fontFamily:
+                                    "'Acumin Variable Concept', sans-serif",
+                                  fontWeight: 500,
+                                  fontSize: "clamp(20px, 1.8vw, 27px)",
+                                  letterSpacing: "0.006em",
+                                  fontVariationSettings:
+                                    "'wdth' 65, 'wght' 500",
+                                }}
+                              >
                                 {item.name}
                               </span>
                             </button>
@@ -1508,17 +1533,17 @@ export default function Sidebar() {
             >
               {user.profileImageUrl ? (
                 <Image
-                  className="border   w-[180px]  h-[199px] object-cover cursor-pointer"
+                  className="w-[210px] h-[230px] object-cover cursor-pointer"
                   src={user.profileImageUrl}
                   alt="Profile"
-                  width={180}
-                  height={199}
+                  width={210}
+                  height={230}
                   onClick={() => router.push("/profile")}
                   style={{
-                    width: "clamp(60px, 15vw, 180px)",
-                    height: "clamp(60px, 25vh, 199px)",
+                    width: "clamp(100px, 18vw, 210px)",
+                    height: "clamp(120px, 25vh, 230px)",
                     objectPosition: "center 20%",
-                    border: `2px solid ${user.secondaryColor}`,
+                    border: `5px solid ${user.secondaryColor}`,
                   }}
                 />
               ) : (
@@ -1526,8 +1551,8 @@ export default function Sidebar() {
                   className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
                   onClick={() => router.push("/profile")}
                   style={{
-                    width: "clamp(60px, 15vw, 180px)",
-                    height: "clamp(60px, 15vh, 199px)",
+                    width: "clamp(100px, 18vw, 210px)",
+                    height: "clamp(120px, 25vh, 230px)",
                   }}
                 >
                   <span

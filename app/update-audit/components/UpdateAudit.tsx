@@ -28,8 +28,15 @@ type FormData = {
   title: string;
   categories: CategoryFormData[];
   summary?: {
-    categoryRecommendations?: Array<{ categoryId: string; recommendation: string }>;
-    nextSteps?: Array<{ type: 'file' | 'text'; content: string; fileUrl?: string }>;
+    categoryRecommendations?: Array<{
+      categoryId: string;
+      recommendation: string;
+    }>;
+    nextSteps?: Array<{
+      type: "file" | "text";
+      content: string;
+      fileUrl?: string;
+    }>;
     overallDetails?: string;
   };
 };
@@ -37,8 +44,8 @@ type FormData = {
 export default function UpdateAudit() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentCategory = parseInt(searchParams.get('category') || '1', 10);
-  const editId = searchParams.get('edit');
+  const currentCategory = parseInt(searchParams.get("category") || "1", 10);
+  const editId = searchParams.get("edit");
 
   const updateAuditMutation = useUpdateAudit();
 
@@ -50,18 +57,20 @@ export default function UpdateAudit() {
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [titleEditable, setTitleEditable] = useState(false);
-  const [sessionStorageCategories, setSessionStorageCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>([]);
+  const [sessionStorageCategories, setSessionStorageCategories] = useState<
+    Array<{ id: string; name: string; recommendation?: string }>
+  >([]);
 
   // Sync formData.summary with sessionStorage when it changes
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleSummaryUpdate = () => {
-      const summaryDataStr = sessionStorage.getItem('summaryData');
+      const summaryDataStr = sessionStorage.getItem("summaryData");
       if (summaryDataStr) {
         try {
           const parsed = JSON.parse(summaryDataStr);
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             summary: {
               categoryRecommendations: parsed.categoryRecommendations || [],
@@ -70,44 +79,49 @@ export default function UpdateAudit() {
             },
           }));
         } catch (error) {
-          console.error('Error syncing summary from sessionStorage:', error);
+          console.error("Error syncing summary from sessionStorage:", error);
         }
       }
     };
 
     // Listen for custom event when summary is updated
-    window.addEventListener('summaryDataUpdated', handleSummaryUpdate);
+    window.addEventListener("summaryDataUpdated", handleSummaryUpdate);
 
     // Also listen for storage events (cross-tab sync)
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'summaryData') {
+      if (e.key === "summaryData") {
         handleSummaryUpdate();
       }
     };
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener('summaryDataUpdated', handleSummaryUpdate);
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("summaryDataUpdated", handleSummaryUpdate);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
   // Sync formData category names/icons when updated in Sidebar
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleCategoryNameUpdate = () => {
       // Update formData category names from sessionStorage
-      setFormData(prev => {
+      setFormData((prev) => {
         const updatedCategories = prev.categories.map((cat, idx) => {
           const categoryNumber = idx + 1;
-          const categoryName = sessionStorage.getItem(`auditData:categoryName:${categoryNumber}`);
-          const categoryIcon = sessionStorage.getItem(`auditData:categoryIcon:${categoryNumber}`);
+          const categoryName = sessionStorage.getItem(
+            `auditData:categoryName:${categoryNumber}`,
+          );
+          const categoryIcon = sessionStorage.getItem(
+            `auditData:categoryIcon:${categoryNumber}`,
+          );
 
           return {
             ...cat,
             name: categoryName || cat.name,
-            icon: categoryIcon || (categoryIcon === null ? undefined : cat.icon),
+            icon:
+              categoryIcon || (categoryIcon === null ? undefined : cat.icon),
           };
         });
 
@@ -119,32 +133,38 @@ export default function UpdateAudit() {
     };
 
     // Listen for category name updates from Sidebar
-    window.addEventListener('categoryNameUpdated', handleCategoryNameUpdate);
+    window.addEventListener("categoryNameUpdated", handleCategoryNameUpdate);
 
     // Also listen for storage events
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key?.startsWith('auditData:categoryName:') || e.key?.startsWith('auditData:categoryIcon:')) {
+      if (
+        e.key?.startsWith("auditData:categoryName:") ||
+        e.key?.startsWith("auditData:categoryIcon:")
+      ) {
         handleCategoryNameUpdate();
       }
     };
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener('categoryNameUpdated', handleCategoryNameUpdate);
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener(
+        "categoryNameUpdated",
+        handleCategoryNameUpdate,
+      );
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
   // Sync formData.categories when categories are reordered in Sidebar
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     const handleCategoryReorder = (event?: CustomEvent) => {
       try {
         let newCategoriesForStorage: CategoryFormData[] | null = null;
-        let newSummaryForStorage: FormData['summary'] | null = null;
+        let newSummaryForStorage: FormData["summary"] | null = null;
 
-        setFormData(prev => {
+        setFormData((prev) => {
           // Only proceed if we have existing categories
           if (!prev.categories || prev.categories.length === 0) {
             return prev;
@@ -152,13 +172,16 @@ export default function UpdateAudit() {
 
           // Only reorder when we have the mapping (drag-and-drop event)
           if (event?.detail?.oldToNewMap) {
-            const oldToNewMap = event.detail.oldToNewMap as Record<number, number>;
+            const oldToNewMap = event.detail.oldToNewMap as Record<
+              number,
+              number
+            >;
             const categoryCount = Math.max(7, prev.categories.length);
             const newCategories: CategoryFormData[] = new Array(categoryCount);
 
             // Create reverse mapping (new position -> old position)
             const newToOldMap: Record<number, number> = {};
-            Object.keys(oldToNewMap).forEach(oldPosStr => {
+            Object.keys(oldToNewMap).forEach((oldPosStr) => {
               const oldPos = Number(oldPosStr);
               const newPos = oldToNewMap[oldPos];
               if (newPos) {
@@ -186,8 +209,12 @@ export default function UpdateAudit() {
             // Update category names/icons from sessionStorage
             for (let i = 0; i < Math.min(newCategories.length, 7); i++) {
               const categoryNumber = i + 1;
-              const categoryName = sessionStorage.getItem(`auditData:categoryName:${categoryNumber}`);
-              const categoryIcon = sessionStorage.getItem(`auditData:categoryIcon:${categoryNumber}`);
+              const categoryName = sessionStorage.getItem(
+                `auditData:categoryName:${categoryNumber}`,
+              );
+              const categoryIcon = sessionStorage.getItem(
+                `auditData:categoryIcon:${categoryNumber}`,
+              );
 
               if (categoryName) {
                 newCategories[i].name = categoryName;
@@ -203,20 +230,26 @@ export default function UpdateAudit() {
             let updatedSummary = prev.summary;
             if (prev.summary && prev.summary.categoryRecommendations) {
               const oldRecommendations = prev.summary.categoryRecommendations;
-              const reorderedRecommendations: Array<{ categoryId: string; recommendation: string }> = new Array(
-                newCategories.length
-              );
+              const reorderedRecommendations: Array<{
+                categoryId: string;
+                recommendation: string;
+              }> = new Array(newCategories.length);
 
-              for (let oldPos = 1; oldPos <= oldRecommendations.length; oldPos++) {
+              for (
+                let oldPos = 1;
+                oldPos <= oldRecommendations.length;
+                oldPos++
+              ) {
                 const entry = oldRecommendations[oldPos - 1];
                 if (!entry) continue;
 
                 const newPos = oldToNewMap[oldPos] ?? oldPos;
-                const newCategoryId = newCategories[newPos - 1]?.id || entry.categoryId || '';
+                const newCategoryId =
+                  newCategories[newPos - 1]?.id || entry.categoryId || "";
 
                 reorderedRecommendations[newPos - 1] = {
                   categoryId: newCategoryId,
-                  recommendation: entry.recommendation || '',
+                  recommendation: entry.recommendation || "",
                 };
               }
 
@@ -224,8 +257,8 @@ export default function UpdateAudit() {
               for (let i = 0; i < newCategories.length; i++) {
                 if (!reorderedRecommendations[i]) {
                   reorderedRecommendations[i] = {
-                    categoryId: newCategories[i]?.id || '',
-                    recommendation: '',
+                    categoryId: newCategories[i]?.id || "",
+                    recommendation: "",
                   };
                 }
               }
@@ -253,33 +286,41 @@ export default function UpdateAudit() {
         });
 
         // Update derived state outside of setFormData using captured values
-        const categoriesForStorage = newCategoriesForStorage as CategoryFormData[] | null;
+        const categoriesForStorage = newCategoriesForStorage as
+          | CategoryFormData[]
+          | null;
         if (categoriesForStorage && Array.isArray(categoriesForStorage)) {
           setSessionStorageCategories(
             categoriesForStorage.map((cat: CategoryFormData, idx: number) => ({
               id: cat.id || `temp-${idx}`,
               name: cat.name,
               recommendation: cat.recommendation || "",
-            }))
+            })),
           );
         }
 
-        const summaryForStorage = newSummaryForStorage as FormData['summary'] | null;
+        const summaryForStorage = newSummaryForStorage as
+          | FormData["summary"]
+          | null;
         if (summaryForStorage) {
           try {
             const summaryDataToSave = {
-              categoryRecommendations: summaryForStorage?.categoryRecommendations || [],
+              categoryRecommendations:
+                summaryForStorage?.categoryRecommendations || [],
               nextSteps: summaryForStorage?.nextSteps || [],
               overallDetails: summaryForStorage?.overallDetails || undefined,
             };
-            sessionStorage.setItem('summaryData', JSON.stringify(summaryDataToSave));
-            window.dispatchEvent(new Event('summaryDataUpdated'));
+            sessionStorage.setItem(
+              "summaryData",
+              JSON.stringify(summaryDataToSave),
+            );
+            window.dispatchEvent(new Event("summaryDataUpdated"));
           } catch (error) {
-            console.error('Error updating sessionStorage summary:', error);
+            console.error("Error updating sessionStorage summary:", error);
           }
         }
       } catch (error) {
-        console.error('Error syncing categories after reorder:', error);
+        console.error("Error syncing categories after reorder:", error);
       }
     };
 
@@ -287,10 +328,10 @@ export default function UpdateAudit() {
     const handleCustomReorder = (event: Event) => {
       handleCategoryReorder(event as CustomEvent);
     };
-    window.addEventListener('categoriesReordered', handleCustomReorder);
+    window.addEventListener("categoriesReordered", handleCustomReorder);
 
     return () => {
-      window.removeEventListener('categoriesReordered', handleCustomReorder);
+      window.removeEventListener("categoriesReordered", handleCustomReorder);
     };
   }, []);
 
@@ -309,82 +350,100 @@ export default function UpdateAudit() {
         const audit = await auditApi.getById(editId);
 
         // Transform audit data to form data structure
-        const categories: CategoryFormData[] = audit.categories.map(cat => ({
+        const categories: CategoryFormData[] = audit.categories.map((cat) => ({
           id: cat.id,
           name: cat.name,
           icon: cat.icon || undefined,
-          questions: cat.questions.map(q => ({
+          questions: cat.questions.map((q) => ({
             id: q.id,
             text: q.text,
-            options: q.options.map(opt => ({
+            options: q.options.map((opt) => ({
               id: opt.id,
               text: opt.text,
-              points: opt.points
-            }))
-          }))
+              points: opt.points,
+            })),
+          })),
         }));
 
         // Handle summary data
         const auditWithSummary = audit as Presentation & {
           summary?: {
-            categoryRecommendations?: string | Array<{ categoryId: string; recommendation: string }>;
-            nextSteps?: string | Array<{ type: string; content: string; fileUrl?: string }>;
-            overallDetails?: string | null
-          } | null
+            categoryRecommendations?:
+              | string
+              | Array<{ categoryId: string; recommendation: string }>;
+            nextSteps?:
+              | string
+              | Array<{ type: string; content: string; fileUrl?: string }>;
+            overallDetails?: string | null;
+          } | null;
         };
 
         let summaryData = undefined;
         if (auditWithSummary.summary) {
           const summary = auditWithSummary.summary;
           let categoryRecommendations = summary.categoryRecommendations
-            ? (typeof summary.categoryRecommendations === 'string'
+            ? typeof summary.categoryRecommendations === "string"
               ? JSON.parse(summary.categoryRecommendations)
-              : summary.categoryRecommendations)
+              : summary.categoryRecommendations
             : [];
 
           // Map temp IDs to real category IDs if needed
           if (Array.isArray(categoryRecommendations)) {
-            categoryRecommendations = categoryRecommendations.map((rec: { categoryId: string; recommendation: string }, index: number) => {
-              if (rec.categoryId && rec.categoryId.startsWith('temp-')) {
-                const tempIndex = parseInt(rec.categoryId.replace('temp-', ''), 10);
-                if (!isNaN(tempIndex) && audit.categories[tempIndex]) {
+            categoryRecommendations = categoryRecommendations.map(
+              (
+                rec: { categoryId: string; recommendation: string },
+                index: number,
+              ) => {
+                if (rec.categoryId && rec.categoryId.startsWith("temp-")) {
+                  const tempIndex = parseInt(
+                    rec.categoryId.replace("temp-", ""),
+                    10,
+                  );
+                  if (!isNaN(tempIndex) && audit.categories[tempIndex]) {
+                    return {
+                      categoryId: audit.categories[tempIndex].id,
+                      recommendation: rec.recommendation || "",
+                    };
+                  }
+                }
+                const categoryExists = audit.categories.some(
+                  (cat) => cat.id === rec.categoryId,
+                );
+                if (categoryExists) {
+                  return rec;
+                }
+                if (audit.categories[index]) {
                   return {
-                    categoryId: audit.categories[tempIndex].id,
+                    categoryId: audit.categories[index].id,
                     recommendation: rec.recommendation || "",
                   };
                 }
-              }
-              const categoryExists = audit.categories.some(cat => cat.id === rec.categoryId);
-              if (categoryExists) {
                 return rec;
-              }
-              if (audit.categories[index]) {
-                return {
-                  categoryId: audit.categories[index].id,
-                  recommendation: rec.recommendation || "",
-                };
-              }
-              return rec;
-            });
+              },
+            );
           }
 
           // Ensure all categories have entries
           const allCategoryRecommendations = audit.categories.map((cat) => {
             const existing = Array.isArray(categoryRecommendations)
-              ? categoryRecommendations.find((rec: { categoryId: string }) => rec.categoryId === cat.id)
+              ? categoryRecommendations.find(
+                  (rec: { categoryId: string }) => rec.categoryId === cat.id,
+                )
               : null;
-            return existing || {
-              categoryId: cat.id,
-              recommendation: "",
-            };
+            return (
+              existing || {
+                categoryId: cat.id,
+                recommendation: "",
+              }
+            );
           });
 
           summaryData = {
             categoryRecommendations: allCategoryRecommendations,
             nextSteps: summary.nextSteps
-              ? (typeof summary.nextSteps === 'string'
+              ? typeof summary.nextSteps === "string"
                 ? JSON.parse(summary.nextSteps)
-                : summary.nextSteps)
+                : summary.nextSteps
               : [],
             overallDetails: summary.overallDetails || undefined,
           };
@@ -402,13 +461,19 @@ export default function UpdateAudit() {
         const recommendationMap = new Map<string, string>();
         if (summaryData?.categoryRecommendations) {
           summaryData.categoryRecommendations.forEach(
-            (rec: { categoryId: string; recommendation: string }, index: number) => {
+            (
+              rec: { categoryId: string; recommendation: string },
+              index: number,
+            ) => {
               if (rec?.categoryId) {
                 recommendationMap.set(rec.categoryId, rec.recommendation || "");
               } else {
-                recommendationMap.set(`position-${index}`, rec.recommendation || "");
+                recommendationMap.set(
+                  `position-${index}`,
+                  rec.recommendation || "",
+                );
               }
-            }
+            },
           );
         }
 
@@ -428,32 +493,42 @@ export default function UpdateAudit() {
         });
 
         // Update sessionStorageCategories for SummarySection
-        setSessionStorageCategories(categoriesWithRecommendations.map((cat, idx) => ({
-          id: cat.id || `temp-${idx}`,
-          name: cat.name,
-          recommendation: cat.recommendation || "",
-        })));
+        setSessionStorageCategories(
+          categoriesWithRecommendations.map((cat, idx) => ({
+            id: cat.id || `temp-${idx}`,
+            name: cat.name,
+            recommendation: cat.recommendation || "",
+          })),
+        );
 
         // Store summary data in sessionStorage for SummarySection component
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem('summaryData', JSON.stringify(summaryData));
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("summaryData", JSON.stringify(summaryData));
           // Store category names for sidebar
           categoriesWithRecommendations.forEach((cat, index) => {
             const categoryNumber = index + 1;
-            sessionStorage.setItem(`auditData:categoryName:${categoryNumber}`, cat.name);
+            sessionStorage.setItem(
+              `auditData:categoryName:${categoryNumber}`,
+              cat.name,
+            );
             if (cat.icon) {
-              sessionStorage.setItem(`auditData:categoryIcon:${categoryNumber}`, cat.icon);
+              sessionStorage.setItem(
+                `auditData:categoryIcon:${categoryNumber}`,
+                cat.icon,
+              );
             } else {
-              sessionStorage.removeItem(`auditData:categoryIcon:${categoryNumber}`);
+              sessionStorage.removeItem(
+                `auditData:categoryIcon:${categoryNumber}`,
+              );
             }
             if (cat.recommendation !== undefined) {
               sessionStorage.setItem(
                 `auditData:categoryRecommendation:${categoryNumber}`,
-                cat.recommendation
+                cat.recommendation,
               );
             }
           });
-          window.dispatchEvent(new Event('categoryNameUpdated'));
+          window.dispatchEvent(new Event("categoryNameUpdated"));
         }
       } catch (error) {
         console.error("Error fetching audit data:", error);
@@ -478,7 +553,7 @@ export default function UpdateAudit() {
   const updateCategoryName = (name: string) => {
     const finalName = name || `Category ${currentCategory}`;
 
-    setFormData(prev => {
+    setFormData((prev) => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
 
@@ -502,18 +577,24 @@ export default function UpdateAudit() {
     });
 
     // Update sessionStorage for sidebar
-    if (typeof window !== 'undefined') {
-      sessionStorage.setItem(`auditData:categoryName:${currentCategory}`, finalName);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(
+        `auditData:categoryName:${currentCategory}`,
+        finalName,
+      );
 
       // Also update auditData categories array in sessionStorage
       try {
-        const raw = sessionStorage.getItem('auditData');
+        const raw = sessionStorage.getItem("auditData");
         const data = raw ? JSON.parse(raw) : { categories: [] };
         if (!Array.isArray(data.categories)) data.categories = [];
 
         const idx = currentCategory - 1;
         while (data.categories.length < currentCategory) {
-          data.categories.push({ name: `Category ${data.categories.length + 1}`, questions: [] });
+          data.categories.push({
+            name: `Category ${data.categories.length + 1}`,
+            questions: [],
+          });
         }
 
         if (data.categories[idx]) {
@@ -522,13 +603,13 @@ export default function UpdateAudit() {
           data.categories[idx] = { name: finalName, questions: [] };
         }
 
-        sessionStorage.setItem('auditData', JSON.stringify(data));
+        sessionStorage.setItem("auditData", JSON.stringify(data));
       } catch (e) {
-        console.error('Error updating auditData category name:', e);
+        console.error("Error updating auditData category name:", e);
       }
 
       // Update sessionStorageCategories for SummarySection
-      setSessionStorageCategories(prev => {
+      setSessionStorageCategories((prev) => {
         const updated = [...prev];
         const categoryIndex = currentCategory - 1;
         const wasNewCategory = updated.length <= categoryIndex;
@@ -551,21 +632,21 @@ export default function UpdateAudit() {
         };
 
         // If this was a new category, dispatch event to notify SummarySection
-        if (wasNewCategory && typeof window !== 'undefined') {
-          window.dispatchEvent(new Event('categoryNameUpdated'));
+        if (wasNewCategory && typeof window !== "undefined") {
+          window.dispatchEvent(new Event("categoryNameUpdated"));
         }
 
         return updated;
       });
 
       // Dispatch event to notify Sidebar
-      window.dispatchEvent(new Event('categoryNameUpdated'));
+      window.dispatchEvent(new Event("categoryNameUpdated"));
     }
   };
 
   // Update category icon
   const updateCategoryIcon = (icon: string) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
 
@@ -589,19 +670,22 @@ export default function UpdateAudit() {
     });
 
     // Update sessionStorage for sidebar
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       if (icon) {
-        sessionStorage.setItem(`auditData:categoryIcon:${currentCategory}`, icon);
+        sessionStorage.setItem(
+          `auditData:categoryIcon:${currentCategory}`,
+          icon,
+        );
       } else {
         sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
       }
-      window.dispatchEvent(new Event('categoryNameUpdated'));
+      window.dispatchEvent(new Event("categoryNameUpdated"));
     }
   };
 
   // Update question text
   const updateQuestion = (rowIndex: number, text: string) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
       const wasNewCategory = newCategories.length <= categoryIndex;
@@ -633,7 +717,13 @@ export default function UpdateAudit() {
       } else {
         questions[rowIndex - 1] = {
           text: text,
-          options: ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((label, i) => ({
+          options: [
+            "Very Minimal",
+            "Just Starting",
+            "Good progress",
+            "Excellent",
+            "Very Excellent",
+          ].map((label, i) => ({
             text: label,
             points: i + 1,
           })),
@@ -644,21 +734,32 @@ export default function UpdateAudit() {
       newCategories[categoryIndex] = category;
 
       // If this is a new category with questions, update sessionStorageCategories
-      if (wasNewCategory && text.trim().length > 0 && typeof window !== 'undefined') {
+      if (
+        wasNewCategory &&
+        text.trim().length > 0 &&
+        typeof window !== "undefined"
+      ) {
         // Update sessionStorageCategories to include the new category
-        setSessionStorageCategories(prev => {
+        setSessionStorageCategories((prev) => {
           const updated = [...prev];
           while (updated.length <= categoryIndex) {
             const catNum = updated.length + 1;
-            const storedName = sessionStorage.getItem(`auditData:categoryName:${catNum}`);
+            const storedName = sessionStorage.getItem(
+              `auditData:categoryName:${catNum}`,
+            );
             updated.push({
               id: `temp-${updated.length}`,
               name: storedName || `Category ${catNum}`,
-              recommendation: sessionStorage.getItem(`auditData:categoryRecommendation:${catNum}`) || "",
+              recommendation:
+                sessionStorage.getItem(
+                  `auditData:categoryRecommendation:${catNum}`,
+                ) || "",
             });
           }
           // Update the name from sessionStorage if available
-          const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
+          const storedName = sessionStorage.getItem(
+            `auditData:categoryName:${currentCategory}`,
+          );
           if (storedName) {
             updated[categoryIndex].name = storedName;
           } else {
@@ -668,13 +769,18 @@ export default function UpdateAudit() {
         });
 
         // Store category name in sessionStorage if not already stored
-        const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
+        const storedName = sessionStorage.getItem(
+          `auditData:categoryName:${currentCategory}`,
+        );
         if (!storedName) {
-          sessionStorage.setItem(`auditData:categoryName:${currentCategory}`, category.name);
+          sessionStorage.setItem(
+            `auditData:categoryName:${currentCategory}`,
+            category.name,
+          );
         }
 
         // Dispatch event to notify SummarySection
-        window.dispatchEvent(new Event('categoryNameUpdated'));
+        window.dispatchEvent(new Event("categoryNameUpdated"));
       }
 
       return {
@@ -685,8 +791,12 @@ export default function UpdateAudit() {
   };
 
   // Update option text
-  const updateOption = (rowIndex: number, optionIndex: number, text: string) => {
-    setFormData(prev => {
+  const updateOption = (
+    rowIndex: number,
+    optionIndex: number,
+    text: string,
+  ) => {
+    setFormData((prev) => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
 
@@ -705,7 +815,13 @@ export default function UpdateAudit() {
       while (questions.length < rowIndex) {
         questions.push({
           text: "",
-          options: ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((label, i) => ({
+          options: [
+            "Very Minimal",
+            "Just Starting",
+            "Good progress",
+            "Excellent",
+            "Very Excellent",
+          ].map((label, i) => ({
             text: label,
             points: i + 1,
           })),
@@ -719,7 +835,14 @@ export default function UpdateAudit() {
         // Ensure options array has 5 items
         while (options.length < 5) {
           options.push({
-            text: ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"][options.length] || "",
+            text:
+              [
+                "Very Minimal",
+                "Just Starting",
+                "Good progress",
+                "Excellent",
+                "Very Excellent",
+              ][options.length] || "",
             points: options.length + 1,
           });
         }
@@ -732,7 +855,13 @@ export default function UpdateAudit() {
         question.options = options;
         questions[rowIndex - 1] = question;
       } else {
-        const defaultOptions = ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((label, i) => ({
+        const defaultOptions = [
+          "Very Minimal",
+          "Just Starting",
+          "Good progress",
+          "Excellent",
+          "Very Excellent",
+        ].map((label, i) => ({
           text: label,
           points: i + 1,
         }));
@@ -757,18 +886,26 @@ export default function UpdateAudit() {
   };
 
   // Reorder questions
-  const reorderQuestions = (draggedRowIndex: number, targetRowIndex: number) => {
-    setFormData(prev => {
+  const reorderQuestions = (
+    draggedRowIndex: number,
+    targetRowIndex: number,
+  ) => {
+    setFormData((prev) => {
       const newCategories = [...prev.categories];
       const categoryIndex = currentCategory - 1;
 
-      if (categoryIndex < 0 || categoryIndex >= newCategories.length) return prev;
+      if (categoryIndex < 0 || categoryIndex >= newCategories.length)
+        return prev;
 
       const category = { ...newCategories[categoryIndex] };
       const questions = [...category.questions];
 
-      if (draggedRowIndex < 1 || draggedRowIndex > questions.length ||
-        targetRowIndex < 1 || targetRowIndex > questions.length) {
+      if (
+        draggedRowIndex < 1 ||
+        draggedRowIndex > questions.length ||
+        targetRowIndex < 1 ||
+        targetRowIndex > questions.length
+      ) {
         return prev;
       }
 
@@ -792,7 +929,7 @@ export default function UpdateAudit() {
       setFormData((prev) => {
         const newCategories = [...prev.categories];
         let targetIndex = newCategories.findIndex((cat, idx) =>
-          cat.id ? cat.id === categoryId : idx === categoryIndex - 1
+          cat.id ? cat.id === categoryId : idx === categoryIndex - 1,
         );
         if (targetIndex === -1 && categoryIndex >= 1) {
           targetIndex = Math.min(categoryIndex - 1, newCategories.length - 1);
@@ -813,7 +950,7 @@ export default function UpdateAudit() {
       setSessionStorageCategories((prev) => {
         const next = [...prev];
         let targetIndex = next.findIndex((cat, idx) =>
-          cat.id ? cat.id === categoryId : idx === categoryIndex - 1
+          cat.id ? cat.id === categoryId : idx === categoryIndex - 1,
         );
         if (targetIndex === -1 && categoryIndex >= 1) {
           targetIndex = categoryIndex - 1;
@@ -834,7 +971,7 @@ export default function UpdateAudit() {
         return next;
       });
     },
-    []
+    [],
   );
 
   const handleUpdate = async () => {
@@ -849,8 +986,8 @@ export default function UpdateAudit() {
     }
 
     // Validate that at least one category has questions
-    const hasQuestions = formData.categories.some(cat =>
-      cat.questions.some(q => q.text && q.text.trim().length > 0)
+    const hasQuestions = formData.categories.some((cat) =>
+      cat.questions.some((q) => q.text && q.text.trim().length > 0),
     );
 
     if (!hasQuestions) {
@@ -873,7 +1010,7 @@ export default function UpdateAudit() {
       const latestCategoryNames: Record<number, string> = {};
       const latestCategoryIcons: Record<number, string | undefined> = {};
 
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         for (let i = 1; i <= 7; i++) {
           const name = sessionStorage.getItem(`auditData:categoryName:${i}`);
           const icon = sessionStorage.getItem(`auditData:categoryIcon:${i}`);
@@ -894,38 +1031,51 @@ export default function UpdateAudit() {
         .map((cat, index) => {
           const categoryNumber = index + 1;
           // Use latest name from sessionStorage if available, otherwise use formData name
-          const categoryName = latestCategoryNames[categoryNumber] || cat.name || `Category ${categoryNumber}`;
+          const categoryName =
+            latestCategoryNames[categoryNumber] ||
+            cat.name ||
+            `Category ${categoryNumber}`;
           // Use latest icon from sessionStorage if available, otherwise use formData icon
-          const categoryIcon = latestCategoryIcons[categoryNumber] !== undefined
-            ? latestCategoryIcons[categoryNumber]
-            : ((cat.icon && cat.icon.trim()) ? cat.icon.trim() : undefined);
+          const categoryIcon =
+            latestCategoryIcons[categoryNumber] !== undefined
+              ? latestCategoryIcons[categoryNumber]
+              : cat.icon && cat.icon.trim()
+                ? cat.icon.trim()
+                : undefined;
 
           const questions = cat.questions
-            .filter(q => q.text && q.text.trim().length > 0)
-            .map(q => ({
+            .filter((q) => q.text && q.text.trim().length > 0)
+            .map((q) => ({
               id: q.id, // Include question ID if it exists
               text: q.text.trim(),
-              options: (Array.isArray(q.options) && q.options.length === 5)
-                ? q.options.map((opt) => ({
-                  id: opt.id, // Include option ID if it exists
-                  text: opt.text.trim(),
-                  points: opt.points
-                }))
-                : ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((text, i) => ({
-                  text: text,
-                  points: i + 1
-                }))
+              options:
+                Array.isArray(q.options) && q.options.length === 5
+                  ? q.options.map((opt) => ({
+                      id: opt.id, // Include option ID if it exists
+                      text: opt.text.trim(),
+                      points: opt.points,
+                    }))
+                  : [
+                      "Very Minimal",
+                      "Just Starting",
+                      "Good progress",
+                      "Excellent",
+                      "Very Excellent",
+                    ].map((text, i) => ({
+                      text: text,
+                      points: i + 1,
+                    })),
             }))
-            .filter(q => q.text.length > 0);
+            .filter((q) => q.text.length > 0);
 
           return {
             id: cat.id, // Include category ID if it exists
             name: categoryName,
             icon: categoryIcon,
-            questions
+            questions,
           };
         })
-        .filter(cat => cat.questions.length > 0);
+        .filter((cat) => cat.questions.length > 0);
 
       if (categories.length === 0) {
         toast.error("Add at least one question in the table");
@@ -935,8 +1085,15 @@ export default function UpdateAudit() {
 
       // Get summary data from sessionStorage (priority) or form data (fallback)
       const summaryData: {
-        categoryRecommendations: Array<{ categoryId: string; recommendation: string }>;
-        nextSteps: Array<{ type: 'file' | 'text'; content: string; fileUrl?: string }>;
+        categoryRecommendations: Array<{
+          categoryId: string;
+          recommendation: string;
+        }>;
+        nextSteps: Array<{
+          type: "file" | "text";
+          content: string;
+          fileUrl?: string;
+        }>;
         overallDetails?: string;
       } = {
         categoryRecommendations: recommendationEntries,
@@ -945,7 +1102,11 @@ export default function UpdateAudit() {
       };
 
       type SummarySource = {
-        nextSteps?: Array<{ type?: string; content?: string; fileUrl?: string }>;
+        nextSteps?: Array<{
+          type?: string;
+          content?: string;
+          fileUrl?: string;
+        }>;
         overallDetails?: string | null;
       };
 
@@ -953,8 +1114,9 @@ export default function UpdateAudit() {
         if (!source) return;
         if (Array.isArray(source.nextSteps)) {
           summaryData.nextSteps = source.nextSteps.map((step) => ({
-            type: (step.type === 'file' || step.type === 'text') ? step.type : 'text',
-            content: step.content || '',
+            type:
+              step.type === "file" || step.type === "text" ? step.type : "text",
+            content: step.content || "",
             fileUrl: step.fileUrl,
           }));
         }
@@ -963,14 +1125,17 @@ export default function UpdateAudit() {
         }
       };
 
-      if (typeof window !== 'undefined') {
-        const summaryDataStr = sessionStorage.getItem('summaryData');
+      if (typeof window !== "undefined") {
+        const summaryDataStr = sessionStorage.getItem("summaryData");
         if (summaryDataStr) {
           try {
             const parsed = JSON.parse(summaryDataStr);
             hydrateNextSteps(parsed);
           } catch (error) {
-            console.error('Error parsing summaryData from sessionStorage:', error);
+            console.error(
+              "Error parsing summaryData from sessionStorage:",
+              error,
+            );
             if (formData.summary) {
               hydrateNextSteps(formData.summary);
             }
@@ -1002,9 +1167,9 @@ export default function UpdateAudit() {
       });
 
       // Clear sessionStorage
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         sessionStorage.clear();
-        window.dispatchEvent(new Event('categoryNameUpdated'));
+        window.dispatchEvent(new Event("categoryNameUpdated"));
       }
 
       // Redirect to home page
@@ -1027,44 +1192,69 @@ export default function UpdateAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">GRADING SCALE (1-5)</p>
+          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">
+            GRADING SCALE (1-5)
+          </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
             <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
-              1-2 URGENT ATTEN
+              1-2 URGENT ATTENTION
             </p>
             <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
               3-4 AVERAGE AUDIT
             </p>
             <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
-              5 EXELLENT AUDIT
+              5 EXCELLENT AUDIT
             </p>
           </div>
         </div>
 
-        <div className="px-24 flex items-center justify-between">
-          {["questions", "answers", "score"].map((item, i) => (
-            <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
-              {item}
-            </p>
-          ))}
+        <div className="px-24 flex items-center" style={{ width: "100%" }}>
+          <p
+            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"
+            style={{ width: "100px" }}
+          ></p>
+          <p
+            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
+            style={{ width: "calc(50% - 50px)" }}
+          >
+            questions
+          </p>
+          <p
+            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
+            style={{ width: "calc(50% - 50px)" }}
+          >
+            answers
+          </p>
         </div>
       </header>
-      <main className="px-24 pt-5 bg-white h-full pb-10">
+      <main className="px-24 pt-5 bg-white pb-40 overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1 relative">
             <input
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, title: e.target.value }))
+              }
               placeholder="Presentation Name"
               disabled={!titleEditable}
-              className="w-full bg-[#4569871A]  text-[18px] pr-12 pl-6 py-[12px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+              className="w-full bg-[#4569871A] pr-12 pl-6 py-[12px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(20px, 1.8vw, 23px)",
+                letterSpacing: "-0.025em",
+                lineHeight: "1",
+                fontVariationSettings: "'wdth' 85, 'wght' 400",
+              }}
             />
             <button
               type="button"
               onClick={() => setTitleEditable((v) => !v)}
               className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-700 hover:bg-gray-50 rounded cursor-pointer"
-              aria-label={titleEditable ? "Disable editing title" : "Enable editing title"}
+              aria-label={
+                titleEditable ? "Disable editing title" : "Enable editing title"
+              }
             >
               <FiEdit size={12} />
             </button>
@@ -1133,8 +1323,12 @@ function AuditTable({
   onQuestionsReorder,
 }: AuditTableProps) {
   const [activeRows, setActiveRows] = useState<Set<number>>(new Set());
-  const [editableQuestions, setEditableQuestions] = useState<Set<number>>(new Set());
-  const [editableStatus, setEditableStatus] = useState<Record<number, Set<number>>>({});
+  const [editableQuestions, setEditableQuestions] = useState<Set<number>>(
+    new Set(),
+  );
+  const [editableStatus, setEditableStatus] = useState<
+    Record<number, Set<number>>
+  >({});
   const [draggedRowIndex, setDraggedRowIndex] = useState<number | null>(null);
   const [dragOverRowIndex, setDragOverRowIndex] = useState<number | null>(null);
 
@@ -1151,7 +1345,7 @@ function AuditTable({
   }, [categoryData, currentCategory]);
 
   const handleQuestionClick = (rowIndex: number) => {
-    setActiveRows(prev => {
+    setActiveRows((prev) => {
       const newSet = new Set(prev);
       newSet.add(rowIndex);
       return newSet;
@@ -1160,7 +1354,7 @@ function AuditTable({
 
   const getQuestionText = (rowIndex: number): string => {
     const question = categoryData.questions[rowIndex - 1];
-    return question?.text || '';
+    return question?.text || "";
   };
 
   const getOptionText = (rowIndex: number, optionIndex: number): string => {
@@ -1176,39 +1370,76 @@ function AuditTable({
 
     // Auto-add options if question has content and options don't exist
     const question = categoryData.questions[rowIndex - 1];
-    if (value.trim().length > 0 && (!question || !question.options || question.options.length === 0)) {
+    if (
+      value.trim().length > 0 &&
+      (!question || !question.options || question.options.length === 0)
+    ) {
       // Options will be added automatically in updateQuestion function
     }
   };
 
-  const handleOptionChange = (rowIndex: number, optionIndex: number, value: string) => {
+  const handleOptionChange = (
+    rowIndex: number,
+    optionIndex: number,
+    value: string,
+  ) => {
     onOptionChange(rowIndex, optionIndex, value);
   };
 
   const statusButtons = [
-    { label: "Very Minimal", color: "bg-[#FFE2E380]", borderColor: "border-[#FFB7B9]", textColor: "text-pink-800" },
-    { label: "Just Starting", color: "bg-[#FFFCE280]", borderColor: "border-[#E3D668]", textColor: "text-yellow-800" },
-    { label: "Good progress", color: "bg-[#FFDBC2B2]", borderColor: "border-[#894B00E5]", textColor: "text-orange-800" },
-    { label: "Excellent", color: "bg-[#DCFCE7]", borderColor: "border-[#01673099]", textColor: "text-green-800" },
-    { label: "Very Excellent", color: "bg-[#DCF3F6]", borderColor: "border-[#01673099]", textColor: "text-blue-800" },
+    {
+      label: "Very Minimal",
+      color: "bg-[#FFE2E380]",
+      borderColor: "border-[#FFB7B9]",
+      textColor: "#A51A1F",
+    },
+    {
+      label: "Just Starting",
+      color: "bg-[#FFFCE280]",
+      borderColor: "border-[#E3D668]",
+      textColor: "#776E23",
+    },
+    {
+      label: "Good progress",
+      color: "bg-[#FFDBC2B2]",
+      borderColor: "border-[#894B00E5]",
+      textColor: "#894B00",
+    },
+    {
+      label: "Excellent",
+      color: "bg-[#DCFCE7]",
+      borderColor: "border-[#01673099]",
+      textColor: "#016730",
+    },
+    {
+      label: "Very Excellent",
+      color: "bg-[#DCF3F6]",
+      borderColor: "border-[#01673099]",
+      textColor: "text-blue-800",
+    },
   ];
 
   // Handle question row drag and drop
   const handleRowDragStart = (e: React.DragEvent, rowIndex: number) => {
     const target = e.target as HTMLElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.closest('input') || target.closest('button')) {
+    if (
+      target.tagName === "INPUT" ||
+      target.tagName === "BUTTON" ||
+      target.closest("input") ||
+      target.closest("button")
+    ) {
       e.preventDefault();
       return;
     }
     setDraggedRowIndex(rowIndex);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', rowIndex.toString());
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", rowIndex.toString());
   };
 
   const handleRowDragOver = (e: React.DragEvent, rowIndex: number) => {
     if (draggedRowIndex === null) return;
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.dropEffect = "move";
     if (rowIndex !== draggedRowIndex) {
       setDragOverRowIndex(rowIndex);
     }
@@ -1232,7 +1463,10 @@ function AuditTable({
 
   return (
     <div className="w-full mt-8">
-      <table className="w-full border-collapse border border-gray-300">
+      <table
+        className="w-full border-collapse border border-gray-300"
+        style={{ tableLayout: "fixed" }}
+      >
         <tbody>
           {Array.from({ length: 10 }, (_, index) => {
             const rowIndex = index + 1;
@@ -1248,42 +1482,63 @@ function AuditTable({
                 onDragOver={(e) => handleRowDragOver(e, rowIndex)}
                 onDragLeave={handleRowDragLeave}
                 onDrop={(e) => handleRowDrop(e, rowIndex)}
-                className={`border-b border-gray-300 ${isDragging ? 'opacity-50' : ''} ${isDragOver ? 'border-t-4 border-t-blue-500' : ''} cursor-move`}
+                className={`border-b border-gray-300 ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
               >
-                <td className="border-r border-gray-300 px-4 py-3 text-center align-middle w-16">
-                  <div className="flex items-center justify-center gap-2">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-                    </svg>
-                    <span className="text-gray-700">{rowIndex}</span>
-                  </div>
+                <td
+                  className="border-r border-gray-300 px-4 py-3 text-center align-middle"
+                  style={{ width: "100px" }}
+                >
+                  <span className="text-gray-700">{rowIndex}</span>
                 </td>
-                <td className="border-r border-gray-300 px-4 py-3 align-middle w-full">
+                <td
+                  className="border-r border-gray-300 px-4 py-3 align-middle"
+                  style={{ width: "calc(50% - 50px)" }}
+                >
                   <div className="relative">
                     <input
                       type="text"
                       value={getQuestionText(rowIndex)}
-                      placeholder={`Question ${rowIndex.toString().padStart(2, '0')}`}
+                      placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                       onClick={() => handleQuestionClick(rowIndex)}
-                      onChange={(e) => handleQuestionChange(rowIndex, e.target.value)}
+                      onChange={(e) =>
+                        handleQuestionChange(rowIndex, e.target.value)
+                      }
                       disabled={!editableQuestions.has(rowIndex)}
                       className="w-full bg-[#4569871A] pr-12 pl-4 h-[60px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontWeight: 400,
+                        fontSize: "23px",
+                        lineHeight: "100%",
+                        letterSpacing: "-0.025em",
+                        fontVariationSettings: "'wdth' 85, 'wght' 400",
+                      }}
                     />
                     <button
                       type="button"
-                      onClick={() => setEditableQuestions(prev => {
-                        const next = new Set(prev);
-                        if (next.has(rowIndex)) next.delete(rowIndex); else next.add(rowIndex);
-                        return next;
-                      })}
+                      onClick={() =>
+                        setEditableQuestions((prev) => {
+                          const next = new Set(prev);
+                          if (next.has(rowIndex)) next.delete(rowIndex);
+                          else next.add(rowIndex);
+                          return next;
+                        })
+                      }
                       className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-700 hover:bg-gray-50 rounded cursor-pointer"
-                      aria-label={editableQuestions.has(rowIndex) ? "Disable editing question" : "Enable editing question"}
+                      aria-label={
+                        editableQuestions.has(rowIndex)
+                          ? "Disable editing question"
+                          : "Enable editing question"
+                      }
                     >
                       <FiEdit size={12} />
                     </button>
                   </div>
                 </td>
-                <td className="border-r border-gray-300 px-4 py-3 align-middle ">
+                <td
+                  className="px-2 py-3 align-middle"
+                  style={{ width: "calc(50% - 50px)" }}
+                >
                   {isActive ? (
                     <div className="flex gap-2 items-center ">
                       {statusButtons.map((button, idx) => (
@@ -1291,25 +1546,56 @@ function AuditTable({
                           <input
                             type="text"
                             value={getOptionText(rowIndex, idx)}
-                            onChange={(e) => handleOptionChange(rowIndex, idx, e.target.value)}
-                            disabled={!((editableStatus[rowIndex]?.has(idx)) ?? false)}
-                            className={`${button.color} ${button.borderColor} ${button.textColor} pr-5 pl-3 py-2.5 w-[5.8vw] rounded-lg border font-medium text-sm outline-none disabled:opacity-70`}
+                            onChange={(e) =>
+                              handleOptionChange(rowIndex, idx, e.target.value)
+                            }
+                            disabled={
+                              !(editableStatus[rowIndex]?.has(idx) ?? false)
+                            }
+                            className={`${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
+                            style={{
+                              fontFamily:
+                                "'Acumin Variable Concept', sans-serif",
+                              fontWeight: 400,
+                              fontSize: "18px",
+                              lineHeight: "100%",
+                              letterSpacing: "-0.015em",
+                              fontVariationSettings: "'wdth' 55, 'wght' 700",
+                              paddingTop: "12px",
+                              paddingBottom: "12px",
+                              // flex: "1",
+                              width: "122px",
+                              textAlign: "center",
+                              color: button.textColor.startsWith("#")
+                                ? button.textColor
+                                : undefined,
+                            }}
                           />
                           <button
                             type="button"
-                            onClick={() => setEditableStatus(prev => {
-                              const next: Record<number, Set<number>> = { ...prev } as Record<number, Set<number>>;
-                              const existing = next[rowIndex] ? new Set(Array.from(next[rowIndex])) : new Set<number>();
-                              if (existing.has(idx)) {
-                                existing.delete(idx);
-                              } else {
-                                existing.add(idx);
-                              }
-                              next[rowIndex] = existing;
-                              return next;
-                            })}
+                            onClick={() =>
+                              setEditableStatus((prev) => {
+                                const next: Record<number, Set<number>> = {
+                                  ...prev,
+                                } as Record<number, Set<number>>;
+                                const existing = next[rowIndex]
+                                  ? new Set(Array.from(next[rowIndex]))
+                                  : new Set<number>();
+                                if (existing.has(idx)) {
+                                  existing.delete(idx);
+                                } else {
+                                  existing.add(idx);
+                                }
+                                next[rowIndex] = existing;
+                                return next;
+                              })
+                            }
                             className={`absolute right-1 top-1/2 -translate-y-1/2 p-0.5 ${button.textColor} hover:opacity-80 rounded cursor-pointer`}
-                            aria-label={((editableStatus[rowIndex]?.has(idx)) ?? false) ? "Disable editing option" : "Enable editing option"}
+                            aria-label={
+                              (editableStatus[rowIndex]?.has(idx) ?? false)
+                                ? "Disable editing option"
+                                : "Enable editing option"
+                            }
                           >
                             <FiEdit size={10} />
                           </button>
