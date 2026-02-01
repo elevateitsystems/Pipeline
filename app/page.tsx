@@ -424,7 +424,7 @@ export default function Home() {
                                 `/update-audit/?edit=${audit.id}&category=1`,
                               )
                             }
-                            className="px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md  flex items-center justify-center gap-1"
+                            className="w-full px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-3 xl:gap-1"
                             style={{
                               fontFamily:
                                 "'Acumin Variable Concept', sans-serif",
@@ -440,7 +440,7 @@ export default function Home() {
                           </button>
                           <CustomButton
                             variant="redLight"
-                            className="text-center"
+                            className="w-full text-center lg:gap-3 xl:gap-1"
                             size="sm"
                             fullRounded={false}
                             leftIcon={<Trash2 size={14} />}
@@ -465,7 +465,7 @@ export default function Home() {
                             `/test?presentationId=${audit.id}&category=1`,
                           )
                         }
-                        className="px-3 cursor-pointer py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1"
+                        className="w-full px-3 cursor-pointer py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                         style={{
                           fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
@@ -481,7 +481,7 @@ export default function Home() {
                       {!isInvitedUser && (
                         <button
                           onClick={() => handleInviteClick(audit)}
-                          className="px-3 cursor-pointer py-1.5 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1"
+                          className="w-full px-3 cursor-pointer py-1.5 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,

@@ -1095,7 +1095,7 @@ export default function Sidebar() {
                   (_, index) => (
                     <div
                       key={`sidebar-skeleton-${index}`}
-                      className="ml-4 min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                      className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
                       style={{
                         marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                       }}
@@ -1154,11 +1154,11 @@ export default function Sidebar() {
 
                   if (useSecondary) {
                     // Create/Update pages: use secondary styling
-                    backgroundColor = isActive ? "white" : secondaryColor;
+                    backgroundColor = isActive ? "transparent" : secondaryColor;
                     textColor = isActive ? "black" : "white";
                   } else if (isTestPageCategory) {
                     // Test page: active = white, inactive = primary with opacity
-                    backgroundColor = isActive ? "white" : secondaryColor;
+                    backgroundColor = isActive ? "transparent" : secondaryColor;
                     textColor = isActive ? "black" : "white";
                   } else if (isNavigationItem && !isActive) {
                     // Navigation items (ALL AUDITS, ALL TEAM MEMBERS) when inactive: match category button style
@@ -1167,7 +1167,7 @@ export default function Sidebar() {
                     textColor = "white";
                   } else {
                     // Default: white background
-                    backgroundColor = "white";
+                    backgroundColor = isActive ? "transparent" : "white";
                     textColor = isActive ? "black" : secondaryColor;
                   }
 
@@ -1229,10 +1229,14 @@ export default function Sidebar() {
                           e.stopPropagation();
                         }
                       }}
-                      className={`ml-4 ${isEditing ? "h-[40px]" : ""}  cursor-pointer flex items-center ${
-                        onTestPage || (isActive && !isEditing)
-                          ? "w-[calc(100%-1rem+2px)] mr-0 border-r-0 active-nav-rounded"
-                          : "w-[93.5%] rounded-xl "
+                      className={` ${isEditing ? "h-[40px]" : ""} cursor-pointer flex items-center relative ${
+                        onNewAuditPage ||
+                        onUpdateAuditPage ||
+                        onSummaryPage ||
+                        onTestPage ||
+                        (isActive && !isEditing)
+                          ? "w-[calc(100%)] mr-0 rounded-l-xl border-r-0"
+                          : "w-[92.5%] mr-1.5 rounded-xl"
                       } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
                       style={{
                         padding:
@@ -1247,16 +1251,28 @@ export default function Sidebar() {
                               ? "2px solid #899AA9"
                               : "none",
                         borderRight: "none",
-                        ...(onTestPage || (isActive && !isEditing)
-                          ? {
-                              borderRadius: "0.75rem 0 0 0.75rem",
-                              overflow: "hidden",
-                            }
-                          : {}),
+                        overflow: "visible",
                       }}
                     >
+                      {isActive && (
+                        <div className="absolute inset-0  pointer-events-none">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            // width="285px"
+                            viewBox="0 0 271 62"
+                            fill="none"
+                            preserveAspectRatio="none"
+                            className="w-64 lg:w-[285px] xl:w-[288px]"
+                          >
+                            <path
+                              d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
+                              fill="#F2F2F2"
+                            />
+                          </svg>
+                        </div>
+                      )}
                       {isEditing && itemCategoryNumber !== null ? (
-                        <div className="w-full h-full flex items-center relative">
+                        <div className="w-full h-full flex items-center relative z-10">
                           {/* Single Input Field Container */}
                           <div className="w-full bg-transparent border-2 border-white rounded px-2 py-1 flex items-center gap-2">
                             {/* Icon Display with Dropdown Arrow */}
@@ -1379,28 +1395,24 @@ export default function Sidebar() {
                           )}
                         </div>
                       ) : (
-                        <div
-                          className="w-full h-full flex items-center justify-between relative"
-                          style={
-                            onTestPage || (isActive && !isEditing)
-                              ? {
-                                  borderRadius: "0.75rem 0 0 0.75rem",
-                                  overflow: "hidden",
-                                }
-                              : undefined
-                          }
-                        >
-                          <div className="flex-1 flex items-center gap-2">
-                            {/* Category icon - view only until edit mode */}
-                            <div className="flex items-center justify-center shrink-0 text-white">
-                              {isCategoryItem &&
-                              itemCategoryNumber !== null &&
-                              getCategoryIcon(itemCategoryNumber)
-                                ? renderIcon(
-                                    getCategoryIcon(itemCategoryNumber),
-                                  )
-                                : item.icon}
-                            </div>
+                        <div className="w-full h-full flex items-center justify-between relative z-10">
+                          <div
+                            className={`flex-1 flex items-center justify-start gap-2`}
+                          >
+                            {/* Category icon - only show if not active or if we're not on the main page to prevent shifting */}
+                            {(!isActive ||
+                              (isCategoryItem &&
+                                itemCategoryNumber !== null)) && (
+                              <div className="flex items-center justify-center shrink-0 text-white">
+                                {isCategoryItem &&
+                                itemCategoryNumber !== null &&
+                                getCategoryIcon(itemCategoryNumber)
+                                  ? renderIcon(
+                                      getCategoryIcon(itemCategoryNumber),
+                                    )
+                                  : item.icon}
+                              </div>
+                            )}
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
@@ -1430,11 +1442,11 @@ export default function Sidebar() {
                                   });
                                 }
                               }}
-                              className={`flex-1 cursor-pointer flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} break-words ${isActive || isEditing ? "active-nav-rounded " : ""}`}
+                              className={`flex-1 cursor-pointer flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} wrap-break-word`}
                               // style={{ color: 'inherit' }}
                             >
                               <span
-                                className="flex-1 text-left uppercase break-words leading-none line-clamp-1"
+                                className={`${isActive ? "text-left relative top-[10px]" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                                 style={{
                                   fontFamily:
                                     "'Acumin Variable Concept', sans-serif",

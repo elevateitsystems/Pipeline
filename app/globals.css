@@ -78,12 +78,6 @@
   /* Chrome, Safari, Opera */
 }
 
-/* Active nav item: subtle rounded left corners only (no pseudo-elements to avoid bracket artifact) */
-.active-nav-rounded {
-  border-top-left-radius: 0.5rem;
-  border-bottom-left-radius: 0.5rem;
-}
-
 .active-nav-item::before {
   content: '';
   position: absolute;
@@ -93,7 +87,8 @@
   height: 20px;
   background: transparent;
   border-bottom-right-radius: 15px;
-  box-shadow: 5px 5px 0 5px #ffffff;
+  box-shadow: 10px 10px 0 10px #ffffff;
+  z-index: 20;
 }
 
 .active-nav-item::after {
@@ -105,7 +100,8 @@
   height: 20px;
   background: transparent;
   border-top-right-radius: 15px;
-  box-shadow: 5px -5px 0 5px #ffffff;
+  box-shadow: 10px -10px 0 10px #ffffff;
+  z-index: 20;
 }
 
 .active-nav-item2::before {
