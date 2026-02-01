@@ -2,7 +2,13 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAudit, useAuditProgress, useTestQuestions, useSubmitTest } from "@/lib/hooks";
+import NextImage from "next/image";
+import {
+  useAudit,
+  useAuditProgress,
+  useTestQuestions,
+  useSubmitTest,
+} from "@/lib/hooks";
 import { useUser } from "@/contexts/UserContext";
 import toast from "react-hot-toast";
 import TableSkeleton from "../../add-new-audit/components/tableSkeleton";
@@ -21,42 +27,69 @@ import { auditKeys } from "@/lib/hooks/useAudit";
 export default function TestPresentation() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const presentationId = searchParams.get('presentationId');
-  const currentCategory = parseInt(searchParams.get('category') || '1', 10);
+  const presentationId = searchParams.get("presentationId");
+  const currentCategory = parseInt(searchParams.get("category") || "1", 10);
   const { user } = useUser();
 
-  const { data: auditData, isLoading: auditLoading, error: auditError } = useAudit(presentationId);
-  const { data: questionsData, isLoading: questionsLoading, error: questionsError } = useTestQuestions(presentationId);
-  const { data: progressData, isLoading: progressLoading, error: progressError } = useAuditProgress(presentationId);
+  const {
+    data: auditData,
+    isLoading: auditLoading,
+    error: auditError,
+  } = useAudit(presentationId);
+  const {
+    data: questionsData,
+    isLoading: questionsLoading,
+    error: questionsError,
+  } = useTestQuestions(presentationId);
+  const {
+    data: progressData,
+    isLoading: progressLoading,
+    error: progressError,
+  } = useAuditProgress(presentationId);
   const submitTestMutation = useSubmitTest();
   const queryClient = useQueryClient();
 
   // Get summary data from audit data (summary is included in the API response)
-  const summaryData = auditData && 'summary' in auditData
-    ? (auditData as Presentation & { summary?: { categoryRecommendations?: string | Array<{ categoryId: string; recommendation: string }>; nextSteps?: string | Array<{ type: string; content: string; fileUrl?: string }>; overallDetails?: string | null } | null })?.summary || null
-    : null;
+  const summaryData =
+    auditData && "summary" in auditData
+      ? (
+          auditData as Presentation & {
+            summary?: {
+              categoryRecommendations?:
+                | string
+                | Array<{ categoryId: string; recommendation: string }>;
+              nextSteps?:
+                | string
+                | Array<{ type: string; content: string; fileUrl?: string }>;
+              overallDetails?: string | null;
+            } | null;
+          }
+        )?.summary || null
+      : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
-  const [categoryScores, setCategoryScores] = useState<Record<string, number>>({}); // categoryId -> total score
+  const [categoryScores, setCategoryScores] = useState<Record<string, number>>(
+    {},
+  ); // categoryId -> total score
 
-  const primaryColor = user?.primaryColor || '#2B4055';
+  const primaryColor = user?.primaryColor || "#2B4055";
 
   // Helper function to get background color based on option points (1-5)
   // Matches the color pattern from UpdateAudit.tsx statusButtons
   const getOptionBackgroundColor = (points: number): string => {
     switch (points) {
       case 1:
-        return '#FFE2E3'; // Very Minimal - pink/red (matches bg-[#FFE2E380])
+        return "#FFE2E3"; // Very Minimal - pink/red (matches bg-[#FFE2E380])
       case 2:
-        return '#FFFCE2'; // Just Starting - yellow (matches bg-[#FFFCE280])
+        return "#FFFCE2"; // Just Starting - yellow (matches bg-[#FFFCE280])
       case 3:
-        return '#FFDBC2'; // Good progress - orange (matches bg-[#FFDBC2B2])
+        return "#FFDBC2"; // Good progress - orange (matches bg-[#FFDBC2B2])
       case 4:
-        return '#DCFCE7'; // Excellent - green (matches bg-[#DCFCE7])
+        return "#DCFCE7"; // Excellent - green (matches bg-[#DCFCE7])
       case 5:
-        return '#DCF3F6'; // Very Excellent - cyan/blue (matches bg-[#DCF3F6])
+        return "#DCF3F6"; // Very Excellent - cyan/blue (matches bg-[#DCF3F6])
       default:
-        return '#E8E8E8'; // Default gray
+        return "#E8E8E8"; // Default gray
     }
   };
 
@@ -65,17 +98,17 @@ export default function TestPresentation() {
   const getOptionTextColor = (points: number): string => {
     switch (points) {
       case 1:
-        return '#9F1239'; // Very Minimal - pink-800
+        return "#9F1239"; // Very Minimal - pink-800
       case 2:
-        return '#854D0E'; // Just Starting - yellow-800
+        return "#854D0E"; // Just Starting - yellow-800
       case 3:
-        return '#9A3412'; // Good progress - orange-800
+        return "#9A3412"; // Good progress - orange-800
       case 4:
-        return '#166534'; // Excellent - green-800
+        return "#166534"; // Excellent - green-800
       case 5:
-        return '#1E40AF'; // Very Excellent - blue-800
+        return "#1E40AF"; // Very Excellent - blue-800
       default:
-        return '#333333'; // Default dark gray
+        return "#333333"; // Default dark gray
     }
   };
 
@@ -84,17 +117,17 @@ export default function TestPresentation() {
   const getOptionColor = (points: number): string => {
     switch (points) {
       case 1:
-        return '#FFB7B9'; // Very Minimal - pink/red (matches border-[#FFB7B9])
+        return "#FFB7B9"; // Very Minimal - pink/red (matches border-[#FFB7B9])
       case 2:
-        return '#E3D668'; // Just Starting - yellow (matches border-[#E3D668])
+        return "#E3D668"; // Just Starting - yellow (matches border-[#E3D668])
       case 3:
-        return '#894B00'; // Good progress - orange (matches border-[#894B00E5])
+        return "#894B00"; // Good progress - orange (matches border-[#894B00E5])
       case 4:
-        return '#016730'; // Excellent - green (matches border-[#01673099])
+        return "#016730"; // Excellent - green (matches border-[#01673099])
       case 5:
-        return '#0EA5E9'; // Very Excellent - cyan/blue (matches bg-[#DCF3F6] theme)
+        return "#0EA5E9"; // Very Excellent - cyan/blue (matches bg-[#DCF3F6] theme)
       default:
-        return '#E8E8E8'; // Default gray
+        return "#E8E8E8"; // Default gray
     }
   };
 
@@ -122,15 +155,21 @@ export default function TestPresentation() {
 
   // Store category names, icons and audit data in sessionStorage when audit data is loaded
   useEffect(() => {
-    if (auditData && typeof window !== 'undefined' && auditData.categories) {
+    if (auditData && typeof window !== "undefined" && auditData.categories) {
       // Store category names and icons
       auditData.categories.forEach((category, index) => {
         const categoryNumber = index + 1;
         if (category.name) {
-          sessionStorage.setItem(`auditData:categoryName:${categoryNumber}`, category.name);
+          sessionStorage.setItem(
+            `auditData:categoryName:${categoryNumber}`,
+            category.name,
+          );
         }
         if (category.icon) {
-          sessionStorage.setItem(`auditData:categoryIcon:${categoryNumber}`, category.icon);
+          sessionStorage.setItem(
+            `auditData:categoryIcon:${categoryNumber}`,
+            category.icon,
+          );
         }
       });
 
@@ -138,38 +177,38 @@ export default function TestPresentation() {
       const auditDataForStorage = {
         id: auditData.id,
         title: auditData.title,
-        categories: auditData.categories.map(cat => ({
+        categories: auditData.categories.map((cat) => ({
           id: cat.id,
           name: cat.name,
           icon: cat.icon,
           questions: cat.questions || [],
         })),
       };
-      sessionStorage.setItem('auditData', JSON.stringify(auditDataForStorage));
+      sessionStorage.setItem("auditData", JSON.stringify(auditDataForStorage));
 
       // Dispatch event to update sidebar
-      window.dispatchEvent(new Event('categoryNameUpdated'));
+      window.dispatchEvent(new Event("categoryNameUpdated"));
     }
   }, [auditData]);
 
   // Store summary data in sessionStorage when it's loaded from audit data
   useEffect(() => {
-    if (summaryData && typeof window !== 'undefined') {
+    if (summaryData && typeof window !== "undefined") {
       try {
         const summaryToStore = {
           categoryRecommendations: summaryData.categoryRecommendations
-            ? (typeof summaryData.categoryRecommendations === 'string'
+            ? typeof summaryData.categoryRecommendations === "string"
               ? JSON.parse(summaryData.categoryRecommendations)
-              : summaryData.categoryRecommendations)
+              : summaryData.categoryRecommendations
             : [],
           nextSteps: summaryData.nextSteps
-            ? (typeof summaryData.nextSteps === 'string'
+            ? typeof summaryData.nextSteps === "string"
               ? JSON.parse(summaryData.nextSteps)
-              : summaryData.nextSteps)
+              : summaryData.nextSteps
             : [],
           overallDetails: summaryData.overallDetails || "",
         };
-        sessionStorage.setItem('summaryData', JSON.stringify(summaryToStore));
+        sessionStorage.setItem("summaryData", JSON.stringify(summaryToStore));
       } catch (error) {
         console.error("Error storing summary data in sessionStorage:", error);
       }
@@ -198,16 +237,16 @@ export default function TestPresentation() {
 
   // Share loading state with sidebar so it can show skeletons
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    sessionStorage.setItem('testSidebarLoading', loading ? 'true' : 'false');
-    window.dispatchEvent(new Event('testSidebarLoadingChanged'));
+    if (typeof window === "undefined") return;
+    sessionStorage.setItem("testSidebarLoading", loading ? "true" : "false");
+    window.dispatchEvent(new Event("testSidebarLoadingChanged"));
   }, [loading]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     return () => {
-      sessionStorage.setItem('testSidebarLoading', 'false');
-      window.dispatchEvent(new Event('testSidebarLoadingChanged'));
+      sessionStorage.setItem("testSidebarLoading", "false");
+      window.dispatchEvent(new Event("testSidebarLoadingChanged"));
     };
   }, []);
 
@@ -221,15 +260,15 @@ export default function TestPresentation() {
     const scores: Record<string, number> = {};
 
     // Initialize all category scores to 0
-    presentation.categories.forEach(cat => {
+    presentation.categories.forEach((cat) => {
       scores[cat.id] = 0;
     });
 
     // Calculate score for each category
-    questions.forEach(q => {
+    questions.forEach((q) => {
       const selectedOptionId = answers[q.id];
       if (selectedOptionId) {
-        const option = q.options.find(opt => opt.id === selectedOptionId);
+        const option = q.options.find((opt) => opt.id === selectedOptionId);
         if (option) {
           const catId = q.category.id;
           // Add the points directly (options have points 1-5)
@@ -243,11 +282,13 @@ export default function TestPresentation() {
 
   // Ensure selected text is black in SelectValue
   useEffect(() => {
-    const selectValues = document.querySelectorAll('[data-slot="select-value"]');
+    const selectValues = document.querySelectorAll(
+      '[data-slot="select-value"]',
+    );
     selectValues.forEach((el) => {
       const htmlEl = el as HTMLElement;
-      if (htmlEl.textContent && htmlEl.textContent !== 'Select an option...') {
-        htmlEl.style.color = '#000000';
+      if (htmlEl.textContent && htmlEl.textContent !== "Select an option...") {
+        htmlEl.style.color = "#000000";
       }
     });
   }, [answers]);
@@ -263,7 +304,7 @@ export default function TestPresentation() {
         console.error("Error saving progress:", error);
       }
     },
-    [presentationId]
+    [presentationId],
   );
 
   const handleAnswerChange = (questionId: string, optionId: string) => {
@@ -283,22 +324,26 @@ export default function TestPresentation() {
     if (!user || !presentationId) return;
 
     // Check if all questions are answered
-    const unansweredQuestions = questions.filter(q => !answers[q.id]);
+    const unansweredQuestions = questions.filter((q) => !answers[q.id]);
     if (unansweredQuestions.length > 0) {
-      toast.error(`Please answer all ${unansweredQuestions.length} remaining questions`);
+      toast.error(
+        `Please answer all ${unansweredQuestions.length} remaining questions`,
+      );
       return;
     }
 
     try {
-      const answerArray = Object.entries(answers).map(([questionId, optionId]) => ({
-        questionId,
-        optionId
-      }));
+      const answerArray = Object.entries(answers).map(
+        ([questionId, optionId]) => ({
+          questionId,
+          optionId,
+        }),
+      );
 
       const result = await submitTestMutation.mutateAsync({
         userId: user.id,
         presentationId,
-        answers: answerArray
+        answers: answerArray,
       });
 
       await saveProgress({});
@@ -317,7 +362,7 @@ export default function TestPresentation() {
   void handleSubmit;
 
   // Filter questions by selected category
-  const displayedQuestions = questions.filter(q => {
+  const displayedQuestions = questions.filter((q) => {
     if (!presentation?.categories) return false;
     const category = presentation.categories[currentCategory - 1];
     return category && q.category.id === category.id;
@@ -325,16 +370,22 @@ export default function TestPresentation() {
 
   // Get current category and its score
   const currentCategoryData = presentation?.categories[currentCategory - 1];
-  const currentCategoryScore = currentCategoryData ? (categoryScores[currentCategoryData.id] || 0) : 0;
+  const currentCategoryScore = currentCategoryData
+    ? categoryScores[currentCategoryData.id] || 0
+    : 0;
 
   // Calculate max score for current category
   const getCategoryMaxScore = (categoryId: string): number => {
     if (!questions.length) return 0;
-    const questionCount = questions.filter(q => q.category.id === categoryId).length;
+    const questionCount = questions.filter(
+      (q) => q.category.id === categoryId,
+    ).length;
     return questionCount * 5; // Each question can score 1-5
   };
 
-  const currentCategoryMaxScore = currentCategoryData ? getCategoryMaxScore(currentCategoryData.id) : 0;
+  const currentCategoryMaxScore = currentCategoryData
+    ? getCategoryMaxScore(currentCategoryData.id)
+    : 0;
 
   if (loading || !presentation) {
     return <TableSkeleton />;
@@ -349,7 +400,15 @@ export default function TestPresentation() {
   };
 
   // Circular Progress Component
-  const CircularProgress = ({ percentage, score, label }: { percentage: number; score: number; label: string }) => {
+  const CircularProgress = ({
+    percentage,
+    score,
+    label,
+  }: {
+    percentage: number;
+    score: number;
+    label: string;
+  }) => {
     const size = 80;
     const center = size / 2;
     const radius = 32; // Adjusted to fit nicely in 80px circle
@@ -358,7 +417,10 @@ export default function TestPresentation() {
 
     return (
       <div className="flex flex-col items-center">
-        <div className="relative" style={{ width: `${size}px`, height: `${size}px` }}>
+        <div
+          className="relative mt-3"
+          style={{ width: `${size}px`, height: `${size}px` }}
+        >
           <svg
             className="transform -rotate-90"
             width={size}
@@ -386,30 +448,58 @@ export default function TestPresentation() {
               strokeDashoffset={offset}
               strokeLinecap="round"
               style={{
-                transition: 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                transition:
+                  "stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             />
           </svg>
           {/* Score in center */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[#2d3e50] font-semibold" style={{ fontSize: '36px', lineHeight: '1' }}>
+            <span
+              className="text-[#2d3e50]"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontWeight: 600,
+                fontSize: "clamp(30px, 5vw, 46px)",
+                lineHeight: "100%",
+                letterSpacing: "0.003em",
+                fontVariationSettings: "'wdth' 65, 'wght' 600",
+                textAlign: "center",
+              }}
+            >
               {score}
             </span>
           </div>
         </div>
         {/* Category label */}
-        <p className="mt-0.5 text-[11px] text-[#2d3e50] text-center font-medium line-clamp-3 leading-tight">
+        <p
+          className="mt-1 text-black text-center font-medium line-clamp-3 leading-tight"
+          style={{
+            fontFamily: "'Acumin Variable Concept', sans-serif",
+            fontWeight: 500,
+            fontStyle: "normal",
+            fontSize: "19px",
+            lineHeight: "100%",
+            letterSpacing: "0.003em",
+            fontVariationSettings: "'wdth' 65, 'wght' 600",
+            textAlign: "center",
+          }}
+        >
           {label}
         </p>
       </div>
     );
   };
-  const filteredCategories = (categories: Presentation['categories']): Category[] => {
-    return categories.filter((category: Category) => category.name.toLowerCase() !== 'summary');
+  const filteredCategories = (
+    categories: Presentation["categories"],
+  ): Category[] => {
+    return categories.filter(
+      (category: Category) => category.name.toLowerCase() !== "summary",
+    );
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
@@ -430,18 +520,25 @@ export default function TestPresentation() {
             <div
               className="flex flex-col items-center ml-4 cursor-pointer"
               onClick={async () => {
-                if (typeof window !== 'undefined' && presentationId && presentation && user) {
+                if (
+                  typeof window !== "undefined" &&
+                  presentationId &&
+                  presentation &&
+                  user
+                ) {
                   try {
                     // Calculate current scores from answers
                     const scores: Record<string, number> = {};
-                    presentation.categories.forEach(cat => {
+                    presentation.categories.forEach((cat) => {
                       scores[cat.id] = 0;
                     });
 
-                    questions.forEach(q => {
+                    questions.forEach((q) => {
                       const selectedOptionId = answers[q.id];
                       if (selectedOptionId) {
-                        const option = q.options.find(opt => opt.id === selectedOptionId);
+                        const option = q.options.find(
+                          (opt) => opt.id === selectedOptionId,
+                        );
                         if (option) {
                           const catId = q.category.id;
                           scores[catId] = (scores[catId] || 0) + option.points;
@@ -451,35 +548,44 @@ export default function TestPresentation() {
 
                     // Filter out summary category
                     const nonSummaryCategories = presentation.categories.filter(
-                      cat => cat.name.toLowerCase() !== 'summary'
+                      (cat) => cat.name.toLowerCase() !== "summary",
                     );
 
                     // Calculate total score (excluding summary)
-                    const totalScore = nonSummaryCategories.reduce((sum, cat) => {
-                      return sum + (scores[cat.id] || 0);
-                    }, 0);
+                    const totalScore = nonSummaryCategories.reduce(
+                      (sum, cat) => {
+                        return sum + (scores[cat.id] || 0);
+                      },
+                      0,
+                    );
 
                     // Prepare category scores for API
-                    const categoryScoresForAPI = nonSummaryCategories.map(cat => ({
-                      categoryId: cat.id,
-                      score: scores[cat.id] || 0,
-                    }));
+                    const categoryScoresForAPI = nonSummaryCategories.map(
+                      (cat) => ({
+                        categoryId: cat.id,
+                        score: scores[cat.id] || 0,
+                      }),
+                    );
 
                     // Update test score in database
-                    await apiClient.post('/test/update-score', {
+                    await apiClient.post("/test/update-score", {
                       presentationId,
                       totalScore,
                       categoryScores: categoryScoresForAPI,
                     });
 
                     // Invalidate audits query to refresh the main page with updated score
-                    queryClient.invalidateQueries({ queryKey: auditKeys.lists() });
+                    queryClient.invalidateQueries({
+                      queryKey: auditKeys.lists(),
+                    });
 
                     // Store category names and scores in sessionStorage (excluding summary)
                     const testResultData = {
                       totalScore,
-                      categoryScores: nonSummaryCategories.map(cat => {
-                        const categoryQuestions = questions.filter(q => q.category.id === cat.id);
+                      categoryScores: nonSummaryCategories.map((cat) => {
+                        const categoryQuestions = questions.filter(
+                          (q) => q.category.id === cat.id,
+                        );
                         return {
                           categoryId: cat.id,
                           categoryName: cat.name,
@@ -488,100 +594,197 @@ export default function TestPresentation() {
                         };
                       }),
                     };
-                    sessionStorage.setItem('testResultData', JSON.stringify(testResultData));
+                    sessionStorage.setItem(
+                      "testResultData",
+                      JSON.stringify(testResultData),
+                    );
 
                     // Store category names
                     presentation.categories.forEach((category, index) => {
                       const categoryNumber = index + 1;
                       if (category.name) {
-                        sessionStorage.setItem(`auditData:categoryName:${categoryNumber}`, category.name);
+                        sessionStorage.setItem(
+                          `auditData:categoryName:${categoryNumber}`,
+                          category.name,
+                        );
                       }
                     });
 
                     // Dispatch events to update sidebar
-                    window.dispatchEvent(new Event('categoryNameUpdated'));
-                    window.dispatchEvent(new Event('testResultUpdated'));
+                    window.dispatchEvent(new Event("categoryNameUpdated"));
+                    window.dispatchEvent(new Event("testResultUpdated"));
 
                     // Navigate to result page
-                    router.push(`/test/result?presentationId=${presentationId}`);
+                    router.push(
+                      `/test/result?presentationId=${presentationId}`,
+                    );
                   } catch (error) {
                     console.error("Error updating test score:", error);
-                    toast.error("Failed to update test score. Please try again.");
+                    toast.error(
+                      "Failed to update test score. Please try again.",
+                    );
                   }
                 }
               }}
             >
               <div className="w-24 h-24 flex items-center justify-center">
-                <svg className="w-12 h-12" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" fill="#F7AF41" />
-                  <path
-                    d="M12 8V12M12 16H12.01"
-                    stroke="white"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <NextImage
+                  src="/searchIcon.png"
+                  alt="Summary Overview"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 mr-20"
+                />
               </div>
-              <p className="mt-2 text-xs text-[#2d3e50] text-center font-medium max-w-[100px] leading-tight">
+              <p
+                className="mr-20 pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 500,
+                  fontStyle: "normal",
+                  fontSize: "19px",
+                  lineHeight: "100%",
+                  letterSpacing: "0.003em",
+                  fontVariationSettings: "'wdth' 65, 'wght' 500",
+                  textAlign: "center",
+                }}
+              >
                 SUMMARY OVERVIEW
               </p>
             </div>
           </div>
         )}
 
-        <div className="bg-white -mt-1 flex items-center justify-center gap-2 w-full ">
-          <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">GRADING SCALE (1-5)</p>
+        <div className="bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
+          <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">
+            GRADING SCALE (1-5)
+          </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
             <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-1 text-white rounded-tl-xl line-clamp-1">
-              1-2 URGENT ATTEN
+              1-2 URGENT ATTENTION
             </p>
             <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1 text-white line-clamp-1">
               3-4 AVERAGE AUDIT
             </p>
             <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-1 text-white rounded-tr-xl line-clamp-1  ">
-              5 EXELLENT AUDIT
+              5 EXCELLENT AUDIT
             </p>
           </div>
         </div>
 
-
-        <div className="px-24 -mt-0.5 flex items-center justify-between">
-          {["questions", "answers", "score"].map((item, i) => (
-            <p key={i} className={`text-[20px] text-white capitalize font-500  leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
-              {item}
-            </p>
-          ))}
+        <div
+          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          style={{ width: "100%" }}
+        >
+          <p
+            className="text-[20px] text-white capitalize font-500 leading-normal font-medium"
+            style={{ width: "100px" }}
+          ></p>
+          <p
+            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            style={{ width: "calc(50% - 100px)" }}
+          >
+            questions
+          </p>
+          <p
+            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            style={{ width: "calc(50% - 100px)" }}
+          >
+            answers
+          </p>
+          <p
+            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            style={{ width: "100px" }}
+          >
+            score
+          </p>
         </div>
-
       </header>
-      <main className="px-24 pt-3 bg-white flex-1 pb-36 ">
-        <div className="">
-          <div className="w-full">
-            <table className="w-full border-collapse  border-gray-300">
+      <main className="px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+        <div className="flex-1 flex flex-col">
+          <div className="w-full flex-grow min-h-[640px]">
+            <table
+              className="w-full border-collapse border-gray-300"
+              style={{ tableLayout: "fixed" }}
+            >
               <tbody>
                 {displayedQuestions.map((question, index) => {
                   const selectedOptionId = answers[question.id];
-                  const selectedOption = question.options.find(opt => opt.id === selectedOptionId);
+                  const selectedOption = question.options.find(
+                    (opt) => opt.id === selectedOptionId,
+                  );
                   const score = selectedOption ? selectedOption.points : 0;
 
                   return (
-                    <tr key={question.id} className="border-b border-r border-[#E8E8E8]">
-                      <td className="border-r border-gray-300 px-4  text-center align-middle w-16">
-                        <span className="text-gray-700">{index + 1}</span>
+                    <tr
+                      key={question.id}
+                      className="border-b border-r border-[#E8E8E8]"
+                    >
+                      <td
+                        className="border-r border-gray-300 px-4 text-center align-middle"
+                        style={{ width: "100px" }}
+                      >
+                        <span
+                          className="text-gray-700"
+                          style={{
+                            fontFamily: "'Acumin Variable Concept', sans-serif",
+                            fontWeight: 500,
+                            fontSize: "21px",
+                            lineHeight: "100%",
+                            letterSpacing: "-0.025em",
+                            fontVariationSettings: "'wdth' 85, 'wght' 400",
+                          }}
+                        >
+                          {index + 1}
+                        </span>
                       </td>
-                      <td className=" px-4  align-middle border-r border-[#E8E8E8] w-full">
+                      <td
+                        className="px-4 align-middle border-r border-[#E8E8E8]"
+                        style={{ width: "calc(50% - 100px)" }}
+                      >
                         <div className="w-full  px-4 border-[#E8E8E8] rounded-xl flex items-center">
-                          <span className="text-gray-900">{question.text}</span>
+                          <span
+                            className="text-gray-900"
+                            style={{
+                              fontFamily:
+                                "'Acumin Variable Concept', sans-serif",
+                              fontWeight: 400,
+                              fontSize: "23px",
+                              lineHeight: "100%",
+                              letterSpacing: "-0.025em",
+                              fontVariationSettings: "'wdth' 85, 'wght' 400",
+                            }}
+                          >
+                            {question.text}
+                          </span>
                         </div>
                       </td>
-                      <td className="border-r border-gray-300 px-4 align-middle">
-                        <div className="relative py-2.5" data-question-id={question.id}>
+                      <td
+                        className="border-r border-gray-300 px-4 align-middle"
+                        style={{ width: "calc(50% - 100px)" }}
+                      >
+                        <div
+                          className="relative py-2.5"
+                          data-question-id={question.id}
+                        >
                           <Select
                             value={selectedOptionId || undefined}
-                            onValueChange={(value) => handleAnswerChange(question.id, value)}
+                            onValueChange={(value) =>
+                              handleAnswerChange(question.id, value)
+                            }
                           >
                             <SelectTrigger
-                              className="w-[30vw] text-sm font-normal text-gray-700 ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
+                              className="w-full text-sm font-normal text-gray-700 ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
+                              style={{
+                                fontFamily:
+                                  "'Acumin Variable Concept', sans-serif",
+                                fontWeight: 400,
+                                fontSize: "20px",
+                                lineHeight: "100%",
+                                letterSpacing: "-0.015em",
+                                fontVariationSettings: "'wdth' 85, 'wght' 500",
+                                textAlign: "left",
+                              }}
                               data-question-id={question.id}
                             >
                               <SelectValue
@@ -593,8 +796,11 @@ export default function TestPresentation() {
                               {[...question.options]
                                 .sort((a, b) => a.points - b.points)
                                 .map((option) => {
-                                  const backgroundColor = getOptionBackgroundColor(option.points);
-                                  const textColor = getOptionTextColor(option.points);
+                                  const backgroundColor =
+                                    getOptionBackgroundColor(option.points);
+                                  const textColor = getOptionTextColor(
+                                    option.points,
+                                  );
                                   return (
                                     <SelectItem
                                       key={option.id}
@@ -603,22 +809,35 @@ export default function TestPresentation() {
                                       style={{
                                         backgroundColor: backgroundColor,
                                         color: textColor,
+                                        fontFamily:
+                                          "'Acumin Variable Concept', sans-serif",
+                                        fontWeight: 400,
+                                        fontSize: "16px",
+                                        lineHeight: "100%",
+                                        letterSpacing: "-0.015em",
+                                        fontVariationSettings:
+                                          "'wdth' 85, 'wght' 400",
                                       }}
                                       onMouseEnter={(e) => {
                                         const target = e.currentTarget;
-                                        target.style.opacity = '0.9';
-                                        target.style.backgroundColor = backgroundColor;
+                                        target.style.opacity = "0.9";
+                                        target.style.backgroundColor =
+                                          backgroundColor;
                                       }}
                                       onMouseLeave={(e) => {
                                         const target = e.currentTarget;
-                                        target.style.opacity = '1';
-                                        target.style.backgroundColor = backgroundColor;
+                                        target.style.opacity = "1";
+                                        target.style.backgroundColor =
+                                          backgroundColor;
                                       }}
                                       onFocus={(e) => {
-                                        e.currentTarget.style.backgroundColor = backgroundColor;
+                                        e.currentTarget.style.backgroundColor =
+                                          backgroundColor;
                                       }}
                                     >
-                                      <span style={{ color: textColor }}>{option.text}</span>
+                                      <span style={{ color: textColor }}>
+                                        {option.text}
+                                      </span>
                                     </SelectItem>
                                   );
                                 })}
@@ -627,13 +846,15 @@ export default function TestPresentation() {
                           <div
                             className="absolute right-0 top-3 h-[55%] w-11 flex items-center justify-center rounded-md pointer-events-none"
                             style={{
-                              backgroundColor: selectedOption ? getOptionColor(selectedOption.points) : 'transparent',
+                              backgroundColor: selectedOption
+                                ? getOptionColor(selectedOption.points)
+                                : "transparent",
                             }}
                           >
                             <svg
                               className="w-4 h-[9px] mt-1"
                               style={{
-                                color: selectedOption ? 'white' : '#606060',
+                                color: selectedOption ? "white" : "#606060",
                               }}
                               fill="currentColor"
                               viewBox="0 0 12 8"
@@ -643,9 +864,22 @@ export default function TestPresentation() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 text-center align-middle w-16">
-                        <span className={`px-3 rounded text-sm font-medium text-gray-900`}>
-                          {score > 0 ? score : '-'}
+                      <td
+                        className="px-4 text-center align-middle"
+                        style={{ width: "100px" }}
+                      >
+                        <span
+                          className={`px-3 rounded font-medium text-gray-900`}
+                          style={{
+                            fontFamily: "'Acumin Variable Concept', sans-serif",
+                            fontWeight: 400,
+                            fontSize: "23px",
+                            lineHeight: "100%",
+                            letterSpacing: "-0.025em",
+                            fontVariationSettings: "'wdth' 85, 'wght' 500",
+                          }}
+                        >
+                          {score > 0 ? score : "-"}
                         </span>
                       </td>
                     </tr>
@@ -654,17 +888,20 @@ export default function TestPresentation() {
                 {/* Total Score Row */}
                 {currentCategoryData && (
                   <tr className=" border-r border-[#E8E8E8] ">
-                    <td className="border-r border-gray-300 px-4 text-center align-middle w-16">
-                    </td>
-                    <td className="px-4  align-middle border-r border-[#E8E8E8] w-full">
-                    </td>
+                    <td className="border-r border-gray-300 px-4 text-center align-middle w-16"></td>
+                    <td className="px-4  align-middle border-r border-[#E8E8E8] w-full"></td>
                     <td className="border-r border-gray-300 px-4  align-middle">
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
-                        <span className="text-gray-50 rounded-lg p-1 px-2 font-semibold " style={{ backgroundColor: primaryColor }}>Total Score</span>
+                        <span
+                          className="text-gray-50 rounded-lg p-1 px-2 font-semibold "
+                          style={{ backgroundColor: primaryColor }}
+                        >
+                          Total Score
+                        </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-center align-middle w-16">
-                      <span className="px-3 py-1 rounded text-sm font-bold text-gray-900">
+                    <td className="px-4 py-2 text-center align-middle w-16">
+                      <span className="px-3 py-1 text-[22px] rounded text-sm font-bold text-gray-900">
                         {currentCategoryScore}
                       </span>
                     </td>
@@ -676,20 +913,38 @@ export default function TestPresentation() {
 
           {/* Score Interpretation Blocks */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="mt-2 grid grid-cols-3 gap-0">
+            <div className="relative bottom-4 mt-2 grid grid-cols-3 gap-0 ">
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl  border-r-2  border-white ">
                 <div
-                  className={`rounded-tl-xl text-center py-1 ${currentCategoryScore >= 1 && currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4)
-                    ? 'bg-[#F65355] text-white'
-                    : 'bg-[#E8E8E8] text-gray-800'
-                    }`}
+                  className={`rounded-tl-xl text-center py-1 ${
+                    currentCategoryScore >= 1 &&
+                    currentCategoryScore <=
+                      Math.floor(currentCategoryMaxScore * 0.4)
+                      ? "bg-[#F65355] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
-                  <h3 className="text-base font-semibold">Score: 1 - {Math.floor(currentCategoryMaxScore * 0.4)}</h3>
+                  <h3
+                    className="text-base font-semibold"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    Score: 1 - {Math.floor(currentCategoryMaxScore * 0.4)}
+                  </h3>
                 </div>
-                <div className="mt-3">
-                  <p className="text-sm px-4 border-r-2 border-gray-200 text-gray-700 leading-relaxed">
-                    This score range indicates areas that require urgent attention and immediate improvement. Critical gaps have been identified that need to be addressed as a priority to enhance overall performance and compliance.
+                <div className="mt-1">
+                  <p
+                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    This score range indicates areas that require urgent
+                    attention and immediate improvement. Critical gaps have been
+                    identified that need to be addressed as a priority to
+                    enhance overall performance and compliance.
                   </p>
                 </div>
               </div>
@@ -697,16 +952,36 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 ${currentCategoryScore > Math.floor(currentCategoryMaxScore * 0.4) && currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.8)
-                    ? 'bg-[#F7AF41] text-white'
-                    : 'bg-[#E8E8E8] text-gray-800'
-                    }`}
+                  className={`text-center py-1 ${
+                    currentCategoryScore >
+                      Math.floor(currentCategoryMaxScore * 0.4) &&
+                    currentCategoryScore <=
+                      Math.floor(currentCategoryMaxScore * 0.8)
+                      ? "bg-[#F7AF41] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
-                  <h3 className="text-base font-semibold">Score: {Math.floor(currentCategoryMaxScore * 0.4) + 1} - {Math.floor(currentCategoryMaxScore * 0.8)}</h3>
+                  <h3
+                    className="text-base font-semibold"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    Score: {Math.floor(currentCategoryMaxScore * 0.4) + 1} -{" "}
+                    {Math.floor(currentCategoryMaxScore * 0.8)}
+                  </h3>
                 </div>
-                <div className="mt-3">
-                  <p className="text-sm px-4 text-gray-700 leading-relaxed">
-                    This score range represents average performance with room for enhancement. While basic standards are met, there are opportunities to strengthen processes and achieve better outcomes through targeted improvements.
+                <div className="mt-1">
+                  <p
+                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    This score range represents average performance with room
+                    for enhancement. While basic standards are met, there are
+                    opportunities to strengthen processes and achieve better
+                    outcomes through targeted improvements.
                   </p>
                 </div>
               </div>
@@ -714,16 +989,33 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${currentCategoryScore > Math.floor(currentCategoryMaxScore * 0.8)
-                    ? 'bg-[#2BD473] text-white'
-                    : 'bg-[#E8E8E8] text-gray-800'
-                    }`}
+                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${
+                    currentCategoryScore >
+                    Math.floor(currentCategoryMaxScore * 0.8)
+                      ? "bg-[#2BD473] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
-                  <h3 className="text-base font-semibold">Score: {Math.floor(currentCategoryMaxScore * 0.8) + 1} - {currentCategoryMaxScore}</h3>
+                  <h3
+                    className="text-base font-semibold"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    Score: {Math.floor(currentCategoryMaxScore * 0.8) + 1} -{" "}
+                    {currentCategoryMaxScore}
+                  </h3>
                 </div>
-                <div className="mt-3 border-l-2 border-gray-200">
-                  <p className="text-sm px-4 text-gray-700 leading-relaxed">
-                    This score range demonstrates excellent performance and strong compliance. The category shows outstanding results with well-established processes and best practices in place.
+                <div className="mt-1 border-l-2 border-gray-200">
+                  <p
+                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                    }}
+                  >
+                    This score range demonstrates excellent performance and
+                    strong compliance. The category shows outstanding results
+                    with well-established processes and best practices in place.
                   </p>
                 </div>
               </div>
@@ -732,37 +1024,54 @@ export default function TestPresentation() {
 
           {/* Category Score Progress Bar */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="mt-2 pt-1 px-4 pb-5 bg-[#D8DEE2] relative">
-              <h3 className="text-base font-semibold text-gray-800 mb-3 uppercase">
-                {currentCategoryData.name.toUpperCase()} SCORE ({currentCategoryScore} / {currentCategoryMaxScore})
+            <div className="mt-1 pt-1 px-4 pb-5 bg-[#D8DEE2]  bottom-4 relative">
+              <h3
+                className="text-base font-semibold text-gray-800 mb-3 uppercase"
+                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+              >
+                {currentCategoryData.name.toUpperCase()} SCORE (
+                {currentCategoryScore} / {currentCategoryMaxScore})
               </h3>
               <div className="relative w-full h-4 flex items-center">
                 {/* Red section - 0-40% of score (top layer) */}
-                <div className="absolute inset-y-0 left-0 h-4 bg-[#F65355] rounded-full z-20" style={{ width: '33.33%', borderRadius: '9999px 0 0 9999px' }}></div>
+                <div
+                  className="absolute inset-y-0 left-0 h-4 bg-[#F65355] rounded-full z-20"
+                  style={{ width: "33.33%", borderRadius: "9999px 0 0 9999px" }}
+                ></div>
                 {/* Yellow section - 40-80% of score (middle layer) */}
-                <div className="absolute inset-y-0 h-4 bg-[#F7AF41] z-10" style={{ left: '33.33%', width: '33.33%' }}></div>
+                <div
+                  className="absolute inset-y-0 h-4 bg-[#F7AF41] z-10"
+                  style={{ left: "33.33%", width: "33.33%" }}
+                ></div>
                 {/* Green section - 80-100% of score (last 20% of max value) (bottom layer) */}
-                <div className="absolute inset-y-0 h-4 bg-[#2BD473] z-0" style={{ left: '66.66%', width: '33.33%', borderRadius: '0 9999px 9999px 0' }}></div>
+                <div
+                  className="absolute inset-y-0 h-4 bg-[#2BD473] z-0"
+                  style={{
+                    left: "66.66%",
+                    width: "33.33%",
+                    borderRadius: "0 9999px 9999px 0",
+                  }}
+                ></div>
                 {/* Score indicator circle */}
                 <div
                   className="absolute transition-all duration-500 z-30"
                   style={{
                     left: `${Math.min((currentCategoryScore / currentCategoryMaxScore) * 100, 100)}%`,
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)'
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
                   }}
                 >
                   <div className="">
                     <div className="w-12 z-30 h-10 bg-[#456987] rounded-2xl flex items-center justify-center  shadow-lg">
-                      <span className="text-white font-bold text-sm">{currentCategoryScore}</span>
+                      <span className="text-white font-bold text-sm">
+                        {currentCategoryScore}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           )}
-
-
         </div>
       </main>
     </div>

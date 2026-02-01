@@ -77,16 +77,7 @@ export default function SigninPage() {
   };
 
   return (
-    <div
-      className="relative min-h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: "url(/bg-img.png)",
-        backgroundSize: "contain",
-      }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-[rgba(43,64,85,0.70)] z-0"></div>
-
+    <div className="relative min-h-screen flex items-center justify-center">
       {/* Content */}
       <div className="flex flex-col items-center relative z-10">
         {/* Logo */}

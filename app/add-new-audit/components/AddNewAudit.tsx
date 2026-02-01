@@ -15,7 +15,6 @@ export default function AddNewAudit() {
   const currentCategory = parseInt(searchParams.get("category") || "1", 10);
   const createAuditMutation = useCreateAudit();
 
-
   const [title, setTitle] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categoryIcon, setCategoryIcon] = useState<string>("");
@@ -23,7 +22,9 @@ export default function AddNewAudit() {
     { index: number; text: string }[]
   >([]);
   const [statusMap, setStatusMap] = useState<Record<number, string[]>>({});
-  const [sessionStorageCategories, setSessionStorageCategories] = useState<Array<{ id: string; name: string; recommendation?: string }>>([]);
+  const [sessionStorageCategories, setSessionStorageCategories] = useState<
+    Array<{ id: string; name: string; recommendation?: string }>
+  >([]);
 
   // Load categories from sessionStorage
   const loadCategoriesFromStorage = () => {
@@ -45,7 +46,7 @@ export default function AddNewAudit() {
           );
           setSessionStorageCategories(categories);
         }
-      } catch { }
+      } catch {}
     }
   };
 
@@ -73,7 +74,7 @@ export default function AddNewAudit() {
           setTitle(parsed.title);
         }
       }
-    } catch { }
+    } catch {}
   }, []);
 
   // Hydrate category name and icon from sessionStorage on mount or category change
@@ -88,8 +89,12 @@ export default function AddNewAudit() {
           return;
         }
         // Try to get from specific category storage
-        const storedName = sessionStorage.getItem(`auditData:categoryName:${currentCategory}`);
-        const storedIcon = sessionStorage.getItem(`auditData:categoryIcon:${currentCategory}`);
+        const storedName = sessionStorage.getItem(
+          `auditData:categoryName:${currentCategory}`,
+        );
+        const storedIcon = sessionStorage.getItem(
+          `auditData:categoryIcon:${currentCategory}`,
+        );
 
         if (storedName) {
           setCategoryName(storedName);
@@ -112,7 +117,6 @@ export default function AddNewAudit() {
             setCategoryName(`Category ${currentCategory}`);
           }
         }
-
 
         // Load icon
         if (storedIcon) {
@@ -233,7 +237,7 @@ export default function AddNewAudit() {
               merged.categories = prev.categories;
           }
         }
-      } catch { }
+      } catch {}
     }
 
     const trimmedTitle = title.trim();
@@ -328,7 +332,7 @@ export default function AddNewAudit() {
     if (typeof window === "undefined") return;
     try {
       // Preserve summaryData before updating auditData
-      const existingSummaryData = sessionStorage.getItem('summaryData');
+      const existingSummaryData = sessionStorage.getItem("summaryData");
 
       // Save category name and icon separately for sidebar access
       const finalCategoryName =
@@ -347,7 +351,6 @@ export default function AddNewAudit() {
         sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
       }
 
-
       const data = buildAuditData;
       sessionStorage.setItem("auditData", JSON.stringify(data));
       if (Array.isArray(data.categories)) {
@@ -359,7 +362,6 @@ export default function AddNewAudit() {
           );
         });
       }
-
 
       // Restore summaryData if it existed (preserve it when navigating between pages)
       if (existingSummaryData) {
@@ -412,15 +414,22 @@ export default function AddNewAudit() {
             .filter((q) => q.text && q.text.trim().length > 0)
             .map((q) => ({
               text: q.text!.trim(),
-              options: (Array.isArray(q.options) && q.options.length === 5)
-                ? q.options.map(opt => ({
-                  text: opt.text.trim(),
-                  points: opt.points
-                }))
-                : ["Very Minimal", "Just Starting", "Good progress", "Excellent", "Very Excellent"].map((text, i) => ({
-                  text: text,
-                  points: i + 1
-                }))
+              options:
+                Array.isArray(q.options) && q.options.length === 5
+                  ? q.options.map((opt) => ({
+                      text: opt.text.trim(),
+                      points: opt.points,
+                    }))
+                  : [
+                      "Very Minimal",
+                      "Just Starting",
+                      "Good progress",
+                      "Excellent",
+                      "Very Excellent",
+                    ].map((text, i) => ({
+                      text: text,
+                      points: i + 1,
+                    })),
             }))
             .filter((q) => q.text.length > 0);
 
@@ -468,10 +477,9 @@ export default function AddNewAudit() {
 
       toast.success("Audit created successfully");
 
-
       // Store the created audit ID in sessionStorage before clearing
-      if (typeof window !== 'undefined' && createdAudit?.id) {
-        sessionStorage.setItem('createdAuditId', createdAudit.id);
+      if (typeof window !== "undefined" && createdAudit?.id) {
+        sessionStorage.setItem("createdAuditId", createdAudit.id);
 
         // Map temp category IDs to real category IDs and update summary if needed
         if (summaryData && createdAudit.categories) {
@@ -480,7 +488,6 @@ export default function AddNewAudit() {
             createdAudit.categories.forEach((cat, idx) => {
               categoryMap[`temp-${idx}`] = cat.id;
             });
-
 
             // Clear summary data from sessionStorage
             sessionStorage.removeItem("summaryData");
@@ -495,7 +502,6 @@ export default function AddNewAudit() {
         }
       }
 
-
       // Clear all state
       setTitle("");
       setCategoryName("");
@@ -503,16 +509,13 @@ export default function AddNewAudit() {
       setTableQuestions([]);
       setStatusMap({});
 
-
       // Clear full sessionStorage after successful creation
       if (typeof window !== "undefined") {
         sessionStorage.clear();
 
-
         // Dispatch event to update sidebar
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
-
 
       // Redirect to home page after successful creation
       setTimeout(() => {
@@ -533,28 +536,31 @@ export default function AddNewAudit() {
           </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
             <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
-              1-2 URGENT ATTEN
+              1-2 URGENT ATTENTION
             </p>
             <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
               3-4 AVERAGE AUDIT
             </p>
             <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
-              5 EXELLENT AUDIT
+              5 EXCELLENT AUDIT
             </p>
           </div>
         </div>
 
-
-        <div className="px-24 flex items-center justify-between">
-          {["questions", "answers", "score"].map((item, i) => (
-            <p key={i} className={`text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium ${i === 1 ? "ml-56" : ""}`}>
-              {item}
-            </p>
-          ))}
+        <div
+          className="audit-content-padding flex items-center"
+          style={{ width: "100%" }}
+        >
+          <p className="audit-index-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"></p>
+          <p className="audit-question-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
+            questions
+          </p>
+          <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
+            answers
+          </p>
         </div>
-
       </header>
-      <main className="px-24 pt-5 bg-white  pb-10">
+      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1">
             <input
@@ -562,7 +568,15 @@ export default function AddNewAudit() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Presentation Name"
-              className="w-full bg-[#4569871A]  text-[18px] px-6 py-[12px] border border-[#3b5163] rounded-xl outline-none"
+              className="w-full bg-[#4569871A] px-6 py-[12px] border border-[#3b5163] rounded-xl outline-none"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(20px, 1.8vw, 23px)",
+                letterSpacing: "-0.025em",
+                lineHeight: "1",
+                fontVariationSettings: "'wdth' 85, 'wght' 400",
+              }}
             />
           </div>
           <div className="w-px h-0 bg-[#3b5163] mx-7"></div>
@@ -625,6 +639,8 @@ function AuditTable({
   const [statusLabels, setStatusLabels] = useState<Record<number, string[]>>(
     {},
   );
+  const [draggedRowIndex, setDraggedRowIndex] = useState<number | null>(null);
+  const [dragOverRowIndex, setDragOverRowIndex] = useState<number | null>(null);
 
   // Hydrate questions and status labels from sessionStorage on mount or category change
   useEffect(() => {
@@ -704,7 +720,7 @@ function AuditTable({
         if (hasQ || hasS) rowsToActivate.add(i);
       }
       setActiveRows(rowsToActivate);
-    } catch { }
+    } catch {}
   }, [currentCategory]);
 
   useEffect(() => {
@@ -742,7 +758,6 @@ function AuditTable({
       row[idx] = value;
       next[rowIndex] = row;
 
-
       // Save to sessionStorage and notify parent with the updated value
       try {
         if (typeof window !== "undefined") {
@@ -750,7 +765,7 @@ function AuditTable({
           sessionStorage.setItem(key, JSON.stringify(row));
           onStatusChange?.(rowIndex, row);
         }
-      } catch { }
+      } catch {}
 
       return next;
     });
@@ -768,7 +783,7 @@ function AuditTable({
           value,
         );
       }
-    } catch { }
+    } catch {}
 
     // Auto-add options for this question if not present yet, using current status labels (defaults)
     if (!statusLabels[rowIndex] || statusLabels[rowIndex].length !== 5) {
@@ -781,9 +796,92 @@ function AuditTable({
             JSON.stringify(defaults),
           );
         }
-      } catch { }
+      } catch {}
       onStatusChange?.(rowIndex, defaults);
     }
+  };
+
+  // Handle row drag and drop
+  const handleRowDragStart = (e: React.DragEvent, rowIndex: number) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.closest("input")) {
+      e.preventDefault();
+      return;
+    }
+    setDraggedRowIndex(rowIndex);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", rowIndex.toString());
+  };
+
+  const handleRowDragOver = (e: React.DragEvent, rowIndex: number) => {
+    if (draggedRowIndex === null) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (rowIndex !== draggedRowIndex) {
+      setDragOverRowIndex(rowIndex);
+    }
+  };
+
+  const handleRowDragLeave = () => {
+    setDragOverRowIndex(null);
+  };
+
+  const handleRowDrop = (e: React.DragEvent, targetRowIndex: number) => {
+    if (draggedRowIndex === null || draggedRowIndex === targetRowIndex) {
+      setDraggedRowIndex(null);
+      setDragOverRowIndex(null);
+      return;
+    }
+    e.preventDefault();
+
+    // Create an array for the 10 rows to perform splice reordering
+    const rowRange = Array.from({ length: 10 }, (_, i) => i + 1);
+
+    // Map current state to an array of objects
+    const items = rowRange.map((idx) => ({
+      question: questions[idx] || "",
+      status: statusLabels[idx] || null,
+    }));
+
+    // Perform splice
+    const [draggedItem] = items.splice(draggedRowIndex - 1, 1);
+    items.splice(targetRowIndex - 1, 0, draggedItem);
+
+    // Map back to dictionary state, but indices are 1..10
+    const newQuestions: { [key: number]: string } = {};
+    const newStatusLabels: Record<number, string[]> = {};
+
+    items.forEach((item, idx) => {
+      const newIdx = idx + 1;
+      if (item.question) newQuestions[newIdx] = item.question;
+      if (item.status) newStatusLabels[newIdx] = item.status;
+
+      // Update sessionStorage
+      try {
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(
+            `auditData:question:${currentCategory}:${newIdx}`,
+            item.question || "",
+          );
+          if (item.status) {
+            sessionStorage.setItem(
+              `auditData:status:${currentCategory}:${newIdx}`,
+              JSON.stringify(item.status),
+            );
+          } else {
+            sessionStorage.removeItem(
+              `auditData:status:${currentCategory}:${newIdx}`,
+            );
+          }
+        }
+      } catch {}
+    });
+
+    setQuestions(newQuestions);
+    setStatusLabels(newStatusLabels);
+
+    setDraggedRowIndex(null);
+    setDragOverRowIndex(null);
   };
 
   const statusButtons = [
@@ -791,25 +889,25 @@ function AuditTable({
       label: "Very Minimal",
       color: "bg-[#FFE2E380]",
       borderColor: "border-[#FFB7B9]",
-      textColor: "text-pink-800",
+      textColor: "#A51A1F",
     },
     {
       label: "Just Starting",
       color: "bg-[#FFFCE280]",
       borderColor: "border-[#E3D668]",
-      textColor: "text-yellow-800",
+      textColor: "#776E23",
     },
     {
       label: "Good progress",
       color: "bg-[#FFDBC2B2]",
       borderColor: "border-[#894B00E5]",
-      textColor: "text-orange-800",
+      textColor: "#894B00",
     },
     {
       label: "Excellent",
       color: "bg-[#DCFCE7]",
       borderColor: "border-[#01673099]",
-      textColor: "text-green-800",
+      textColor: "#016730",
     },
     {
       label: "Very Excellent",
@@ -820,32 +918,57 @@ function AuditTable({
   ];
 
   return (
-    <div className="w-full  mt-8">
-      <table className="w-full border-collapse border border-gray-300">
+    <div className="w-full mt-8 overflow-x-auto">
+      <table
+        className="w-full border-collapse border border-gray-300"
+        style={{ tableLayout: "fixed" }}
+      >
         <tbody>
           {Array.from({ length: 10 }, (_, index) => {
             const rowIndex = index + 1;
             const isActive = activeRows.has(rowIndex);
 
-
             return (
-              <tr key={rowIndex} className="border-b border-gray-300">
-                <td className="border-r border-gray-300 px-4 py-3 text-center align-middle w-16">
-                  <span className="text-gray-700">{rowIndex}</span>
+              <tr
+                key={rowIndex}
+                draggable={true}
+                onDragStart={(e) => handleRowDragStart(e, rowIndex)}
+                onDragOver={(e) => handleRowDragOver(e, rowIndex)}
+                onDragLeave={handleRowDragLeave}
+                onDrop={(e) => handleRowDrop(e, rowIndex)}
+                className={`border-b border-gray-300 ${draggedRowIndex === rowIndex ? "opacity-50" : ""} ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
+              >
+                <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
+                      =
+                    </span>
+                    <span className="text-gray-700">{rowIndex}</span>
+                  </div>
                 </td>
-                <td className="border-r border-gray-300 px-4 py-3 align-middle w-full">
+                <td className="audit-question-col border-r border-gray-300 px-4 py-3 align-middle">
                   <input
                     type="text"
                     value={questions[rowIndex] || ""}
                     placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                     onClick={() => handleQuestionClick(rowIndex)}
-                    onChange={(e) => handleQuestionChange(rowIndex, e.target.value)}
+                    onChange={(e) =>
+                      handleQuestionChange(rowIndex, e.target.value)
+                    }
                     className="w-full bg-[#4569871A] px-4 h-[60px] border border-[#3b5163] rounded-xl outline-none"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 400,
+                      fontSize: "23px",
+                      lineHeight: "100%",
+                      letterSpacing: "-0.025em",
+                      fontVariationSettings: "'wdth' 85, 'wght' 400",
+                    }}
                   />
                 </td>
-                <td className="border-r border-gray-300 px-4 py-3 align-middle ">
+                <td className="audit-answer-col px-2 py-3 align-middle">
                   {isActive ? (
-                    <div className="flex gap-2 items-center ">
+                    <div className="flex gap-2 items-center justify-center">
                       {statusButtons.map((button, idx) => (
                         <input
                           key={button.label}
@@ -854,7 +977,21 @@ function AuditTable({
                           onChange={(e) =>
                             setStatusValue(rowIndex, idx, e.target.value)
                           }
-                          className={`${button.color} ${button.borderColor} ${button.textColor} pl-3 py-1.5 w-28 rounded-lg border font-medium text-sm outline-none`}
+                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} px-3 rounded-lg border outline-none`}
+                          style={{
+                            fontFamily: "'Acumin Variable Concept', sans-serif",
+                            fontWeight: 400,
+                            fontSize: "18px",
+                            lineHeight: "100%",
+                            letterSpacing: "-0.015em",
+                            fontVariationSettings: "'wdth' 55, 'wght' 700",
+                            paddingTop: "12px",
+                            paddingBottom: "12px",
+                            textAlign: "center",
+                            color: button.textColor.startsWith("#")
+                              ? button.textColor
+                              : undefined,
+                          }}
                         />
                       ))}
                     </div>
