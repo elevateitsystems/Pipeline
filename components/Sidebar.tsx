@@ -24,6 +24,7 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
   const [editingCategory, setEditingCategory] = useState<number | null>(null);
   const [editingIconCategory, setEditingIconCategory] = useState<number | null>(
     null,
@@ -61,6 +62,11 @@ export default function Sidebar() {
   // Get user's primary color with opacity
   const primaryColor = user?.primaryColor || "#2B4055";
   const secondaryColor = user?.secondaryColor || "#F7AF41";
+
+  // Set mounted after hydration to prevent SSR mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load test result data for summary overview
   useEffect(() => {
@@ -260,10 +266,18 @@ export default function Sidebar() {
 
   // Helper to get category name
   const getCategoryName = (categoryNumber: number): string => {
+    // Default fallback value - must be consistent for SSR and client
+    const fallback = `Category ${categoryNumber}`;
+
+    // First check if we have it in state (populated after mount)
     if (categoryNames[categoryNumber]) {
       return categoryNames[categoryNumber];
     }
-    if (typeof window === "undefined") return `Category ${categoryNumber}`;
+
+    // During SSR or before hydration, always return fallback to prevent mismatch
+    if (typeof window === "undefined" || !mounted) return fallback;
+
+    // Only read from sessionStorage after hydration is complete
     try {
       const storedName = sessionStorage.getItem(
         `auditData:categoryName:${categoryNumber}`,
@@ -282,15 +296,20 @@ export default function Sidebar() {
         }
       }
     } catch {}
-    return `CATEGORIES 0${categoryNumber}`;
+    return fallback;
   };
 
   // Helper to get category icon
   const getCategoryIcon = (categoryNumber: number): string | undefined => {
+    // First check if we have it in state
     if (categoryIcons[categoryNumber]) {
       return categoryIcons[categoryNumber];
     }
-    if (typeof window === "undefined") return undefined;
+
+    // During SSR or before hydration, return undefined to prevent mismatch
+    if (typeof window === "undefined" || !mounted) return undefined;
+
+    // Only read from sessionStorage after hydration
     try {
       const storedIcon = sessionStorage.getItem(
         `auditData:categoryIcon:${categoryNumber}`,
@@ -312,9 +331,24 @@ export default function Sidebar() {
     return undefined;
   };
 
-  // Helper to render icon component
+  // Helper to render icon component (supports both Lucide icons and custom URL icons)
   const renderIcon = (iconName: string | undefined) => {
     if (!iconName) return null;
+
+    // Check if it's a custom URL icon
+    if (iconName.startsWith("http")) {
+      return (
+        <Image
+          src={iconName}
+          alt="Custom icon"
+          width={20}
+          height={20}
+          className="w-5 h-5 object-contain"
+        />
+      );
+    }
+
+    // Otherwise, try to render as Lucide icon
     const IconComponent = (
       LucideIcons as unknown as Record<
         string,
@@ -370,8 +404,6 @@ export default function Sidebar() {
         console.error("Error updating category name:", e);
       }
     }
-
-    setEditingCategory(null);
   };
 
   // Handle category icon update
@@ -905,6 +937,16 @@ export default function Sidebar() {
       onTestPage && presentationId ? actualCategoryCount : 7; // Always show 7 for create, update, and summary pages
 
     // Create categories based on the count
+    const defaultIcons = [
+      "Folder",
+      "FileText",
+      "List",
+      "CheckSquare",
+      "PieChart",
+      "BarChart",
+      "Settings",
+    ];
+
     const categoryItems = Array.from({ length: categoryCount }, (_, i) => {
       const categoryNumber = i + 1;
       const query = new URLSearchParams();
@@ -912,25 +954,13 @@ export default function Sidebar() {
       if (onTestPage && presentationId)
         query.set("presentationId", presentationId);
       query.set("category", String(categoryNumber));
+      const defaultIconName = defaultIcons[i % defaultIcons.length];
+
       return {
         categoryNumber,
         name: getCategoryName(categoryNumber),
         href: `${basePath}?${query.toString()}`,
-        icon: (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 7h4l2 2h10a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
-            />
-          </svg>
-        ),
+        icon: renderIcon(getCategoryIcon(categoryNumber) || defaultIconName),
       };
     });
 
@@ -963,9 +993,8 @@ export default function Sidebar() {
 
   return (
     <div
-      className="w-75 flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
+      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
       style={{
-        width: "300px",
         overflowX: "hidden",
         position: "relative",
         backgroundColor: "transparent",
@@ -986,7 +1015,7 @@ export default function Sidebar() {
         ) : (
           <Image
             onClick={() => router.push("/")}
-            className="cursor-pointer"
+            className="cursor-pointer sidebar-logo"
             src={user?.company?.logoUrl || logo}
             alt="Logo"
             width={168}
@@ -1075,14 +1104,13 @@ export default function Sidebar() {
               onSummaryPage ||
               onTestPage) && (
               <div
-                className="px-8 text-left text-[#fffef7] uppercase"
+                className="sidebar-header-text px-8 text-left text-[#fffef7] uppercase"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontSize: "clamp(20px, 1.8vw, 27px)",
                   lineHeight: "1",
                   letterSpacing: "0.006em",
-                  textAlign: "center",
                   fontVariationSettings: "'wdth' 65, 'wght' 500",
                 }}
               >
@@ -1182,7 +1210,8 @@ export default function Sidebar() {
                   const canDrag =
                     isCategoryItem &&
                     itemCategoryNumber !== null &&
-                    pathname === "/update-audit" &&
+                    (pathname === "/update-audit" ||
+                      pathname === "/add-new-audit") &&
                     item.name !== "Summary";
 
                   const isSummaryItem = item.name === "Summary";
@@ -1229,23 +1258,22 @@ export default function Sidebar() {
                           e.stopPropagation();
                         }
                       }}
-                      className={` ${isEditing ? "h-[40px]" : ""} cursor-pointer flex items-center relative ${
+                      className={`h-[68px] cursor-pointer flex items-center relative ${
                         onNewAuditPage ||
                         onUpdateAuditPage ||
                         onSummaryPage ||
                         onTestPage ||
-                        (isActive && !isEditing)
+                        isActive
                           ? "w-[calc(100%)] mr-0 rounded-l-xl border-r-0"
                           : "w-[92.5%] mr-1.5 rounded-xl"
                       } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
                       style={{
-                        padding:
-                          "clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1rem)",
+                        padding: "0 clamp(0.75rem, 3vw, 1rem)",
                         marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                         backgroundColor: backgroundColor,
                         color: textColor,
                         border:
-                          onTestPage || (isActive && !isEditing)
+                          onTestPage || isActive
                             ? "none"
                             : useSecondary
                               ? "2px solid #899AA9"
@@ -1255,14 +1283,13 @@ export default function Sidebar() {
                       }}
                     >
                       {isActive && (
-                        <div className="absolute inset-0  pointer-events-none">
+                        <div className="absolute inset-0 pointer-events-none">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            // width="285px"
                             viewBox="0 0 271 62"
                             fill="none"
                             preserveAspectRatio="none"
-                            className="w-64 lg:w-[285px] xl:w-[288px]"
+                            className="sidebar-active-tab-svg w-64 lg:w-[285px] xl:w-[288px] h-[calc(100%+16px)] absolute top-[-8px]"
                           >
                             <path
                               d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
@@ -1271,95 +1298,89 @@ export default function Sidebar() {
                           </svg>
                         </div>
                       )}
-                      {isEditing && itemCategoryNumber !== null ? (
-                        <div className="w-full h-full flex items-center relative z-10">
-                          {/* Single Input Field Container */}
-                          <div className="w-full bg-transparent border-2 border-white rounded px-2 py-1 flex items-center gap-2">
-                            {/* Icon Display with Dropdown Arrow */}
-                            <div className="flex items-center gap-1 shrink-0">
-                              <div className="w-[262px] h-10 border-2 border-[#45698799] rounded-xl -left-[15px] absolute pointer-events-none bg-transparent"></div>
-                              <div className="w-[280px] h-13 border-2 border-r-0 rounded-r-none border-gray-300 rounded-2xl -left-[22px] absolute pointer-events-none bg-transparent active-nav-item2"></div>
-                              <div
-                                className="flex items-center justify-center"
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setEditingIconCategory(itemCategoryNumber);
-                                }}
-                                style={{
-                                  color: "inherit",
-                                  minWidth: "20px",
-                                  minHeight: "20px",
-                                }}
-                              >
-                                {getCategoryIcon(itemCategoryNumber)
-                                  ? renderIcon(
-                                      getCategoryIcon(itemCategoryNumber),
-                                    )
-                                  : item.icon}
-                              </div>
-
-                              {/* Dropdown Button beside icon */}
-                              <button
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setEditingIconCategory(itemCategoryNumber);
-                                }}
-                                className="p-0.5 hover:opacity-80 transition-opacity"
-                                style={{ color: "inherit" }}
-                                title="Change icon"
-                              >
-                                <svg
-                                  className="w-3 h-3"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path
-                                    fillRule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              </button>
+                      {isEditing ? (
+                        <div
+                          className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""}`}
+                        >
+                          {canDrag && !isSummaryItem && (
+                            <span
+                              onMouseDown={() =>
+                                setDragHandleCategory(itemCategoryNumber)
+                              }
+                              className={`text-xl font-light select-none mr-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"}`}
+                            >
+                              =
+                            </span>
+                          )}
+                          <button
+                            data-icon-picker-trigger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingIconCategory(itemCategoryNumber);
+                            }}
+                            className={`flex items-center gap-1 shrink-0 hover:bg-black/5 rounded p-1 transition-colors ${isActive ? "text-black" : "text-white"}`}
+                            style={{ color: "inherit" }}
+                          >
+                            <div className="flex items-center justify-center">
+                              {isCategoryItem &&
+                              itemCategoryNumber !== null &&
+                              getCategoryIcon(itemCategoryNumber as number)
+                                ? renderIcon(
+                                    getCategoryIcon(
+                                      itemCategoryNumber as number,
+                                    ),
+                                  )
+                                : item.icon}
                             </div>
+                            <LucideIcons.ChevronDown size={14} />
+                          </button>
+                          <input
+                            type="text"
+                            defaultValue={getCategoryName(
+                              itemCategoryNumber as number,
+                            )}
+                            autoFocus
+                            onBlur={(e) => {
+                              if (itemCategoryNumber !== null) {
+                                // If focus is moving to the icon picker trigger, don't close edit mode
+                                const isIconTrigger = (
+                                  e.relatedTarget as HTMLElement
+                                )?.closest("[data-icon-picker-trigger]");
 
-                            {/* Editable Text Field */}
-                            <input
-                              type="text"
-                              defaultValue={getCategoryName(itemCategoryNumber)}
-                              autoFocus
-                              onBlur={(e) => {
-                                if (itemCategoryNumber !== null) {
+                                handleCategoryNameUpdate(
+                                  itemCategoryNumber,
+                                  e.target.value,
+                                );
+
+                                if (!isIconTrigger) {
+                                  setEditingCategory(null);
+                                }
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (itemCategoryNumber !== null) {
+                                if (e.key === "Enter") {
                                   handleCategoryNameUpdate(
                                     itemCategoryNumber,
-                                    e.target.value,
+                                    e.currentTarget.value,
                                   );
+                                  setEditingCategory(null);
+                                } else if (e.key === "Escape") {
+                                  setEditingCategory(null);
                                 }
-                              }}
-                              onKeyDown={(e) => {
-                                if (itemCategoryNumber !== null) {
-                                  if (e.key === "Enter") {
-                                    handleCategoryNameUpdate(
-                                      itemCategoryNumber,
-                                      e.currentTarget.value,
-                                    );
-                                  } else if (e.key === "Escape") {
-                                    setEditingCategory(null);
-                                  }
-                                }
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                              className="flex-1 bg-transparent outline-none border-none"
-                              style={{
-                                color: "inherit",
-                                fontFamily:
-                                  "'Acumin Variable Concept', sans-serif",
-                              }}
-                            />
-                          </div>
+                              }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex-1 bg-transparent outline-none border-none text-left"
+                            style={{
+                              color: "inherit",
+                              fontFamily:
+                                "'Acumin Variable Concept', sans-serif",
+                              fontWeight: 500,
+                              fontVariationSettings: "'wdth' 65, 'wght' 500",
+                              fontSize: "clamp(20px, 1.8vw, 27px)",
+                            }}
+                          />
 
                           {/* Icon Picker Dropdown */}
                           {editingIconCategory === itemCategoryNumber && (
@@ -1378,10 +1399,12 @@ export default function Sidebar() {
                               }}
                             >
                               <IconPicker
-                                value={getCategoryIcon(itemCategoryNumber)}
+                                value={getCategoryIcon(
+                                  itemCategoryNumber as number,
+                                )}
                                 onChange={(iconName) => {
                                   handleCategoryIconUpdate(
-                                    itemCategoryNumber,
+                                    itemCategoryNumber as number,
                                     iconName,
                                   );
                                   setEditingIconCategory(null);
@@ -1395,15 +1418,29 @@ export default function Sidebar() {
                           )}
                         </div>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-between relative z-10">
+                        <div
+                          className={`w-full h-full flex items-center justify-between relative z-10 ${isActive ? "top-[2px]" : ""}`}
+                        >
                           <div
-                            className={`flex-1 flex items-center justify-start gap-2`}
+                            className={`flex-1 flex items-center justify-start gap-4`}
                           >
+                            {canDrag && !isSummaryItem && (
+                              <span
+                                onMouseDown={() =>
+                                  setDragHandleCategory(itemCategoryNumber)
+                                }
+                                className={`text-xl font-light select-none mr-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"}`}
+                              >
+                                =
+                              </span>
+                            )}
                             {/* Category icon - only show if not active or if we're not on the main page to prevent shifting */}
                             {(!isActive ||
                               (isCategoryItem &&
                                 itemCategoryNumber !== null)) && (
-                              <div className="flex items-center justify-center shrink-0 text-white">
+                              <div
+                                className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
+                              >
                                 {isCategoryItem &&
                                 itemCategoryNumber !== null &&
                                 getCategoryIcon(itemCategoryNumber)
@@ -1446,7 +1483,7 @@ export default function Sidebar() {
                               // style={{ color: 'inherit' }}
                             >
                               <span
-                                className={`${isActive ? "text-left relative top-[10px]" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
+                                className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                                 style={{
                                   fontFamily:
                                     "'Acumin Variable Concept', sans-serif",
@@ -1521,10 +1558,11 @@ export default function Sidebar() {
                 </div>
               </div>
             </div>
-            <div className="px-4 space-y-3 grid grid-cols-2 gap-4 mt-10">
+            <div className="flex items-center justify-center gap-2 mb-8 sidebar-bottom-info">
               <CustomButton
                 onClick={handleLogout}
-                className="w-full py-1 rounded-full font-semibold text-white transition-colors text-center"
+                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
+                style={{ fontSize: "inherit" }}
               >
                 Logout
               </CustomButton>
@@ -1545,7 +1583,7 @@ export default function Sidebar() {
             >
               {user.profileImageUrl ? (
                 <Image
-                  className="w-[210px] h-[230px] object-cover cursor-pointer"
+                  className="sidebar-profile-image w-[210px] h-[230px] object-cover cursor-pointer"
                   src={user.profileImageUrl}
                   alt="Profile"
                   width={210}
@@ -1568,7 +1606,7 @@ export default function Sidebar() {
                   }}
                 >
                   <span
-                    className="font-medium text-gray-700"
+                    className="font-medium text-gray-700 sidebar-bottom-info"
                     style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}
                   >
                     {user.name.charAt(0).toUpperCase()}
@@ -1577,7 +1615,7 @@ export default function Sidebar() {
               )}
             </div>
             <p
-              className="font-medium text-white text-center underline cursor-pointer"
+              className="font-medium text-white text-center underline cursor-pointer sidebar-bottom-info"
               style={{
                 fontSize: "clamp(0.875rem, 3vw, 1.125rem)",
                 marginTop: "clamp(0.25rem, 1vw, 0.5rem)",

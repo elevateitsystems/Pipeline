@@ -1208,26 +1208,20 @@ export default function UpdateAudit() {
           </div>
         </div>
 
-        <div className="px-24 flex items-center" style={{ width: "100%" }}>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"
-            style={{ width: "100px" }}
-          ></p>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 50px)" }}
-          >
+        <div
+          className="audit-content-padding flex items-center"
+          style={{ width: "100%" }}
+        >
+          <p className="audit-index-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"></p>
+          <p className="audit-question-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             questions
           </p>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 50px)" }}
-          >
+          <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             answers
           </p>
         </div>
       </header>
-      <main className="px-24 pt-5 bg-white pb-40 overflow-y-auto">
+      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1 relative">
             <input
@@ -1462,7 +1456,7 @@ function AuditTable({
   };
 
   return (
-    <div className="w-full mt-8">
+    <div className="w-full mt-8 overflow-x-auto">
       <table
         className="w-full border-collapse border border-gray-300"
         style={{ tableLayout: "fixed" }}
@@ -1484,16 +1478,15 @@ function AuditTable({
                 onDrop={(e) => handleRowDrop(e, rowIndex)}
                 className={`border-b border-gray-300 ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
               >
-                <td
-                  className="border-r border-gray-300 px-4 py-3 text-center align-middle"
-                  style={{ width: "100px" }}
-                >
-                  <span className="text-gray-700">{rowIndex}</span>
+                <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
+                      =
+                    </span>
+                    <span className="text-gray-700">{rowIndex}</span>
+                  </div>
                 </td>
-                <td
-                  className="border-r border-gray-300 px-4 py-3 align-middle"
-                  style={{ width: "calc(50% - 50px)" }}
-                >
+                <td className="audit-question-col border-r border-gray-300 px-4 py-3 align-middle">
                   <div className="relative">
                     <input
                       type="text"
@@ -1535,12 +1528,9 @@ function AuditTable({
                     </button>
                   </div>
                 </td>
-                <td
-                  className="px-2 py-3 align-middle"
-                  style={{ width: "calc(50% - 50px)" }}
-                >
+                <td className="audit-answer-col px-2 py-3 align-middle">
                   {isActive ? (
-                    <div className="flex gap-2 items-center ">
+                    <div className="flex gap-2 items-center justify-center">
                       {statusButtons.map((button, idx) => (
                         <div key={button.label} className="relative">
                           <input
@@ -1552,7 +1542,7 @@ function AuditTable({
                             disabled={
                               !(editableStatus[rowIndex]?.has(idx) ?? false)
                             }
-                            className={`${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
+                            className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
                             style={{
                               fontFamily:
                                 "'Acumin Variable Concept', sans-serif",
@@ -1563,8 +1553,6 @@ function AuditTable({
                               fontVariationSettings: "'wdth' 55, 'wght' 700",
                               paddingTop: "12px",
                               paddingBottom: "12px",
-                              // flex: "1",
-                              width: "122px",
                               textAlign: "center",
                               color: button.textColor.startsWith("#")
                                 ? button.textColor

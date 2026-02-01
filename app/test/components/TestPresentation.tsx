@@ -655,7 +655,7 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="bg-white -mt-1 flex items-center justify-center gap-2 w-full ">
+        <div className="bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
           <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">
             GRADING SCALE (1-5)
           </p>
@@ -673,7 +673,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="px-24 -mt-0.5 flex items-center"
+          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
           style={{ width: "100%" }}
         >
           <p
@@ -700,9 +700,9 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="min-h-screen px-24 pt-3 bg-white flex-1 pb-[550px] ">
-        <div className="">
-          <div className="w-full">
+      <main className="px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+        <div className="flex-1 flex flex-col">
+          <div className="w-full flex-grow min-h-[640px]">
             <table
               className="w-full border-collapse border-gray-300"
               style={{ tableLayout: "fixed" }}
@@ -913,7 +913,7 @@ export default function TestPresentation() {
 
           {/* Score Interpretation Blocks */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="mt-2 grid grid-cols-3 gap-0">
+            <div className="relative bottom-4 mt-2 grid grid-cols-3 gap-0 ">
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl  border-r-2  border-white ">
                 <div
@@ -1024,7 +1024,7 @@ export default function TestPresentation() {
 
           {/* Category Score Progress Bar */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="mt-2 pt-1 px-4 pb-5 bg-[#D8DEE2] relative">
+            <div className="mt-1 pt-1 px-4 pb-5 bg-[#D8DEE2]  bottom-4 relative">
               <h3
                 className="text-base font-semibold text-gray-800 mb-3 uppercase"
                 style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}

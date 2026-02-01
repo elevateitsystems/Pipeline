@@ -127,3 +127,99 @@
   border-top-right-radius: 20px;
   box-shadow: 1px -1px 0 1px #ffffff;
 }
+
+/* Sidebar responsive width for 1024px screens */
+.sidebar-width {
+  width: 300px;
+}
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .sidebar-width {
+    width: 350px !important;
+  }
+  
+  /* Profile image larger at 1024px */
+  .sidebar-profile-image {
+    width: 250px !important;
+    height: 270px !important;
+  }
+  
+  /* Active tab SVG wider at 1024px */
+  .sidebar-active-tab-svg {
+    width: 340px !important;
+  }
+
+  /* Logo larger at 1024px */
+  .sidebar-logo {
+    width: 220px !important;
+    height: 80px !important;
+  }
+
+  /* Logout text / Bottom info adjustment */
+  .sidebar-bottom-info {
+    font-size: 1.25rem !important;
+  }
+
+  /* Header text scaling */
+  .sidebar-header-text {
+    font-size: 1.5rem !important;
+  }
+
+  /* Reduce main content padding at 1024px to allow wider table */
+  .audit-content-padding {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Table adjustments for 1024px - Perfectly balanced 50/50 like 1440px */
+  .audit-index-col {
+    width: 60px !important;
+  }
+  .audit-question-col {
+    width: 50% !important; 
+    min-width: 650px !important; /* Balanced with answer column */
+  }
+  .audit-answer-col {
+    width: 50% !important;
+    min-width: 650px !important; /* Ensure buttons fit */
+  }
+
+  /* Scale down status buttons at 1024px */
+  .audit-status-button {
+    width: 125px !important;
+    font-size: 15px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+}
+
+/* Common audit table styles for all desktop screens */
+.audit-content-padding {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+@media (min-width: 1280px) {
+  .audit-content-padding {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+.audit-index-col {
+  width: 60px !important;
+}
+
+.audit-question-col {
+  width: 50% !important;
+  min-width: 650px !important;
+}
+
+.audit-answer-col {
+  width: 50% !important;
+  min-width: 650px !important;
+}
+
+.audit-status-button {
+  width: 130px;
+}

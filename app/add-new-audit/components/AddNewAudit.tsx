@@ -547,32 +547,20 @@ export default function AddNewAudit() {
           </div>
         </div>
 
-        <div className="px-24 flex items-center" style={{ width: "100%" }}>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"
-            style={{ width: "100px" }}
-          ></p>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
-          >
+        <div
+          className="audit-content-padding flex items-center"
+          style={{ width: "100%" }}
+        >
+          <p className="audit-index-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium"></p>
+          <p className="audit-question-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             questions
           </p>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
-          >
+          <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             answers
-          </p>
-          <p
-            className="text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center"
-            style={{ width: "100px" }}
-          >
-            score
           </p>
         </div>
       </header>
-      <main className="px-24 pt-5 bg-white pb-40 overflow-y-auto">
+      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1">
             <input
@@ -651,6 +639,8 @@ function AuditTable({
   const [statusLabels, setStatusLabels] = useState<Record<number, string[]>>(
     {},
   );
+  const [draggedRowIndex, setDraggedRowIndex] = useState<number | null>(null);
+  const [dragOverRowIndex, setDragOverRowIndex] = useState<number | null>(null);
 
   // Hydrate questions and status labels from sessionStorage on mount or category change
   useEffect(() => {
@@ -811,6 +801,89 @@ function AuditTable({
     }
   };
 
+  // Handle row drag and drop
+  const handleRowDragStart = (e: React.DragEvent, rowIndex: number) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.closest("input")) {
+      e.preventDefault();
+      return;
+    }
+    setDraggedRowIndex(rowIndex);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", rowIndex.toString());
+  };
+
+  const handleRowDragOver = (e: React.DragEvent, rowIndex: number) => {
+    if (draggedRowIndex === null) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (rowIndex !== draggedRowIndex) {
+      setDragOverRowIndex(rowIndex);
+    }
+  };
+
+  const handleRowDragLeave = () => {
+    setDragOverRowIndex(null);
+  };
+
+  const handleRowDrop = (e: React.DragEvent, targetRowIndex: number) => {
+    if (draggedRowIndex === null || draggedRowIndex === targetRowIndex) {
+      setDraggedRowIndex(null);
+      setDragOverRowIndex(null);
+      return;
+    }
+    e.preventDefault();
+
+    // Create an array for the 10 rows to perform splice reordering
+    const rowRange = Array.from({ length: 10 }, (_, i) => i + 1);
+
+    // Map current state to an array of objects
+    const items = rowRange.map((idx) => ({
+      question: questions[idx] || "",
+      status: statusLabels[idx] || null,
+    }));
+
+    // Perform splice
+    const [draggedItem] = items.splice(draggedRowIndex - 1, 1);
+    items.splice(targetRowIndex - 1, 0, draggedItem);
+
+    // Map back to dictionary state, but indices are 1..10
+    const newQuestions: { [key: number]: string } = {};
+    const newStatusLabels: Record<number, string[]> = {};
+
+    items.forEach((item, idx) => {
+      const newIdx = idx + 1;
+      if (item.question) newQuestions[newIdx] = item.question;
+      if (item.status) newStatusLabels[newIdx] = item.status;
+
+      // Update sessionStorage
+      try {
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(
+            `auditData:question:${currentCategory}:${newIdx}`,
+            item.question || "",
+          );
+          if (item.status) {
+            sessionStorage.setItem(
+              `auditData:status:${currentCategory}:${newIdx}`,
+              JSON.stringify(item.status),
+            );
+          } else {
+            sessionStorage.removeItem(
+              `auditData:status:${currentCategory}:${newIdx}`,
+            );
+          }
+        }
+      } catch {}
+    });
+
+    setQuestions(newQuestions);
+    setStatusLabels(newStatusLabels);
+
+    setDraggedRowIndex(null);
+    setDragOverRowIndex(null);
+  };
+
   const statusButtons = [
     {
       label: "Very Minimal",
@@ -856,17 +929,24 @@ function AuditTable({
             const isActive = activeRows.has(rowIndex);
 
             return (
-              <tr key={rowIndex} className="border-b border-gray-300">
-                <td
-                  className="border-r border-gray-300 px-4 py-3 text-center align-middle"
-                  style={{ width: "100px" }}
-                >
-                  <span className="text-gray-700">{rowIndex}</span>
+              <tr
+                key={rowIndex}
+                draggable={true}
+                onDragStart={(e) => handleRowDragStart(e, rowIndex)}
+                onDragOver={(e) => handleRowDragOver(e, rowIndex)}
+                onDragLeave={handleRowDragLeave}
+                onDrop={(e) => handleRowDrop(e, rowIndex)}
+                className={`border-b border-gray-300 ${draggedRowIndex === rowIndex ? "opacity-50" : ""} ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
+              >
+                <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
+                      =
+                    </span>
+                    <span className="text-gray-700">{rowIndex}</span>
+                  </div>
                 </td>
-                <td
-                  className="border-r border-gray-300 px-4 py-3 align-middle"
-                  style={{ width: "calc(50% - 100px)" }}
-                >
+                <td className="audit-question-col border-r border-gray-300 px-4 py-3 align-middle">
                   <input
                     type="text"
                     value={questions[rowIndex] || ""}
@@ -886,12 +966,9 @@ function AuditTable({
                     }}
                   />
                 </td>
-                <td
-                  className="border-r border-gray-300 px-4 py-3 align-middle"
-                  style={{ width: "calc(50% - 100px)" }}
-                >
+                <td className="audit-answer-col px-2 py-3 align-middle">
                   {isActive ? (
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2 items-center justify-center">
                       {statusButtons.map((button, idx) => (
                         <input
                           key={button.label}
@@ -900,17 +977,16 @@ function AuditTable({
                           onChange={(e) =>
                             setStatusValue(rowIndex, idx, e.target.value)
                           }
-                          className={`${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} px-3 rounded-lg border outline-none`}
+                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} px-3 rounded-lg border outline-none`}
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "18px",
                             lineHeight: "100%",
                             letterSpacing: "-0.015em",
-                            fontVariationSettings: "'wdth' 85, 'wght' 400",
+                            fontVariationSettings: "'wdth' 55, 'wght' 700",
                             paddingTop: "12px",
                             paddingBottom: "12px",
-                            flex: "1",
                             textAlign: "center",
                             color: button.textColor.startsWith("#")
                               ? button.textColor
@@ -922,12 +998,6 @@ function AuditTable({
                   ) : (
                     <div className="w-[30vw]"></div>
                   )}
-                </td>
-                <td
-                  className="px-4 py-3 text-center align-middle"
-                  style={{ width: "100px" }}
-                >
-                  <span className="text-gray-700">0</span>
                 </td>
               </tr>
             );

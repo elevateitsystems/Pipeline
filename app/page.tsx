@@ -4,6 +4,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import notFoundImg from "@/public/notFound2.png";
+import editIcon from "@/public/Edit.png";
 import Image from "next/image";
 import {
   useAuthCheck,
@@ -12,7 +13,7 @@ import {
   useSendAuditInvite,
 } from "@/lib/hooks";
 import { Presentation } from "@/lib/types";
-import { Edit, Trash2, Play, Mail } from "lucide-react";
+import { Trash2, Play, Mail } from "lucide-react";
 import toast from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
 import HomeSkeleton from "@/components/HomeSkeleton";
@@ -310,6 +311,7 @@ export default function Home() {
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
@@ -320,6 +322,7 @@ export default function Home() {
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
@@ -330,6 +333,7 @@ export default function Home() {
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
@@ -340,6 +344,7 @@ export default function Home() {
                 className="px-6 py-4 text-left text-sm text-gray-700 border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
@@ -415,7 +420,7 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-[15%_30%_30%_25%] gap-2 pr-6">
                       {!isInvitedUser && (
                         <>
                           <button
@@ -424,7 +429,7 @@ export default function Home() {
                                 `/update-audit/?edit=${audit.id}&category=1`,
                               )
                             }
-                            className="w-full px-3 py-1.5 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-3 xl:gap-1"
+                            className="w-full px-2 py-2 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-1 xl:gap-1"
                             style={{
                               fontFamily:
                                 "'Acumin Variable Concept', sans-serif",
@@ -435,15 +440,21 @@ export default function Home() {
                               fontVariationSettings: "'wdth' 85, 'wght' 400",
                             }}
                           >
-                            <Edit size={14} />
-                            Edit
+                            <Image
+                              src={editIcon}
+                              alt="Edit"
+                              width={18}
+                              height={18}
+                              className=""
+                            />
+                            <span className="">Edit</span>
                           </button>
                           <CustomButton
                             variant="redLight"
-                            className="w-full text-center lg:gap-3 xl:gap-1"
+                            className="w-full text-center  py-2 lg:gap-3 xl:gap-1"
                             size="sm"
                             fullRounded={false}
-                            leftIcon={<Trash2 size={14} />}
+                            leftIcon={<Trash2 size={18} />}
                             onClick={() => handleDeleteClick(audit.id)}
                             style={{
                               fontFamily:
@@ -465,7 +476,7 @@ export default function Home() {
                             `/test?presentationId=${audit.id}&category=1`,
                           )
                         }
-                        className="w-full px-3 cursor-pointer py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
+                        className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3"
                         style={{
                           fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
@@ -475,13 +486,13 @@ export default function Home() {
                           fontVariationSettings: "'wdth' 85, 'wght' 400",
                         }}
                       >
-                        <Play size={14} />
+                        <Play size={18} className="" />
                         Start Audit
                       </button>
                       {!isInvitedUser && (
                         <button
                           onClick={() => handleInviteClick(audit)}
-                          className="w-full px-3 cursor-pointer py-1.5 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
+                          className="w-full px-3 cursor-pointer py-2 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
@@ -491,7 +502,7 @@ export default function Home() {
                             fontVariationSettings: "'wdth' 85, 'wght' 400",
                           }}
                         >
-                          <Mail size={14} />
+                          <Mail size={18} />
                           Invite
                         </button>
                       )}
