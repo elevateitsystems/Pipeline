@@ -1289,7 +1289,7 @@ export default function Sidebar() {
                             viewBox="0 0 271 62"
                             fill="none"
                             preserveAspectRatio="none"
-                            className="sidebar-active-tab-svg w-64 lg:w-[285px] xl:w-[288px] h-[calc(100%+16px)] absolute top-[-8px]"
+                            className="sidebar-active-tab-svg ml-1.5 w-64 lg:w-[285px] xl:w-[288px] h-[calc(100%+16px)] absolute top-[-8px]"
                           >
                             <path
                               d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
