@@ -842,7 +842,7 @@ export default function Sidebar() {
           // If viewing one of the directly moved categories, reload to refresh
           window.location.reload();
         }
-        // Otherwise, no action needed - data is updated and sidebar will refresh via event
+        // Otherwise, no action needed - data is updated and sidebar will refresh
       } catch (e) {
         console.error("Error reordering categories:", e);
         toast.error("Failed to reorder categories. Please try again.");
