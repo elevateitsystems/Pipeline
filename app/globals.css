@@ -146,7 +146,7 @@
   
   /* Active tab SVG wider at 1024px */
   .sidebar-active-tab-svg {
-    width: 340px !important;
+    /* width: 340px !important; */
   }
 
   /* Logo larger at 1024px */
