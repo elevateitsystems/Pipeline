@@ -5,13 +5,161 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useLogout } from "@/lib/hooks";
 import Image from "next/image";
 import logo from "@/public/logo.png";
-import { useState, useEffect } from "react";
-import { FiEdit } from "react-icons/fi";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import summary from "@/public/summary.png";
-import { CustomButton } from "./common";
 import toast from "react-hot-toast";
-import IconPicker from "./IconPicker";
-import * as LucideIcons from "lucide-react";
+import SidebarItem from "./SidebarItem";
+import SidebarHeader from "./SidebarHeader";
+import SidebarResults from "./SidebarResults";
+import SidebarFooter from "./SidebarFooter";
+import {
+  // Navigation & UI
+  Home,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  MoreVertical,
+  MoreHorizontal,
+
+  // Actions
+  Search,
+  Settings,
+  Plus,
+  Minus,
+  Edit,
+  Trash2,
+  Download,
+  Upload,
+  Save,
+  Copy,
+  Check,
+
+  // Files & Folders
+  Folder,
+  FolderOpen,
+  File,
+  FileText,
+  List,
+  CheckSquare,
+
+  // Communication
+  Mail,
+  Send,
+  MessageSquare,
+  Bell,
+  Phone,
+
+  // User & Account
+  User,
+  Users,
+  UserPlus,
+  LogOut,
+  LogIn,
+  Lock,
+  Unlock,
+
+  // Content
+  Eye,
+  EyeOff,
+  Star,
+  Heart,
+  Share2,
+  Link,
+  ExternalLink,
+
+  // Data & Analytics
+  BarChart,
+  PieChart,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+
+  // Status & Feedback
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Info,
+  HelpCircle,
+} from "lucide-react";
+
+// Mapping for dynamic icon rendering without bundling the whole library
+const IconMap: Record<
+  string,
+  React.ComponentType<{ className?: string; size?: number }>
+> = {
+  Home,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  MoreVertical,
+  MoreHorizontal,
+
+  // Actions
+  Search,
+  Settings,
+  Plus,
+  Minus,
+  Edit,
+  Trash2,
+  Download,
+  Upload,
+  Save,
+  Copy,
+  Check,
+
+  // Files & Folders
+  Folder,
+  FolderOpen,
+  File,
+  FileText,
+
+  // Communication
+  Mail,
+  Send,
+  MessageSquare,
+  Bell,
+  Phone,
+
+  // User & Account
+  User,
+  Users,
+  UserPlus,
+  LogOut,
+  LogIn,
+  Lock,
+  Unlock,
+
+  // Content
+  Eye,
+  EyeOff,
+  Star,
+  Heart,
+  Share2,
+  Link,
+  ExternalLink,
+  List,
+  CheckSquare,
+
+  // Data & Analytics
+  BarChart,
+  PieChart,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+
+  // Status & Feedback
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Info,
+  HelpCircle,
+};
 type NavigationItem = {
   name: string;
   href: string;
@@ -265,74 +413,80 @@ export default function Sidebar() {
   }, []);
 
   // Helper to get category name
-  const getCategoryName = (categoryNumber: number): string => {
-    // Default fallback value - must be consistent for SSR and client
-    const fallback = `Category ${categoryNumber}`;
+  const getCategoryName = useCallback(
+    (categoryNumber: number): string => {
+      // Default fallback value - must be consistent for SSR and client
+      const fallback = `Category ${categoryNumber}`;
 
-    // First check if we have it in state (populated after mount)
-    if (categoryNames[categoryNumber]) {
-      return categoryNames[categoryNumber];
-    }
-
-    // During SSR or before hydration, always return fallback to prevent mismatch
-    if (typeof window === "undefined" || !mounted) return fallback;
-
-    // Only read from sessionStorage after hydration is complete
-    try {
-      const storedName = sessionStorage.getItem(
-        `auditData:categoryName:${categoryNumber}`,
-      );
-      if (storedName && storedName.trim()) {
-        return storedName;
+      // First check if we have it in state (populated after mount)
+      if (categoryNames[categoryNumber]) {
+        return categoryNames[categoryNumber];
       }
-      const raw = sessionStorage.getItem("auditData");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed?.categories)) {
-          const cat = parsed.categories[categoryNumber - 1];
-          if (cat?.name) {
-            return cat.name;
+
+      // During SSR or before hydration, always return fallback to prevent mismatch
+      if (typeof window === "undefined" || !mounted) return fallback;
+
+      // Only read from sessionStorage after hydration is complete
+      try {
+        const storedName = sessionStorage.getItem(
+          `auditData:categoryName:${categoryNumber}`,
+        );
+        if (storedName && storedName.trim()) {
+          return storedName;
+        }
+        const raw = sessionStorage.getItem("auditData");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed?.categories)) {
+            const cat = parsed.categories[categoryNumber - 1];
+            if (cat?.name) {
+              return cat.name;
+            }
           }
         }
-      }
-    } catch {}
-    return fallback;
-  };
+      } catch {}
+      return fallback;
+    },
+    [categoryNames, mounted],
+  );
 
   // Helper to get category icon
-  const getCategoryIcon = (categoryNumber: number): string | undefined => {
-    // First check if we have it in state
-    if (categoryIcons[categoryNumber]) {
-      return categoryIcons[categoryNumber];
-    }
-
-    // During SSR or before hydration, return undefined to prevent mismatch
-    if (typeof window === "undefined" || !mounted) return undefined;
-
-    // Only read from sessionStorage after hydration
-    try {
-      const storedIcon = sessionStorage.getItem(
-        `auditData:categoryIcon:${categoryNumber}`,
-      );
-      if (storedIcon && storedIcon.trim()) {
-        return storedIcon;
+  const getCategoryIcon = useCallback(
+    (categoryNumber: number): string | undefined => {
+      // First check if we have it in state
+      if (categoryIcons[categoryNumber]) {
+        return categoryIcons[categoryNumber];
       }
-      const raw = sessionStorage.getItem("auditData");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed?.categories)) {
-          const cat = parsed.categories[categoryNumber - 1];
-          if (cat?.icon) {
-            return cat.icon;
+
+      // During SSR or before hydration, return undefined to prevent mismatch
+      if (typeof window === "undefined" || !mounted) return undefined;
+
+      // Only read from sessionStorage after hydration
+      try {
+        const storedIcon = sessionStorage.getItem(
+          `auditData:categoryIcon:${categoryNumber}`,
+        );
+        if (storedIcon && storedIcon.trim()) {
+          return storedIcon;
+        }
+        const raw = sessionStorage.getItem("auditData");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed?.categories)) {
+            const cat = parsed.categories[categoryNumber - 1];
+            if (cat?.icon) {
+              return cat.icon;
+            }
           }
         }
-      }
-    } catch {}
-    return undefined;
-  };
+      } catch {}
+      return undefined;
+    },
+    [categoryIcons, mounted],
+  );
 
   // Helper to render icon component (supports both Lucide icons and custom URL icons)
-  const renderIcon = (iconName: string | undefined) => {
+  const renderIcon = useCallback((iconName: string | undefined) => {
     if (!iconName) return null;
 
     // Check if it's a custom URL icon
@@ -348,16 +502,11 @@ export default function Sidebar() {
       );
     }
 
-    // Otherwise, try to render as Lucide icon
-    const IconComponent = (
-      LucideIcons as unknown as Record<
-        string,
-        React.ComponentType<{ className?: string; size?: number }>
-      >
-    )[iconName];
+    // Otherwise, try to render as Lucide icon from our optimized map
+    const IconComponent = IconMap[iconName];
     if (!IconComponent) return null;
     return <IconComponent className="w-5 h-5" />;
-  };
+  }, []);
 
   // Handle category name update
   const handleCategoryNameUpdate = (
@@ -865,38 +1014,35 @@ export default function Sidebar() {
     }
   };
 
-  if (!user) {
-    return null;
-  }
+  const navigationItems: NavigationItem[] = useMemo(
+    () => [
+      {
+        name: "ALL AUDITS",
+        href: "/",
+        icon: "",
+      },
+      ...(isInvitedUser
+        ? []
+        : [
+            {
+              name: "ALL TEAM MEMBERS",
+              href: "/invited-users",
+              icon: "",
+            },
+          ]),
+      ...(user?.role === "ADMIN"
+        ? [
+            {
+              name: "ADMIN DASHBOARD",
+              href: "/admin",
+              icon: "",
+            },
+          ]
+        : []),
+    ],
+    [isInvitedUser, user?.role],
+  );
 
-  const navigationItems: NavigationItem[] = [
-    {
-      name: "ALL AUDITS",
-      href: "/",
-      icon: "",
-    },
-    ...(isInvitedUser
-      ? []
-      : [
-          {
-            name: "ALL TEAM MEMBERS",
-            href: "/invited-users",
-            icon: "",
-          },
-        ]),
-    ...(user?.role === "ADMIN"
-      ? [
-          {
-            name: "ADMIN DASHBOARD",
-            href: "/admin",
-            icon: "",
-          },
-        ]
-      : []),
-  ];
-
-  // When on add-new-audit, update-audit, summary, or test page, show Category 1-7 and hide ALL AUDITS button
-  // On main page (pathname === '/'), only show ALL AUDITS
   const onNewAuditPage = pathname === "/add-new-audit";
   const onUpdateAuditPage = pathname === "/update-audit";
   const onSummaryPage = pathname === "/summary";
@@ -906,89 +1052,98 @@ export default function Sidebar() {
   const shouldShowTestSkeleton =
     onTestPage && !!searchParams.get("presentationId") && isTestSidebarLoading;
 
-  // Calculate effectiveItems based on current page - always start fresh
-  let effectiveItems: NavigationItem[] = [];
+  const effectiveItems = useMemo(() => {
+    let items: NavigationItem[] = [];
 
-  // Only show categories and summary on specific audit pages, NOT on main page
-  // Explicitly check that we're NOT on the main page first
-  if (onMainPage) {
-    // On main page, only show ALL AUDITS button
-    effectiveItems = [...navigationItems];
-  } else if (
-    onNewAuditPage ||
-    onUpdateAuditPage ||
-    onSummaryPage ||
-    onTestPage
-  ) {
-    const editId = searchParams.get("edit");
-    const presentationId = searchParams.get("presentationId");
-    // Determine the base path for categories - summary page should use update-audit if editId exists, otherwise add-new-audit
-    let basePath = "/add-new-audit";
-    if (onUpdateAuditPage) basePath = "/update-audit";
-    if (onSummaryPage) {
-      // On summary page, categories should link to update-audit if editId exists, otherwise add-new-audit
-      basePath = editId ? "/update-audit" : "/add-new-audit";
+    if (onMainPage) {
+      items = [...navigationItems];
+    } else if (
+      onNewAuditPage ||
+      onUpdateAuditPage ||
+      onSummaryPage ||
+      onTestPage
+    ) {
+      const editId = searchParams.get("edit");
+      const presentationId = searchParams.get("presentationId");
+      let basePath = "/add-new-audit";
+      if (onUpdateAuditPage) basePath = "/update-audit";
+      if (onSummaryPage) {
+        basePath = editId ? "/update-audit" : "/add-new-audit";
+      }
+      if (onTestPage) basePath = "/test";
+
+      const categoryCount =
+        onTestPage && presentationId ? actualCategoryCount : 7;
+
+      const defaultIcons = [
+        "Folder",
+        "FileText",
+        "List",
+        "CheckSquare",
+        "PieChart",
+        "BarChart",
+        "Settings",
+      ];
+
+      const categoryItems = Array.from({ length: categoryCount }, (_, i) => {
+        const categoryNumber = i + 1;
+        const query = new URLSearchParams();
+        if (onUpdateAuditPage && editId) query.set("edit", editId);
+        if (onTestPage && presentationId)
+          query.set("presentationId", presentationId);
+        query.set("category", String(categoryNumber));
+        const defaultIconName = defaultIcons[i % defaultIcons.length];
+
+        return {
+          categoryNumber,
+          name: getCategoryName(categoryNumber),
+          href: `${basePath}?${query.toString()}`,
+          icon: renderIcon(getCategoryIcon(categoryNumber) || defaultIconName),
+        };
+      });
+
+      const summaryItem =
+        onNewAuditPage || onUpdateAuditPage
+          ? (() => {
+              const summaryQuery = new URLSearchParams();
+              if (onUpdateAuditPage && editId) summaryQuery.set("edit", editId);
+              summaryQuery.set("category", "8");
+              return {
+                name: "Summary",
+                href: `${basePath}?${summaryQuery.toString()}`,
+                icon: (
+                  <Image src={summary} alt="Summary" width={20} height={20} />
+                ),
+              };
+            })()
+          : null;
+
+      items = summaryItem
+        ? [...categoryItems, summaryItem]
+        : [...categoryItems];
+    } else {
+      items = [...navigationItems];
     }
-    if (onTestPage) basePath = "/test";
+    return items;
+  }, [
+    onMainPage,
+    onNewAuditPage,
+    onUpdateAuditPage,
+    onSummaryPage,
+    onTestPage,
+    navigationItems,
+    searchParams,
+    actualCategoryCount,
+    categoryNames,
+    categoryIcons,
+    mounted,
+    getCategoryIcon,
+    getCategoryName,
+    renderIcon,
+  ]);
 
-    // Determine how many categories to show
-    // Only use actualCategoryCount for test/presentation page, always show 7 for create/update/summary pages
-    const categoryCount =
-      onTestPage && presentationId ? actualCategoryCount : 7; // Always show 7 for create, update, and summary pages
-
-    // Create categories based on the count
-    const defaultIcons = [
-      "Folder",
-      "FileText",
-      "List",
-      "CheckSquare",
-      "PieChart",
-      "BarChart",
-      "Settings",
-    ];
-
-    const categoryItems = Array.from({ length: categoryCount }, (_, i) => {
-      const categoryNumber = i + 1;
-      const query = new URLSearchParams();
-      if (onUpdateAuditPage && editId) query.set("edit", editId);
-      if (onTestPage && presentationId)
-        query.set("presentationId", presentationId);
-      query.set("category", String(categoryNumber));
-      const defaultIconName = defaultIcons[i % defaultIcons.length];
-
-      return {
-        categoryNumber,
-        name: getCategoryName(categoryNumber),
-        href: `${basePath}?${query.toString()}`,
-        icon: renderIcon(getCategoryIcon(categoryNumber) || defaultIconName),
-      };
-    });
-
-    // Add Summary as 8th item (category=8 or summary parameter)
-    const summaryItem =
-      onNewAuditPage || onUpdateAuditPage
-        ? (() => {
-            const summaryQuery = new URLSearchParams();
-            if (onUpdateAuditPage && editId) summaryQuery.set("edit", editId);
-            summaryQuery.set("category", "8");
-            return {
-              name: "Summary",
-              href: `${basePath}?${summaryQuery.toString()}`,
-              icon: (
-                <Image src={summary} alt="Summary" width={20} height={20} />
-              ),
-            };
-          })()
-        : null;
-
-    // Build items array: categories + summary (no ALL AUDITS on create/update/test pages)
-    // Don't show ALL AUDITS on create, update, or test/presentation pages
-    effectiveItems = summaryItem
-      ? [...categoryItems, summaryItem]
-      : [...categoryItems];
-  } else {
-    // For any other page (not main, not audit pages), just show navigation items (ALL AUDITS)
-    effectiveItems = [...navigationItems];
+  if (!user) {
+    return null;
   }
 
   return (
@@ -1000,34 +1155,13 @@ export default function Sidebar() {
         backgroundColor: "transparent",
       }}
     >
-      {/* Logo/Brand or Summary Overview */}
-      <div
-        className="py-11 border-b-2 border-[#456987] flex justify-center shrink-0"
-        style={{ position: "relative", zIndex: 2 }}
-      >
-        {onResultPage ? (
-          <div className="flex items-center gap-3 px-4">
-            <Image src={summary} alt="Logo" width={70} height={60} />
-            <span className="text-white font-normal text-3xl">
-              Summary Overview
-            </span>
-          </div>
-        ) : (
-          <Image
-            onClick={() => router.push("/")}
-            className="cursor-pointer sidebar-logo"
-            src={user?.company?.logoUrl || logo}
-            alt="Logo"
-            width={168}
-            height={60}
-            style={{
-              width: "clamp(120px, 15vw, 168px)",
-              height: "clamp(40px, 8vw, 60px)",
-              objectFit: "contain",
-            }}
-          />
-        )}
-      </div>
+      <SidebarHeader
+        onResultPage={onResultPage}
+        router={router}
+        user={user}
+        logo={logo}
+        summary={summary}
+      />
 
       {/* Navigation - Scrollable section */}
       <nav
@@ -1041,62 +1175,7 @@ export default function Sidebar() {
         }}
       >
         {onResultPage ? (
-          <>
-            {/* Area Of Urgent Focus */}
-            <div className="px-4 mt-4">
-              <h3
-                className="text-lg text-white mb-3 uppercase"
-                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
-              >
-                Area Of Urgent Focus
-              </h3>
-              <div className="space-y-3">
-                {testResultData &&
-                  (() => {
-                    const urgentCategories = [...testResultData.categoryScores]
-                      .filter(
-                        (cs) => cs.categoryName.toLowerCase() !== "summary",
-                      )
-                      .sort((a, b) => {
-                        const aPercentage =
-                          a.maxScore > 0 ? (a.score / a.maxScore) * 100 : 0;
-                        const bPercentage =
-                          b.maxScore > 0 ? (b.score / b.maxScore) * 100 : 0;
-                        return aPercentage - bPercentage;
-                      })
-                      .slice(0, 3);
-
-                    return urgentCategories.map((cs) => {
-                      const percentage =
-                        cs.maxScore > 0 ? (cs.score / cs.maxScore) * 100 : 0;
-                      return (
-                        <div key={cs.categoryId} className="mb-4">
-                          <div className="flex justify-between items-center mb-1">
-                            <span
-                              className="text-white text-sm text-nowrap"
-                              style={{
-                                fontFamily:
-                                  "'Acumin Variable Concept', sans-serif",
-                              }}
-                            >
-                              {cs.categoryName}
-                            </span>
-                          </div>
-                          <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-[#F65355] transition-all duration-500"
-                              style={{ width: `${Math.min(percentage, 100)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      );
-                    });
-                  })()}
-              </div>
-            </div>
-
-            {/* Testimonials */}
-          </>
+          <SidebarResults testResultData={testResultData} />
         ) : (
           <>
             {(onNewAuditPage ||
@@ -1104,7 +1183,7 @@ export default function Sidebar() {
               onSummaryPage ||
               onTestPage) && (
               <div
-                className="sidebar-header-text px-8 text-left text-[#fffef7] uppercase"
+                className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
@@ -1133,7 +1212,6 @@ export default function Sidebar() {
                   ),
                 )
               : effectiveItems.map((item) => {
-                  // Active state: exact match for regular links; for category links, match by query param
                   let isActive = pathname === item.href;
                   const isCategoryItem =
                     "categoryNumber" in item &&
@@ -1155,46 +1233,35 @@ export default function Sidebar() {
                     ).get("category");
                     isActive = currentCategory === itemCategory;
                   }
-                  // For summary page, only the summary link should be active, not categories
                   if (onSummaryPage) {
                     if (item.name === "Summary") {
                       isActive = true;
                     } else {
-                      // Categories on summary page should not be active
                       isActive = false;
                     }
                   }
-                  // Use secondary styling for all items on create, update, and summary pages
                   const useSecondary =
                     onNewAuditPage || onUpdateAuditPage || onSummaryPage;
-                  // Test page: active = white bg, inactive = primary color with opacity + white text
                   const isTestPageCategory = onTestPage && isCategoryItem;
                   const isEditing =
                     itemCategoryNumber !== null &&
                     editingCategory === itemCategoryNumber;
-                  // Check if this is a navigation item (ALL AUDITS, ALL TEAM MEMBERS)
                   const isNavigationItem =
                     !isCategoryItem && item.name !== "Summary";
 
-                  // Determine background and text colors
                   let backgroundColor = "white";
                   let textColor = primaryColor;
 
                   if (useSecondary) {
-                    // Create/Update pages: use secondary styling
                     backgroundColor = isActive ? "transparent" : secondaryColor;
                     textColor = isActive ? "black" : "white";
                   } else if (isTestPageCategory) {
-                    // Test page: active = white, inactive = primary with opacity
                     backgroundColor = isActive ? "transparent" : secondaryColor;
                     textColor = isActive ? "black" : "white";
                   } else if (isNavigationItem && !isActive) {
-                    // Navigation items (ALL AUDITS, ALL TEAM MEMBERS) when inactive: match category button style
-                    // Use primary color with opacity background and white text (like category buttons on create/update pages)
                     backgroundColor = secondaryColor;
                     textColor = "white";
                   } else {
-                    // Default: white background
                     backgroundColor = isActive ? "transparent" : "white";
                     textColor = isActive ? "black" : secondaryColor;
                   }
@@ -1217,9 +1284,20 @@ export default function Sidebar() {
                   const isSummaryItem = item.name === "Summary";
 
                   return (
-                    <div
+                    <SidebarItem
                       key={item.name}
-                      draggable={canDrag && !isSummaryItem}
+                      item={item}
+                      isActive={isActive}
+                      isEditing={isEditing}
+                      isCategoryItem={isCategoryItem}
+                      itemCategoryNumber={itemCategoryNumber}
+                      backgroundColor={backgroundColor}
+                      textColor={textColor}
+                      isDragging={isDragging}
+                      isDragOver={isDragOver}
+                      canDrag={canDrag}
+                      isSummaryItem={isSummaryItem}
+                      useSecondary={useSecondary}
                       onDragStart={(e) => {
                         if (!canDrag || isSummaryItem) {
                           e.preventDefault();
@@ -1239,394 +1317,84 @@ export default function Sidebar() {
                         canDrag && !isSummaryItem
                           ? (e) =>
                               handleCategoryDragOver(e, itemCategoryNumber! - 1)
-                          : undefined
+                          : () => {}
                       }
                       onDragLeave={
                         canDrag && !isSummaryItem
                           ? handleCategoryDragLeave
-                          : undefined
+                          : () => {}
                       }
                       onDrop={
                         canDrag && !isSummaryItem
                           ? (e) =>
                               handleCategoryDrop(e, itemCategoryNumber! - 1)
-                          : undefined
+                          : () => {}
                       }
-                      onClick={(e) => {
-                        // Allow clicking through to button for Summary items
-                        if (isSummaryItem) {
-                          e.stopPropagation();
+                      onItemClick={() => {
+                        const isNonCategoryItem = itemCategoryNumber === null;
+                        const canNavigate =
+                          !isEditing &&
+                          (isSummaryItem ||
+                            isNonCategoryItem ||
+                            (itemCategoryNumber !== null &&
+                              editingIconCategory !== itemCategoryNumber));
+
+                        if (canNavigate) {
+                          router.push(item.href);
                         }
                       }}
-                      className={`h-[68px] cursor-pointer flex items-center relative ${
-                        onNewAuditPage ||
-                        onUpdateAuditPage ||
-                        onSummaryPage ||
-                        onTestPage ||
-                        isActive
-                          ? "w-[calc(100%)] mr-0 rounded-l-xl border-r-0"
-                          : "w-[92.5%] mr-1.5 rounded-xl"
-                      } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
-                      style={{
-                        padding: "0 clamp(0.75rem, 3vw, 1rem)",
-                        marginLeft: "clamp(0.75rem, 2vw, 1rem)",
-                        backgroundColor: backgroundColor,
-                        color: textColor,
-                        border:
-                          onTestPage || isActive
-                            ? "none"
-                            : useSecondary
-                              ? "2px solid #899AA9"
-                              : "none",
-                        borderRight: "none",
-                        overflow: "visible",
+                      onEditClick={(e) => {
+                        e.stopPropagation();
+                        if (itemCategoryNumber !== null) {
+                          setEditingCategory(itemCategoryNumber);
+                          if (item.href) {
+                            router.push(item.href);
+                          }
+                        }
                       }}
-                    >
-                      {isActive && (
-                        <div className="absolute inset-0 pointer-events-none">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 271 62"
-                            fill="none"
-                            preserveAspectRatio="none"
-                            className="sidebar-active-tab-svg ml-1.5 w-64 lg:w-[285px] xl:w-[288px] h-[calc(100%+16px)] absolute top-[-8px]"
-                          >
-                            <path
-                              d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
-                              fill="#F2F2F2"
-                            />
-                          </svg>
-                        </div>
-                      )}
-                      {isEditing ? (
-                        <div
-                          className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""}`}
-                        >
-                          {canDrag && !isSummaryItem && (
-                            <span
-                              onMouseDown={() =>
-                                setDragHandleCategory(itemCategoryNumber)
-                              }
-                              className={`text-xl font-light select-none mr-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"}`}
-                            >
-                              =
-                            </span>
-                          )}
-                          <button
-                            data-icon-picker-trigger
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEditingIconCategory(itemCategoryNumber);
-                            }}
-                            className={`flex items-center gap-1 shrink-0 hover:bg-black/5 rounded p-1 transition-colors ${isActive ? "text-black" : "text-white"}`}
-                            style={{ color: "inherit" }}
-                          >
-                            <div className="flex items-center justify-center">
-                              {isCategoryItem &&
-                              itemCategoryNumber !== null &&
-                              getCategoryIcon(itemCategoryNumber as number)
-                                ? renderIcon(
-                                    getCategoryIcon(
-                                      itemCategoryNumber as number,
-                                    ),
-                                  )
-                                : item.icon}
-                            </div>
-                            <LucideIcons.ChevronDown size={14} />
-                          </button>
-                          <input
-                            type="text"
-                            defaultValue={getCategoryName(
-                              itemCategoryNumber as number,
-                            )}
-                            autoFocus
-                            onBlur={(e) => {
-                              if (itemCategoryNumber !== null) {
-                                // If focus is moving to the icon picker trigger, don't close edit mode
-                                const isIconTrigger = (
-                                  e.relatedTarget as HTMLElement
-                                )?.closest("[data-icon-picker-trigger]");
-
-                                handleCategoryNameUpdate(
-                                  itemCategoryNumber,
-                                  e.target.value,
-                                );
-
-                                if (!isIconTrigger) {
-                                  setEditingCategory(null);
-                                }
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (itemCategoryNumber !== null) {
-                                if (e.key === "Enter") {
-                                  handleCategoryNameUpdate(
-                                    itemCategoryNumber,
-                                    e.currentTarget.value,
-                                  );
-                                  setEditingCategory(null);
-                                } else if (e.key === "Escape") {
-                                  setEditingCategory(null);
-                                }
-                              }
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex-1 bg-transparent outline-none border-none text-left"
-                            style={{
-                              color: "inherit",
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
-                              fontWeight: 500,
-                              fontVariationSettings: "'wdth' 65, 'wght' 500",
-                              fontSize: "clamp(20px, 1.8vw, 27px)",
-                            }}
-                          />
-
-                          {/* Icon Picker Dropdown */}
-                          {editingIconCategory === itemCategoryNumber && (
-                            <div
-                              className="absolute top-full left-0 mt-1"
-                              style={{
-                                zIndex: 99999,
-                                overflow: "visible",
-                                position: "absolute",
-                              }}
-                              onMouseDown={(e) => {
-                                e.stopPropagation();
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                            >
-                              <IconPicker
-                                value={getCategoryIcon(
-                                  itemCategoryNumber as number,
-                                )}
-                                onChange={(iconName) => {
-                                  handleCategoryIconUpdate(
-                                    itemCategoryNumber as number,
-                                    iconName,
-                                  );
-                                  setEditingIconCategory(null);
-                                }}
-                                placeholder="Select icon"
-                                showButton={false}
-                                isOpen={true}
-                                onClose={() => setEditingIconCategory(null)}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div
-                          className={`w-full h-full flex items-center justify-between relative z-10 ${isActive ? "top-[2px]" : ""}`}
-                        >
-                          <div
-                            className={`flex-1 flex items-center justify-start gap-4`}
-                          >
-                            {canDrag && !isSummaryItem && (
-                              <span
-                                onMouseDown={() =>
-                                  setDragHandleCategory(itemCategoryNumber)
-                                }
-                                className={`text-xl font-light select-none mr-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"}`}
-                              >
-                                =
-                              </span>
-                            )}
-                            {/* Category icon - only show if not active or if we're not on the main page to prevent shifting */}
-                            {(!isActive ||
-                              (isCategoryItem &&
-                                itemCategoryNumber !== null)) && (
-                              <div
-                                className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
-                              >
-                                {isCategoryItem &&
-                                itemCategoryNumber !== null &&
-                                getCategoryIcon(itemCategoryNumber)
-                                  ? renderIcon(
-                                      getCategoryIcon(itemCategoryNumber),
-                                    )
-                                  : item.icon}
-                              </div>
-                            )}
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                // Allow navigation if:
-                                // 1. Not editing category name
-                                // 2. Either it's a category item (itemCategoryNumber !== null) and not editing icon, OR it's the Summary item, OR it's a non-category item (like ALL AUDITS)
-                                const isSummaryItem = item.name === "Summary";
-                                const isNonCategoryItem =
-                                  itemCategoryNumber === null && !isSummaryItem;
-                                const canNavigate =
-                                  !isEditing &&
-                                  (isSummaryItem ||
-                                    isNonCategoryItem ||
-                                    (itemCategoryNumber !== null &&
-                                      editingIconCategory !==
-                                        itemCategoryNumber));
-                                if (canNavigate) {
-                                  console.log("Navigating to:", item.href);
-                                  router.push(item.href);
-                                } else {
-                                  console.log("Navigation blocked:", {
-                                    isEditing,
-                                    isSummaryItem,
-                                    itemCategoryNumber,
-                                    editingIconCategory,
-                                  });
-                                }
-                              }}
-                              className={`flex-1 cursor-pointer flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} wrap-break-word`}
-                              // style={{ color: 'inherit' }}
-                            >
-                              <span
-                                className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
-                                style={{
-                                  fontFamily:
-                                    "'Acumin Variable Concept', sans-serif",
-                                  fontWeight: 500,
-                                  fontSize: "clamp(20px, 1.8vw, 27px)",
-                                  letterSpacing: "0.006em",
-                                  fontVariationSettings:
-                                    "'wdth' 65, 'wght' 500",
-                                }}
-                              >
-                                {item.name}
-                              </span>
-                            </button>
-                          </div>
-
-                          {isCategoryItem &&
-                            itemCategoryNumber !== null &&
-                            (onNewAuditPage || onUpdateAuditPage) && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingCategory(itemCategoryNumber);
-                                  if (item.href) {
-                                    router.push(item.href);
-                                  }
-                                }}
-                                className="p-1 rounded hover:bg-white/20 cursor-pointer flex items-center"
-                                style={{ color: "inherit" }}
-                                aria-label="Edit category name"
-                              >
-                                <FiEdit size={12} />
-                              </button>
-                            )}
-                        </div>
-                      )}
-                    </div>
+                      onMouseDownDrag={() => {
+                        if (itemCategoryNumber !== null) {
+                          setDragHandleCategory(itemCategoryNumber);
+                        }
+                      }}
+                      onIconPickerTrigger={(e) => {
+                        e.stopPropagation();
+                        if (itemCategoryNumber !== null) {
+                          setEditingIconCategory(itemCategoryNumber);
+                        }
+                      }}
+                      onCategoryNameUpdate={(newName) => {
+                        if (itemCategoryNumber !== null) {
+                          handleCategoryNameUpdate(itemCategoryNumber, newName);
+                        }
+                      }}
+                      onCategoryIconUpdate={(iconName) => {
+                        if (itemCategoryNumber !== null) {
+                          handleCategoryIconUpdate(
+                            itemCategoryNumber,
+                            iconName,
+                          );
+                        }
+                      }}
+                      editingIconCategory={editingIconCategory}
+                      setEditingIconCategory={setEditingIconCategory}
+                      setEditingCategory={setEditingCategory}
+                      getCategoryName={getCategoryName}
+                      getCategoryIcon={getCategoryIcon}
+                      renderIcon={renderIcon}
+                    />
                   );
                 })}
           </>
         )}
       </nav>
 
-      {/* User Profile Section or Action Buttons */}
-      <div
-        className="pt-2 mt-auto overflow-hidden shrink-0"
-        style={{
-          position: "relative",
-          zIndex: 2,
-          paddingBottom: "clamp(.5rem, 3vw, .75rem)",
-        }}
-      >
-        {onResultPage ? (
-          <div>
-            <div className="px-4 mt-6">
-              <h3 className="text-lg text-white mb-3 uppercase text-center">
-                Testimonials
-              </h3>
-              <div className="space-y-4">
-                <div className="bg-white/10 rounded-lg p-3  text-center">
-                  <p className="text-white text-xs leading-relaxed ">
-                    This audit system has transformed how we track and improve
-                    our processes. The comprehensive scoring and detailed
-                    recommendations help us identify areas for urgent attention.
-                  </p>
-                </div>
-                <div className="bg-white/10 rounded-lg p-3  text-center">
-                  <p className="text-white text-xs leading-relaxed ">
-                    The category-based assessment structure makes it easy to
-                    focus on specific areas. The summary overview provides clear
-                    insights for continuous improvement.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-2 mb-8 sidebar-bottom-info">
-              <CustomButton
-                onClick={handleLogout}
-                className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-                style={{ fontSize: "inherit" }}
-              >
-                Logout
-              </CustomButton>
-
-              <button
-                onClick={() => router.push("/")}
-                className="w-full py-1 h-10 cursor-pointer rounded-full bg-transparent border border-white/50  font-semibold text-white transition-colors text-center"
-              >
-                Exit
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div
-              className="flex items-center justify-center"
-              style={{ marginBottom: "clamp(0.25rem, 1vw, 0.5rem)" }}
-            >
-              {user.profileImageUrl ? (
-                <Image
-                  className="sidebar-profile-image w-[210px] h-[230px] object-cover cursor-pointer"
-                  src={user.profileImageUrl}
-                  alt="Profile"
-                  width={210}
-                  height={230}
-                  onClick={() => router.push("/profile")}
-                  style={{
-                    width: "clamp(100px, 18vw, 210px)",
-                    height: "clamp(120px, 25vh, 230px)",
-                    objectPosition: "center 20%",
-                    border: `5px solid ${user.secondaryColor}`,
-                  }}
-                />
-              ) : (
-                <div
-                  className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
-                  onClick={() => router.push("/profile")}
-                  style={{
-                    width: "clamp(100px, 18vw, 210px)",
-                    height: "clamp(120px, 25vh, 230px)",
-                  }}
-                >
-                  <span
-                    className="font-medium text-gray-700 sidebar-bottom-info"
-                    style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}
-                  >
-                    {user.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              )}
-            </div>
-            <p
-              className="font-medium text-white text-center underline cursor-pointer sidebar-bottom-info"
-              style={{
-                fontSize: "clamp(0.875rem, 3vw, 1.125rem)",
-                marginTop: "clamp(0.25rem, 1vw, 0.5rem)",
-              }}
-              onClick={handleLogout}
-            >
-              Logout
-            </p>
-          </>
-        )}
-      </div>
+      <SidebarFooter
+        onResultPage={onResultPage}
+        user={user}
+        handleLogout={handleLogout}
+        router={router}
+      />
     </div>
   );
 }

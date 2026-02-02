@@ -20,281 +20,75 @@ interface IconPickerProps {
 
 // Curated lucide-react icons list - most commonly used icons
 const POPULAR_ICONS = [
-  // Basic UI & Actions
-  "Folder",
-  "FileText",
-  "Settings",
-  "User",
-  "Users",
-  "Edit",
-  "Trash",
-  "Save",
-  "Copy",
-  "Download",
-  "Upload",
-  "Plus",
-  "Minus",
-  "X",
-  "Check",
-  "Search",
-  "Filter",
-  "Grid",
-  "List",
+  // Navigation & UI (9)
+  "Home",
   "Menu",
-  "MoreHorizontal",
-  "MoreVertical",
-
-  // Navigation & Arrows
-  "ArrowRight",
-  "ArrowLeft",
-  "ArrowUp",
-  "ArrowDown",
+  "X",
   "ChevronDown",
+  "ChevronUp",
   "ChevronLeft",
   "ChevronRight",
-  "ChevronUp",
-  "Home",
-  "Navigation",
-  "Compass",
-  "Map",
-  "MapPin",
-  "Globe",
+  "MoreVertical",
+  "MoreHorizontal",
+
+  // Actions (11)
+  "Search",
+  "Settings",
+  "Plus",
+  "Minus",
+  "Edit",
+  "Trash",
+  "Download",
+  "Upload",
+  "Save",
+  "Copy",
+  "Check",
+
+  // Files & Folders (5)
+  "Folder",
+  "FolderOpen",
+  "File",
+  "FileText",
+  "Image",
+
+  // Communication (5)
+  "Mail",
+  "Send",
+  "MessageSquare",
+  "Bell",
+  "Phone",
+
+  // User & Account (7)
+  "User",
+  "Users",
+  "UserPlus",
+  "LogOut",
+  "LogIn",
+  "Lock",
+  "Unlock",
+
+  // Content (7)
+  "Eye",
+  "EyeOff",
+  "Star",
+  "Heart",
+  "Share",
   "Link",
   "ExternalLink",
 
-  // Communication
-  "Mail",
-  "MessageSquare",
-  "Phone",
-  "Video",
-  "Camera",
-  "Mic",
-  "Bell",
-  "Share",
-  "Send",
-
-  // Media & Files
-  "Image",
-  "Music",
-  "Film",
-  "Play",
-  "Pause",
-  "Stop",
-  "Volume2",
-  "File",
-  "Files",
-  "FolderOpen",
-  "FolderPlus",
-  "FileCheck",
-  "FileX",
-  "FileImage",
-  "FileVideo",
-  "FileAudio",
-  "FileCode",
-  "FileZip",
-
-  // Data & Charts
+  // Data & Analytics (5)
   "BarChart",
   "PieChart",
-  "LineChart",
   "TrendingUp",
   "TrendingDown",
   "Activity",
-  "Pulse",
-  "Gauge",
 
-  // Status & Alerts
-  "CheckCircle",
+  // Status & Feedback (5)
   "AlertCircle",
-  "AlertTriangle",
-  "Info",
-  "Star",
-  "Heart",
-  "Bookmark",
-  "Tag",
-  "Flag",
-  "Target",
-  "Award",
-  "Trophy",
-  "Medal",
-  "Crown",
-
-  // Time & Calendar
-  "Calendar",
-  "Clock",
-  "Timer",
-  "History",
-
-  // Security & Access
-  "Lock",
-  "Unlock",
-  "Shield",
-  "Key",
-  "Eye",
-  "EyeOff",
-  "Fingerprint",
-
-  // Tools & Utilities
-  "Scissors",
-  "Printer",
-  "Wrench",
-  "Tool",
-  "Hammer",
-  "Cog",
-  "Settings2",
-  "Zap",
-  "Battery",
-  "Wifi",
-  "Power",
-  "PowerOff",
-  "RefreshCw",
-  "RefreshCcw",
-  "RotateCw",
-  "RotateCcw",
-
-  // Business & Finance
-  "ShoppingCart",
-  "CreditCard",
-  "DollarSign",
-  "Coins",
-  "Briefcase",
-  "Building",
-  "Store",
-  "Receipt",
-
-  // Education & Learning
-  "Book",
-  "BookOpen",
-  "GraduationCap",
-  "School",
-  "Library",
-
-  // Technology
-  "Code",
-  "Database",
-  "Server",
-  "Cloud",
-  "Computer",
-  "Laptop",
-  "Smartphone",
-  "Tablet",
-  "Monitor",
-  "Cpu",
-  "HardDrive",
-  "Usb",
-  "Bluetooth",
-  "WifiOff",
-
-  // Design & Creative
-  "Palette",
-  "PenTool",
-  "Paintbrush",
-  "Layers",
-  "LayoutDashboard",
-  "Frame",
-
-  // Shapes & Symbols
-  "Circle",
-  "Square",
-  "Triangle",
-  "Hexagon",
-  "Diamond",
-
-  // Weather & Nature
-  "Sun",
-  "Moon",
-  "CloudRain",
-  "CloudSnow",
-  "CloudLightning",
-  "Umbrella",
-  "Droplet",
-  "Flame",
-  "Leaf",
-  "Tree",
-  "Flower",
-  "Mountain",
-
-  // Social & Brand
-  "Facebook",
-  "Twitter",
-  "Instagram",
-  "Linkedin",
-  "Youtube",
-  "Github",
-  "Gitlab",
-  "Dribbble",
-  "Slack",
-
-  // Miscellaneous
-  "Package",
-  "Box",
-  "Archive",
-  "Gift",
-  "Rocket",
-  "Lightbulb",
-  "Sparkles",
-  "Wand2",
-  "QrCode",
-  "Scan",
-  "Barcode",
-  "Ticket",
-  "Tags",
-  "Pin",
-  "Paperclip",
-  "Clipboard",
-  "StickyNote",
-  "Notebook",
-  "Pen",
-  "Pencil",
-  "Highlighter",
-  "Calculator",
-  "Stopwatch",
-  "Coffee",
-  "Utensils",
-  "ShoppingBag",
-  "ShoppingBasket",
-  "Car",
-  "Plane",
-  "Train",
-  "Bike",
-  "Ship",
-  "Truck",
-  "Gamepad",
-  "Tv",
-  "Radio",
-  "Headphones",
-  "Speaker",
-  "Smile",
-  "Laugh",
-  "Meh",
-  "Frown",
-  "HelpCircle",
+  "CheckCircle",
   "XCircle",
-  "PlusCircle",
-  "MinusCircle",
-  "Maximize",
-  "Minimize",
-  "Shrink",
-  "Move",
-  "Undo",
-  "Redo",
-  "Cut",
-  "Paste",
-  "Bold",
-  "Italic",
-  "Underline",
-  "Strikethrough",
-  "AlignLeft",
-  "AlignCenter",
-  "AlignRight",
-  "AlignJustify",
-  "ListOrdered",
-  "LogIn",
-  "LogOut",
-  "UserPlus",
-  "UserMinus",
-  "UserCheck",
-  "UserX",
+  "Info",
+  "HelpCircle",
 ] as const;
 
 export default function IconPicker({
@@ -339,15 +133,15 @@ export default function IconPicker({
   // Filter icons based on search query
   const filteredLucideIcons = searchQuery.trim()
     ? POPULAR_ICONS.filter((icon) =>
-        icon.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      icon.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : POPULAR_ICONS;
 
   const customIcons = iconesData?.data || [];
   const filteredCustomIcons = searchQuery.trim()
     ? customIcons.filter((icon) =>
-        icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : customIcons;
 
   // Close dropdown when clicking outside
@@ -552,9 +346,8 @@ export default function IconPicker({
             )}
           </div>
           <svg
-            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${
-              isOpen ? "rotate-180" : ""
-            }`}
+            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${isOpen ? "rotate-180" : ""
+              }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -587,8 +380,8 @@ export default function IconPicker({
             data-icon-picker-dropdown
             className="bg-white border border-gray-200 rounded-xl shadow-2xl"
             style={{
-              width: "clamp(280px, 320px, 90vw)",
-              height: "clamp(300px, 350px, 70vh)",
+              width: "clamp(250px, 20vw, 288px)",
+              height: "clamp(280px, 20vh, 312px)",
               display: "flex",
               flexDirection: "column",
               top: `${dropdownPosition.top}px`,
@@ -655,7 +448,7 @@ export default function IconPicker({
                   <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">
                     Your Icons
                   </p>
-                  <div className="grid grid-cols-5 lg:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-5 gap-2">
                     {filteredCustomIcons.map((icon) => (
                       <button
                         key={icon.id}
@@ -665,11 +458,10 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleCustomIconSelect(icon.iconUrl);
                         }}
-                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
-                          value === icon.iconUrl
-                            ? "ring-2 ring-blue-500 bg-blue-50"
-                            : "border border-gray-200"
-                        }`}
+                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === icon.iconUrl
+                          ? "ring-2 ring-blue-500 bg-blue-50"
+                          : "border border-gray-200"
+                          }`}
                         title={icon.name}
                       >
                         <Image
@@ -692,7 +484,7 @@ export default function IconPicker({
                     Standard Icons
                   </p>
                 )}
-                <div className="grid grid-cols-5 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {filteredLucideIcons.map((iconName) => {
                     const IconComponent = (
                       LucideIcons as unknown as Record<
@@ -717,11 +509,10 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleIconSelect(iconName);
                         }}
-                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
-                          value === iconName
-                            ? "ring-2 ring-blue-500 bg-blue-50"
-                            : "border border-gray-200"
-                        }`}
+                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === iconName
+                          ? "ring-2 ring-blue-500 bg-blue-50"
+                          : "border border-gray-200"
+                          }`}
                         title={iconName}
                       >
                         <IconComponent className="w-5 h-5" />

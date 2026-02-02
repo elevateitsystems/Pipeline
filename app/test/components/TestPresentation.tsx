@@ -53,18 +53,18 @@ export default function TestPresentation() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-          auditData as Presentation & {
-            summary?: {
-              categoryRecommendations?:
-                | string
-                | Array<{ categoryId: string; recommendation: string }>;
-              nextSteps?:
-                | string
-                | Array<{ type: string; content: string; fileUrl?: string }>;
-              overallDetails?: string | null;
-            } | null;
-          }
-        )?.summary || null
+        auditData as Presentation & {
+          summary?: {
+            categoryRecommendations?:
+            | string
+            | Array<{ categoryId: string; recommendation: string }>;
+            nextSteps?:
+            | string
+            | Array<{ type: string; content: string; fileUrl?: string }>;
+            overallDetails?: string | null;
+          } | null;
+        }
+      )?.summary || null
       : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
@@ -473,7 +473,7 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="mt-1 text-black text-center font-medium line-clamp-3 leading-tight"
+          className="mt-1 text-black text-center font-medium line-clamp-2 leading-tight"
           style={{
             fontFamily: "'Acumin Variable Concept', sans-serif",
             fontWeight: 500,
@@ -917,13 +917,12 @@ export default function TestPresentation() {
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl  border-r-2  border-white ">
                 <div
-                  className={`rounded-tl-xl text-center py-1 ${
-                    currentCategoryScore >= 1 &&
+                  className={`rounded-tl-xl text-center py-1 ${currentCategoryScore >= 1 &&
                     currentCategoryScore <=
-                      Math.floor(currentCategoryMaxScore * 0.4)
-                      ? "bg-[#F65355] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    Math.floor(currentCategoryMaxScore * 0.4)
+                    ? "bg-[#F65355] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
+                    }`}
                 >
                   <h3
                     className="text-base font-semibold"
@@ -952,14 +951,13 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 ${
-                    currentCategoryScore >
-                      Math.floor(currentCategoryMaxScore * 0.4) &&
+                  className={`text-center py-1 ${currentCategoryScore >
+                    Math.floor(currentCategoryMaxScore * 0.4) &&
                     currentCategoryScore <=
-                      Math.floor(currentCategoryMaxScore * 0.8)
-                      ? "bg-[#F7AF41] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    Math.floor(currentCategoryMaxScore * 0.8)
+                    ? "bg-[#F7AF41] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
+                    }`}
                 >
                   <h3
                     className="text-base font-semibold"
@@ -989,12 +987,11 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${
-                    currentCategoryScore >
+                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${currentCategoryScore >
                     Math.floor(currentCategoryMaxScore * 0.8)
-                      ? "bg-[#2BD473] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    ? "bg-[#2BD473] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
+                    }`}
                 >
                   <h3
                     className="text-base font-semibold"

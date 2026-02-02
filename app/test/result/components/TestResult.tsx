@@ -32,18 +32,18 @@ export default function TestResult() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-          auditData as Presentation & {
-            summary?: {
-              categoryRecommendations?:
-                | string
-                | Array<{ categoryId: string; recommendation: string }>;
-              nextSteps?:
-                | string
-                | Array<{ type: string; content: string; fileUrl?: string }>;
-              overallDetails?: string | null;
-            } | null;
-          }
-        )?.summary || null
+        auditData as Presentation & {
+          summary?: {
+            categoryRecommendations?:
+            | string
+            | Array<{ categoryId: string; recommendation: string }>;
+            nextSteps?:
+            | string
+            | Array<{ type: string; content: string; fileUrl?: string }>;
+            overallDetails?: string | null;
+          } | null;
+        }
+      )?.summary || null
       : null;
 
   useEffect(() => {
@@ -155,14 +155,14 @@ export default function TestResult() {
           <div className="mb-6">
             <div className="flex justify-between items-start mb-3">
               <div className="flex gap-20">
-                <h1 className="text-3xl font-semibold text-gray-900 mb-1">
+                <h1 className="text-3xl text-nowrap text-[#2D2D2D] mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                  <h2 className="text-3xl  text-[#2B4055] mb-1">
                     YOUR SALES CONVERSION SCORE
                   </h2>
-                  <p className="text-sm text-gray-600 leading-relaxed ">
+                  <p className="text-gray-600 text-lg leading-relaxed ">
                     Your overall performance score based on the audit
                     assessment. This score reflects your current standing across
                     all evaluated categories and provides insight into your
@@ -246,8 +246,8 @@ export default function TestResult() {
             </div>
 
             {/* AUDIT TOTAL SCORE Progress Bar */}
-            <div className="  relative rounded-lg">
-              <h3 className="text-sm font-semibold text-gray-800  uppercase">
+            <div className="relative rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-800  uppercase">
                 AUDIT TOTAL SCORE ({totalScore} / {totalMaxScore})
               </h3>
               <div className="relative w-full h-3 mt-2 flex items-center rounded-full ">
@@ -276,7 +276,7 @@ export default function TestResult() {
                   }}
                 >
                   <div className="w-10 h-8 bg-[#456987] rounded-lg flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-sm">
+                    <span className="text-white font-bold">
                       {totalScore}
                     </span>
                   </div>
@@ -287,7 +287,7 @@ export default function TestResult() {
 
           {/* VISUAL BREAKDOWN RESULTS Section */}
           <div className="mb-4 border-t pt-4 border-gray-300">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-3xl text-[#2D2D2D] mb-3">
               VISUAL BREAKDOWN RESULTS
             </h2>
             <div className="bg-[#EFEFEF] p-4 rounded-lg">
@@ -313,7 +313,7 @@ export default function TestResult() {
                   return (
                     <div
                       key={cs.categoryId}
-                      className="px-4 py-2 rounded-lg font-semibold uppercase text-sm border-2"
+                      className="px-4 py-2 truncate text-lg rounded-lg font-semibold uppercase border-2"
                       style={{
                         borderColor: borderColor,
                         backgroundColor: bgColor,
@@ -325,7 +325,7 @@ export default function TestResult() {
                   );
                 })}
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-gray-600 text-lg leading-relaxed">
                 The visual breakdown above represents your performance across
                 the top four categories. Each category is color-coded based on
                 your score: red indicates areas requiring urgent attention,
@@ -341,7 +341,7 @@ export default function TestResult() {
           <div className="grid grid-cols-2 gap-6 mb-2 border-y py-2 border-gray-300">
             {/* Left Column - IMPROVEMENT RECOMMENDATIONS */}
             <div className="border-r pr-6 border-gray-300">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl text-[#2D2D2D] mb-4">
                 IMPROVEMENT RECOMMENDATIONS
               </h2>
               <div className="space-y-4">
@@ -352,13 +352,10 @@ export default function TestResult() {
                   return (
                     <div
                       key={cs.categoryId}
-                      className={`pb-1 ${index === lastThreeCategories.length - 1 ? "" : "border-b border-gray-300"}`}
+                      className={`pb-1 ${index === lastThreeCategories.length - 1 ? "" : "border-b min-h-20 line-clamp-3 border-gray-300"}`}
                     >
-                      <h3 className="text-base font-bold text-gray-900 mb-2">
-                        {cs.categoryName}:
-                      </h3>
-                      <p className="text-sm text-gray-600 leading-relaxed">
-                        {recommendation ||
+                      <p className="text-gray-600 text-lg leading-relaxed">
+                        <span className="text-[#2B4055] font-bold">{cs.categoryName}:</span> {recommendation ||
                           "No specific recommendations available for this category."}
                       </p>
                     </div>
@@ -369,7 +366,7 @@ export default function TestResult() {
 
             {/* Right Column - WHAT ARE THE NEXT STEPS? */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl text-[#2D2D2D] mb-4">
                 WHAT ARE THE NEXT STEPS?
               </h2>
               <div className="space-y-3 mb-4 grid grid-cols-3 gap-4">
@@ -381,52 +378,52 @@ export default function TestResult() {
                     : [];
                   return Array.isArray(nextSteps) && nextSteps.length > 0
                     ? nextSteps
-                        .slice(0, 3)
-                        .map(
-                          (
-                            step: {
-                              type: string;
-                              content: string;
-                              fileUrl?: string;
-                            },
-                            index: number,
-                          ) => (
-                            <div
-                              key={index}
-                              className="w-full h-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left"
-                            >
-                              {step.type === "file" && step.fileUrl ? (
-                                <div className="flex items-center gap-2">
-                                  <Image
-                                    src={step.fileUrl}
-                                    alt="Step"
-                                    width={140}
-                                    height={140}
-                                    className="object-contain rounded w-full h-[120px]"
-                                  />
-                                </div>
-                              ) : (
-                                <p className="text-sm text-gray-600">
-                                  {step.content ||
-                                    `Enter step ${index + 1} details`}
-                                </p>
-                              )}
-                            </div>
-                          ),
-                        )
+                      .slice(0, 3)
+                      .map(
+                        (
+                          step: {
+                            type: string;
+                            content: string;
+                            fileUrl?: string;
+                          },
+                          index: number,
+                        ) => (
+                          <div
+                            key={index}
+                            className="w-full h-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left min-h-30"
+                          >
+                            {step.type === "file" && step.fileUrl ? (
+                              <div className="flex items-center gap-2">
+                                <Image
+                                  src={step.fileUrl}
+                                  alt="Step"
+                                  width={140}
+                                  height={140}
+                                  className="object-contain rounded w-full h-[120px]"
+                                />
+                              </div>
+                            ) : (
+                              <p className="text-gray-600">
+                                {step.content ||
+                                  `Enter step ${index + 1} details`}
+                              </p>
+                            )}
+                          </div>
+                        ),
+                      )
                     : [1, 2, 3].map((step) => (
-                        <div
-                          key={step}
-                          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left"
-                        >
-                          <p className="text-sm text-gray-400">
-                            Enter step {step} details
-                          </p>
-                        </div>
-                      ));
+                      <div
+                        key={step}
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left min-h-40"
+                      >
+                        <p className="text-sm text-gray-400">
+                          Enter step {step} details
+                        </p>
+                      </div>
+                    ));
                 })()}
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-gray-600 text-lg leading-relaxed">
                 {summaryData?.overallDetails ||
                   "Based on your audit results, focus on implementing the recommended improvements in the areas with the lowest scores. Start with the most critical categories that require urgent attention, then work through the next steps systematically. Regular follow-up assessments will help you track your progress and ensure continuous improvement across all evaluated areas."}
               </p>
@@ -434,11 +431,11 @@ export default function TestResult() {
           </div>
 
           {/* Want to Skip the Line? Section */}
-          <div className="text-center bg-[#EFEFEF] py-2 rounded-xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className="text-center bg-[#EFEFEF] py-2 mt-5 rounded-xl">
+            <h2 className="text-2xl font-semibold text-[#2D2D2D] mb-2">
               Want to Skip the Line?
             </h2>
-            <p className="text-sm text-gray-600 leading-relaxed mb-4 max-w-3xl mx-auto">
+            <p className="text-gray-600 leading-relaxed mb-4 max-w-3xl mx-auto">
               For action-takers ready to eliminate their conversion leaks
               immediately, schedule a strategy call. We&apos;ll map out how your
               personalized Pipeline Conversion Kit could look-so you can start

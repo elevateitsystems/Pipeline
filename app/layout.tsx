@@ -5,8 +5,10 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ReactQueryProvider } from "@/lib/react-query";
 import { getSession } from "@/lib/session";
 import Sidebar from "@/components/Sidebar";
+import SidebarSkeleton from "@/components/SidebarSkeleton";
 import BackgroundWrapper from "@/components/BackgroundWrapper";
 import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 
 import ScalingWrapper from "@/components/ScalingWrapper";
 
@@ -32,7 +34,9 @@ export default async function RootLayout({
                 <ScalingWrapper>
                   {session ? (
                     <div className="flex h-full w-full">
-                      <Sidebar />
+                      <Suspense fallback={<SidebarSkeleton />}>
+                        <Sidebar />
+                      </Suspense>
                       <main className="flex-1">{children}</main>
                     </div>
                   ) : (
