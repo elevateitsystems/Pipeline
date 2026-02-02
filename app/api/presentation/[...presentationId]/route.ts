@@ -126,13 +126,62 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
   }
 }
 
+// export async function DELETE(request: NextRequest): Promise<NextResponse> {
+//   const url = new URL(request.url);
+//   const presentationId = url.pathname.split("/").pop();
+
+//   if (!presentationId) {
+//     return NextResponse.json(
+//       { error: "presentaton ID is required" },
+//       { status: 400 }
+//     );
+//   }
+
+//   try {
+//     // Get the presentation to know the userId before deleting
+//     const presentation = await prisma.presentation.findUnique({
+//       where: { id: presentationId },
+//     });
+
+//     if (!presentation) {
+//       return NextResponse.json(
+//         { error: "Presentation not found" },
+//         { status: 404 }
+//       );
+//     }
+
+//     await prisma.presentation.delete({
+//       where: { id: presentationId },
+//     });
+
+//     // Invalidate caches
+//     await invalidateCache(`presentation:id:${presentationId}`);
+//     await invalidateCache(`presentation:${presentation.userId}`);
+
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         message: "Presenation deleted successfully",
+//       },
+//       { status: 200 }
+//     );
+//   } catch (error) {
+//     console.error("Error deleting presentation:", error);
+//     return NextResponse.json(
+//       { error: "Failed to delete presentaton" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+
 export async function DELETE(request: NextRequest): Promise<NextResponse> {
   const url = new URL(request.url);
   const presentationId = url.pathname.split("/").pop();
 
   if (!presentationId) {
     return NextResponse.json(
-      { error: "presentaton ID is required" },
+      { error: "Presentation ID is required" },
       { status: 400 }
     );
   }
@@ -154,21 +203,22 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
       where: { id: presentationId },
     });
 
-    // Invalidate caches
-    await invalidateCache(`presentation:id:${presentationId}`);
-    await invalidateCache(`presentation:${presentation.userId}`);
+    // Invalidate caches in Redis
+    await invalidateCache(`presentation:id:${presentationId}`); 
+    await invalidateCache(`audit:${presentation.userId}`);      
+    await invalidateCache('categories');                        
 
     return NextResponse.json(
       {
         success: true,
-        message: "Presenation deleted successfully",
+        message: "Presentation deleted successfully",
       },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting presentation:", error);
     return NextResponse.json(
-      { error: "Failed to delete presentaton" },
+      { error: "Failed to delete presentation" },
       { status: 500 }
     );
   }
