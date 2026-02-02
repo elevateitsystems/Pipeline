@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { CustomButton } from "@/components/common";
 import SummarySection from "@/components/SummarySection";
 
-
 type OptionState = { text: string; points: number };
 
 export default function AddNewAudit() {
@@ -472,11 +471,11 @@ export default function AddNewAudit() {
       // IMPORTANT: Summary is sent as a separate field, NOT as part of categories array
       // Categories array only contains categories 1-7, summary is completely separate
 
-      console.log('Categories array only contains categories 1-7,',{
+      console.log("Categories array only contains categories 1-7,", {
         title: (auditData.title || title).trim(),
         categories, // Only categories 1-7, excludes summary
         ...(summaryData && { summary: summaryData }), // Summary is separate from categories
-      })
+      });
       const createdAudit = await createAuditMutation.mutateAsync({
         title: (auditData.title || title).trim(),
         categories, // Only categories 1-7, excludes summary
@@ -525,8 +524,7 @@ export default function AddNewAudit() {
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
       // Redirect to home page after successful creation
- router.push("/");
-
+      router.push("/");
     } catch (e) {
       toast.error("Failed to create audit. Please try again.");
       console.error(e);
@@ -534,75 +532,71 @@ export default function AddNewAudit() {
   };
 
   const convertToFormat = (rows: any) => {
-  const title =
-    rows.find((r:any) => r["Presentation Name"])?.["Presentation Name"] ||
-    "Untitled";
+    const title =
+      rows.find((r: any) => r["Presentation Name"])?.["Presentation Name"] ||
+      "Untitled";
 
-  let currentCategory = "";
+    let currentCategory = "";
 
-  const categoriesMap: Record<string, any[]> = {};
+    const categoriesMap: Record<string, any[]> = {};
 
-  rows.forEach((row: any) => {
-    if (row["Category"]) {
-      currentCategory = row["Category"];
-    }
+    rows.forEach((row: any) => {
+      if (row["Category"]) {
+        currentCategory = row["Category"];
+      }
 
-    if (!categoriesMap[currentCategory]) {
-      categoriesMap[currentCategory] = [];
-    }
+      if (!categoriesMap[currentCategory]) {
+        categoriesMap[currentCategory] = [];
+      }
 
-    const questionText = row["Question 2"];
-    if (!questionText) return;
+      const questionText = row["Question 2"];
+      if (!questionText) return;
 
-    const optionsRaw = String(row["Column 2"] || "").split(",");
+      const optionsRaw = String(row["Column 2"] || "").split(",");
 
-    const options = optionsRaw.map((opt, index) => ({
-      text: opt.trim(),
-      points: index + 1,
-    }));
+      const options = optionsRaw.map((opt, index) => ({
+        text: opt.trim(),
+        points: index + 1,
+      }));
 
-    categoriesMap[currentCategory].push({
-      text: questionText,
-      options,
+      categoriesMap[currentCategory].push({
+        text: questionText,
+        options,
+      });
     });
-  });
 
-  return {
-    title,
-    categories: Object.keys(categoriesMap).map((name) => ({
-      name,
-      questions: categoriesMap[name],
-    })),
+    return {
+      title,
+      categories: Object.keys(categoriesMap).map((name) => ({
+        name,
+        questions: categoriesMap[name],
+      })),
+    };
   };
-};
 
-const handleFileUpload = (e: any) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const handleFileUpload = (e: any) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = async (event) => {
-    if (!event.target) return;
-    const data = event.target.result;
+    reader.onload = async (event) => {
+      if (!event.target) return;
+      const data = event.target.result;
 
-    const workbook = XLSX.read(data, { type: "binary" });
+      const workbook = XLSX.read(data, { type: "binary" });
 
-    const sheetName = workbook.SheetNames[0];
+      const sheetName = workbook.SheetNames[0];
 
-    const rows = XLSX.utils.sheet_to_json(
-      workbook.Sheets[sheetName]
-    );
+      const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
-    const formattedData = convertToFormat(rows);
+      const formattedData = convertToFormat(rows);
 
-    console.log("Converted JSON:", formattedData);
+      console.log("Converted JSON:", formattedData);
 
-    // 👉 Save it to state or send directly
-   const createdAudit = await createAuditMutation.mutateAsync(formattedData);
-   toast.success("Audit created successfully");
-
-
+      // 👉 Save it to state or send directly
+      const createdAudit = await createAuditMutation.mutateAsync(formattedData);
+      toast.success("Audit created successfully");
 
       // Clear full sessionStorage after successful creation
       if (typeof window !== "undefined") {
@@ -612,11 +606,11 @@ const handleFileUpload = (e: any) => {
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
       // Redirect to home page after successful creation
- router.push("/");
-  };
+      router.push("/");
+    };
 
-  reader.readAsBinaryString(file);
-};
+    reader.readAsBinaryString(file);
+  };
   return (
     <div className="">
       <header className="">
@@ -677,7 +671,7 @@ const handleFileUpload = (e: any) => {
             >
               Back to List
             </button>
-           <CustomButton
+            <CustomButton
               variant="primary"
               size="md"
               className="flex-1"
@@ -687,21 +681,17 @@ const handleFileUpload = (e: any) => {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-<div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
-    <input
-    type="file"
-    accept=".csv,.xlsx,.xls"
-    onChange={handleFileUpload}
-    className="hidden"
-    id="auditUpload"
-  />
+            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
+              <input
+                type="file"
+                accept=".csv,.xlsx,.xls"
+                onChange={handleFileUpload}
+                className="hidden"
+                id="auditUpload"
+              />
 
-  <label
-    htmlFor="auditUpload"
-  >
-    Upload File
-  </label>
-</div>
+              <label htmlFor="auditUpload">Upload File</label>
+            </div>
           </div>
         </div>
 

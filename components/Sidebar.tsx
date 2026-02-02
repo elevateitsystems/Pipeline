@@ -42,6 +42,8 @@ import {
   FolderOpen,
   File,
   FileText,
+  List,
+  CheckSquare,
 
   // Communication
   Mail,
@@ -81,7 +83,7 @@ import {
   XCircle,
   Info,
   HelpCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 // Mapping for dynamic icon rendering without bundling the whole library
 const IconMap: Record<
@@ -141,6 +143,8 @@ const IconMap: Record<
   Share2,
   Link,
   ExternalLink,
+  List,
+  CheckSquare,
 
   // Data & Analytics
   BarChart,
@@ -258,7 +262,7 @@ export default function Sidebar() {
               }
             }
           }
-        } catch { }
+        } catch {}
       }
       setCategoryNames(names);
     };
@@ -440,7 +444,7 @@ export default function Sidebar() {
             }
           }
         }
-      } catch { }
+      } catch {}
       return fallback;
     },
     [categoryNames, mounted],
@@ -475,7 +479,7 @@ export default function Sidebar() {
             }
           }
         }
-      } catch { }
+      } catch {}
       return undefined;
     },
     [categoryIcons, mounted],
@@ -821,13 +825,13 @@ export default function Sidebar() {
                 const statusData = oldData.statuses[Number(qNum)];
                 const options = statusData
                   ? JSON.parse(statusData).map((text: string, idx: number) => ({
-                    text,
-                    points: idx + 1,
-                  }))
+                      text,
+                      points: idx + 1,
+                    }))
                   : Array.from({ length: 5 }, (_, idx) => ({
-                    text: `Option ${idx + 1}`,
-                    points: idx + 1,
-                  }));
+                      text: `Option ${idx + 1}`,
+                      points: idx + 1,
+                    }));
 
                 return {
                   text: questionText || "",
@@ -1020,20 +1024,20 @@ export default function Sidebar() {
       ...(isInvitedUser
         ? []
         : [
-          {
-            name: "ALL TEAM MEMBERS",
-            href: "/invited-users",
-            icon: "",
-          },
-        ]),
+            {
+              name: "ALL TEAM MEMBERS",
+              href: "/invited-users",
+              icon: "",
+            },
+          ]),
       ...(user?.role === "ADMIN"
         ? [
-          {
-            name: "ADMIN DASHBOARD",
-            href: "/admin",
-            icon: "",
-          },
-        ]
+            {
+              name: "ADMIN DASHBOARD",
+              href: "/admin",
+              icon: "",
+            },
+          ]
         : []),
     ],
     [isInvitedUser, user?.role],
@@ -1101,17 +1105,17 @@ export default function Sidebar() {
       const summaryItem =
         onNewAuditPage || onUpdateAuditPage
           ? (() => {
-            const summaryQuery = new URLSearchParams();
-            if (onUpdateAuditPage && editId) summaryQuery.set("edit", editId);
-            summaryQuery.set("category", "8");
-            return {
-              name: "Summary",
-              href: `${basePath}?${summaryQuery.toString()}`,
-              icon: (
-                <Image src={summary} alt="Summary" width={20} height={20} />
-              ),
-            };
-          })()
+              const summaryQuery = new URLSearchParams();
+              if (onUpdateAuditPage && editId) summaryQuery.set("edit", editId);
+              summaryQuery.set("category", "8");
+              return {
+                name: "Summary",
+                href: `${basePath}?${summaryQuery.toString()}`,
+                icon: (
+                  <Image src={summary} alt="Summary" width={20} height={20} />
+                ),
+              };
+            })()
           : null;
 
       items = summaryItem
@@ -1178,209 +1182,209 @@ export default function Sidebar() {
               onUpdateAuditPage ||
               onSummaryPage ||
               onTestPage) && (
-                <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
-                  style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
-                    fontWeight: 500,
-                    fontSize: "clamp(20px, 1.8vw, 27px)",
-                    lineHeight: "1",
-                    letterSpacing: "0.006em",
-                    fontVariationSettings: "'wdth' 65, 'wght' 500",
-                  }}
-                >
-                  AUDIT CATGORIES
-                </div>
-              )}
+              <div
+                className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 500,
+                  fontSize: "clamp(20px, 1.8vw, 27px)",
+                  lineHeight: "1",
+                  letterSpacing: "0.006em",
+                  fontVariationSettings: "'wdth' 65, 'wght' 500",
+                }}
+              >
+                AUDIT CATGORIES
+              </div>
+            )}
             {shouldShowTestSkeleton
               ? Array.from(
-                { length: Math.max(actualCategoryCount, 4) },
-                (_, index) => (
-                  <div
-                    key={`sidebar-skeleton-${index}`}
-                    className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
-                    style={{
-                      marginLeft: "clamp(0.75rem, 2vw, 1rem)",
-                    }}
-                  >
-                    <div className="h-full w-full animate-pulse bg-white/25" />
-                  </div>
-                ),
-              )
+                  { length: Math.max(actualCategoryCount, 4) },
+                  (_, index) => (
+                    <div
+                      key={`sidebar-skeleton-${index}`}
+                      className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                      style={{
+                        marginLeft: "clamp(0.75rem, 2vw, 1rem)",
+                      }}
+                    >
+                      <div className="h-full w-full animate-pulse bg-white/25" />
+                    </div>
+                  ),
+                )
               : effectiveItems.map((item) => {
-                let isActive = pathname === item.href;
-                const isCategoryItem =
-                  "categoryNumber" in item &&
-                  typeof item.categoryNumber === "number";
-                const itemCategoryNumber =
-                  isCategoryItem && item.categoryNumber !== undefined
-                    ? item.categoryNumber
-                    : null;
-                if (
-                  (onNewAuditPage &&
-                    item.href.startsWith("/add-new-audit")) ||
-                  (onUpdateAuditPage &&
-                    item.href.startsWith("/update-audit")) ||
-                  (onTestPage && item.href.startsWith("/test"))
-                ) {
-                  const currentCategory = searchParams.get("category");
-                  const itemCategory = new URLSearchParams(
-                    item.href.split("?")[1],
-                  ).get("category");
-                  isActive = currentCategory === itemCategory;
-                }
-                if (onSummaryPage) {
-                  if (item.name === "Summary") {
-                    isActive = true;
-                  } else {
-                    isActive = false;
+                  let isActive = pathname === item.href;
+                  const isCategoryItem =
+                    "categoryNumber" in item &&
+                    typeof item.categoryNumber === "number";
+                  const itemCategoryNumber =
+                    isCategoryItem && item.categoryNumber !== undefined
+                      ? item.categoryNumber
+                      : null;
+                  if (
+                    (onNewAuditPage &&
+                      item.href.startsWith("/add-new-audit")) ||
+                    (onUpdateAuditPage &&
+                      item.href.startsWith("/update-audit")) ||
+                    (onTestPage && item.href.startsWith("/test"))
+                  ) {
+                    const currentCategory = searchParams.get("category");
+                    const itemCategory = new URLSearchParams(
+                      item.href.split("?")[1],
+                    ).get("category");
+                    isActive = currentCategory === itemCategory;
                   }
-                }
-                const useSecondary =
-                  onNewAuditPage || onUpdateAuditPage || onSummaryPage;
-                const isTestPageCategory = onTestPage && isCategoryItem;
-                const isEditing =
-                  itemCategoryNumber !== null &&
-                  editingCategory === itemCategoryNumber;
-                const isNavigationItem =
-                  !isCategoryItem && item.name !== "Summary";
-
-                let backgroundColor = "white";
-                let textColor = primaryColor;
-
-                if (useSecondary) {
-                  backgroundColor = isActive ? "transparent" : secondaryColor;
-                  textColor = isActive ? "black" : "white";
-                } else if (isTestPageCategory) {
-                  backgroundColor = isActive ? "transparent" : secondaryColor;
-                  textColor = isActive ? "black" : "white";
-                } else if (isNavigationItem && !isActive) {
-                  backgroundColor = secondaryColor;
-                  textColor = "white";
-                } else {
-                  backgroundColor = isActive ? "transparent" : "white";
-                  textColor = isActive ? "black" : secondaryColor;
-                }
-
-                const isDragging =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  draggedCategoryIndex === itemCategoryNumber - 1;
-                const isDragOver =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  dragOverCategoryIndex === itemCategoryNumber - 1;
-                const canDrag =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  (pathname === "/update-audit" ||
-                    pathname === "/add-new-audit") &&
-                  item.name !== "Summary";
-
-                const isSummaryItem = item.name === "Summary";
-
-                return (
-                  <SidebarItem
-                    key={item.name}
-                    item={item}
-                    isActive={isActive}
-                    isEditing={isEditing}
-                    isCategoryItem={isCategoryItem}
-                    itemCategoryNumber={itemCategoryNumber}
-                    backgroundColor={backgroundColor}
-                    textColor={textColor}
-                    isDragging={isDragging}
-                    isDragOver={isDragOver}
-                    canDrag={canDrag}
-                    isSummaryItem={isSummaryItem}
-                    useSecondary={useSecondary}
-                    onDragStart={(e) => {
-                      if (!canDrag || isSummaryItem) {
-                        e.preventDefault();
-                        return;
-                      }
-                      if (
-                        itemCategoryNumber === null ||
-                        dragHandleCategory !== itemCategoryNumber
-                      ) {
-                        e.preventDefault();
-                        return;
-                      }
-                      handleCategoryDragStart(e, itemCategoryNumber - 1);
-                    }}
-                    onDragEnd={() => setDragHandleCategory(null)}
-                    onDragOver={
-                      canDrag && !isSummaryItem
-                        ? (e) =>
-                          handleCategoryDragOver(e, itemCategoryNumber! - 1)
-                        : () => { }
+                  if (onSummaryPage) {
+                    if (item.name === "Summary") {
+                      isActive = true;
+                    } else {
+                      isActive = false;
                     }
-                    onDragLeave={
-                      canDrag && !isSummaryItem
-                        ? handleCategoryDragLeave
-                        : () => { }
-                    }
-                    onDrop={
-                      canDrag && !isSummaryItem
-                        ? (e) =>
-                          handleCategoryDrop(e, itemCategoryNumber! - 1)
-                        : () => { }
-                    }
-                    onItemClick={() => {
-                      const isNonCategoryItem = itemCategoryNumber === null;
-                      const canNavigate =
-                        !isEditing &&
-                        (isSummaryItem ||
-                          isNonCategoryItem ||
-                          (itemCategoryNumber !== null &&
-                            editingIconCategory !== itemCategoryNumber));
+                  }
+                  const useSecondary =
+                    onNewAuditPage || onUpdateAuditPage || onSummaryPage;
+                  const isTestPageCategory = onTestPage && isCategoryItem;
+                  const isEditing =
+                    itemCategoryNumber !== null &&
+                    editingCategory === itemCategoryNumber;
+                  const isNavigationItem =
+                    !isCategoryItem && item.name !== "Summary";
 
-                      if (canNavigate) {
-                        router.push(item.href);
+                  let backgroundColor = "white";
+                  let textColor = primaryColor;
+
+                  if (useSecondary) {
+                    backgroundColor = isActive ? "transparent" : secondaryColor;
+                    textColor = isActive ? "black" : "white";
+                  } else if (isTestPageCategory) {
+                    backgroundColor = isActive ? "transparent" : secondaryColor;
+                    textColor = isActive ? "black" : "white";
+                  } else if (isNavigationItem && !isActive) {
+                    backgroundColor = secondaryColor;
+                    textColor = "white";
+                  } else {
+                    backgroundColor = isActive ? "transparent" : "white";
+                    textColor = isActive ? "black" : secondaryColor;
+                  }
+
+                  const isDragging =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    draggedCategoryIndex === itemCategoryNumber - 1;
+                  const isDragOver =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    dragOverCategoryIndex === itemCategoryNumber - 1;
+                  const canDrag =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    (pathname === "/update-audit" ||
+                      pathname === "/add-new-audit") &&
+                    item.name !== "Summary";
+
+                  const isSummaryItem = item.name === "Summary";
+
+                  return (
+                    <SidebarItem
+                      key={item.name}
+                      item={item}
+                      isActive={isActive}
+                      isEditing={isEditing}
+                      isCategoryItem={isCategoryItem}
+                      itemCategoryNumber={itemCategoryNumber}
+                      backgroundColor={backgroundColor}
+                      textColor={textColor}
+                      isDragging={isDragging}
+                      isDragOver={isDragOver}
+                      canDrag={canDrag}
+                      isSummaryItem={isSummaryItem}
+                      useSecondary={useSecondary}
+                      onDragStart={(e) => {
+                        if (!canDrag || isSummaryItem) {
+                          e.preventDefault();
+                          return;
+                        }
+                        if (
+                          itemCategoryNumber === null ||
+                          dragHandleCategory !== itemCategoryNumber
+                        ) {
+                          e.preventDefault();
+                          return;
+                        }
+                        handleCategoryDragStart(e, itemCategoryNumber - 1);
+                      }}
+                      onDragEnd={() => setDragHandleCategory(null)}
+                      onDragOver={
+                        canDrag && !isSummaryItem
+                          ? (e) =>
+                              handleCategoryDragOver(e, itemCategoryNumber! - 1)
+                          : () => {}
                       }
-                    }}
-                    onEditClick={(e) => {
-                      e.stopPropagation();
-                      if (itemCategoryNumber !== null) {
-                        setEditingCategory(itemCategoryNumber);
-                        if (item.href) {
+                      onDragLeave={
+                        canDrag && !isSummaryItem
+                          ? handleCategoryDragLeave
+                          : () => {}
+                      }
+                      onDrop={
+                        canDrag && !isSummaryItem
+                          ? (e) =>
+                              handleCategoryDrop(e, itemCategoryNumber! - 1)
+                          : () => {}
+                      }
+                      onItemClick={() => {
+                        const isNonCategoryItem = itemCategoryNumber === null;
+                        const canNavigate =
+                          !isEditing &&
+                          (isSummaryItem ||
+                            isNonCategoryItem ||
+                            (itemCategoryNumber !== null &&
+                              editingIconCategory !== itemCategoryNumber));
+
+                        if (canNavigate) {
                           router.push(item.href);
                         }
-                      }
-                    }}
-                    onMouseDownDrag={() => {
-                      if (itemCategoryNumber !== null) {
-                        setDragHandleCategory(itemCategoryNumber);
-                      }
-                    }}
-                    onIconPickerTrigger={(e) => {
-                      e.stopPropagation();
-                      if (itemCategoryNumber !== null) {
-                        setEditingIconCategory(itemCategoryNumber);
-                      }
-                    }}
-                    onCategoryNameUpdate={(newName) => {
-                      if (itemCategoryNumber !== null) {
-                        handleCategoryNameUpdate(itemCategoryNumber, newName);
-                      }
-                    }}
-                    onCategoryIconUpdate={(iconName) => {
-                      if (itemCategoryNumber !== null) {
-                        handleCategoryIconUpdate(
-                          itemCategoryNumber,
-                          iconName,
-                        );
-                      }
-                    }}
-                    editingIconCategory={editingIconCategory}
-                    setEditingIconCategory={setEditingIconCategory}
-                    setEditingCategory={setEditingCategory}
-                    getCategoryName={getCategoryName}
-                    getCategoryIcon={getCategoryIcon}
-                    renderIcon={renderIcon}
-                  />
-                );
-              })}
+                      }}
+                      onEditClick={(e) => {
+                        e.stopPropagation();
+                        if (itemCategoryNumber !== null) {
+                          setEditingCategory(itemCategoryNumber);
+                          if (item.href) {
+                            router.push(item.href);
+                          }
+                        }
+                      }}
+                      onMouseDownDrag={() => {
+                        if (itemCategoryNumber !== null) {
+                          setDragHandleCategory(itemCategoryNumber);
+                        }
+                      }}
+                      onIconPickerTrigger={(e) => {
+                        e.stopPropagation();
+                        if (itemCategoryNumber !== null) {
+                          setEditingIconCategory(itemCategoryNumber);
+                        }
+                      }}
+                      onCategoryNameUpdate={(newName) => {
+                        if (itemCategoryNumber !== null) {
+                          handleCategoryNameUpdate(itemCategoryNumber, newName);
+                        }
+                      }}
+                      onCategoryIconUpdate={(iconName) => {
+                        if (itemCategoryNumber !== null) {
+                          handleCategoryIconUpdate(
+                            itemCategoryNumber,
+                            iconName,
+                          );
+                        }
+                      }}
+                      editingIconCategory={editingIconCategory}
+                      setEditingIconCategory={setEditingIconCategory}
+                      setEditingCategory={setEditingCategory}
+                      getCategoryName={getCategoryName}
+                      getCategoryIcon={getCategoryIcon}
+                      renderIcon={renderIcon}
+                    />
+                  );
+                })}
           </>
         )}
       </nav>
