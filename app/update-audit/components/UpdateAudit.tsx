@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { auditApi } from "@/lib/api";
 import { useUpdateAudit } from "@/lib/hooks/useAudit";
@@ -10,6 +10,7 @@ import TableSkeleton from "../../add-new-audit/components/tableSkeleton";
 import { CustomButton } from "@/components/common";
 import { FiEdit } from "react-icons/fi";
 import SummarySection from "@/components/SummarySection";
+import AuditTable from "@/components/AuditTable";
 
 type OptionState = { id?: string; text: string; points: number };
 type CategoryFormData = {
@@ -543,279 +544,331 @@ export default function UpdateAudit() {
   }, [editId, router]);
 
   // Get current category data
-  const currentCategoryData = formData.categories[currentCategory - 1] || {
-    name: `Category ${currentCategory}`,
-    icon: undefined,
-    questions: [],
-  };
+  const currentCategoryData = useMemo(() => {
+    return (
+      formData.categories[currentCategory - 1] || {
+        name: `Category ${currentCategory}`,
+        icon: undefined,
+        questions: [],
+      }
+    );
+  }, [formData.categories, currentCategory]);
 
   // Update category name
-  const updateCategoryName = (name: string) => {
-    const finalName = name || `Category ${currentCategory}`;
+  const updateCategoryName = useCallback(
+    (name: string) => {
+      const finalName = name || `Category ${currentCategory}`;
 
-    setFormData((prev) => {
-      const newCategories = [...prev.categories];
-      const categoryIndex = currentCategory - 1;
+      setFormData((prev) => {
+        const newCategories = [...prev.categories];
+        const categoryIndex = currentCategory - 1;
 
-      // Ensure array is long enough
-      while (newCategories.length <= categoryIndex) {
-        newCategories.push({
-          name: `Category ${newCategories.length + 1}`,
-          questions: [],
-        });
-      }
-
-      newCategories[categoryIndex] = {
-        ...newCategories[categoryIndex],
-        name: finalName,
-      };
-
-      return {
-        ...prev,
-        categories: newCategories,
-      };
-    });
-
-    // Update sessionStorage for sidebar
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(
-        `auditData:categoryName:${currentCategory}`,
-        finalName,
-      );
-
-      // Also update auditData categories array in sessionStorage
-      try {
-        const raw = sessionStorage.getItem("auditData");
-        const data = raw ? JSON.parse(raw) : { categories: [] };
-        if (!Array.isArray(data.categories)) data.categories = [];
-
-        const idx = currentCategory - 1;
-        while (data.categories.length < currentCategory) {
-          data.categories.push({
-            name: `Category ${data.categories.length + 1}`,
+        // Ensure array is long enough
+        while (newCategories.length <= categoryIndex) {
+          newCategories.push({
+            name: `Category ${newCategories.length + 1}`,
             questions: [],
           });
         }
 
-        if (data.categories[idx]) {
-          data.categories[idx].name = finalName;
-        } else {
-          data.categories[idx] = { name: finalName, questions: [] };
-        }
-
-        sessionStorage.setItem("auditData", JSON.stringify(data));
-      } catch (e) {
-        console.error("Error updating auditData category name:", e);
-      }
-
-      // Update sessionStorageCategories for SummarySection
-      setSessionStorageCategories((prev) => {
-        const updated = [...prev];
-        const categoryIndex = currentCategory - 1;
-        const wasNewCategory = updated.length <= categoryIndex;
-
-        // Ensure array is long enough
-        while (updated.length <= categoryIndex) {
-          const catNum = updated.length + 1;
-          // Try to get ID from formData if available
-          const formDataCategory = formData.categories[updated.length];
-          updated.push({
-            id: formDataCategory?.id || `temp-${updated.length}`,
-            name: `Category ${catNum}`,
-            recommendation: formDataCategory?.recommendation || "",
-          });
-        }
-        // Update the category name
-        updated[categoryIndex] = {
-          ...updated[categoryIndex],
+        newCategories[categoryIndex] = {
+          ...newCategories[categoryIndex],
           name: finalName,
         };
 
-        // If this was a new category, dispatch event to notify SummarySection
-        if (wasNewCategory && typeof window !== "undefined") {
-          window.dispatchEvent(new Event("categoryNameUpdated"));
-        }
-
-        return updated;
+        return {
+          ...prev,
+          categories: newCategories,
+        };
       });
 
-      // Dispatch event to notify Sidebar
-      window.dispatchEvent(new Event("categoryNameUpdated"));
-    }
-  };
-
-  // Update category icon
-  const updateCategoryIcon = (icon: string) => {
-    setFormData((prev) => {
-      const newCategories = [...prev.categories];
-      const categoryIndex = currentCategory - 1;
-
-      // Ensure array is long enough
-      while (newCategories.length <= categoryIndex) {
-        newCategories.push({
-          name: `Category ${newCategories.length + 1}`,
-          questions: [],
-        });
-      }
-
-      newCategories[categoryIndex] = {
-        ...newCategories[categoryIndex],
-        icon: icon || undefined,
-      };
-
-      return {
-        ...prev,
-        categories: newCategories,
-      };
-    });
-
-    // Update sessionStorage for sidebar
-    if (typeof window !== "undefined") {
-      if (icon) {
+      // Update sessionStorage for sidebar
+      if (typeof window !== "undefined") {
         sessionStorage.setItem(
-          `auditData:categoryIcon:${currentCategory}`,
-          icon,
+          `auditData:categoryName:${currentCategory}`,
+          finalName,
         );
-      } else {
-        sessionStorage.removeItem(`auditData:categoryIcon:${currentCategory}`);
-      }
-      window.dispatchEvent(new Event("categoryNameUpdated"));
-    }
-  };
 
-  // Update question text
-  const updateQuestion = (rowIndex: number, text: string) => {
-    setFormData((prev) => {
-      const newCategories = [...prev.categories];
-      const categoryIndex = currentCategory - 1;
-      const wasNewCategory = newCategories.length <= categoryIndex;
+        // Also update auditData categories array in sessionStorage
+        try {
+          const raw = sessionStorage.getItem("auditData");
+          const data = raw ? JSON.parse(raw) : { categories: [] };
+          if (!Array.isArray(data.categories)) data.categories = [];
 
-      // Ensure array is long enough
-      while (newCategories.length <= categoryIndex) {
-        newCategories.push({
-          name: `Category ${newCategories.length + 1}`,
-          questions: [],
-        });
-      }
-
-      const category = { ...newCategories[categoryIndex] };
-      const questions = [...category.questions];
-
-      // Ensure questions array is long enough
-      while (questions.length < rowIndex) {
-        questions.push({
-          text: "",
-          options: [],
-        });
-      }
-
-      if (questions[rowIndex - 1]) {
-        questions[rowIndex - 1] = {
-          ...questions[rowIndex - 1],
-          text: text,
-        };
-      } else {
-        questions[rowIndex - 1] = {
-          text: text,
-          options: [
-            "Very Minimal",
-            "Just Starting",
-            "Good progress",
-            "Excellent",
-            "Very Excellent",
-          ].map((label, i) => ({
-            text: label,
-            points: i + 1,
-          })),
-        };
-      }
-
-      category.questions = questions;
-      newCategories[categoryIndex] = category;
-
-      // If this is a new category with questions, update sessionStorageCategories
-      if (
-        wasNewCategory &&
-        text.trim().length > 0 &&
-        typeof window !== "undefined"
-      ) {
-        // Update sessionStorageCategories to include the new category
-        setSessionStorageCategories((prev) => {
-          const updated = [...prev];
-          while (updated.length <= categoryIndex) {
-            const catNum = updated.length + 1;
-            const storedName = sessionStorage.getItem(
-              `auditData:categoryName:${catNum}`,
-            );
-            updated.push({
-              id: `temp-${updated.length}`,
-              name: storedName || `Category ${catNum}`,
-              recommendation:
-                sessionStorage.getItem(
-                  `auditData:categoryRecommendation:${catNum}`,
-                ) || "",
+          const idx = currentCategory - 1;
+          while (data.categories.length < currentCategory) {
+            data.categories.push({
+              name: `Category ${data.categories.length + 1}`,
+              questions: [],
             });
           }
-          // Update the name from sessionStorage if available
-          const storedName = sessionStorage.getItem(
-            `auditData:categoryName:${currentCategory}`,
-          );
-          if (storedName) {
-            updated[categoryIndex].name = storedName;
+
+          if (data.categories[idx]) {
+            data.categories[idx].name = finalName;
           } else {
-            updated[categoryIndex].name = category.name;
+            data.categories[idx] = { name: finalName, questions: [] };
           }
+
+          sessionStorage.setItem("auditData", JSON.stringify(data));
+        } catch (e) {
+          console.error("Error updating auditData category name:", e);
+        }
+
+        // Update sessionStorageCategories for SummarySection
+        setSessionStorageCategories((prev) => {
+          const updated = [...prev];
+          const categoryIndex = currentCategory - 1;
+          const wasNewCategory = updated.length <= categoryIndex;
+
+          // Ensure array is long enough
+          while (updated.length <= categoryIndex) {
+            const catNum = updated.length + 1;
+            // Try to get ID from formData if available
+            const formDataCategory = formData.categories[updated.length];
+            updated.push({
+              id: formDataCategory?.id || `temp-${updated.length}`,
+              name: `Category ${catNum}`,
+              recommendation: formDataCategory?.recommendation || "",
+            });
+          }
+          // Update the category name
+          updated[categoryIndex] = {
+            ...updated[categoryIndex],
+            name: finalName,
+          };
+
+          // If this was a new category, dispatch event to notify SummarySection
+          if (wasNewCategory && typeof window !== "undefined") {
+            window.dispatchEvent(new Event("categoryNameUpdated"));
+          }
+
           return updated;
         });
 
-        // Store category name in sessionStorage if not already stored
-        const storedName = sessionStorage.getItem(
-          `auditData:categoryName:${currentCategory}`,
-        );
-        if (!storedName) {
-          sessionStorage.setItem(
-            `auditData:categoryName:${currentCategory}`,
-            category.name,
-          );
-        }
-
-        // Dispatch event to notify SummarySection
+        // Dispatch event to notify Sidebar
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
+    },
+    [currentCategory, formData.categories],
+  );
 
-      return {
-        ...prev,
-        categories: newCategories,
-      };
-    });
-  };
+  // Update category icon
+  const updateCategoryIcon = useCallback(
+    (icon: string) => {
+      setFormData((prev) => {
+        const newCategories = [...prev.categories];
+        const categoryIndex = currentCategory - 1;
+
+        // Ensure array is long enough
+        while (newCategories.length <= categoryIndex) {
+          newCategories.push({
+            name: `Category ${newCategories.length + 1}`,
+            questions: [],
+          });
+        }
+
+        newCategories[categoryIndex] = {
+          ...newCategories[categoryIndex],
+          icon: icon || undefined,
+        };
+
+        return {
+          ...prev,
+          categories: newCategories,
+        };
+      });
+
+      // Update sessionStorage for sidebar
+      if (typeof window !== "undefined") {
+        if (icon) {
+          sessionStorage.setItem(
+            `auditData:categoryIcon:${currentCategory}`,
+            icon,
+          );
+        } else {
+          sessionStorage.removeItem(
+            `auditData:categoryIcon:${currentCategory}`,
+          );
+        }
+        window.dispatchEvent(new Event("categoryNameUpdated"));
+      }
+    },
+    [currentCategory],
+  );
+
+  // Update question text
+  const updateQuestion = useCallback(
+    (rowIndex: number, text: string) => {
+      setFormData((prev) => {
+        const newCategories = [...prev.categories];
+        const categoryIndex = currentCategory - 1;
+        const wasNewCategory = newCategories.length <= categoryIndex;
+
+        // Ensure array is long enough
+        while (newCategories.length <= categoryIndex) {
+          newCategories.push({
+            name: `Category ${newCategories.length + 1}`,
+            questions: [],
+          });
+        }
+
+        const category = { ...newCategories[categoryIndex] };
+        const questions = [...category.questions];
+
+        // Ensure questions array is long enough
+        while (questions.length < rowIndex) {
+          questions.push({
+            text: "",
+            options: [],
+          });
+        }
+
+        if (questions[rowIndex - 1]) {
+          questions[rowIndex - 1] = {
+            ...questions[rowIndex - 1],
+            text: text,
+          };
+        } else {
+          questions[rowIndex - 1] = {
+            text: text,
+            options: [
+              "Very Minimal",
+              "Just Starting",
+              "Good progress",
+              "Excellent",
+              "Very Excellent",
+            ].map((label, i) => ({
+              text: label,
+              points: i + 1,
+            })),
+          };
+        }
+
+        category.questions = questions;
+        newCategories[categoryIndex] = category;
+
+        // If this is a new category with questions, update sessionStorageCategories
+        if (
+          wasNewCategory &&
+          text.trim().length > 0 &&
+          typeof window !== "undefined"
+        ) {
+          // Update sessionStorageCategories to include the new category
+          setSessionStorageCategories((prev) => {
+            const updated = [...prev];
+            while (updated.length <= categoryIndex) {
+              const catNum = updated.length + 1;
+              const storedName = sessionStorage.getItem(
+                `auditData:categoryName:${catNum}`,
+              );
+              updated.push({
+                id: `temp-${updated.length}`,
+                name: storedName || `Category ${catNum}`,
+                recommendation:
+                  sessionStorage.getItem(
+                    `auditData:categoryRecommendation:${catNum}`,
+                  ) || "",
+              });
+            }
+            // Update the name from sessionStorage if available
+            const storedName = sessionStorage.getItem(
+              `auditData:categoryName:${currentCategory}`,
+            );
+            if (storedName) {
+              updated[categoryIndex].name = storedName;
+            } else {
+              updated[categoryIndex].name = category.name;
+            }
+            return updated;
+          });
+
+          // Store category name in sessionStorage if not already stored
+          const storedName = sessionStorage.getItem(
+            `auditData:categoryName:${currentCategory}`,
+          );
+          if (!storedName) {
+            sessionStorage.setItem(
+              `auditData:categoryName:${currentCategory}`,
+              category.name,
+            );
+          }
+
+          // Dispatch event to notify SummarySection
+          window.dispatchEvent(new Event("categoryNameUpdated"));
+        }
+
+        return {
+          ...prev,
+          categories: newCategories,
+        };
+      });
+    },
+    [currentCategory],
+  );
 
   // Update option text
-  const updateOption = (
-    rowIndex: number,
-    optionIndex: number,
-    text: string,
-  ) => {
-    setFormData((prev) => {
-      const newCategories = [...prev.categories];
-      const categoryIndex = currentCategory - 1;
+  const updateOption = useCallback(
+    (rowIndex: number, optionIndex: number, text: string) => {
+      setFormData((prev) => {
+        const newCategories = [...prev.categories];
+        const categoryIndex = currentCategory - 1;
 
-      // Ensure array is long enough
-      while (newCategories.length <= categoryIndex) {
-        newCategories.push({
-          name: `Category ${newCategories.length + 1}`,
-          questions: [],
-        });
-      }
+        // Ensure array is long enough
+        while (newCategories.length <= categoryIndex) {
+          newCategories.push({
+            name: `Category ${newCategories.length + 1}`,
+            questions: [],
+          });
+        }
 
-      const category = { ...newCategories[categoryIndex] };
-      const questions = [...category.questions];
+        const category = { ...newCategories[categoryIndex] };
+        const questions = [...category.questions];
 
-      // Ensure questions array is long enough
-      while (questions.length < rowIndex) {
-        questions.push({
-          text: "",
-          options: [
+        // Ensure questions array is long enough
+        while (questions.length < rowIndex) {
+          questions.push({
+            text: "",
+            options: [
+              "Very Minimal",
+              "Just Starting",
+              "Good progress",
+              "Excellent",
+              "Very Excellent",
+            ].map((label, i) => ({
+              text: label,
+              points: i + 1,
+            })),
+          });
+        }
+
+        if (questions[rowIndex - 1]) {
+          const question = { ...questions[rowIndex - 1] };
+          const options = [...question.options];
+
+          // Ensure options array has 5 items
+          while (options.length < 5) {
+            options.push({
+              text:
+                [
+                  "Very Minimal",
+                  "Just Starting",
+                  "Good progress",
+                  "Excellent",
+                  "Very Excellent",
+                ][options.length] || "",
+              points: options.length + 1,
+            });
+          }
+
+          options[optionIndex] = {
+            ...options[optionIndex],
+            text: text,
+          };
+
+          question.options = options;
+          questions[rowIndex - 1] = question;
+        } else {
+          const defaultOptions = [
             "Very Minimal",
             "Just Starting",
             "Good progress",
@@ -824,105 +877,67 @@ export default function UpdateAudit() {
           ].map((label, i) => ({
             text: label,
             points: i + 1,
-          })),
-        });
-      }
-
-      if (questions[rowIndex - 1]) {
-        const question = { ...questions[rowIndex - 1] };
-        const options = [...question.options];
-
-        // Ensure options array has 5 items
-        while (options.length < 5) {
-          options.push({
-            text:
-              [
-                "Very Minimal",
-                "Just Starting",
-                "Good progress",
-                "Excellent",
-                "Very Excellent",
-              ][options.length] || "",
-            points: options.length + 1,
-          });
+          }));
+          defaultOptions[optionIndex] = {
+            text: text,
+            points: optionIndex + 1,
+          };
+          questions[rowIndex - 1] = {
+            text: "",
+            options: defaultOptions,
+          };
         }
 
-        options[optionIndex] = {
-          ...options[optionIndex],
-          text: text,
-        };
+        category.questions = questions;
+        newCategories[categoryIndex] = category;
 
-        question.options = options;
-        questions[rowIndex - 1] = question;
-      } else {
-        const defaultOptions = [
-          "Very Minimal",
-          "Just Starting",
-          "Good progress",
-          "Excellent",
-          "Very Excellent",
-        ].map((label, i) => ({
-          text: label,
-          points: i + 1,
-        }));
-        defaultOptions[optionIndex] = {
-          text: text,
-          points: optionIndex + 1,
+        return {
+          ...prev,
+          categories: newCategories,
         };
-        questions[rowIndex - 1] = {
-          text: "",
-          options: defaultOptions,
-        };
-      }
-
-      category.questions = questions;
-      newCategories[categoryIndex] = category;
-
-      return {
-        ...prev,
-        categories: newCategories,
-      };
-    });
-  };
+      });
+    },
+    [currentCategory],
+  );
 
   // Reorder questions
-  const reorderQuestions = (
-    draggedRowIndex: number,
-    targetRowIndex: number,
-  ) => {
-    setFormData((prev) => {
-      const newCategories = [...prev.categories];
-      const categoryIndex = currentCategory - 1;
+  const reorderQuestions = useCallback(
+    (draggedRowIndex: number, targetRowIndex: number) => {
+      setFormData((prev) => {
+        const newCategories = [...prev.categories];
+        const categoryIndex = currentCategory - 1;
 
-      if (categoryIndex < 0 || categoryIndex >= newCategories.length)
-        return prev;
+        if (categoryIndex < 0 || categoryIndex >= newCategories.length)
+          return prev;
 
-      const category = { ...newCategories[categoryIndex] };
-      const questions = [...category.questions];
+        const category = { ...newCategories[categoryIndex] };
+        const questions = [...category.questions];
 
-      if (
-        draggedRowIndex < 1 ||
-        draggedRowIndex > questions.length ||
-        targetRowIndex < 1 ||
-        targetRowIndex > questions.length
-      ) {
-        return prev;
-      }
+        if (
+          draggedRowIndex < 1 ||
+          draggedRowIndex > questions.length ||
+          targetRowIndex < 1 ||
+          targetRowIndex > questions.length
+        ) {
+          return prev;
+        }
 
-      // Reorder questions
-      const draggedQuestion = questions[draggedRowIndex - 1];
-      questions.splice(draggedRowIndex - 1, 1);
-      questions.splice(targetRowIndex - 1, 0, draggedQuestion);
+        // Reorder questions
+        const draggedQuestion = questions[draggedRowIndex - 1];
+        questions.splice(draggedRowIndex - 1, 1);
+        questions.splice(targetRowIndex - 1, 0, draggedQuestion);
 
-      category.questions = questions;
-      newCategories[categoryIndex] = category;
+        category.questions = questions;
+        newCategories[categoryIndex] = category;
 
-      return {
-        ...prev,
-        categories: newCategories,
-      };
-    });
-  };
+        return {
+          ...prev,
+          categories: newCategories,
+        };
+      });
+    },
+    [currentCategory],
+  );
 
   const handleCategoryRecommendationChange = React.useCallback(
     (categoryId: string, value: string, categoryIndex: number) => {
@@ -1184,9 +1199,16 @@ export default function UpdateAudit() {
     }
   };
 
-  if (loading) {
-    return <TableSkeleton />;
-  }
+  const handleTitleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({ ...prev, title: e.target.value }));
+    },
+    [],
+  );
+
+  // if (loading) {
+  //   return <TableSkeleton />;
+  // }
 
   return (
     <div className="">
@@ -1227,9 +1249,7 @@ export default function UpdateAudit() {
             <input
               type="text"
               value={formData.title}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, title: e.target.value }))
-              }
+              onChange={handleTitleChange}
               placeholder="Presentation Name"
               disabled={!titleEditable}
               className="w-full bg-[#4569871A] pr-12 pl-6 py-[12px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
@@ -1295,310 +1315,6 @@ export default function UpdateAudit() {
           </div>
         )}
       </main>
-    </div>
-  );
-}
-
-interface AuditTableProps {
-  currentCategory: number;
-  categoryData: CategoryFormData;
-  onCategoryNameChange: (name: string) => void;
-  onCategoryIconChange: (icon: string) => void;
-  onQuestionChange: (rowIndex: number, text: string) => void;
-  onOptionChange: (rowIndex: number, optionIndex: number, text: string) => void;
-  onQuestionsReorder: (draggedRowIndex: number, targetRowIndex: number) => void;
-}
-
-function AuditTable({
-  currentCategory,
-  categoryData,
-  onQuestionChange,
-  onOptionChange,
-  onQuestionsReorder,
-}: AuditTableProps) {
-  const [activeRows, setActiveRows] = useState<Set<number>>(new Set());
-  const [editableQuestions, setEditableQuestions] = useState<Set<number>>(
-    new Set(),
-  );
-  const [editableStatus, setEditableStatus] = useState<
-    Record<number, Set<number>>
-  >({});
-  const [draggedRowIndex, setDraggedRowIndex] = useState<number | null>(null);
-  const [dragOverRowIndex, setDragOverRowIndex] = useState<number | null>(null);
-
-  // Initialize active rows based on category data
-  useEffect(() => {
-    const rowsToActivate = new Set<number>();
-    categoryData.questions.forEach((q, idx) => {
-      const rowIndex = idx + 1;
-      if (q.text && q.text.trim().length > 0) {
-        rowsToActivate.add(rowIndex);
-      }
-    });
-    setActiveRows(rowsToActivate);
-  }, [categoryData, currentCategory]);
-
-  const handleQuestionClick = (rowIndex: number) => {
-    setActiveRows((prev) => {
-      const newSet = new Set(prev);
-      newSet.add(rowIndex);
-      return newSet;
-    });
-  };
-
-  const getQuestionText = (rowIndex: number): string => {
-    const question = categoryData.questions[rowIndex - 1];
-    return question?.text || "";
-  };
-
-  const getOptionText = (rowIndex: number, optionIndex: number): string => {
-    const question = categoryData.questions[rowIndex - 1];
-    if (question && question.options && question.options[optionIndex]) {
-      return question.options[optionIndex].text;
-    }
-    return statusButtons[optionIndex].label;
-  };
-
-  const handleQuestionChange = (rowIndex: number, value: string) => {
-    onQuestionChange(rowIndex, value);
-
-    // Auto-add options if question has content and options don't exist
-    const question = categoryData.questions[rowIndex - 1];
-    if (
-      value.trim().length > 0 &&
-      (!question || !question.options || question.options.length === 0)
-    ) {
-      // Options will be added automatically in updateQuestion function
-    }
-  };
-
-  const handleOptionChange = (
-    rowIndex: number,
-    optionIndex: number,
-    value: string,
-  ) => {
-    onOptionChange(rowIndex, optionIndex, value);
-  };
-
-  const statusButtons = [
-    {
-      label: "Very Minimal",
-      color: "bg-[#FFE2E380]",
-      borderColor: "border-[#FFB7B9]",
-      textColor: "#A51A1F",
-    },
-    {
-      label: "Just Starting",
-      color: "bg-[#FFFCE280]",
-      borderColor: "border-[#E3D668]",
-      textColor: "#776E23",
-    },
-    {
-      label: "Good progress",
-      color: "bg-[#FFDBC2B2]",
-      borderColor: "border-[#894B00E5]",
-      textColor: "#894B00",
-    },
-    {
-      label: "Excellent",
-      color: "bg-[#DCFCE7]",
-      borderColor: "border-[#01673099]",
-      textColor: "#016730",
-    },
-    {
-      label: "Very Excellent",
-      color: "bg-[#DCF3F6]",
-      borderColor: "border-[#01673099]",
-      textColor: "text-blue-800",
-    },
-  ];
-
-  // Handle question row drag and drop
-  const handleRowDragStart = (e: React.DragEvent, rowIndex: number) => {
-    const target = e.target as HTMLElement;
-    if (
-      target.tagName === "INPUT" ||
-      target.tagName === "BUTTON" ||
-      target.closest("input") ||
-      target.closest("button")
-    ) {
-      e.preventDefault();
-      return;
-    }
-    setDraggedRowIndex(rowIndex);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", rowIndex.toString());
-  };
-
-  const handleRowDragOver = (e: React.DragEvent, rowIndex: number) => {
-    if (draggedRowIndex === null) return;
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    if (rowIndex !== draggedRowIndex) {
-      setDragOverRowIndex(rowIndex);
-    }
-  };
-
-  const handleRowDragLeave = () => {
-    setDragOverRowIndex(null);
-  };
-
-  const handleRowDrop = (e: React.DragEvent, targetRowIndex: number) => {
-    if (draggedRowIndex === null || draggedRowIndex === targetRowIndex) {
-      setDraggedRowIndex(null);
-      setDragOverRowIndex(null);
-      return;
-    }
-    e.preventDefault();
-    onQuestionsReorder(draggedRowIndex, targetRowIndex);
-    setDraggedRowIndex(null);
-    setDragOverRowIndex(null);
-  };
-
-  return (
-    <div className="w-full mt-8 overflow-x-auto">
-      <table
-        className="w-full border-collapse border border-gray-300"
-        style={{ tableLayout: "fixed" }}
-      >
-        <tbody>
-          {Array.from({ length: 10 }, (_, index) => {
-            const rowIndex = index + 1;
-            const isActive = activeRows.has(rowIndex);
-            const isDragging = draggedRowIndex === rowIndex;
-            const isDragOver = dragOverRowIndex === rowIndex;
-
-            return (
-              <tr
-                key={rowIndex}
-                draggable={true}
-                onDragStart={(e) => handleRowDragStart(e, rowIndex)}
-                onDragOver={(e) => handleRowDragOver(e, rowIndex)}
-                onDragLeave={handleRowDragLeave}
-                onDrop={(e) => handleRowDrop(e, rowIndex)}
-                className={`border-b border-gray-300 ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
-              >
-                <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
-                      =
-                    </span>
-                    <span className="text-gray-700">{rowIndex}</span>
-                  </div>
-                </td>
-                <td className="audit-question-col border-r border-gray-300 px-4 py-3 align-middle">
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={getQuestionText(rowIndex)}
-                      placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
-                      onClick={() => handleQuestionClick(rowIndex)}
-                      onChange={(e) =>
-                        handleQuestionChange(rowIndex, e.target.value)
-                      }
-                      disabled={!editableQuestions.has(rowIndex)}
-                      className="w-full bg-[#4569871A] pr-12 pl-4 h-[60px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
-                      style={{
-                        fontFamily: "'Acumin Variable Concept', sans-serif",
-                        fontWeight: 400,
-                        fontSize: "23px",
-                        lineHeight: "100%",
-                        letterSpacing: "-0.025em",
-                        fontVariationSettings: "'wdth' 85, 'wght' 400",
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEditableQuestions((prev) => {
-                          const next = new Set(prev);
-                          if (next.has(rowIndex)) next.delete(rowIndex);
-                          else next.add(rowIndex);
-                          return next;
-                        })
-                      }
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-700 hover:bg-gray-50 rounded cursor-pointer"
-                      aria-label={
-                        editableQuestions.has(rowIndex)
-                          ? "Disable editing question"
-                          : "Enable editing question"
-                      }
-                    >
-                      <FiEdit size={12} />
-                    </button>
-                  </div>
-                </td>
-                <td className="audit-answer-col px-2 py-3 align-middle">
-                  {isActive ? (
-                    <div className="flex gap-2 items-center justify-center">
-                      {statusButtons.map((button, idx) => (
-                        <div key={button.label} className="relative">
-                          <input
-                            type="text"
-                            value={getOptionText(rowIndex, idx)}
-                            onChange={(e) =>
-                              handleOptionChange(rowIndex, idx, e.target.value)
-                            }
-                            disabled={
-                              !(editableStatus[rowIndex]?.has(idx) ?? false)
-                            }
-                            className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
-                            style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
-                              fontWeight: 400,
-                              fontSize: "18px",
-                              lineHeight: "100%",
-                              letterSpacing: "-0.015em",
-                              fontVariationSettings: "'wdth' 55, 'wght' 700",
-                              paddingTop: "12px",
-                              paddingBottom: "12px",
-                              textAlign: "center",
-                              color: button.textColor.startsWith("#")
-                                ? button.textColor
-                                : undefined,
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setEditableStatus((prev) => {
-                                const next: Record<number, Set<number>> = {
-                                  ...prev,
-                                } as Record<number, Set<number>>;
-                                const existing = next[rowIndex]
-                                  ? new Set(Array.from(next[rowIndex]))
-                                  : new Set<number>();
-                                if (existing.has(idx)) {
-                                  existing.delete(idx);
-                                } else {
-                                  existing.add(idx);
-                                }
-                                next[rowIndex] = existing;
-                                return next;
-                              })
-                            }
-                            className={`absolute right-1 top-1/2 -translate-y-1/2 p-0.5 ${button.textColor} hover:opacity-80 rounded cursor-pointer`}
-                            aria-label={
-                              (editableStatus[rowIndex]?.has(idx) ?? false)
-                                ? "Disable editing option"
-                                : "Enable editing option"
-                            }
-                          >
-                            <FiEdit size={10} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="w-[30vw]"></div>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
     </div>
   );
 }

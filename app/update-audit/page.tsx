@@ -4,7 +4,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
-  import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import TableSkeleton from "../add-new-audit/components/tableSkeleton";
 import UpdateAudit from "./components/UpdateAudit";
 
@@ -36,11 +36,11 @@ export default function UpdateAuditPage() {
     checkAuth();
   }, [router]);
 
-  if (isLoading || !user) {
-    return (
-      <TableSkeleton />
-    );
-  }
+  // if (isLoading || !user) {
+  //   return (
+  //     <TableSkeleton />
+  //   );
+  // }
 
   return (
     <div className="">
@@ -50,4 +50,3 @@ export default function UpdateAuditPage() {
     </div>
   );
 }
-
