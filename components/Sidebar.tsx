@@ -139,7 +139,7 @@ export default function Sidebar() {
               }
             }
           }
-        } catch { }
+        } catch {}
       }
       setCategoryNames(names);
     };
@@ -702,13 +702,13 @@ export default function Sidebar() {
                 const statusData = oldData.statuses[Number(qNum)];
                 const options = statusData
                   ? JSON.parse(statusData).map((text: string, idx: number) => ({
-                    text,
-                    points: idx + 1,
-                  }))
+                      text,
+                      points: idx + 1,
+                    }))
                   : Array.from({ length: 5 }, (_, idx) => ({
-                    text: `Option ${idx + 1}`,
-                    points: idx + 1,
-                  }));
+                      text: `Option ${idx + 1}`,
+                      points: idx + 1,
+                    }));
 
                 return {
                   text: questionText || "",
@@ -1075,19 +1075,19 @@ export default function Sidebar() {
             )}
             {shouldShowTestSkeleton
               ? Array.from(
-                { length: Math.max(actualCategoryCount, 4) },
-                (_, index) => (
-                  <div
-                    key={`sidebar-skeleton-${index}`}
-                    className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
-                    style={{
-                      marginLeft: "clamp(0.75rem, 2vw, 1rem)",
-                    }}
-                  >
-                    <div className="h-full w-full animate-pulse bg-white/25" />
-                  </div>
-                ),
-              )
+                  { length: Math.max(actualCategoryCount, 4) },
+                  (_, index) => (
+                    <div
+                      key={`sidebar-skeleton-${index}`}
+                      className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                      style={{
+                        marginLeft: "clamp(0.75rem, 2vw, 1rem)",
+                      }}
+                    >
+                      <div className="h-full w-full animate-pulse bg-white/25" />
+                    </div>
+                  ),
+                )
               : effectiveItems.map((item) => {
                   let isActive = pathname === item.href;
                   const isCategoryItem =
@@ -1143,22 +1143,22 @@ export default function Sidebar() {
                     textColor = isActive ? "black" : secondaryColor;
                   }
 
-                const isDragging =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  draggedCategoryIndex === itemCategoryNumber - 1;
-                const isDragOver =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  dragOverCategoryIndex === itemCategoryNumber - 1;
-                const canDrag =
-                  isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  (pathname === "/update-audit" ||
-                    pathname === "/add-new-audit") &&
-                  item.name !== "Summary";
+                  const isDragging =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    draggedCategoryIndex === itemCategoryNumber - 1;
+                  const isDragOver =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    dragOverCategoryIndex === itemCategoryNumber - 1;
+                  const canDrag =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    (pathname === "/update-audit" ||
+                      pathname === "/add-new-audit") &&
+                    item.name !== "Summary";
 
-                const isSummaryItem = item.name === "Summary";
+                  const isSummaryItem = item.name === "Summary";
 
                   return (
                     <SidebarItem
@@ -1207,12 +1207,7 @@ export default function Sidebar() {
                               handleCategoryDrop(e, itemCategoryNumber! - 1)
                           : () => {}
                       }
-                      onItemClick={(e) => {
-                        if (isSummaryItem) {
-                          e.stopPropagation();
-                          return;
-                        }
-
+                      onItemClick={() => {
                         const isNonCategoryItem = itemCategoryNumber === null;
                         const canNavigate =
                           !isEditing &&
