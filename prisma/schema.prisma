@@ -58,23 +58,7 @@ model Company {
   @@map("companies")
 }
 
-model Invitation {
-  id             String        @id @default(cuid())
-  email          String
-  companyId      String
-  token          String        @unique
-  invitedById    String
-  role           UserRole      @default(USER)
-  status         InviteStatus  @default(PENDING)
-  expiresAt      DateTime
-  createdAt      DateTime      @default(now())
-  presentationId String?
-  company        Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  invitedBy      User          @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
-  presentation   Presentation? @relation(fields: [presentationId], references: [id], onDelete: Cascade)
 
-  @@map("invitations")
-}
 
 model Presentation {
   id            String         @id @default(cuid())
@@ -89,10 +73,43 @@ model Presentation {
   sharedWith    SharedAudit[]
   summary       Summary?
   tests         Test[]
-
+  @@index([userId])   
   @@index([title])
+  @@index([createdAt])
   @@map("presentations")
 }
+
+model SharedAudit {
+  id             String       @id @default(cuid())
+  userId         String
+  presentationId String
+  sharedById     String
+  createdAt      DateTime     @default(now())
+  presentation   Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+ @@index([userId])  
+  @@unique([userId, presentationId])
+  @@map("shared_audits")
+}
+
+model Invitation {
+  id             String        @id @default(cuid())
+  email          String
+  companyId      String
+  token          String        @unique
+  invitedById    String
+  role           UserRole      @default(USER)
+  status         InviteStatus  @default(PENDING)
+  expiresAt      DateTime
+  createdAt      DateTime      @default(now())
+  presentationId String?
+  company        Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  invitedBy      User          @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+  presentation   Presentation? @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+ @@index([email, status]) 
+  @@map("invitations")
+}
+
 
 model Category {
   id             String          @id @default(cuid())
@@ -104,7 +121,7 @@ model Category {
   presentation   Presentation    @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   categoryScores CategoryScore[]
   questions      Question[]
-
+ @@index([presentationId])  
   @@index([name])
   @@map("categories")
 }
@@ -118,7 +135,7 @@ model Question {
   answers    Answer[]
   options    Option[]
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
+ @@index([categoryId]) 
   @@map("questions")
 }
 
@@ -129,7 +146,7 @@ model Option {
   points     Int      @default(0)
   answers    Answer[]
   question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
+ @@index([questionId])  
   @@map("options")
 }
 
@@ -155,7 +172,7 @@ model Test {
   categoryScores CategoryScore[]
   presentation   Presentation    @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  @@index([presentationId]) 
   @@map("tests")
 }
 
@@ -197,18 +214,7 @@ model Summary {
   @@map("summaries")
 }
 
-model SharedAudit {
-  id             String       @id @default(cuid())
-  userId         String
-  presentationId String
-  sharedById     String
-  createdAt      DateTime     @default(now())
-  presentation   Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, presentationId])
-  @@map("shared_audits")
-}
 
 model PasswordReset {
   id        String   @id @default(cuid())
