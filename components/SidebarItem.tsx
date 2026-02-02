@@ -83,11 +83,10 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={`h-[68px] cursor-pointer flex items-center relative ${
-          isActive
-            ? "w-[calc(100%)] mr-0 rounded-l-xl border-r-0"
-            : "w-[92.5%] mr-1.5 rounded-xl"
-        } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
+        className={`h-[68px] cursor-pointer flex items-center relative ${isActive
+          ? "w-[calc(100%+2px)] mr-0 rounded-l-xl border-r-0"
+          : "w-[92.5%] mr-1.5 rounded-xl"
+          } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
         style={{
           padding: "0 clamp(0.75rem, 3vw, 1rem)",
           marginLeft: "clamp(0.75rem, 2vw, 1rem)",
@@ -113,7 +112,7 @@ const SidebarItem = memo(
             >
               <path
                 d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
-                fill="#F2F2F2"
+                fill="#ffffff"
               />
             </svg>
           </div>
@@ -138,8 +137,8 @@ const SidebarItem = memo(
             >
               <div className="flex items-center justify-center">
                 {isCategoryItem &&
-                itemCategoryNumber !== null &&
-                getCategoryIcon(itemCategoryNumber)
+                  itemCategoryNumber !== null &&
+                  getCategoryIcon(itemCategoryNumber)
                   ? renderIcon(getCategoryIcon(itemCategoryNumber))
                   : item.icon}
               </div>
@@ -228,16 +227,16 @@ const SidebarItem = memo(
               )}
               {(!isActive ||
                 (isCategoryItem && itemCategoryNumber !== null)) && (
-                <div
-                  className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
-                >
-                  {isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  getCategoryIcon(itemCategoryNumber)
-                    ? renderIcon(getCategoryIcon(itemCategoryNumber))
-                    : item.icon}
-                </div>
-              )}
+                  <div
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
+                  >
+                    {isCategoryItem &&
+                      itemCategoryNumber !== null &&
+                      getCategoryIcon(itemCategoryNumber)
+                      ? renderIcon(getCategoryIcon(itemCategoryNumber))
+                      : item.icon}
+                  </div>
+                )}
               <div
                 className={`flex-1 flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} wrap-break-word`}
               >
