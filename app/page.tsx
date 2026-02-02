@@ -42,6 +42,7 @@ export default function Home() {
     id: string;
     title: string;
   } | null>(null);
+  console.log({auditsData})
 
   useEffect(() => {
     if (!authLoading && authData) {
