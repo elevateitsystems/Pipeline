@@ -4,88 +4,88 @@ import { AuditCreateSchema } from "@/validation/audit.validation";
 import { NextRequest, NextResponse } from "next/server";
 import { withCache, invalidateCache } from "@/lib/cache";
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
-    const userId = session.id;
-    const body = await req.json();
+// export async function POST(req: NextRequest): Promise<NextResponse> {
+//   try {
+//     const session = await getSession();
+//     if (!session) {
+//       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+//     }
+//     const userId = session.id;
+//     const body = await req.json();
 
-    const parsed = AuditCreateSchema.safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.flatten().fieldErrors },
-        { status: 400 }
-      );
-    }
+//     const parsed = AuditCreateSchema.safeParse(body);
+//     if (!parsed.success) {
+//       return NextResponse.json(
+//         { error: parsed.error.flatten().fieldErrors },
+//         { status: 400 }
+//       );
+//     }
 
-    const data = parsed.data;
+//     const data = parsed.data;
 
-    const audit = await prisma.presentation.create({
-      data: {
-        title: data.title,
-        userId: userId,
-        categories: {
-          create: data.categories.map((cat) => ({
-            name: cat.name,
-            icon: (cat.icon && cat.icon.trim()) ? cat.icon.trim() : null,
-            questions: {
-              create: cat.questions.map((q) => ({
-                text: q.text,
-                options: {
-                  create: q.options.map((opt) => ({
-                    text: opt.text,
-                    points: opt.points,
-                  })),
-                },
-              })),
-            },
-          })),
-        },
-        ...(data.summary && {
-          summary: {
-            create: {
-              categoryRecommendations: data.summary.categoryRecommendations
-                ? JSON.stringify(data.summary.categoryRecommendations)
-                : null,
-              nextSteps: data.summary.nextSteps
-                ? JSON.stringify(data.summary.nextSteps)
-                : null,
-              overallDetails: data.summary.overallDetails || null,
-            },
-          },
-        }),
-      },
-      include: {
-        categories: {
-          include: {
-            questions: {
-              include: { options: true },
-            },
-          },
-        },
-        summary: true,
-      },
-    });
+//     const audit = await prisma.presentation.create({
+//       data: {
+//         title: data.title,
+//         userId: userId,
+//         categories: {
+//           create: data.categories.map((cat) => ({
+//             name: cat.name,
+//             icon: (cat.icon && cat.icon.trim()) ? cat.icon.trim() : null,
+//             questions: {
+//               create: cat.questions.map((q) => ({
+//                 text: q.text,
+//                 options: {
+//                   create: q.options.map((opt) => ({
+//                     text: opt.text,
+//                     points: opt.points,
+//                   })),
+//                 },
+//               })),
+//             },
+//           })),
+//         },
+//         ...(data.summary && {
+//           summary: {
+//             create: {
+//               categoryRecommendations: data.summary.categoryRecommendations
+//                 ? JSON.stringify(data.summary.categoryRecommendations)
+//                 : null,
+//               nextSteps: data.summary.nextSteps
+//                 ? JSON.stringify(data.summary.nextSteps)
+//                 : null,
+//               overallDetails: data.summary.overallDetails || null,
+//             },
+//           },
+//         }),
+//       },
+//       include: {
+//         categories: {
+//           include: {
+//             questions: {
+//               include: { options: true },
+//             },
+//           },
+//         },
+//         summary: true,
+//       },
+//     });
 
-    await invalidateCache(`audit:${userId}`);
-    await invalidateCache('categories');
+//     await invalidateCache(`audit:${userId}`);
+//     await invalidateCache('categories');
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Audit created successfully",
-        data: audit,
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error creating audit:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}
+//     return NextResponse.json(
+//       {
+//         success: true,
+//         message: "Audit created successfully",
+//         data: audit,
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.error("Error creating audit:", error);
+//     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+//   }
+// }
 
 // export async function GET(): Promise<NextResponse> {
 //   try {
@@ -197,6 +197,134 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 //   }
 // }
 
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  try {
+    const session = await getSession();
+    if (!session) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    const userId = session.id;
+    const body = await req.json();
+
+    const parsed = AuditCreateSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+    const data = parsed.data;
+
+    // 1️⃣ Create the main presentation
+    const audit = await prisma.presentation.create({
+      data: { title: data.title, userId },
+    });
+
+    const presentationId = audit.id;
+
+    // 2️⃣ Create categories in bulk
+    const categories = await prisma.category.createMany({
+      data: data.categories.map(cat => ({
+        name: cat.name,
+        icon: cat.icon?.trim() || null,
+        presentationId,
+      })),
+    });
+
+    // Fetch created category IDs
+    const createdCategories = await prisma.category.findMany({
+      where: { presentationId },
+    });
+
+    // 3️⃣ Create questions in bulk
+    const questionsToCreate: { text: string; categoryId: string }[] = [];
+    const optionMap: Record<string, { text: string; points: number; questionTempId: string }[]> = {};
+
+    data.categories.forEach((cat, index) => {
+      const catId = createdCategories[index].id;
+      cat.questions.forEach((q, qIndex) => {
+        const tempId = `${index}-${qIndex}`; // temp mapping for options
+        questionsToCreate.push({ text: q.text, categoryId: catId });
+        optionMap[tempId] = q.options.map(opt => ({
+          text: opt.text,
+          points: opt.points,
+          questionTempId: tempId,
+        }));
+      });
+    });
+
+    const createdQuestions = await prisma.question.createMany({
+      data: questionsToCreate,
+    });
+
+    // Fetch created questions IDs
+    const questionsInDb = await prisma.question.findMany({
+      where: { categoryId: { in: createdCategories.map(c => c.id) } },
+    });
+
+    // 4️⃣ Create options in bulk
+    const optionsToCreate: { text: string; points: number; questionId: string }[] = [];
+    let counter = 0;
+    data.categories.forEach((cat, ) => {
+      cat.questions.forEach((q, ) => {
+        const questionId = questionsInDb[counter++].id;
+        q.options.forEach(opt => {
+          optionsToCreate.push({
+            text: opt.text,
+            points: opt.points,
+            questionId,
+          });
+        });
+      });
+    });
+
+    if (optionsToCreate.length > 0) {
+      await prisma.option.createMany({ data: optionsToCreate });
+    }
+
+    // 5️⃣ Create summary if exists
+    if (data.summary) {
+      await prisma.summary.create({
+        data: {
+          presentationId,
+          categoryRecommendations: data.summary.categoryRecommendations
+            ? JSON.stringify(data.summary.categoryRecommendations)
+            : null,
+          nextSteps: data.summary.nextSteps ? JSON.stringify(data.summary.nextSteps) : null,
+          overallDetails: data.summary.overallDetails || null,
+        },
+      });
+    }
+
+    // 6️⃣ Fetch full audit with nested data
+    const fullAudit = await prisma.presentation.findUnique({
+      where: { id: presentationId },
+      include: {
+        categories: { include: { questions: { include: { options: true } } } },
+        summary: true,
+      },
+    });
+
+    // 7️⃣ Invalidate cache in parallel
+    await Promise.all([
+      invalidateCache(`audit:${userId}`),
+      invalidateCache('categories'),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      message: "Audit created successfully",
+      data: fullAudit,
+    }, { status: 201 });
+
+  } catch (error) {
+    console.error("Error creating audit:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+
+
 export async function GET(req: Request): Promise<NextResponse> {
   try {
     const session = await getSession();
@@ -210,8 +338,8 @@ export async function GET(req: Request): Promise<NextResponse> {
     const { searchParams } = new URL(req.url);
     const page = Number(searchParams.get("page") || 1);
     const limit = Number(searchParams.get("limit") || 10);
-
-    return withCache(`audit:${userId}:p${page}`, async () => {
+// :p${page}
+    return withCache(`audit:${userId}`, async () => {
 
       // ─────────────────────────────────────────────
       // 1. RUN INITIAL QUERIES IN PARALLEL

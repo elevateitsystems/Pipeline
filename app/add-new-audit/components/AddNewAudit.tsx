@@ -524,11 +524,9 @@ export default function AddNewAudit() {
         // Dispatch event to update sidebar
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
-
       // Redirect to home page after successful creation
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
+ router.push("/");
+
     } catch (e) {
       toast.error("Failed to create audit. Please try again.");
       console.error(e);
@@ -602,7 +600,19 @@ const handleFileUpload = (e: any) => {
 
     // 👉 Save it to state or send directly
    const createdAudit = await createAuditMutation.mutateAsync(formattedData);
-   console.log({createdAudit})
+   toast.success("Audit created successfully");
+
+
+
+      // Clear full sessionStorage after successful creation
+      if (typeof window !== "undefined") {
+        sessionStorage.clear();
+
+        // Dispatch event to update sidebar
+        window.dispatchEvent(new Event("categoryNameUpdated"));
+      }
+      // Redirect to home page after successful creation
+ router.push("/");
   };
 
   reader.readAsBinaryString(file);
@@ -677,7 +687,8 @@ const handleFileUpload = (e: any) => {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-  <input
+<div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
+    <input
     type="file"
     accept=".csv,.xlsx,.xls"
     onChange={handleFileUpload}
@@ -687,10 +698,10 @@ const handleFileUpload = (e: any) => {
 
   <label
     htmlFor="auditUpload"
-    className="px-4 py-2 border rounded-md cursor-pointer bg-gray-100 hover:bg-gray-200"
   >
     Upload File
   </label>
+</div>
           </div>
         </div>
 

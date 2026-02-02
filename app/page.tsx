@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/contexts/UserContext";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, use } from "react";
 import { useRouter } from "next/navigation";
 import notFoundImg from "@/public/notFound2.png";
 import editIcon from "@/public/Edit.png";
@@ -33,6 +33,7 @@ export default function Home() {
     data: auditsData,
     isLoading: auditsLoading,
     error: auditsError,
+    refetch: refetchAudits,
   } = useAudits();
   const deleteAuditMutation = useDeleteAudit();
   const sendInviteMutation = useSendAuditInvite();
@@ -183,7 +184,10 @@ export default function Home() {
       throw error;
     }
   };
-
+useEffect(() => {
+    // Refetch audits when component mounts to get the latest data
+    refetchAudits();
+  }, [refetchAudits]);
   if (isLoading || loadingAudits || !user) {
     return <HomeSkeleton />;
   }
