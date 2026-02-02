@@ -339,15 +339,15 @@ export default function IconPicker({
   // Filter icons based on search query
   const filteredLucideIcons = searchQuery.trim()
     ? POPULAR_ICONS.filter((icon) =>
-        icon.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      icon.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : POPULAR_ICONS;
 
   const customIcons = iconesData?.data || [];
   const filteredCustomIcons = searchQuery.trim()
     ? customIcons.filter((icon) =>
-        icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : customIcons;
 
   // Close dropdown when clicking outside
@@ -552,9 +552,8 @@ export default function IconPicker({
             )}
           </div>
           <svg
-            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${
-              isOpen ? "rotate-180" : ""
-            }`}
+            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${isOpen ? "rotate-180" : ""
+              }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -587,8 +586,8 @@ export default function IconPicker({
             data-icon-picker-dropdown
             className="bg-white border border-gray-200 rounded-xl shadow-2xl"
             style={{
-              width: "clamp(280px, 320px, 90vw)",
-              height: "clamp(300px, 350px, 70vh)",
+              width: "clamp(250px, 20vw, 288px)",
+              height: "clamp(280px, 20vh, 312px)",
               display: "flex",
               flexDirection: "column",
               top: `${dropdownPosition.top}px`,
@@ -655,7 +654,7 @@ export default function IconPicker({
                   <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">
                     Your Icons
                   </p>
-                  <div className="grid grid-cols-5 lg:grid-cols-6 gap-2">
+                  <div className="grid grid-cols-5 gap-2">
                     {filteredCustomIcons.map((icon) => (
                       <button
                         key={icon.id}
@@ -665,11 +664,10 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleCustomIconSelect(icon.iconUrl);
                         }}
-                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
-                          value === icon.iconUrl
-                            ? "ring-2 ring-blue-500 bg-blue-50"
-                            : "border border-gray-200"
-                        }`}
+                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === icon.iconUrl
+                          ? "ring-2 ring-blue-500 bg-blue-50"
+                          : "border border-gray-200"
+                          }`}
                         title={icon.name}
                       >
                         <Image
@@ -692,7 +690,7 @@ export default function IconPicker({
                     Standard Icons
                   </p>
                 )}
-                <div className="grid grid-cols-5 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                   {filteredLucideIcons.map((iconName) => {
                     const IconComponent = (
                       LucideIcons as unknown as Record<
@@ -717,11 +715,10 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleIconSelect(iconName);
                         }}
-                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
-                          value === iconName
-                            ? "ring-2 ring-blue-500 bg-blue-50"
-                            : "border border-gray-200"
-                        }`}
+                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === iconName
+                          ? "ring-2 ring-blue-500 bg-blue-50"
+                          : "border border-gray-200"
+                          }`}
                         title={iconName}
                       >
                         <IconComponent className="w-5 h-5" />
