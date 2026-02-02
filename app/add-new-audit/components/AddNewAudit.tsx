@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import * as XLSX from "xlsx";
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCreateAudit } from "@/lib/hooks";
 import toast from "react-hot-toast";
 import { CustomButton } from "@/components/common";
 import SummarySection from "@/components/SummarySection";
+
 
 type OptionState = { text: string; points: number };
 
@@ -469,6 +471,12 @@ export default function AddNewAudit() {
       // Call single audit API with full data
       // IMPORTANT: Summary is sent as a separate field, NOT as part of categories array
       // Categories array only contains categories 1-7, summary is completely separate
+
+      console.log('Categories array only contains categories 1-7,',{
+        title: (auditData.title || title).trim(),
+        categories, // Only categories 1-7, excludes summary
+        ...(summaryData && { summary: summaryData }), // Summary is separate from categories
+      })
       const createdAudit = await createAuditMutation.mutateAsync({
         title: (auditData.title || title).trim(),
         categories, // Only categories 1-7, excludes summary
@@ -527,6 +535,78 @@ export default function AddNewAudit() {
     }
   };
 
+  const convertToFormat = (rows: any) => {
+  const title =
+    rows.find((r:any) => r["Presentation Name"])?.["Presentation Name"] ||
+    "Untitled";
+
+  let currentCategory = "";
+
+  const categoriesMap: Record<string, any[]> = {};
+
+  rows.forEach((row: any) => {
+    if (row["Category"]) {
+      currentCategory = row["Category"];
+    }
+
+    if (!categoriesMap[currentCategory]) {
+      categoriesMap[currentCategory] = [];
+    }
+
+    const questionText = row["Question 2"];
+    if (!questionText) return;
+
+    const optionsRaw = String(row["Column 2"] || "").split(",");
+
+    const options = optionsRaw.map((opt, index) => ({
+      text: opt.trim(),
+      points: index + 1,
+    }));
+
+    categoriesMap[currentCategory].push({
+      text: questionText,
+      options,
+    });
+  });
+
+  return {
+    title,
+    categories: Object.keys(categoriesMap).map((name) => ({
+      name,
+      questions: categoriesMap[name],
+    })),
+  };
+};
+
+const handleFileUpload = (e: any) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = async (event) => {
+    if (!event.target) return;
+    const data = event.target.result;
+
+    const workbook = XLSX.read(data, { type: "binary" });
+
+    const sheetName = workbook.SheetNames[0];
+
+    const rows = XLSX.utils.sheet_to_json(
+      workbook.Sheets[sheetName]
+    );
+
+    const formattedData = convertToFormat(rows);
+
+    console.log("Converted JSON:", formattedData);
+
+    // 👉 Save it to state or send directly
+   const createdAudit = await createAuditMutation.mutateAsync(formattedData);
+   console.log({createdAudit})
+  };
+
+  reader.readAsBinaryString(file);
+};
   return (
     <div className="">
       <header className="">
@@ -587,7 +667,7 @@ export default function AddNewAudit() {
             >
               Back to List
             </button>
-            <CustomButton
+           <CustomButton
               variant="primary"
               size="md"
               className="flex-1"
@@ -597,6 +677,20 @@ export default function AddNewAudit() {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
+  <input
+    type="file"
+    accept=".csv,.xlsx,.xls"
+    onChange={handleFileUpload}
+    className="hidden"
+    id="auditUpload"
+  />
+
+  <label
+    htmlFor="auditUpload"
+    className="px-4 py-2 border rounded-md cursor-pointer bg-gray-100 hover:bg-gray-200"
+  >
+    Upload File
+  </label>
           </div>
         </div>
 

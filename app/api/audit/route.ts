@@ -87,115 +87,287 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 }
 
-export async function GET(): Promise<NextResponse> {
+// export async function GET(): Promise<NextResponse> {
+//   try {
+//     const session = await getSession();
+//     if (!session) {
+//       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+//     }
+//     const userId = session.id;
+
+//     return withCache(`audit:${userId}`, async () => {
+//       const user = await prisma.user.findUnique({
+//         where: { id: userId },
+//         include: {
+//           company: true,
+//         },
+//       });
+
+//       if (!user) {
+//         return NextResponse.json({ error: "User not found" }, { status: 404 });
+//       }
+
+//       // Check if user has an accepted invitation with a presentationId (for invited users who signed up)
+//       const acceptedInvitation = await prisma.invitation.findFirst({
+//         where: {
+//           email: user.email,
+//           status: "ACCEPTED",
+//           presentationId: { not: null },
+//         },
+//         orderBy: {
+//           createdAt: 'desc',
+//         },
+//       });
+
+//       // Get all audits shared with this user
+//       const sharedAudits = await prisma.sharedAudit.findMany({
+//         where: {
+//           userId: userId,
+//         },
+//         select: {
+//           presentationId: true,
+//         },
+//       });
+
+//       const sharedAuditIds = sharedAudits.map(sa => sa.presentationId);
+
+//       let whereClause:
+//         | { id: { in: string[] } }
+//         | { OR: Array<{ userId: string } | { id: { in: string[] } }> }
+//         | { userId: string };
+
+//       if (acceptedInvitation?.presentationId) {
+//         const auditIds = [acceptedInvitation.presentationId, ...sharedAuditIds];
+//         whereClause = {
+//           id: { in: auditIds },
+//         };
+//       } else if (sharedAuditIds.length > 0) {
+//         whereClause = {
+//           OR: [
+//             { userId: userId },
+//             { id: { in: sharedAuditIds } },
+//           ],
+//         };
+//       } else {
+//         whereClause = {
+//           userId: userId,
+//         };
+//       }
+
+//       const audits = await prisma.presentation.findMany({
+//         where: whereClause,
+//         include: {
+//           categories: {
+//             include: {
+//               questions: {
+//                 include: { options: true },
+//               },
+//             },
+//           },
+//         tests: {
+//           orderBy: {
+//             createdAt: 'desc',
+//           },
+//           take: 1,
+//         },
+//         },
+//         orderBy: {
+//           createdAt: 'desc',
+//         },
+//       });
+
+//       const isInvitedUser = !!acceptedInvitation?.presentationId;
+
+//       return NextResponse.json(
+//         {
+//           success: true,
+//           message: "Audit fetch successfully!",
+//           data: audits,
+//           isInvitedUser: isInvitedUser,
+//         },
+//         { status: 200 }
+//       );
+//     });
+//   } catch (error) {
+//     console.error("Error fetching audits:", error);
+//     return NextResponse.json(
+//       { error: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+export async function GET(req: Request): Promise<NextResponse> {
   try {
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
+
     const userId = session.id;
 
-    return withCache(`audit:${userId}`, async () => {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        include: {
-          company: true,
-        },
-      });
+    // Optional pagination
+    const { searchParams } = new URL(req.url);
+    const page = Number(searchParams.get("page") || 1);
+    const limit = Number(searchParams.get("limit") || 10);
+
+    return withCache(`audit:${userId}:p${page}`, async () => {
+
+      // ─────────────────────────────────────────────
+      // 1. RUN INITIAL QUERIES IN PARALLEL
+      // ─────────────────────────────────────────────
+      const [user, acceptedInvitation, sharedAudits] = await Promise.all([
+
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: {
+            email: true,
+            companyId: true,
+          },
+        }),
+
+        prisma.invitation.findFirst({
+          where: {
+            email: undefined, // filled after user load
+            status: "ACCEPTED",
+            presentationId: { not: null },
+          },
+          orderBy: { createdAt: "desc" },
+          select: { presentationId: true },
+        }),
+
+        prisma.sharedAudit.findMany({
+          where: { userId },
+          select: { presentationId: true },
+        }),
+      ]);
 
       if (!user) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
 
-      // Check if user has an accepted invitation with a presentationId (for invited users who signed up)
-      const acceptedInvitation = await prisma.invitation.findFirst({
+      // Re-check invitation with email
+      const invitation = await prisma.invitation.findFirst({
         where: {
           email: user.email,
           status: "ACCEPTED",
           presentationId: { not: null },
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-
-      // Get all audits shared with this user
-      const sharedAudits = await prisma.sharedAudit.findMany({
-        where: {
-          userId: userId,
-        },
-        select: {
-          presentationId: true,
-        },
+        orderBy: { createdAt: "desc" },
+        select: { presentationId: true },
       });
 
       const sharedAuditIds = sharedAudits.map(sa => sa.presentationId);
 
-      let whereClause:
-        | { id: { in: string[] } }
-        | { OR: Array<{ userId: string } | { id: { in: string[] } }> }
-        | { userId: string };
+      // ─────────────────────────────────────────────
+      // 2. BUILD WHERE CLAUSE
+      // ─────────────────────────────────────────────
+      let whereClause: any;
 
-      if (acceptedInvitation?.presentationId) {
-        const auditIds = [acceptedInvitation.presentationId, ...sharedAuditIds];
+      if (invitation?.presentationId) {
         whereClause = {
-          id: { in: auditIds },
+          id: { in: [invitation.presentationId, ...sharedAuditIds] },
         };
       } else if (sharedAuditIds.length > 0) {
         whereClause = {
           OR: [
-            { userId: userId },
+            { userId },
             { id: { in: sharedAuditIds } },
           ],
         };
       } else {
-        whereClause = {
-          userId: userId,
-        };
+        whereClause = { userId };
       }
 
+      // ─────────────────────────────────────────────
+      // 3. MAIN OPTIMIZED QUERY
+      // ─────────────────────────────────────────────
       const audits = await prisma.presentation.findMany({
         where: whereClause,
-        include: {
+
+        skip: (page - 1) * limit,
+        take: limit,
+
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          updatedAt: true,
+
           categories: {
-            include: {
+            select: {
+              id: true,
+              name: true,
+              icon: true,
+
               questions: {
-                include: { options: true },
+                select: {
+                  id: true,
+                  text: true,
+
+                  options: {
+                    select: {
+                      id: true,
+                      text: true,
+                      points: true,
+                    },
+                  },
+                },
               },
             },
           },
-        tests: {
-          orderBy: {
-            createdAt: 'desc',
+
+          tests: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+            select: {
+              id: true,
+              totalScore: true,
+              createdAt: true,
+            },
           },
-          take: 1,
         },
-        },
+
         orderBy: {
-          createdAt: 'desc',
+          createdAt: "desc",
         },
       });
 
-      const isInvitedUser = !!acceptedInvitation?.presentationId;
+      // ─────────────────────────────────────────────
+      // 4. COUNT FOR PAGINATION
+      // ─────────────────────────────────────────────
+      const total = await prisma.presentation.count({
+        where: whereClause,
+      });
 
       return NextResponse.json(
         {
           success: true,
-          message: "Audit fetch successfully",
+          message: "Audit fetch successfully!",
           data: audits,
-          isInvitedUser: isInvitedUser,
+          isInvitedUser: !!invitation?.presentationId,
+
+          pagination: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+          },
         },
         { status: 200 }
       );
     });
+
   } catch (error) {
     console.error("Error fetching audits:", error);
+
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
     );
   }
 }
+
 
 /*
 {

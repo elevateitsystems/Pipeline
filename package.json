@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev --turbopack",
-  "prisma:migrate": "prisma migrate dev",
-  "prisma:studio": "prisma studio",
-  "prisma:generate": "prisma generate",
+    "dev": "next dev --turbopack",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:generate": "prisma generate",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
@@ -34,6 +34,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-spinners": "^0.17.0",
     "tailwind-merge": "^3.3.1",
+    "xlsx": "^0.18.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {
