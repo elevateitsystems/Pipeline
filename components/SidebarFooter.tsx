@@ -29,32 +29,32 @@ const SidebarFooter = ({
       }}
     >
       {onResultPage ? (
-        <div>
-          <div className="px-4 mt-6">
-            <h3 className="text-lg text-white mb-3 uppercase text-center">
+        <div className="px-4 mt-6 border-t-2 border-[#456987]">
+          <div className="mt-4">
+            <h3 className="text-2xl text-white mb-3  text-center">
               Testimonials
             </h3>
             <div className="space-y-4">
-              <div className="bg-white/10 rounded-lg p-3  text-center">
-                <p className="text-white text-xs leading-relaxed ">
-                  This audit system has transformed how we track and improve our
-                  processes. The comprehensive scoring and detailed
+              <div className="bg-[#456987] rounded-lg p-3  text-center">
+                <p className="text-[#E8E8E8]  ">
+                  This audit system has transformed how we track and improve
+                  our processes. The comprehensive scoring and detailed
                   recommendations help us identify areas for urgent attention.
                 </p>
               </div>
-              <div className="bg-white/10 rounded-lg p-3  text-center">
-                <p className="text-white text-xs leading-relaxed ">
-                  The category-based assessment structure makes it easy to focus
-                  on specific areas. The summary overview provides clear
+              <div className="bg-[#456987] rounded-lg p-3  text-center">
+                <p className="text-[#E8E8E8]  font-normal">
+                  The category-based assessment structure makes it easy to
+                  focus on specific areas. The summary overview provides clear
                   insights for continuous improvement.
                 </p>
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-2 mb-8 sidebar-bottom-info px-4">
+          <div className="grid grid-cols-2 items-center justify-center gap-2 mb-8 mt-4 sidebar-bottom-info">
             <CustomButton
               onClick={handleLogout}
-              className="flex-1 flex items-center justify-center gap-2 text-white hover:text-gray-300 transition-colors"
+              className="flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
               style={{ fontSize: "inherit" }}
             >
               Logout
@@ -62,7 +62,7 @@ const SidebarFooter = ({
 
             <button
               onClick={() => router.push("/")}
-              className="flex-1 py-1 h-10 cursor-pointer rounded-full bg-transparent border border-white/50  font-semibold text-white transition-colors text-center"
+              className="w-full py-1 h-10 cursor-pointer rounded-full hover:bg-black/5 bg-transparent border border-white/50  text-white transition-colors text-center"
             >
               Exit
             </button>

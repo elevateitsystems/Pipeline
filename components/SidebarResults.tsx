@@ -17,7 +17,7 @@ const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
   return (
     <div className="px-4 mt-4">
       <h3
-        className="text-lg text-white mb-3 uppercase"
+        className="text-xl text-white mb-3 uppercase"
         style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
       >
         Area Of Urgent Focus
@@ -26,7 +26,9 @@ const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
         {testResultData &&
           (() => {
             const urgentCategories = [...testResultData.categoryScores]
-              .filter((cs) => cs.categoryName.toLowerCase() !== "summary")
+              .filter(
+                (cs) => cs.categoryName.toLowerCase() !== "summary",
+              )
               .sort((a, b) => {
                 const aPercentage =
                   a.maxScore > 0 ? (a.score / a.maxScore) * 100 : 0;
@@ -43,15 +45,16 @@ const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
                 <div key={cs.categoryId} className="mb-4">
                   <div className="flex justify-between items-center mb-1">
                     <span
-                      className="text-white text-sm text-nowrap"
+                      className="text-white overflow-hidden text-xl text-nowrap"
                       style={{
-                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontFamily:
+                          "'Acumin Variable Concept', sans-serif",
                       }}
                     >
                       {cs.categoryName}
                     </span>
                   </div>
-                  <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden">
+                  <div className="w-full h-4  border-2 border-[#456987] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-[#F65355] transition-all duration-500"
                       style={{ width: `${Math.min(percentage, 100)}%` }}
