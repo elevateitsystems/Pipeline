@@ -12,6 +12,7 @@ interface SidebarHeaderProps {
   user: SessionUser;
   logo: StaticImageData;
   summary: StaticImageData;
+  secondaryColor?: string;
 }
 
 const SidebarHeader = ({
@@ -20,11 +21,16 @@ const SidebarHeader = ({
   user,
   logo,
   summary,
+  secondaryColor,
 }: SidebarHeaderProps) => {
   return (
     <div
-      className="py-11 border-b-2 border-[#456987] flex justify-center shrink-0"
-      style={{ position: "relative", zIndex: 2 }}
+      className="py-11 border-b-2 flex justify-center shrink-0"
+      style={{
+        position: "relative",
+        zIndex: 2,
+        borderColor: secondaryColor || "#456987",
+      }}
     >
       {onResultPage ? (
         <div className="flex items-center gap-3 px-4">
