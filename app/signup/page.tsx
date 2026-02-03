@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useInvite, useRegister } from "@/lib/hooks";
+import { useUser } from "@/contexts/UserContext";
 import axios from "axios";
 import Image from "next/image";
 
@@ -18,6 +19,18 @@ interface InvitationData {
 export default function SignupPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    }
+  }, [user, router]);
 
   const [formData, setFormData] = useState({
     name: "",
