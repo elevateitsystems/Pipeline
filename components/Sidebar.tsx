@@ -1209,6 +1209,7 @@ export default function Sidebar() {
             secondaryColor={secondaryColor}
           />
         ) : (
+          //comment
           <>
             {(onNewAuditPage ||
               onUpdateAuditPage ||
