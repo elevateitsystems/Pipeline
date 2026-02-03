@@ -44,7 +44,7 @@ export default function Home() {
     id: string;
     title: string;
   } | null>(null);
-  console.log({auditsData})
+  console.log({ auditsData })
 
   useEffect(() => {
     if (!authLoading && authData) {
@@ -184,7 +184,7 @@ export default function Home() {
       throw error;
     }
   };
-useEffect(() => {
+  useEffect(() => {
     // Refetch audits when component mounts to get the latest data
     refetchAudits();
   }, [refetchAudits]);
@@ -425,7 +425,7 @@ useEffect(() => {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="grid grid-cols-[15%_30%_30%_25%] gap-2 pr-6">
+                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
                       {!isInvitedUser && (
                         <>
                           <button

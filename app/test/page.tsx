@@ -25,6 +25,12 @@ export default function TestPage() {
           return;
         }
 
+        if (data.user?.role === "ADMIN") {
+          toast.error("Admins cannot take audits");
+          router.push("/admin");
+          return;
+        }
+
         setIsLoading(false);
       } catch (error) {
         console.error(error);

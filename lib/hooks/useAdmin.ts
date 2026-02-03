@@ -20,7 +20,7 @@ export function useAllUsers(limit?: number, page?: number, search?: string) {
       if (limit) params.limit = limit.toString();
       if (page) params.page = page.toString();
       if (search) params.search = search;
-      
+
       const response = await apiClient.get<{ users: User[]; total: number; page: number; totalPages: number }>(
         '/admin/all-users',
         { params: Object.keys(params).length > 0 ? params : undefined }
@@ -39,14 +39,14 @@ export function useAllAudits(limit?: number, page?: number, search?: string) {
       if (limit) params.limit = limit.toString();
       if (page) params.page = page.toString();
       if (search) params.search = search;
-      
-      const response = await apiClient.get<{ 
-        audits: Array<Presentation & { 
+
+      const response = await apiClient.get<{
+        audits: Array<Presentation & {
           user: Pick<User, 'id' | 'name' | 'email'> & { company?: { id: string; name: string } };
           _count: { tests: number };
-        }>; 
-        total: number; 
-        page: number; 
+        }>;
+        total: number;
+        page: number;
         totalPages: number;
       }>(
         '/admin/audits',
@@ -77,7 +77,7 @@ export function useAllTeams() {
   return useQuery({
     queryKey: adminKeys.teams(),
     queryFn: async () => {
-      const response = await apiClient.get<{ 
+      const response = await apiClient.get<{
         teams: Array<{
           id: string;
           name: string;
@@ -113,6 +113,22 @@ export function useAllTeams() {
         total: number;
       }>('/admin/teams');
       return response;
+    },
+  });
+}
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+// Delete user (admin only)
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userId: string) => {
+      await apiClient.delete(`/admin/users/${userId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminKeys.users() });
     },
   });
 }
