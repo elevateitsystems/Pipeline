@@ -239,7 +239,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
 
     // 3️⃣ Create questions in bulk
-    const questionsToCreate: { text: string; categoryId: string }[] = [];
+    const questionsToCreate: { text: string; categoryId: string; order: number }[] = [];
     const optionMap: Record<string, { text: string; points: number; questionTempId: string }[]> = {};
 
     data.categories.forEach((cat, index) => {
