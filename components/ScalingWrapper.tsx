@@ -4,6 +4,7 @@ import { useEffect, useState, ReactNode } from 'react';
 
 export default function ScalingWrapper({ children }: { children: ReactNode }) {
     const [scales, setScales] = useState({ x: 1, y: 1 });
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -13,6 +14,7 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
             const widthScale = window.innerWidth / targetWidth;
             const heightScale = window.innerHeight / targetHeight;
             setScales({ x: widthScale, y: heightScale });
+            setIsReady(true);
         };
 
         handleResize();
@@ -30,7 +32,10 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                zIndex: 10
+                zIndex: 10,
+                opacity: isReady ? 1 : 0,
+                transition: 'opacity 0.2s ease-in-out',
+                backgroundColor: 'transparent'
             }}
         >
             <div
