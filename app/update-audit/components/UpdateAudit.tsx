@@ -1206,9 +1206,9 @@ export default function UpdateAudit() {
     [],
   );
 
-  // if (loading) {
-  //   return <TableSkeleton />;
-  // }
+  if (loading) {
+    return <TableSkeleton />;
+  }
 
   return (
     <div className="">

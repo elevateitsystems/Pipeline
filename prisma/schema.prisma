@@ -121,6 +121,7 @@ model Category {
   presentation   Presentation    @relation(fields: [presentationId], references: [id], onDelete: Cascade)
   categoryScores CategoryScore[]
   questions      Question[]
+  order          Int             @default(0) // Added for persisting drag-and-drop order
  @@index([presentationId])  
   @@index([name])
   @@map("categories")
@@ -135,6 +136,7 @@ model Question {
   answers    Answer[]
   options    Option[]
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  order      Int      @default(0) // Added for persisting question order
  @@index([categoryId]) 
   @@map("questions")
 }

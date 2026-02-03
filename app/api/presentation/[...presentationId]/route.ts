@@ -20,8 +20,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         where: { id: presentationId },
         include: {
           categories: {
+            orderBy: { order: 'asc' }, // Order by the persisted order field
             include: {
               questions: {
+                orderBy: { order: 'asc' }, // Order questions too
                 include: {
                   options: true,
                 },
