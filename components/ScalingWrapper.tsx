@@ -12,8 +12,6 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
 
             const widthScale = window.innerWidth / targetWidth;
             const heightScale = window.innerHeight / targetHeight;
-
-            // Scale X and Y independently to fit the screen exactly
             setScales({ x: widthScale, y: heightScale });
         };
 
