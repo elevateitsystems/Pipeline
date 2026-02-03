@@ -156,6 +156,21 @@ export default function UpdateAudit() {
     };
   }, []);
 
+  // Share loading state with sidebar so it can show skeletons
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    sessionStorage.setItem("testSidebarLoading", loading ? "true" : "false");
+    window.dispatchEvent(new Event("testSidebarLoadingChanged"));
+  }, [loading]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    return () => {
+      sessionStorage.setItem("testSidebarLoading", "false");
+      window.dispatchEvent(new Event("testSidebarLoadingChanged"));
+    };
+  }, []);
+
   // Sync formData.categories when categories are reordered in Sidebar
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1050,13 +1065,25 @@ export default function UpdateAudit() {
             latestCategoryNames[categoryNumber] ||
             cat.name ||
             `Category ${categoryNumber}`;
+          // Define default icons to match Sidebar logic
+          const defaultIcons = [
+            "Folder",
+            "FileText",
+            "List",
+            "CheckSquare",
+            "PieChart",
+            "BarChart",
+            "Settings",
+          ];
+          const defaultIconName = defaultIcons[index % defaultIcons.length];
+
           // Use latest icon from sessionStorage if available, otherwise use formData icon
           const categoryIcon =
             latestCategoryIcons[categoryNumber] !== undefined
-              ? latestCategoryIcons[categoryNumber]
+              ? latestCategoryIcons[categoryNumber] || defaultIconName
               : cat.icon && cat.icon.trim()
                 ? cat.icon.trim()
-                : undefined;
+                : defaultIconName;
 
           const questions = cat.questions
             .filter((q) => q.text && q.text.trim().length > 0)

@@ -45,7 +45,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
-    
+
     if (existingUser) {
       // User already exists - share the audit with them directly
       // Check if audit is already shared with this user
@@ -76,9 +76,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       // Send email with login link
       const loginLink = `${process.env.APP_URL || 'http://localhost:3000'}/signin`;
-      
+
       await transport.sendMail({
-        from: "chayansd5656@gmail.com",
+        from: process.env.APP_EMAIL,
         to: email,
         subject: `New audit shared with you: ${presentation.title}`,
         text: `A new audit "${presentation.title}" has been shared with you. Please log in to access it: ${loginLink}`,
@@ -135,11 +135,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
 
-    // Send email with signup invitation link
+    // Send email with signup invitation link 
     const invitationLink = `${process.env.APP_URL || 'http://localhost:3000'}/signup?token=${token}`;
-    
+
     await transport.sendMail({
-      from: "chayansd5656@gmail.com",
+      from: process.env.APP_EMAIL,
       to: email,
       subject: `Invitation to take audit: ${presentation.title}`,
       text: `You have been invited to take the audit "${presentation.title}". Please sign up using this link: ${invitationLink}`,

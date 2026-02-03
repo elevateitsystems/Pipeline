@@ -83,7 +83,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // TODO: Send email link with: `${process.env.APP_URL}/signup?token=${token}`
 
   const mail =  await transport.sendMail({
-      from : "chayansd5656@gmail.com",
+      from : process.env.APP_EMAIL,
       to : email,
       subject : "Your invitaion email",
       text : `Invitation link: ${process.env.APP_URL}/signup?token=${token}`

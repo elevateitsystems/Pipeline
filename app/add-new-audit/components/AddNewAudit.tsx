@@ -409,7 +409,19 @@ export default function AddNewAudit() {
       const allCategories = auditData.categories || [];
       const categories = allCategories
         .filter((cat, index) => index < 7) // Only include categories at index 0-6 (categories 1-7)
-        .map((cat) => {
+        .map((cat, index) => {
+          // Define default icons to match Sidebar logic
+          const defaultIcons = [
+            "Folder",
+            "FileText",
+            "List",
+            "CheckSquare",
+            "PieChart",
+            "BarChart",
+            "Settings",
+          ];
+          const defaultIconName = defaultIcons[index % defaultIcons.length];
+
           // Filter out empty questions and ensure each question has 5 options
           const questions = cat.questions
             .filter((q) => q.text && q.text.trim().length > 0)
@@ -436,7 +448,8 @@ export default function AddNewAudit() {
 
           return {
             name: cat.name || "Category",
-            icon: cat.icon && cat.icon.trim() ? cat.icon.trim() : undefined,
+            icon:
+              cat.icon && cat.icon.trim() ? cat.icon.trim() : defaultIconName,
             questions,
           };
         })
