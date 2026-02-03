@@ -11,6 +11,7 @@ import TableSkeleton from "../add-new-audit/components/tableSkeleton";
 export default function TestPage() {
   const { user } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -37,15 +38,14 @@ export default function TestPage() {
   }, [router]);
 
   if (isLoading || !user) {
-    return (
-      <TableSkeleton />
-    );
+    return <TableSkeleton />;
   }
+
+  const presentationId = searchParams.get("presentationId");
 
   return (
     <div className="">
-      <TestPresentation />
+      <TestPresentation key={presentationId} />
     </div>
   );
 }
-

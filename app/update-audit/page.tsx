@@ -2,7 +2,7 @@
 
 import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import "react-loading-skeleton/dist/skeleton.css";
 import toast from "react-hot-toast";
 import TableSkeleton from "../add-new-audit/components/tableSkeleton";
@@ -11,6 +11,7 @@ import UpdateAudit from "./components/UpdateAudit";
 export default function UpdateAuditPage() {
   const { user } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -36,16 +37,16 @@ export default function UpdateAuditPage() {
     checkAuth();
   }, [router]);
 
-  // if (isLoading || !user) {
-  //   return (
-  //     <TableSkeleton />
-  //   );
-  // }
+  if (isLoading || !user) {
+    return <TableSkeleton />;
+  }
+
+  const editId = searchParams.get("edit");
 
   return (
     <div className="">
       <div className="">
-        <UpdateAudit />
+        <UpdateAudit key={editId} />
       </div>
     </div>
   );
