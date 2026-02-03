@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
     try {
         const session = await getSession();
@@ -20,7 +20,7 @@ export async function DELETE(
             );
         }
 
-        const { id } = params;
+        const { id } = await params;
 
         // Check if user to be deleted exists
         const user = await prisma.user.findUnique({

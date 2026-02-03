@@ -225,10 +225,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // 2️⃣ Create categories in bulk
     const categories = await prisma.category.createMany({
-      data: data.categories.map(cat => ({
+      data: data.categories.map((cat, index) => ({
         name: cat.name,
         icon: cat.icon?.trim() || null,
         presentationId,
+        order: index,
       })),
     });
 
@@ -245,7 +246,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const catId = createdCategories[index].id;
       cat.questions.forEach((q, qIndex) => {
         const tempId = `${index}-${qIndex}`; // temp mapping for options
-        questionsToCreate.push({ text: q.text, categoryId: catId });
+        questionsToCreate.push({ text: q.text, categoryId: catId, order: qIndex });
         optionMap[tempId] = q.options.map(opt => ({
           text: opt.text,
           points: opt.points,

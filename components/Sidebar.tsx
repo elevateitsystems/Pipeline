@@ -99,6 +99,8 @@ import {
   Hourglass,
   CalendarCheck,
   CalendarClock,
+  List,
+  CheckSquare,
 } from "lucide-react";
 
 // Mapping for dynamic icon rendering without bundling the whole library
@@ -169,6 +171,8 @@ const IconMap: Record<
   Clipboard,
   BookOpen,
   Notebook,
+  List,
+  CheckSquare,
 
   // Finance & Money
   DollarSign,
@@ -1083,7 +1087,7 @@ export default function Sidebar() {
   const onResultPage = pathname === "/test/result";
   const onMainPage = pathname === "/";
   const shouldShowTestSkeleton =
-    onTestPage && !!searchParams.get("presentationId") && isTestSidebarLoading;
+    (onTestPage || onUpdateAuditPage) && isTestSidebarLoading;
 
   const effectiveItems = useMemo(() => {
     let items: NavigationItem[] = [];
