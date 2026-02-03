@@ -1058,10 +1058,8 @@ export default function Sidebar() {
     if (onMainPage) {
       items = [...navigationItems];
     } else if (
-      onNewAuditPage ||
-      onUpdateAuditPage ||
-      onSummaryPage ||
-      onTestPage
+      (onNewAuditPage || onUpdateAuditPage || onSummaryPage || onTestPage) &&
+      !onMainPage
     ) {
       const editId = searchParams.get("edit");
       const presentationId = searchParams.get("presentationId");
@@ -1134,9 +1132,6 @@ export default function Sidebar() {
     navigationItems,
     searchParams,
     actualCategoryCount,
-    categoryNames,
-    categoryIcons,
-    mounted,
     getCategoryIcon,
     getCategoryName,
     renderIcon,
@@ -1181,21 +1176,22 @@ export default function Sidebar() {
             {(onNewAuditPage ||
               onUpdateAuditPage ||
               onSummaryPage ||
-              onTestPage) && (
-              <div
-                className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
-                style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontWeight: 500,
-                  fontSize: "clamp(20px, 1.8vw, 27px)",
-                  lineHeight: "1",
-                  letterSpacing: "0.006em",
-                  fontVariationSettings: "'wdth' 65, 'wght' 500",
-                }}
-              >
-                AUDIT CATGORIES
-              </div>
-            )}
+              onTestPage) &&
+              !onMainPage && (
+                <div
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
+                  style={{
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
+                    fontWeight: 500,
+                    fontSize: "clamp(20px, 1.8vw, 27px)",
+                    lineHeight: "1",
+                    letterSpacing: "0.006em",
+                    fontVariationSettings: "'wdth' 65, 'wght' 500",
+                  }}
+                >
+                  AUDIT CATGORIES
+                </div>
+              )}
             {shouldShowTestSkeleton
               ? Array.from(
                   { length: Math.max(actualCategoryCount, 4) },
@@ -1212,6 +1208,8 @@ export default function Sidebar() {
                   ),
                 )
               : effectiveItems.map((item) => {
+                  // Functionality (edit and drag-and-drop) is only allowed on edit and create pages
+                  // This selectively "comments out" the functionality on presentation/test pages.
                   let isActive = pathname === item.href;
                   const isCategoryItem =
                     "categoryNumber" in item &&
@@ -1274,11 +1272,18 @@ export default function Sidebar() {
                     isCategoryItem &&
                     itemCategoryNumber !== null &&
                     dragOverCategoryIndex === itemCategoryNumber - 1;
-                  const canDrag =
+                  // Edit options allowed on both create and edit pages
+                  const canEdit =
                     isCategoryItem &&
                     itemCategoryNumber !== null &&
                     (pathname === "/update-audit" ||
-                      pathname === "/add-new-audit") &&
+                      pathname === "/add-new-audit");
+
+                  // Drag and drop ONLY allowed on edit (update) page, not on create page
+                  const canDrag =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    pathname === "/update-audit" &&
                     item.name !== "Summary";
 
                   const isSummaryItem = item.name === "Summary";
@@ -1343,20 +1348,28 @@ export default function Sidebar() {
                           router.push(item.href);
                         }
                       }}
-                      onEditClick={(e) => {
-                        e.stopPropagation();
-                        if (itemCategoryNumber !== null) {
-                          setEditingCategory(itemCategoryNumber);
-                          if (item.href) {
-                            router.push(item.href);
-                          }
-                        }
-                      }}
-                      onMouseDownDrag={() => {
-                        if (itemCategoryNumber !== null) {
-                          setDragHandleCategory(itemCategoryNumber);
-                        }
-                      }}
+                      onEditClick={
+                        canEdit
+                          ? (e) => {
+                              e.stopPropagation();
+                              if (itemCategoryNumber !== null) {
+                                setEditingCategory(itemCategoryNumber);
+                                if (item.href) {
+                                  router.push(item.href);
+                                }
+                              }
+                            }
+                          : undefined
+                      }
+                      onMouseDownDrag={
+                        canDrag
+                          ? () => {
+                              if (itemCategoryNumber !== null) {
+                                setDragHandleCategory(itemCategoryNumber);
+                              }
+                            }
+                          : undefined
+                      }
                       onIconPickerTrigger={(e) => {
                         e.stopPropagation();
                         if (itemCategoryNumber !== null) {
