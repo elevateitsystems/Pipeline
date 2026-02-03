@@ -47,7 +47,7 @@ export default function AddNewAudit() {
           );
           setSessionStorageCategories(categories);
         }
-      } catch {}
+      } catch { }
     }
   };
 
@@ -75,7 +75,7 @@ export default function AddNewAudit() {
           setTitle(parsed.title);
         }
       }
-    } catch {}
+    } catch { }
   }, []);
 
   // Hydrate category name and icon from sessionStorage on mount or category change
@@ -238,7 +238,7 @@ export default function AddNewAudit() {
               merged.categories = prev.categories;
           }
         }
-      } catch {}
+      } catch { }
     }
 
     const trimmedTitle = title.trim();
@@ -430,19 +430,19 @@ export default function AddNewAudit() {
               options:
                 Array.isArray(q.options) && q.options.length === 5
                   ? q.options.map((opt) => ({
-                      text: opt.text.trim(),
-                      points: opt.points,
-                    }))
+                    text: opt.text.trim(),
+                    points: opt.points,
+                  }))
                   : [
-                      "Very Minimal",
-                      "Just Starting",
-                      "Good progress",
-                      "Excellent",
-                      "Very Excellent",
-                    ].map((text, i) => ({
-                      text: text,
-                      points: i + 1,
-                    })),
+                    "Very Minimal",
+                    "Just Starting",
+                    "Good progress",
+                    "Excellent",
+                    "Very Excellent",
+                  ].map((text, i) => ({
+                    text: text,
+                    points: i + 1,
+                  })),
             }))
             .filter((q) => q.text.length > 0);
 
@@ -464,19 +464,56 @@ export default function AddNewAudit() {
       let summaryData = null;
       if (typeof window !== "undefined") {
         const summaryDataStr = sessionStorage.getItem("summaryData");
-        if (summaryDataStr) {
-          try {
-            const parsed = JSON.parse(summaryDataStr);
-            // Map temp category IDs to category indices (will be mapped to real IDs after creation)
-            // For now, we'll use the category index as the identifier
-            summaryData = {
-              categoryRecommendations: parsed.categoryRecommendations || [],
-              nextSteps: parsed.nextSteps || [],
-              overallDetails: parsed.overallDetails,
-            };
-          } catch (error) {
-            console.error("Error parsing summary data:", error);
+
+        if (!summaryDataStr) {
+          toast.error("Please fill the summary section first");
+          return;
+        }
+
+        try {
+          const parsed = JSON.parse(summaryDataStr);
+
+          if (!parsed.overallDetails || !parsed.overallDetails.trim()) {
+            toast.error("Please fill the overall summary details");
+            return;
           }
+
+          // Check for category recommendations
+          const recMap = new Map();
+          if (Array.isArray(parsed.categoryRecommendations)) {
+            parsed.categoryRecommendations.forEach((r: any) => recMap.set(r.categoryId, r.recommendation));
+          }
+
+          // Filter active categories (same logic as 'categories' variable but keeping IDs)
+          const activeCategoriesWithIds = allCategories
+            .map((cat, index) => ({ ...cat, originalIndex: index })) // Keep original index for temp ID generation
+            .filter((cat, index) => index < 7)
+            .filter((cat) =>
+              cat.questions.some((q) => q.text && q.text.trim().length > 0)
+            );
+
+          const missingRecs = activeCategoriesWithIds.some((cat) => {
+            const id = (cat as any).id || `temp-${cat.originalIndex}`;
+            const rec = recMap.get(id);
+            return !rec || !rec.trim();
+          });
+
+          if (missingRecs) {
+            toast.error("Please fill the summary recommendations for all categories");
+            return;
+          }
+
+          // Map temp category IDs to category indices (will be mapped to real IDs after creation)
+          // For now, we'll use the category index as the identifier
+          summaryData = {
+            categoryRecommendations: parsed.categoryRecommendations || [],
+            nextSteps: parsed.nextSteps || [],
+            overallDetails: parsed.overallDetails,
+          };
+        } catch (error) {
+          console.error("Error parsing summary data:", error);
+          toast.error("Failed to process summary data");
+          return;
         }
       }
 
@@ -828,7 +865,7 @@ function AuditTable({
         if (hasQ || hasS) rowsToActivate.add(i);
       }
       setActiveRows(rowsToActivate);
-    } catch {}
+    } catch { }
   }, [currentCategory]);
 
   useEffect(() => {
@@ -873,7 +910,7 @@ function AuditTable({
           sessionStorage.setItem(key, JSON.stringify(row));
           onStatusChange?.(rowIndex, row);
         }
-      } catch {}
+      } catch { }
 
       return next;
     });
@@ -891,7 +928,7 @@ function AuditTable({
           value,
         );
       }
-    } catch {}
+    } catch { }
 
     // Auto-add options for this question if not present yet, using current status labels (defaults)
     if (!statusLabels[rowIndex] || statusLabels[rowIndex].length !== 5) {
@@ -904,7 +941,7 @@ function AuditTable({
             JSON.stringify(defaults),
           );
         }
-      } catch {}
+      } catch { }
       onStatusChange?.(rowIndex, defaults);
     }
   };
@@ -982,7 +1019,7 @@ function AuditTable({
             );
           }
         }
-      } catch {}
+      } catch { }
     });
 
     setQuestions(newQuestions);
