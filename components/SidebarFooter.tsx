@@ -11,6 +11,7 @@ interface SidebarFooterProps {
   user: SessionUser;
   handleLogout: () => void;
   router: AppRouterInstance;
+  secondaryColor?: string;
 }
 
 const SidebarFooter = ({
@@ -18,6 +19,7 @@ const SidebarFooter = ({
   user,
   handleLogout,
   router,
+  secondaryColor,
 }: SidebarFooterProps) => {
   return (
     <div
@@ -29,23 +31,32 @@ const SidebarFooter = ({
       }}
     >
       {onResultPage ? (
-        <div className="px-4 mt-6 border-t-2 border-[#456987]">
+        <div
+          className="px-4 mt-6 border-t-2"
+          style={{ borderColor: secondaryColor || "#456987" }}
+        >
           <div className="mt-4">
             <h3 className="text-2xl text-white mb-3  text-center">
               Testimonials
             </h3>
             <div className="space-y-4">
-              <div className="bg-[#456987] rounded-lg p-3  text-center">
+              <div
+                className="rounded-lg p-3 text-center"
+                style={{ backgroundColor: secondaryColor || "#456987" }}
+              >
                 <p className="text-[#E8E8E8]  ">
-                  This audit system has transformed how we track and improve
-                  our processes. The comprehensive scoring and detailed
+                  This audit system has transformed how we track and improve our
+                  processes. The comprehensive scoring and detailed
                   recommendations help us identify areas for urgent attention.
                 </p>
               </div>
-              <div className="bg-[#456987] rounded-lg p-3  text-center">
+              <div
+                className="rounded-lg p-3 text-center"
+                style={{ backgroundColor: secondaryColor || "#456987" }}
+              >
                 <p className="text-[#E8E8E8]  font-normal">
-                  The category-based assessment structure makes it easy to
-                  focus on specific areas. The summary overview provides clear
+                  The category-based assessment structure makes it easy to focus
+                  on specific areas. The summary overview provides clear
                   insights for continuous improvement.
                 </p>
               </div>

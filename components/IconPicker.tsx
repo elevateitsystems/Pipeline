@@ -18,77 +18,96 @@ interface IconPickerProps {
   onClose?: () => void;
 }
 
-// Curated lucide-react icons list - most commonly used icons
+// Curated lucide-react icons list - audit & business category focused
 const POPULAR_ICONS = [
-  // Navigation & UI (9)
-  "Home",
-  "Menu",
-  "X",
-  "ChevronDown",
-  "ChevronUp",
-  "ChevronLeft",
-  "ChevronRight",
-  "MoreVertical",
-  "MoreHorizontal",
+  // Business & Strategy
+  "Target",
+  "Award",
+  "Briefcase",
+  "Building",
+  "Building2",
+  "Landmark",
+  "Store",
+  "ShoppingCart",
 
-  // Actions (11)
-  "Search",
-  "Settings",
-  "Plus",
-  "Minus",
-  "Edit",
-  "Trash",
-  "Download",
-  "Upload",
-  "Save",
-  "Copy",
-  "Check",
-
-  // Files & Folders (5)
-  "Folder",
-  "FolderOpen",
-  "File",
-  "FileText",
-  "Image",
-
-  // Communication (5)
-  "Mail",
-  "Send",
-  "MessageSquare",
-  "Bell",
-  "Phone",
-
-  // User & Account (7)
-  "User",
-  "Users",
-  "UserPlus",
-  "LogOut",
-  "LogIn",
-  "Lock",
-  "Unlock",
-
-  // Content (7)
-  "Eye",
-  "EyeOff",
-  "Star",
-  "Heart",
-  "Share",
-  "Link",
-  "ExternalLink",
-
-  // Data & Analytics (5)
-  "BarChart",
-  "PieChart",
+  // Performance & Analytics
   "TrendingUp",
   "TrendingDown",
+  "BarChart",
+  "PieChart",
+  "LineChart",
   "Activity",
+  "Gauge",
+  "Zap",
 
-  // Status & Feedback (5)
-  "AlertCircle",
+  // People & Teams
+  "Users",
+  "User",
+  "UserCheck",
+  "UserCog",
+  "UserPlus",
+  "Contact",
+  "Handshake",
+
+  // Quality & Compliance
+  "Shield",
+  "ShieldCheck",
   "CheckCircle",
   "XCircle",
-  "Info",
-  "HelpCircle",
+  "AlertCircle",
+  "BadgeCheck",
+  "ClipboardCheck",
+
+  // Innovation & Ideas
+  "Lightbulb",
+  "Rocket",
+  "Sparkles",
+  "Star",
+  "Trophy",
+  "Crown",
+  "Gem",
+
+  // Communication & Feedback
+  "MessageSquare",
+  "Mail",
+  "Phone",
+  "Bell",
+  "Megaphone",
+  "Radio",
+
+  // Documentation & Files
+  "FileText",
+  "File",
+  "Folder",
+  "FolderOpen",
+  "Clipboard",
+  "BookOpen",
+  "Notebook",
+
+  // Finance & Money
+  "DollarSign",
+  "CreditCard",
+  "Wallet",
+  "Coins",
+  "TrendingUp",
+  "Calculator",
+
+  // Technology & Tools
+  "Settings",
+  "Cog",
+  "Wrench",
+  "Tool",
+  "Cpu",
+  "Database",
+  "Server",
+
+  // Time & Planning
+  "Calendar",
+  "Clock",
+  "Timer",
+  "Hourglass",
+  "CalendarCheck",
+  "CalendarClock",
 ] as const;
 
 export default function IconPicker({

@@ -19,6 +19,42 @@ export async function proxy(request: NextRequest) {
 
   // Allow public routes
   if (isPublicRoute) {
+    // If it's a login/signup page, check if user is ALREADY authenticated
+    if (pathname === '/signin' || pathname === '/signup') {
+      try {
+        const sessionId = request.cookies.get(COOKIE_NAME)?.value;
+        const sessionDataCookie = request.cookies.get(SESSION_DATA_COOKIE_NAME)?.value;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let user: any = null;
+
+        // Check Redis first
+        if (sessionId && redis) {
+          const sessionKey = `session:${sessionId}`;
+          const data = await redis.get(sessionKey);
+          if (data) {
+             user = typeof data === 'string' ? JSON.parse(data) : data;
+          }
+        } 
+        // Fallback to cookie
+        else if (sessionDataCookie) {
+          try {
+             const json = atob(sessionDataCookie);
+             user = JSON.parse(json);
+          } catch {}
+        }
+
+        // If authenticated -> Redirect to Dashboard
+        if (user) {
+           // Default to / for most, /admin if role is explicitly ADMIN
+           // Note: user object structure depends on what's saved. 
+           const destination = user.role === 'ADMIN' ? '/admin' : '/';
+           return NextResponse.redirect(new URL(destination, request.url));
+        }
+      } catch (e) {
+        // If checking session fails, just let them see the public page
+        console.error("Error checking session on public route:", e);
+      }
+    }
     return NextResponse.next();
   }
 

@@ -110,9 +110,9 @@ export default function InvitedUsersPage() {
                 <th className="px-6 py-4 border-r text-left text-sm font-semibold text-gray-700 border-b">
                   Invited Date
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
+                {/* <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
                   Expires At
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -150,11 +150,11 @@ export default function InvitedUsersPage() {
                     <td className="px-6 border-r py-4 text-gray-600">
                       {formatDate(invitation.createdAt)}
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    {/* <td className="px-6 py-4 text-gray-600">
                       <span className={expired ? "text-red-600" : ""}>
                         {formatDate(invitation.expiresAt)}
                       </span>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}

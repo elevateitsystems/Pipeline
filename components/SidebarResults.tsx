@@ -11,9 +11,13 @@ interface SidebarResultsProps {
       maxScore: number;
     }>;
   } | null;
+  secondaryColor?: string;
 }
 
-const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
+const SidebarResults = ({
+  testResultData,
+  secondaryColor,
+}: SidebarResultsProps) => {
   return (
     <div className="px-4 mt-4">
       <h3
@@ -26,9 +30,7 @@ const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
         {testResultData &&
           (() => {
             const urgentCategories = [...testResultData.categoryScores]
-              .filter(
-                (cs) => cs.categoryName.toLowerCase() !== "summary",
-              )
+              .filter((cs) => cs.categoryName.toLowerCase() !== "summary")
               .sort((a, b) => {
                 const aPercentage =
                   a.maxScore > 0 ? (a.score / a.maxScore) * 100 : 0;
@@ -47,14 +49,16 @@ const SidebarResults = ({ testResultData }: SidebarResultsProps) => {
                     <span
                       className="text-white overflow-hidden text-xl text-nowrap"
                       style={{
-                        fontFamily:
-                          "'Acumin Variable Concept', sans-serif",
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
                       }}
                     >
                       {cs.categoryName}
                     </span>
                   </div>
-                  <div className="w-full h-4  border-2 border-[#456987] rounded-full overflow-hidden">
+                  <div
+                    className="w-full h-4 border-2 rounded-full overflow-hidden"
+                    style={{ borderColor: secondaryColor || "#456987" }}
+                  >
                     <div
                       className="h-full bg-[#F65355] transition-all duration-500"
                       style={{ width: `${Math.min(percentage, 100)}%` }}

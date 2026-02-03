@@ -3,11 +3,13 @@
 import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthCheck, useAllUsers, useAllAudits } from "@/lib/hooks";
+import { useAuthCheck, useAllUsers, useAllAudits, useDeleteAudit, useDeleteUser } from "@/lib/hooks";
 import { useAllTeams } from "@/lib/hooks/useAdmin";
 import toast from "react-hot-toast";
-import { Users, FileText, Search, ChevronLeft, ChevronRight, Building2, ChevronDown, ChevronUp } from "lucide-react";
+import { Users, FileText, Search, ChevronLeft, ChevronRight, Building2, ChevronDown, ChevronUp, Trash2, Eye } from "lucide-react";
 import InvitedUsersModal from "@/components/InvitedUsersModal";
+import AuditReviewModal from "@/components/AuditReviewModal";
+import ConfirmationModal from "@/components/common/ConfirmationModal";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -15,13 +17,13 @@ export default function AdminDashboard() {
   const { user } = useUser();
   const router = useRouter();
   const { data: authData, isLoading: authLoading } = useAuthCheck();
-  
+
   // Users state
   const [usersPage, setUsersPage] = useState(1);
   const [usersSearch, setUsersSearch] = useState("");
   const [usersSearchInput, setUsersSearchInput] = useState("");
   const usersLimit = 10;
-  
+
   // Audits state
   const [auditsPage, setAuditsPage] = useState(1);
   const [auditsSearch, setAuditsSearch] = useState("");
@@ -37,12 +39,36 @@ export default function AdminDashboard() {
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Audit review modal state
+  const [selectedAuditForReview, setSelectedAuditForReview] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  // Audit delete state
+  const [auditToDelete, setAuditToDelete] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  // User delete state
+  const [userToDelete, setUserToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
+
+  const deleteAuditMutation = useDeleteAudit();
+  const deleteUserMutation = useDeleteUser();
+
   const { data: usersData, isLoading: usersLoading } = useAllUsers(
     usersLimit,
     usersPage,
     usersSearch
   );
-  
+
   const { data: auditsData, isLoading: auditsLoading } = useAllAudits(
     auditsLimit,
     auditsPage,
@@ -89,6 +115,32 @@ export default function AdminDashboard() {
       month: "short",
       day: "numeric",
     });
+  };
+
+  const handleDeleteAudit = async () => {
+    if (!auditToDelete) return;
+    try {
+      await deleteAuditMutation.mutateAsync(auditToDelete.id);
+      toast.success("Audit deleted successfully");
+      setIsDeleteModalOpen(false);
+      setAuditToDelete(null);
+    } catch (error) {
+      console.error("Error deleting audit:", error);
+      toast.error("Failed to delete audit");
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+    try {
+      await deleteUserMutation.mutateAsync(userToDelete.id);
+      toast.success("User deleted successfully");
+      setIsDeleteUserModalOpen(false);
+      setUserToDelete(null);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
   };
 
   if (authLoading || !user || user.role !== "ADMIN") {
@@ -358,11 +410,10 @@ export default function AdminDashboard() {
                                   </div>
                                   <div className="flex items-center justify-between pt-2 border-t border-gray-200">
                                     <span
-                                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                                        member.role === "ADMIN"
-                                          ? "bg-[#F7AF41] text-black"
-                                          : "bg-gray-100 text-gray-700"
-                                      }`}
+                                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${member.role === "ADMIN"
+                                        ? "bg-[#F7AF41] text-black"
+                                        : "bg-gray-100 text-gray-700"
+                                        }`}
                                     >
                                       {member.role}
                                     </span>
@@ -454,13 +505,12 @@ export default function AdminDashboard() {
                                     <td className="px-4 py-3">
                                       {audit.latestScore !== undefined ? (
                                         <span
-                                          className={`px-2 py-1 rounded text-xs font-medium ${
-                                            audit.latestScore < 30
-                                              ? "bg-red-100 text-red-700"
-                                              : audit.latestScore < 40
+                                          className={`px-2 py-1 rounded text-xs font-medium ${audit.latestScore < 30
+                                            ? "bg-red-100 text-red-700"
+                                            : audit.latestScore < 40
                                               ? "bg-orange-100 text-orange-700"
                                               : "bg-[#d1fae5] text-[#16a34a]"
-                                          }`}
+                                            }`}
                                         >
                                           {audit.latestScore}
                                         </span>
@@ -515,7 +565,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-                        <div className="border border-gray-300 rounded-lg overflow-hidden">
+        <div className="border border-gray-300 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
@@ -534,6 +584,9 @@ export default function AdminDashboard() {
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
                     Sign Up Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -578,17 +631,35 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            user.role === "ADMIN"
-                              ? "bg-[#F7AF41] text-black"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${user.role === "ADMIN"
+                            ? "bg-[#F7AF41] text-black"
+                            : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {user.role}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-gray-600">
                         {formatDate(user.createdAt)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          onClick={() => {
+                            setUserToDelete({
+                              id: user.id,
+                              name: user.name,
+                            });
+                            setIsDeleteUserModalOpen(true);
+                          }}
+                          className={`p-2 rounded-lg transition-colors ${user.role === "ADMIN"
+                              ? "text-gray-400 cursor-not-allowed"
+                              : "text-red-600 hover:bg-red-50 cursor-pointer"
+                            }`}
+                          title={user.role === "ADMIN" ? "Cannot delete admin users" : "Delete User"}
+                          disabled={user.role === "ADMIN"}
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -651,7 +722,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-                        <div className="border border-gray-300 rounded-lg overflow-hidden">
+        <div className="border border-gray-300 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
@@ -673,6 +744,9 @@ export default function AdminDashboard() {
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
                     Created Date
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border-b">
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -761,13 +835,12 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4">
                           {latestTest?.totalScore !== undefined ? (
                             <span
-                              className={`px-3 py-1 rounded text-sm font-medium ${
-                                latestTest.totalScore < 30
-                                  ? "bg-red-100 text-red-700"
-                                  : latestTest.totalScore < 40
+                              className={`px-3 py-1 rounded text-sm font-medium ${latestTest.totalScore < 30
+                                ? "bg-red-100 text-red-700"
+                                : latestTest.totalScore < 40
                                   ? "bg-orange-100 text-orange-700"
                                   : "bg-[#d1fae5] text-[#16a34a]"
-                              }`}
+                                }`}
                             >
                               {latestTest.totalScore}
                             </span>
@@ -777,6 +850,36 @@ export default function AdminDashboard() {
                         </td>
                         <td className="px-6 py-4 text-gray-600">
                           {formatDate(audit.createdAt)}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => {
+                                setSelectedAuditForReview({
+                                  id: audit.id,
+                                  title: audit.title,
+                                });
+                                setIsReviewModalOpen(true);
+                              }}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
+                              title="View Details"
+                            >
+                              <Eye size={18} />
+                            </button>
+                            <button
+                              onClick={() => {
+                                setAuditToDelete({
+                                  id: audit.id,
+                                  title: audit.title,
+                                });
+                                setIsDeleteModalOpen(true);
+                              }}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                              title="Delete Audit"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -826,6 +929,55 @@ export default function AdminDashboard() {
           companyId={selectedUser.companyId}
         />
       )}
+
+      {/* Audit Review Modal */}
+      {selectedAuditForReview && (
+        <AuditReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => {
+            setIsReviewModalOpen(false);
+            setSelectedAuditForReview(null);
+          }}
+          auditId={selectedAuditForReview.id}
+          auditTitle={selectedAuditForReview.title}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          if (!deleteAuditMutation.isPending) {
+            setIsDeleteModalOpen(false);
+            setAuditToDelete(null);
+          }
+        }}
+        onConfirm={handleDeleteAudit}
+        title="Delete Audit"
+        message={`Are you sure you want to delete "${auditToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        loading={deleteAuditMutation.isPending}
+      />
+
+      {/* User Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isDeleteUserModalOpen}
+        onClose={() => {
+          if (!deleteUserMutation.isPending) {
+            setIsDeleteUserModalOpen(false);
+            setUserToDelete(null);
+          }
+        }}
+        onConfirm={handleDeleteUser}
+        title="Delete User"
+        message={`Are you sure you want to delete "${userToDelete?.name}"? This action cannot be undone and will delete all associated audits and tests.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        loading={deleteUserMutation.isPending}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { FiEdit } from "react-icons/fi";
 import IconPicker from "./IconPicker";
@@ -28,9 +28,9 @@ interface SidebarItemProps {
   onDragOver: (e: React.DragEvent) => void;
   onDragLeave: () => void;
   onDrop: (e: React.DragEvent) => void;
-  onEditClick: (e: React.MouseEvent) => void;
+  onEditClick?: (e: React.MouseEvent) => void;
   onItemClick: (e: React.MouseEvent) => void;
-  onMouseDownDrag: () => void;
+  onMouseDownDrag?: () => void;
   onIconPickerTrigger: (e: React.MouseEvent) => void;
   onCategoryNameUpdate: (name: string) => void;
   onCategoryIconUpdate: (iconName: string) => void;
@@ -74,6 +74,16 @@ const SidebarItem = memo(
     getCategoryIcon,
     renderIcon,
   }: SidebarItemProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (isEditing && inputRef.current) {
+        // focus with preventScroll to stop the browser from "jumping" to the input
+        // which happens if the item is partially off-screen or overflows
+        inputRef.current.focus({ preventScroll: true });
+      }
+    }, [isEditing]);
+
     return (
       <div
         draggable={canDrag && !isSummaryItem}
@@ -84,8 +94,8 @@ const SidebarItem = memo(
         onDrop={onDrop}
         onClick={onItemClick}
         className={`h-[68px] cursor-pointer flex items-center relative ${isActive
-          ? "w-[calc(100%+2px)] mr-0 rounded-l-xl border-r-0"
-          : "w-[92.5%] mr-1.5 rounded-xl"
+            ? "w-[calc(100%+2px)] mr-0 rounded-l-xl border-r-0"
+            : "w-[92.5%]  rounded-xl"
           } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
         style={{
           padding: "0 clamp(0.75rem, 3vw, 1rem)",
@@ -145,9 +155,9 @@ const SidebarItem = memo(
               <ChevronDown size={14} />
             </button>
             <input
+              ref={inputRef}
               type="text"
               defaultValue={getCategoryName(itemCategoryNumber as number)}
-              autoFocus
               onBlur={(e) => {
                 if (itemCategoryNumber !== null) {
                   const isIconTrigger = (
@@ -172,15 +182,22 @@ const SidebarItem = memo(
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 bg-transparent outline-none border-none text-left"
+              className="flex-1 bg-transparent outline-none border-none text-left min-w-0 p-0"
               style={{
                 color: "inherit",
                 fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 500,
                 fontVariationSettings: "'wdth' 65, 'wght' 500",
                 fontSize: "clamp(20px, 1.8vw, 27px)",
+                letterSpacing: "0.006em",
+                lineHeight: 1,
               }}
             />
+
+            {/* Spacer to match the edit button width in viewing mode */}
+            {isCategoryItem && itemCategoryNumber !== null && (
+              <div className="w-5 shrink-0" />
+            )}
 
             {/* Icon Picker Dropdown */}
             {editingIconCategory === itemCategoryNumber && (
@@ -214,7 +231,7 @@ const SidebarItem = memo(
           </div>
         ) : (
           <div
-            className={`w-full h-full flex items-center justify-between relative z-10 ${isActive ? "top-[2px]" : ""}`}
+            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""}`}
           >
             <div className={`flex-1 flex items-center justify-start gap-4`}>
               {canDrag && !isSummaryItem && (
@@ -228,8 +245,7 @@ const SidebarItem = memo(
               {(!isActive ||
                 (isCategoryItem && itemCategoryNumber !== null)) && (
                   <div
-                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
-                  >
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}>
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&
                       getCategoryIcon(itemCategoryNumber)
@@ -258,7 +274,7 @@ const SidebarItem = memo(
             {isCategoryItem && itemCategoryNumber !== null && onEditClick && (
               <button
                 onClick={onEditClick}
-                className="p-1 rounded hover:bg-white/20 cursor-pointer flex items-center"
+                className="p-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0"
                 style={{ color: "inherit" }}
                 aria-label="Edit category name"
               >

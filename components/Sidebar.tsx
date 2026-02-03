@@ -13,76 +13,92 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarResults from "./SidebarResults";
 import SidebarFooter from "./SidebarFooter";
 import {
-  // Navigation & UI
-  Home,
-  Menu,
-  X,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-  MoreVertical,
-  MoreHorizontal,
+  // Business & Strategy
+  Target,
+  Award,
+  Briefcase,
+  Building,
+  Building2,
+  Landmark,
+  Store,
+  ShoppingCart,
 
-  // Actions
-  Search,
-  Settings,
-  Plus,
-  Minus,
-  Edit,
-  Trash2,
-  Download,
-  Upload,
-  Save,
-  Copy,
-  Check,
-
-  // Files & Folders
-  Folder,
-  FolderOpen,
-  File,
-  FileText,
-  List,
-  CheckSquare,
-
-  // Communication
-  Mail,
-  Send,
-  MessageSquare,
-  Bell,
-  Phone,
-
-  // User & Account
-  User,
-  Users,
-  UserPlus,
-  LogOut,
-  LogIn,
-  Lock,
-  Unlock,
-
-  // Content
-  Eye,
-  EyeOff,
-  Star,
-  Heart,
-  Share2,
-  Link,
-  ExternalLink,
-
-  // Data & Analytics
-  BarChart,
-  PieChart,
+  // Performance & Analytics
   TrendingUp,
   TrendingDown,
+  BarChart,
+  PieChart,
+  LineChart,
   Activity,
+  Gauge,
+  Zap,
 
-  // Status & Feedback
-  AlertCircle,
+  // People & Teams
+  Users,
+  User,
+  UserCheck,
+  UserCog,
+  UserPlus,
+  Contact,
+  Handshake,
+
+  // Quality & Compliance
+  Shield,
+  ShieldCheck,
   CheckCircle,
   XCircle,
-  Info,
-  HelpCircle,
+  AlertCircle,
+  BadgeCheck,
+  ClipboardCheck,
+
+  // Innovation & Ideas
+  Lightbulb,
+  Rocket,
+  Sparkles,
+  Star,
+  Trophy,
+  Crown,
+  Gem,
+
+  // Communication & Feedback
+  MessageSquare,
+  Mail,
+  Phone,
+  Bell,
+  Megaphone,
+  Radio,
+
+  // Documentation & Files
+  FileText,
+  File,
+  Folder,
+  FolderOpen,
+  Clipboard,
+  BookOpen,
+  Notebook,
+
+  // Finance & Money
+  DollarSign,
+  CreditCard,
+  Wallet,
+  Coins,
+  Calculator,
+
+  // Technology & Tools
+  Settings,
+  Cog,
+  Wrench,
+  Cpu,
+  Database,
+  Server,
+
+  // Time & Planning
+  Calendar,
+  Clock,
+  Timer,
+  Hourglass,
+  CalendarCheck,
+  CalendarClock,
 } from "lucide-react";
 
 // Mapping for dynamic icon rendering without bundling the whole library
@@ -90,75 +106,92 @@ const IconMap: Record<
   string,
   React.ComponentType<{ className?: string; size?: number }>
 > = {
-  Home,
-  Menu,
-  X,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-  MoreVertical,
-  MoreHorizontal,
+  // Business & Strategy
+  Target,
+  Award,
+  Briefcase,
+  Building,
+  Building2,
+  Landmark,
+  Store,
+  ShoppingCart,
 
-  // Actions
-  Search,
-  Settings,
-  Plus,
-  Minus,
-  Edit,
-  Trash2,
-  Download,
-  Upload,
-  Save,
-  Copy,
-  Check,
-
-  // Files & Folders
-  Folder,
-  FolderOpen,
-  File,
-  FileText,
-
-  // Communication
-  Mail,
-  Send,
-  MessageSquare,
-  Bell,
-  Phone,
-
-  // User & Account
-  User,
-  Users,
-  UserPlus,
-  LogOut,
-  LogIn,
-  Lock,
-  Unlock,
-
-  // Content
-  Eye,
-  EyeOff,
-  Star,
-  Heart,
-  Share2,
-  Link,
-  ExternalLink,
-  List,
-  CheckSquare,
-
-  // Data & Analytics
-  BarChart,
-  PieChart,
+  // Performance & Analytics
   TrendingUp,
   TrendingDown,
+  BarChart,
+  PieChart,
+  LineChart,
   Activity,
+  Gauge,
+  Zap,
 
-  // Status & Feedback
-  AlertCircle,
+  // People & Teams
+  Users,
+  User,
+  UserCheck,
+  UserCog,
+  UserPlus,
+  Contact,
+  Handshake,
+
+  // Quality & Compliance
+  Shield,
+  ShieldCheck,
   CheckCircle,
   XCircle,
-  Info,
-  HelpCircle,
+  AlertCircle,
+  BadgeCheck,
+  ClipboardCheck,
+
+  // Innovation & Ideas
+  Lightbulb,
+  Rocket,
+  Sparkles,
+  Star,
+  Trophy,
+  Crown,
+  Gem,
+
+  // Communication & Feedback
+  MessageSquare,
+  Mail,
+  Phone,
+  Bell,
+  Megaphone,
+  Radio,
+
+  // Documentation & Files
+  FileText,
+  File,
+  Folder,
+  FolderOpen,
+  Clipboard,
+  BookOpen,
+  Notebook,
+
+  // Finance & Money
+  DollarSign,
+  CreditCard,
+  Wallet,
+  Coins,
+  Calculator,
+
+  // Technology & Tools
+  Settings,
+  Cog,
+  Wrench,
+  Cpu,
+  Database,
+  Server,
+
+  // Time & Planning
+  Calendar,
+  Clock,
+  Timer,
+  Hourglass,
+  CalendarCheck,
+  CalendarClock,
 };
 type NavigationItem = {
   name: string;
@@ -1058,10 +1091,8 @@ export default function Sidebar() {
     if (onMainPage) {
       items = [...navigationItems];
     } else if (
-      onNewAuditPage ||
-      onUpdateAuditPage ||
-      onSummaryPage ||
-      onTestPage
+      (onNewAuditPage || onUpdateAuditPage || onSummaryPage || onTestPage) &&
+      !onMainPage
     ) {
       const editId = searchParams.get("edit");
       const presentationId = searchParams.get("presentationId");
@@ -1134,9 +1165,6 @@ export default function Sidebar() {
     navigationItems,
     searchParams,
     actualCategoryCount,
-    categoryNames,
-    categoryIcons,
-    mounted,
     getCategoryIcon,
     getCategoryName,
     renderIcon,
@@ -1161,6 +1189,7 @@ export default function Sidebar() {
         user={user}
         logo={logo}
         summary={summary}
+        secondaryColor={secondaryColor}
       />
 
       {/* Navigation - Scrollable section */}
@@ -1175,27 +1204,32 @@ export default function Sidebar() {
         }}
       >
         {onResultPage ? (
-          <SidebarResults testResultData={testResultData} />
+          <SidebarResults
+            testResultData={testResultData}
+            secondaryColor={secondaryColor}
+          />
         ) : (
+          //comment
           <>
             {(onNewAuditPage ||
               onUpdateAuditPage ||
               onSummaryPage ||
-              onTestPage) && (
-              <div
-                className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
-                style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontWeight: 500,
-                  fontSize: "clamp(20px, 1.8vw, 27px)",
-                  lineHeight: "1",
-                  letterSpacing: "0.006em",
-                  fontVariationSettings: "'wdth' 65, 'wght' 500",
-                }}
-              >
-                AUDIT CATGORIES
-              </div>
-            )}
+              onTestPage) &&
+              !onMainPage && (
+                <div
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
+                  style={{
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
+                    fontWeight: 500,
+                    fontSize: "clamp(20px, 1.8vw, 27px)",
+                    lineHeight: "1",
+                    letterSpacing: "0.006em",
+                    fontVariationSettings: "'wdth' 65, 'wght' 500",
+                  }}
+                >
+                  AUDIT CATGORIES
+                </div>
+              )}
             {shouldShowTestSkeleton
               ? Array.from(
                   { length: Math.max(actualCategoryCount, 4) },
@@ -1212,6 +1246,8 @@ export default function Sidebar() {
                   ),
                 )
               : effectiveItems.map((item) => {
+                  // Functionality (edit and drag-and-drop) is only allowed on edit and create pages
+                  // This selectively "comments out" the functionality on presentation/test pages.
                   let isActive = pathname === item.href;
                   const isCategoryItem =
                     "categoryNumber" in item &&
@@ -1274,11 +1310,18 @@ export default function Sidebar() {
                     isCategoryItem &&
                     itemCategoryNumber !== null &&
                     dragOverCategoryIndex === itemCategoryNumber - 1;
-                  const canDrag =
+                  // Edit options allowed on both create and edit pages
+                  const canEdit =
                     isCategoryItem &&
                     itemCategoryNumber !== null &&
                     (pathname === "/update-audit" ||
-                      pathname === "/add-new-audit") &&
+                      pathname === "/add-new-audit");
+
+                  // Drag and drop ONLY allowed on edit (update) page, not on create page
+                  const canDrag =
+                    isCategoryItem &&
+                    itemCategoryNumber !== null &&
+                    pathname === "/update-audit" &&
                     item.name !== "Summary";
 
                   const isSummaryItem = item.name === "Summary";
@@ -1343,20 +1386,28 @@ export default function Sidebar() {
                           router.push(item.href);
                         }
                       }}
-                      onEditClick={(e) => {
-                        e.stopPropagation();
-                        if (itemCategoryNumber !== null) {
-                          setEditingCategory(itemCategoryNumber);
-                          if (item.href) {
-                            router.push(item.href);
-                          }
-                        }
-                      }}
-                      onMouseDownDrag={() => {
-                        if (itemCategoryNumber !== null) {
-                          setDragHandleCategory(itemCategoryNumber);
-                        }
-                      }}
+                      onEditClick={
+                        canEdit
+                          ? (e) => {
+                              e.stopPropagation();
+                              if (itemCategoryNumber !== null) {
+                                setEditingCategory(itemCategoryNumber);
+                                if (item.href) {
+                                  router.push(item.href);
+                                }
+                              }
+                            }
+                          : undefined
+                      }
+                      onMouseDownDrag={
+                        canDrag
+                          ? () => {
+                              if (itemCategoryNumber !== null) {
+                                setDragHandleCategory(itemCategoryNumber);
+                              }
+                            }
+                          : undefined
+                      }
                       onIconPickerTrigger={(e) => {
                         e.stopPropagation();
                         if (itemCategoryNumber !== null) {
@@ -1394,6 +1445,7 @@ export default function Sidebar() {
         user={user}
         handleLogout={handleLogout}
         router={router}
+        secondaryColor={secondaryColor}
       />
     </div>
   );

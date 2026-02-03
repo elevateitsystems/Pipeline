@@ -367,7 +367,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 
     // Process categories in parallel
     await Promise.all(
-      data.categories.map(async (catData) => {
+      data.categories.map(async (catData, catIndex) => {
         if (catData.id && payloadCategoryIds.has(catData.id)) {
           // Update existing category
           const existingCategory = existingAuditWithData.categories.find(c => c.id === catData.id);
@@ -375,7 +375,11 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 
           await prisma.category.update({
             where: { id: catData.id },
-            data: { name: catData.name, icon: catData.icon?.trim() || null },
+            data: { 
+              name: catData.name, 
+              icon: catData.icon?.trim() || null,
+              order: catIndex // Save order based on array index
+            },
           });
 
           const payloadQuestionIds = new Set(catData.questions.filter(q => q.id).map(q => q.id!));
@@ -388,10 +392,16 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 
           // Process questions in parallel
           await Promise.all(
-            catData.questions.map(async (qData) => {
+            catData.questions.map(async (qData, qIndex) => {
               const existingQuestion = existingCategory.questions.find(q => q.id === qData.id);
               if (existingQuestion) {
-                await prisma.question.update({ where: { id: qData.id! }, data: { text: qData.text } });
+                await prisma.question.update({ 
+                  where: { id: qData.id! }, 
+                  data: { 
+                    text: qData.text,
+                    order: qIndex // Save order based on array index
+                  } 
+                });
 
                 const payloadOptionIds = new Set(qData.options.filter(o => o.id).map(o => o.id!));
 
@@ -422,6 +432,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
                   data: {
                     text: qData.text,
                     categoryId: catData.id!,
+                    order: qIndex, // Save order
                     options: { create: qData.options.map(o => ({ text: o.text, points: o.points })) },
                   },
                 });
@@ -435,9 +446,11 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
               name: catData.name,
               icon: catData.icon?.trim() || null,
               presentationId: auditId,
+              order: catIndex, // Save order
               questions: {
-                create: catData.questions.map(q => ({
+                create: catData.questions.map((q, qIndex) => ({
                   text: q.text,
+                  order: qIndex, // Save order
                   options: { create: q.options.map(o => ({ text: o.text, points: o.points })) },
                 })),
               },

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLogin } from "@/lib/hooks";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
@@ -16,6 +18,18 @@ export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [usePin, setUsePin] = useState(false);
   const loginMutation = useLogin();
+  const { user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    }
+  }, [user, router]);
 
   const handlePinChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single digit
