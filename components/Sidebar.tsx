@@ -449,6 +449,23 @@ export default function Sidebar() {
     };
   }, []);
 
+  // Set loading state true immediately on navigation to loading pages to prevent "flash" of old content
+  useEffect(() => {
+    const isLoadingPage = pathname === "/test" || pathname === "/update-audit";
+    if (isLoadingPage) {
+      // Check if we already have it in storage as false (e.g. already loaded)
+      // but on initial navigation, we should prefer showing skeleton
+      const stored = sessionStorage.getItem("testSidebarLoading");
+      if (stored === "false") {
+        setIsTestSidebarLoading(false);
+      } else {
+        setIsTestSidebarLoading(true);
+      }
+    } else {
+      setIsTestSidebarLoading(false);
+    }
+  }, [pathname]);
+
   // Helper to get category name
   const getCategoryName = useCallback(
     (categoryNumber: number): string => {
