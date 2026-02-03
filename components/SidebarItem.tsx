@@ -85,7 +85,7 @@ const SidebarItem = memo(
         onClick={onItemClick}
         className={`h-[68px] cursor-pointer flex items-center relative ${isActive
           ? "w-[calc(100%+2px)] mr-0 rounded-l-xl border-r-0"
-          : "w-[92.5%] mr-1.5 rounded-xl"
+          : "w-[92.5%] rounded-xl"
           } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
         style={{
           padding: "0 clamp(0.75rem, 3vw, 1rem)",
@@ -172,7 +172,7 @@ const SidebarItem = memo(
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 bg-transparent outline-none border-none text-left"
+              className="flex-1 bg-transparent outline-none border-none text-left min-w-0"
               style={{
                 color: "inherit",
                 fontFamily: "'Acumin Variable Concept', sans-serif",
