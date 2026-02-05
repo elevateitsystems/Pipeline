@@ -570,7 +570,7 @@ export default function AddNewAudit() {
       if (typeof window !== "undefined") {
         sessionStorage.clear();
 
-        // Dispatch event to update sidebar
+        // Dispatch  to update sidebar
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
       // Redirect to home page after successful creation

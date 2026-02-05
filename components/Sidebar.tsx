@@ -1257,7 +1257,11 @@ export default function Sidebar() {
                   (_, index) => (
                     <div
                       key={`sidebar-skeleton-${index}`}
-                      className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                      className={`min-h-[40px] bg-white/10 overflow-hidden ${
+                        onTestPage
+                          ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl"
+                          : "w-[88%] rounded-xl"
+                      }`}
                       style={{
                         marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                       }}
