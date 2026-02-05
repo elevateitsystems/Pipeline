@@ -710,6 +710,7 @@ export default function TestPresentation() {
               className="w-full border-collapse border-gray-300"
               style={{ tableLayout: "fixed" }}
             >
+              {/* start */}
               <tbody>
                 {displayedQuestions.map((question, index) => {
                   const selectedOptionId = answers[question.id];
