@@ -503,7 +503,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="bg-white pt-1 grid grid-cols-8 gap-1 w-full ">
+          <div className="bg-white pt-1 px-12 grid grid-cols-8 gap-1 w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -518,7 +518,7 @@ export default function TestPresentation() {
             })}
             {/* Summary Icon */}
             <div
-              className="flex flex-col items-center ml-4 cursor-pointer"
+              className="flex flex-col items-center cursor-pointer"
               onClick={async () => {
                 if (
                   typeof window !== "undefined" &&
@@ -633,11 +633,11 @@ export default function TestPresentation() {
                   alt="Summary Overview"
                   width={48}
                   height={48}
-                  className="w-12 h-12 mr-20"
+                  className="w-12 h-12"
                 />
               </div>
               <p
-                className="mr-20 pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
+                className="pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
@@ -655,7 +655,10 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
+        <div
+          className="bg-white -mt-1 
+         flex items-center justify-center gap-2 w-full "
+        >
           <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">
             GRADING SCALE (1-5)
           </p>
@@ -673,7 +676,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center justify-center"
           style={{ width: "100%" }}
         >
           <p
@@ -681,26 +684,26 @@ export default function TestPresentation() {
             style={{ width: "100px" }}
           ></p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
+            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            style={{ width: "55%" }}
           >
             questions
           </p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
+            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            style={{ width: "calc(30% - 100px)" }}
           >
             answers
           </p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] left-25 text-white capitalize font-500 leading-normal font-medium text-center"
             style={{ width: "100px" }}
           >
             score
           </p>
         </div>
       </header>
-      <main className="px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+      <main className="px-12 pt-3 bg-white flex-1 flex flex-col pb-12">
         <div className="flex-1 flex flex-col">
           <div className="w-full flex-grow min-h-[640px]">
             <table
@@ -739,8 +742,8 @@ export default function TestPresentation() {
                         </span>
                       </td>
                       <td
-                        className="px-4 align-middle border-r border-[#E8E8E8]"
-                        style={{ width: "calc(50% - 100px)" }}
+                        className="px-4 align-middle border-r  border-[#E8E8E8]"
+                        style={{ width: "65%" }}
                       >
                         <div className="w-full  px-4 border-[#E8E8E8] rounded-xl flex items-center">
                           <span
@@ -760,8 +763,8 @@ export default function TestPresentation() {
                         </div>
                       </td>
                       <td
-                        className="border-r border-gray-300 px-4 align-middle"
-                        style={{ width: "calc(50% - 100px)" }}
+                        className="border-r border-gray-300  px-4 align-middle"
+                        style={{ width: "35%" }}
                       >
                         <div
                           className="relative py-2.5"
@@ -888,8 +891,14 @@ export default function TestPresentation() {
                 {/* Total Score Row */}
                 {currentCategoryData && (
                   <tr className=" border-r border-[#E8E8E8] ">
-                    <td className="border-r border-gray-300 px-4 text-center align-middle w-16"></td>
-                    <td className="px-4  align-middle border-r border-[#E8E8E8] w-full"></td>
+                    <td
+                      className="border-r border-gray-300 px-4 text-center align-middle"
+                      style={{ width: "100px" }}
+                    ></td>
+                    <td
+                      className="px-4  align-middle border-r border-[#E8E8E8]"
+                      style={{ width: "calc(70% - 100px)" }}
+                    ></td>
                     <td className="border-r border-gray-300 px-4  align-middle">
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
                         <span
@@ -900,7 +909,10 @@ export default function TestPresentation() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-2 text-center align-middle w-16">
+                    <td
+                      className="px-4 py-2 text-center align-middle"
+                      style={{ width: "100px" }}
+                    >
                       <span className="px-3 py-1 text-[22px] rounded text-sm font-bold text-gray-900">
                         {currentCategoryScore}
                       </span>
