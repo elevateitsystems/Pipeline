@@ -44,7 +44,7 @@ export default function Home() {
     id: string;
     title: string;
   } | null>(null);
-  console.log({ auditsData })
+  console.log({ auditsData });
 
   useEffect(() => {
     if (!authLoading && authData) {
@@ -274,14 +274,15 @@ export default function Home() {
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-gray-600 text-base"
+              className="text-gray-600 text-[20px]"
               style={{
                 fontFamily: "'Acumin Variable Concept', sans-serif",
+
                 fontWeight: 400,
                 fontVariationSettings: "'wdth' 85, 'wght' 400",
               }}
             >
-              Track and compare all your AUDIT audit reports in one place. View
+              Track and compare all your AUDIT reports in one place. View
               scores, dates, and improvement insights instantly.
             </p>
           </div>
@@ -425,7 +426,9 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
+                    <div
+                      className={`grid ${isInvitedUser ? "grid-cols-1" : "grid-cols-[15%_30%_30%_25%]"} gap-2 pr-6`}
+                    >
                       {!isInvitedUser && (
                         <>
                           <button
