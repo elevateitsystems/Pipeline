@@ -676,7 +676,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center justify-center"
+          className="px-24 h-8 -mt-0.5 lg:max-xl:-mt-2 flex items-center justify-center"
           style={{ width: "100%" }}
         >
           <p
@@ -684,19 +684,19 @@ export default function TestPresentation() {
             style={{ width: "100px" }}
           ></p>
           <p
-            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
             style={{ width: "55%" }}
           >
             questions
           </p>
           <p
-            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
             style={{ width: "calc(30% - 100px)" }}
           >
             answers
           </p>
           <p
-            className="relative lg:top-1 xl:top-0 text-[17px] xl:text-[20px] left-25 text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] left-25 text-white capitalize font-500 leading-normal font-medium text-center"
             style={{ width: "100px" }}
           >
             score
