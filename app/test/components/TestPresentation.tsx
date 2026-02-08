@@ -684,19 +684,19 @@ export default function TestPresentation() {
             style={{ width: "100px" }}
           ></p>
           <p
-            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-left right-18.5"
             style={{ width: "55%" }}
           >
             questions
           </p>
           <p
-            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] text-white capitalize font-500 leading-normal font-medium text-left right-2"
             style={{ width: "calc(30% - 100px)" }}
           >
             answers
           </p>
           <p
-            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] left-25 text-white capitalize font-500 leading-normal font-medium text-center"
+            className="relative top-1 lg:top-1 xl:top-0.5 text-[17px] xl:text-[20px] left-25 text-white capitalize font-500 leading-normal font-medium text-center "
             style={{ width: "100px" }}
           >
             score
