@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(cuid())
+  name            String
+  email           String         @unique
+  role            UserRole       @default(USER)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  passCode        String
+  primaryColor    String
+  profileImageUrl String?
+  secondaryColor  String?
+  companyId       String
+  companyRole     String?
+  pin             String?
+  sentInvites     Invitation[]   @relation("InvitedBy")
+  presentations   Presentation[]
+  sharedAudits    SharedAudit[]
+  tests           Test[]
+  company         Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+   icones          Icone[] 
+  @@index([email])
+  @@map("users")
+}
+
+model Icone {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  name      String
+  iconUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@map("icones")
+} 
+
+model Company {
+  id        String       @id @default(cuid())
+  name      String
+  logoUrl   String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  invites   Invitation[]
+  users     User[]
+
+  @@index([name])
+  @@map("companies")
+}
+
+
+
+model Presentation {
+  id            String         @id @default(cuid())
+  userId        String
+  title         String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  auditProgress AuditProgress?
+  categories    Category[]
+  invitations   Invitation[]
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sharedWith    SharedAudit[]
+  summary       Summary?
+  tests         Test[]
+  @@index([userId])   
+  @@index([title])
+  @@index([createdAt])
+  @@map("presentations")
+}
+
+model SharedAudit {
+  id             String       @id @default(cuid())
+  userId         String
+  presentationId String
+  sharedById     String
+  createdAt      DateTime     @default(now())
+  presentation   Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+ @@index([userId])  
+  @@unique([userId, presentationId])
+  @@map("shared_audits")
+}
+
+model Invitation {
+  id             String        @id @default(cuid())
+  email          String
+  companyId      String
+  token          String        @unique
+  invitedById    String
+  role           UserRole      @default(USER)
+  status         InviteStatus  @default(PENDING)
+  expiresAt      DateTime
+  createdAt      DateTime      @default(now())
+  presentationId String?
+  company        Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  invitedBy      User          @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+  presentation   Presentation? @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+ @@index([email, status]) 
+  @@map("invitations")
+}
+
+
+model Category {
+  id             String          @id @default(cuid())
+  name           String
+  presentationId String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  icon           String?
+  presentation   Presentation    @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  categoryScores CategoryScore[]
+  questions      Question[]
+  order          Int             @default(0) // Added for persisting drag-and-drop order
+ @@index([presentationId])  
+  @@index([name])
+  @@map("categories")
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  text       String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  answers    Answer[]
+  options    Option[]
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  order      Int      @default(0) // Added for persisting question order
+ @@index([categoryId]) 
+  @@map("questions")
+}
+
+model Option {
+  id         String   @id @default(cuid())
+  text       String
+  questionId String
+  points     Int      @default(0)
+  answers    Answer[]
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+ @@index([questionId])  
+  @@map("options")
+}
+
+model CategoryScore {
+  id         String   @id @default(cuid())
+  testId     String
+  categoryId String
+  score      Int      @default(0)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  test       Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  @@map("category_scores")
+}
+
+model Test {
+  id             String          @id @default(cuid())
+  userId         String
+  presentationId String
+  totalScore     Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  answers        Answer[]
+  categoryScores CategoryScore[]
+  presentation   Presentation    @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([presentationId]) 
+  @@map("tests")
+}
+
+model AuditProgress {
+  id             String       @id @default(cuid())
+  presentationId String       @unique
+  answers        Json         @default("{}")
+  updatedBy      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  presentation   Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+
+  @@map("audit_progress")
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  testId     String
+  questionId String
+  optionId   String
+  points     Int      @default(0)
+  option     Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  test       Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+
+  @@map("answers")
+}
+
+model Summary {
+  id                      String       @id @default(cuid())
+  presentationId          String       @unique
+  categoryRecommendations String?
+  nextSteps               String?
+  overallDetails          String?
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+  presentation            Presentation @relation(fields: [presentationId], references: [id], onDelete: Cascade)
+
+  @@map("summaries")
+}
+
+
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@map("password_resets")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}

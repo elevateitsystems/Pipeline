@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: hsl(var(--black));
+  --color-yellow: hsl(var(--yollow));
+  --color-yollow: hsl(var(--yollow));
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 17.6%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 17.6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 17.6%;
+    --primary: 0 0% 17.6%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 17.6%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 17.6%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --black: 0, 0%, 18%;
+    --yollow: 36, 92%, 61%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 17.6%;
+    --radius: 0.5rem;
+  }
+
+  html {
+    font-family: var(--font-acumin), sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  body {
+    /* Background will be applied dynamically via BackgroundWrapper component */
+    font-family: var(--font-acumin), sans-serif !important;
+    letter-spacing: -0.01em !important;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
+.font-acumin {
+  font-family: var(--font-acumin), sans-serif;
+}
+
+
+
+*,
+*::before,
+*::after {
+  font-family: var(--font-acumin), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Hide scrollbars */
+.hide-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+
+
+/* Sidebar responsive for 1024px screens */
+.sidebar-width {
+  width: 300px;
+}
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .sidebar-width {
+    width: 350px !important;
+  }
+
+  /* Profile image larger at 1024px */
+  .sidebar-profile-image {
+    width: 250px !important;
+    height: 270px !important;
+  }
+
+  /* Active tab SVG wider at 1024px */
+  .sidebar-active-tab-svg {
+    /* width: 340px !important; */
+  }
+
+  /* Logo larger at 1024px */
+  .sidebar-logo {
+    width: 220px !important;
+    height: 80px !important;
+  }
+
+  /* Logout text / Bottom info adjustment */
+  .sidebar-bottom-info {
+    font-size: 1.25rem !important;
+  }
+
+  /* Header text scaling */
+  .sidebar-header-text {
+    font-size: 1.5rem !important;
+  }
+
+  /* Reduce main content padding at 1024px to allow wider table */
+  .audit-content-padding {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Table adjustments for 1024px - Perfectly balanced 50/50 like 1440px */
+  .audit-index-col {
+    width: 60px !important;
+  }
+
+  .audit-question-col {
+    width: 50% !important;
+    min-width: 650px !important;
+    /* Balanced with answer column */
+  }
+
+  .audit-answer-col {
+    width: 50% !important;
+    min-width: 650px !important;
+    /* Ensure buttons fit */
+  }
+
+  /* Scale down status buttons at 1024px */
+  .audit-status-button {
+    width: 125px !important;
+    font-size: 15px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+  }
+}
+
+/* Common audit table styles for all desktop screens */
+.audit-content-padding {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+@media (min-width: 1280px) {
+  .audit-content-padding {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+.audit-index-col {
+  width: 60px !important;
+}
+
+.audit-question-col {
+  width: 50% !important;
+  min-width: 650px !important;
+}
+
+.audit-answer-col {
+  width: 50% !important;
+  min-width: 650px !important;
+}
+
+.audit-status-button {
+  width: 130px;
+}
