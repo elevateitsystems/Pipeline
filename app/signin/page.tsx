@@ -100,9 +100,9 @@ export default function SigninPage() {
           alt="Pipeline Conversions"
           width={191}
           height={59}
-          className="h-[50px] sm:h-[60px] lg:h-[70px] xl:h-[59px] w-[150px] sm:w-[160px] lg:w-[170px] xl:w-[191px] mb-[20px] sm:mb-[30px] lg:mb-[40px] xl:mb-[49px]"
+          className="h-[50px] sm:h-[60px] lg:h-[70px] xl:h-[59px] w-[150px] sm:w-[160px] lg:w-[170px] xl:w-[191px] mb-4 sm:mb-7 lg:mb-8 xl:mb-10"
         />
-        <h2 className="font-light text-[24px] sm:text-[34px] leading-[28px] sm:leading-[39px] uppercase text-white mb-5 sm:mb-7 lg:mb-10 xl:mb-12">
+        <h2 className="font-light text-[24px] sm:text-[34px] leading-[28px] sm:leading-[39px] uppercase text-white mb-5 sm:mb-7 lg:mb-8 xl:mb-10">
           {/* WELCOME BACK */}
           welcome back
         </h2>

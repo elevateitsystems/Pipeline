@@ -29,7 +29,7 @@ const SidebarHeader = ({
       style={{
         position: "relative",
         zIndex: 2,
-        borderColor: secondaryColor || "#456987",
+        borderColor: "#456987",
       }}
     >
       {onResultPage ? (
