@@ -981,7 +981,7 @@ export default function SummarySection({
             WHAT ARE THE NEXT STEPS?
           </h1>
 
-          <div className="bg-[#EFEFEF] p-4 rounded-2xl mt-4 flex flex-col flex-1 overflow-hidden">
+          <div className="bg-[#EFEFEF] h-fit p-4 rounded-2xl mt-4 flex flex-col flex-1 overflow-hidden">
             {/* Top Boxes */}
             <div className="flex flex-col sm:flex-row gap-3 mb-4 shrink-0">
               {[0, 1, 2].map((index) => (
@@ -1095,7 +1095,8 @@ export default function SummarySection({
                 value={overallDetails}
                 onChange={(e) => setOverallDetails(e.target.value)}
                 placeholder="Add overall next step details..."
-                className="w-full h-24 p-3 text-sm text-[#3b5163] border border-[#3b5163] rounded-lg resize-none outline-none bg-white"
+                className="w-full h-24 p-3 text-sm text-[#3b5163] border border-[#AAA] rounded-lg resize-none outline-none bg-[#4569871A]"
+              // w-full h-[60px] min-h-[40px] p-2 text-sm text-black tracking-[0.4px] font-light border border-[#AAA] rounded-lg resize-none bg-[#4569871A] outline-none
               />
             </div>
           </div>

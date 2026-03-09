@@ -198,7 +198,7 @@ export default function SignupPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center relative z-10 w-full px-4 py-16 lg:px-8 xl:px-12">
+      <div className="w-fit flex flex-col items-center relative z-10 px-4 py-16 lg:px-8 xl:px-12">
         {/* Logo */}
         <Image
           src="/logo.png"
@@ -477,7 +477,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={registerMutation.isPending || inviteLoading}
-              className="w-full bg-yellow text-black font-normal h-14 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 mt-3 shadow-sm"
+              className="w-full bg-yellow text-black font-normal h-12 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 mt-3 shadow-sm"
             >
               {registerMutation.isPending ? "Creating Account..." : "Signup"}
             </button>
