@@ -234,13 +234,13 @@ export default function ProfilePage() {
 
   const profileCardLayout =
     viewportWidth <= 480
-      ? { left: getCenteredLeft(0.9), top: 86, scale: 0.9 }
+      ? { left: getCenteredLeft(1), top: 46, scale: 1 }
       : viewportWidth <= 768
-        ? { left: getCenteredLeft(0.96), top: 60, scale: 0.96 }
+        ? { left: getCenteredLeft(1.07), top: 26, scale: 1.07 }
         : viewportWidth <= 900
-          ? { left: getCenteredLeft(0.96), top: 56, scale: 0.96 }
+          ? { left: getCenteredLeft(1.06), top: 36, scale: 1.06 }
           : viewportWidth <= 1024
-            ? { left: getCenteredLeft(1.02), top: 30, scale: 1.02 }
+            ? { left: 440, top: 30, scale: 1.02 }
             : viewportWidth <= 1280
               ? { left: 278, top: 50, scale: 0.9 }
               : viewportWidth <= 1440
@@ -503,7 +503,7 @@ export default function ProfilePage() {
                   >
                     Primary Color
                   </label>
-                  <div className="relative flex h-[46px] w-[326px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
+                  <div className="relative flex h-[46px] w-[326px] items-center overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
                     <input
                       type="color"
                       value={formData.primaryColor || "#000000"}
@@ -519,14 +519,14 @@ export default function ProfilePage() {
                       className="h-[46px] w-[44px] shrink-0"
                       style={{ backgroundColor: formData.primaryColor }}
                     />
-                    <div className="flex h-[46px] w-[282px] items-center gap-[12px] px-[14px]">
+                    <div className="flex h-full w-[282px] items-center gap-[12px] px-[14px]">
                       <span
-                        className="flex items-center text-[#2D2D2D] uppercase"
+                        className="flex h-full items-center text-[#2D2D2D] uppercase"
                         style={{
                           fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "19px",
                           fontWeight: 400,
-                          lineHeight: "100%",
+                          lineHeight: "1",
                           letterSpacing: "-0.021em",
                         }}
                       >
@@ -544,7 +544,7 @@ export default function ProfilePage() {
                   >
                     Secondary Color
                   </label>
-                  <div className="relative flex h-[46px] w-[326px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
+                  <div className="relative flex h-[46px] w-[326px] items-center overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
                     <input
                       type="color"
                       value={formData.secondaryColor || "#000000"}
@@ -560,14 +560,14 @@ export default function ProfilePage() {
                       className="h-[46px] w-[44px] shrink-0"
                       style={{ backgroundColor: formData.secondaryColor }}
                     />
-                    <div className="flex h-[46px] w-[282px] items-center gap-[12px] px-[14px]">
+                    <div className="flex h-full w-[282px] items-center gap-[12px] px-[14px]">
                       <span
-                        className="flex items-center text-[#2D2D2D] uppercase"
+                        className="flex h-full items-center text-[#2D2D2D] uppercase"
                         style={{
                           fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "19px",
                           fontWeight: 400,
-                          lineHeight: "100%",
+                          lineHeight: "1",
                           letterSpacing: "-0.021em",
                         }}
                       >
