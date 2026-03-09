@@ -102,6 +102,7 @@ import {
   List,
   CheckSquare,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Mapping for dynamic icon rendering without bundling the whole library
 const IconMap: Record<
@@ -204,7 +205,13 @@ type NavigationItem = {
   categoryNumber?: number;
 };
 
-export default function Sidebar() {
+export default function Sidebar({
+  className,
+  width,
+}: {
+  className?: string;
+  width?: number;
+} = {}) {
   const { user, isInvitedUser } = useUser();
   const router = useRouter();
   const pathname = usePathname();
@@ -1197,8 +1204,12 @@ export default function Sidebar() {
 
   return (
     <div
-      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
+      className={cn(
+        "sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar",
+        className,
+      )}
       style={{
+        width: width ? `${width}px` : undefined,
         overflowX: "hidden",
         position: "relative",
         backgroundColor: "transparent",

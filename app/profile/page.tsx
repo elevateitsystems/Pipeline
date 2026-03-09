@@ -11,6 +11,7 @@ import { UpdateProfileData } from "@/validation/update-profile.validation";
 import { CustomButton } from "@/components/common";
 
 export default function ProfilePage() {
+  const CANVAS_WIDTH = 1920;
   const PROFILE_CARD_WIDTH = 764;
   const PROFILE_CARD_HEIGHT = 965;
   const { user, isInvitedUser } = useUser();
@@ -228,18 +229,23 @@ export default function ProfilePage() {
     router.push("/");
   };
 
+  const getCenteredLeft = (scale: number) =>
+    Math.round((CANVAS_WIDTH - PROFILE_CARD_WIDTH * scale) / 2);
+
   const profileCardLayout =
-    viewportWidth <= 768
-      ? { left: 168, top: 28, scale: 0.84 }
-      : viewportWidth <= 900
-        ? { left: 208, top: 32, scale: 0.92 }
-        : viewportWidth <= 1024
-          ? { left: 288, top: 30, scale: 1.05 }
-          : viewportWidth <= 1280
-            ? { left: 278, top: 50, scale: 0.9 }
-            : viewportWidth <= 1440
-              ? { left: 360, top: 52, scale: 1.02 }
-              : { left: 383, top: 45, scale: 1 };
+    viewportWidth <= 480
+      ? { left: getCenteredLeft(0.9), top: 86, scale: 0.9 }
+      : viewportWidth <= 768
+        ? { left: getCenteredLeft(0.96), top: 60, scale: 0.96 }
+        : viewportWidth <= 900
+          ? { left: getCenteredLeft(0.96), top: 56, scale: 0.96 }
+          : viewportWidth <= 1024
+            ? { left: getCenteredLeft(1.02), top: 30, scale: 1.02 }
+            : viewportWidth <= 1280
+              ? { left: 278, top: 50, scale: 0.9 }
+              : viewportWidth <= 1440
+                ? { left: 360, top: 52, scale: 1.02 }
+                : { left: 383, top: 45, scale: 1 };
 
   if (!user) {
     return (
