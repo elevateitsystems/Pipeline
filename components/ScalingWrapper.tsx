@@ -28,7 +28,7 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
             style={{
                 width: '100vw',
                 height: '100vh',
-                overflowY: 'auto',
+                overflow: 'hidden',
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -38,7 +38,7 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
                 backgroundColor: 'transparent'
             }}
         >
-            {/* <div
+            <div
                 className="scaling-inner-canvas"
                 style={{
                     width: '1920px',
@@ -51,9 +51,9 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
                     display: 'flex',
                     flexDirection: 'column'
                 }}
-            > */}
-            {children}
-            {/* </div> */}
+            >
+                {children}
+            </div>
         </div>
     );
 }

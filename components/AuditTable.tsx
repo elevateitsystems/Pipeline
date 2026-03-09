@@ -233,7 +233,7 @@ const AuditTable = React.memo(function AuditTable({
                       disabled={!editableQuestions.has(rowIndex)}
                       className="w-full bg-[#4569871A] pr-12 pl-4 h-[60px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
                       style={{
-                        fontFamily: "var(--font-acumin), sans-serif",
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
                         fontWeight: 400,
                         fontSize: "23px",
                         lineHeight: "100%",
@@ -279,7 +279,7 @@ const AuditTable = React.memo(function AuditTable({
                             className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
                             style={{
                               fontFamily:
-                                "var(--font-acumin), sans-serif",
+                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "18px",
                               lineHeight: "100%",

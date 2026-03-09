@@ -77,6 +77,8 @@ export default function SignupPage() {
     }
   };
   const [message, setMessage] = useState("");
+  const [uploadingProfile, setUploadingProfile] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -125,6 +127,8 @@ export default function SignupPage() {
     };
     reader.readAsDataURL(file);
 
+    const setter = type === "profile" ? setUploadingProfile : setUploadingLogo;
+    setter(true);
     try {
       const url = await uploadToCloudinary(file);
       setFormData((prev) => ({
@@ -133,6 +137,8 @@ export default function SignupPage() {
       }));
     } catch (error) {
       console.error(`${type} image upload failed:`, error);
+    } finally {
+      setter(false);
     }
   };
 
@@ -191,8 +197,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center">
-      <div className="flex flex-col items-center relative z-10 lg:w-[728px] py-10">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center relative z-10 w-full px-4 py-16 lg:px-8 xl:px-12">
         {/* Logo */}
         <Image
           src="/logo.png"
@@ -231,7 +237,7 @@ export default function SignupPage() {
                     required={!token}
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
                   />
                 </div>
               </>
@@ -465,7 +471,8 @@ export default function SignupPage() {
                   </div>
                 </div>
               </>
-            ) : null}
+            ) : null
+            }
 
             <button
               type="submit"
@@ -475,14 +482,16 @@ export default function SignupPage() {
               {registerMutation.isPending ? "Creating Account..." : "Signup"}
             </button>
 
-            {message && (
-              <p
-                className={`text-center text-sm mt-3 ${message.includes("success") ? "text-green-600" : "text-red-600"
-                  }`}
-              >
-                {message}
-              </p>
-            )}
+            {
+              message && (
+                <p
+                  className={`text-center text-sm mt-3 ${message.includes("success") ? "text-green-600" : "text-red-600"
+                    }`}
+                >
+                  {message}
+                </p>
+              )
+            }
 
             <div className="text-center mt-3 w-full text-gray-800 text-[14px] sm:text-[16px]">
               Already have an account?{" "}
@@ -493,9 +502,9 @@ export default function SignupPage() {
                 Login
               </Link>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          </form >
+        </div >
+      </div >
+    </div >
   );
 }

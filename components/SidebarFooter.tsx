@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import { SessionUser } from "@/lib/session";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
 import { CustomButton } from "./common";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { SessionUser } from "@/lib/session";
 
 interface SidebarFooterProps {
   onResultPage: boolean;

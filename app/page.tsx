@@ -217,7 +217,7 @@ export default function Home() {
                 }}
               />
               <p
-                className="font-normal"
+                className="text-[#2D2D2D] mb-2 font-normal"
                 style={{ fontSize: "clamp(.5rem, 4vw, 2rem)" }}
               >
                 NO AUDIT CREATED
@@ -290,7 +290,7 @@ export default function Home() {
                   router.push("/add-new-audit/?category=1");
                 }}
                 style={{
-                  fontFamily: "var(--font-acumin), sans-serif",
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
@@ -310,7 +310,7 @@ export default function Home() {
               <th
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
-                  fontFamily: "var(--font-acumin), sans-serif",
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -321,7 +321,7 @@ export default function Home() {
               <th
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
-                  fontFamily: "var(--font-acumin), sans-serif",
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -332,7 +332,7 @@ export default function Home() {
               <th
                 className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
                 style={{
-                  fontFamily: "var(--font-acumin), sans-serif",
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -343,7 +343,7 @@ export default function Home() {
               <th
                 className="px-6 py-4 text-left text-sm text-gray-700 border-b"
                 style={{
-                  fontFamily: "var(--font-acumin), sans-serif",
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "24px",
                   fontWeight: 600,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -361,7 +361,7 @@ export default function Home() {
                   key={audit.id}
                   className="border-b border-[#E0E0E0] hover:bg-gray-50"
                   style={{
-                    fontFamily: "var(--font-acumin), sans-serif",
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 400,
                     fontVariationSettings: "'wdth' 85, 'wght' 400",
                   }}
@@ -369,7 +369,7 @@ export default function Home() {
                   <td
                     className="px-6 border-r py-4 text-gray-800"
                     style={{
-                      fontFamily: "var(--font-acumin), sans-serif",
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -382,7 +382,7 @@ export default function Home() {
                   <td
                     className="px-6 border-r py-4 text-gray-600"
                     style={{
-                      fontFamily: "var(--font-acumin), sans-serif",
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -405,7 +405,7 @@ export default function Home() {
                         className="px-3 py-2 text-center rounded font-medium"
                         style={{
                           color: scoreColor.text,
-                          fontFamily: "var(--font-acumin), sans-serif",
+                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "23px",
                           lineHeight: "100%",
@@ -420,9 +420,7 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <div
-                      className={`grid ${isInvitedUser ? "grid-cols-1" : "grid-cols-[15%_30%_30%_25%]"} gap-2 pr-6`}
-                    >
+                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
                       {!isInvitedUser && (
                         <>
                           <button
@@ -434,7 +432,7 @@ export default function Home() {
                             className="w-full px-2 py-2 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-1 xl:gap-1"
                             style={{
                               fontFamily:
-                                "var(--font-acumin), sans-serif",
+                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -460,7 +458,7 @@ export default function Home() {
                             onClick={() => handleDeleteClick(audit.id)}
                             style={{
                               fontFamily:
-                                "var(--font-acumin), sans-serif",
+                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -480,7 +478,7 @@ export default function Home() {
                         }
                         className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3"
                         style={{
-                          fontFamily: "var(--font-acumin), sans-serif",
+                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "24px",
                           lineHeight: "100%",
@@ -496,7 +494,7 @@ export default function Home() {
                           onClick={() => handleInviteClick(audit)}
                           className="w-full px-3 cursor-pointer py-2 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                           style={{
-                            fontFamily: "var(--font-acumin), sans-serif",
+                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "24px",
                             lineHeight: "100%",

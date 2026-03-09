@@ -145,7 +145,7 @@ export default function TestResult() {
       className=""
       style={{
         backgroundColor: "#f5f5f5",
-        fontFamily: "var(--font-acumin), sans-serif",
+        fontFamily: "'Acumin Variable Concept', sans-serif",
       }}
     >
       {/* Right Main Content - 80% width */}

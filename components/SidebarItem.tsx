@@ -93,13 +93,12 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={`text-2xl font-[500] cursor-pointer flex items-center relative py-[11px] px-[16px] ${isActive
+        className={`h-[68px] cursor-pointer flex items-center relative ${isActive
           ? "w-[calc(100%+2px)] mr-0 rounded-l-xl border-r-0"
-          : (isCategoryItem || isSummaryItem) && !useSecondary
-            ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl border-r-0"
-            : "rounded-l-xl"
+          : "w-[92.5%]  rounded-xl"
           } ${isDragging ? "opacity-50" : ""} ${isDragOver ? "border-2 border-dashed border-white" : ""} ${canDrag && !isSummaryItem ? "cursor-move" : ""}`}
         style={{
+          padding: "0 clamp(0.75rem, 3vw, 1rem)",
           marginLeft: "clamp(0.75rem, 2vw, 1rem)",
           backgroundColor: backgroundColor,
           color: textColor,
@@ -123,7 +122,7 @@ const SidebarItem = memo(
             >
               <path
                 d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
-                fill="#F7FCFF"
+                fill="#ffffff"
               />
             </svg>
           </div>
@@ -186,7 +185,7 @@ const SidebarItem = memo(
               className="flex-1 bg-transparent outline-none border-none text-left min-w-0 p-0"
               style={{
                 color: "inherit",
-                fontFamily: "var(--font-acumin)",
+                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 500,
                 fontVariationSettings: "'wdth' 65, 'wght' 500",
                 fontSize: "clamp(20px, 1.8vw, 27px)",
@@ -243,24 +242,24 @@ const SidebarItem = memo(
                   =
                 </span>
               )}
-              {((isCategoryItem && itemCategoryNumber !== null) || item.icon) && (
-                <div
-                  className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}
-                >
-                  {isCategoryItem &&
-                    itemCategoryNumber !== null &&
-                    getCategoryIcon(itemCategoryNumber)
-                    ? renderIcon(getCategoryIcon(itemCategoryNumber))
-                    : item.icon}
-                </div>
-              )}
+              {(!isActive ||
+                (isCategoryItem && itemCategoryNumber !== null)) && (
+                  <div
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"}`}>
+                    {isCategoryItem &&
+                      itemCategoryNumber !== null &&
+                      getCategoryIcon(itemCategoryNumber)
+                      ? renderIcon(getCategoryIcon(itemCategoryNumber))
+                      : item.icon}
+                  </div>
+                )}
               <div
                 className={`flex-1 flex items-center gap-4 text-left ${item?.name?.length > 50 ? "text-[13px]" : "text-sm"} wrap-break-word`}
               >
                 <span
                   className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                   style={{
-                    fontFamily: "var(--font-acumin)",
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
                     fontSize: "clamp(20px, 1.8vw, 27px)",
                     letterSpacing: "0.006em",

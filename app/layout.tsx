@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+<<<<<<< HEAD
 import localFont from "next/font/local";
+=======
+>>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
 import { UserProvider } from "@/contexts/UserContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ReactQueryProvider } from "@/lib/react-query";
@@ -71,7 +74,7 @@ export default async function RootLayout({
                   style: {
                     background: "#fff",
                     color: "#333",
-                    fontFamily: "var(--font-acumin)",
+                    fontFamily: "Acumin Variable Concept",
                   },
                   success: {
                     iconTheme: {

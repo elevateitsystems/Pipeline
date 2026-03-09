@@ -1201,26 +1201,9 @@ export default function Sidebar() {
       style={{
         overflowX: "hidden",
         position: "relative",
+        backgroundColor: "transparent",
       }}
     >
-      {/* Sidebar Background SVG */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <svg
-          className="w-full h-full"
-          width="1863"
-          height="1047"
-          viewBox="0 0 1863 1047"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M1914.73 1091H-50.7612C-84.5922 1091 -112 1086.51 -112 1080.97V-60.9776C-112 -66.51 -84.5922 -71 -50.7612 -71H1914.73C1948.56 -71 1976 -66.51 1976 -60.9776V1080.97C1976 1086.51 1948.56 1091 1914.73 1091Z"
-            fill="#2B4055"
-            fillOpacity="0.5"
-          />
-        </svg>
-      </div>
       <SidebarHeader
         onResultPage={onResultPage}
         router={router}
@@ -1232,11 +1215,11 @@ export default function Sidebar() {
 
       {/* Navigation - Scrollable section */}
       <nav
-        className="pt-7 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
+        className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
         style={{
           position: "relative",
           zIndex: 2,
-          gap: "24px",
+          gap: "clamp(0.5rem, 1.25vw, 1rem)",
           display: "flex",
           flexDirection: "column",
         }}
@@ -1257,7 +1240,7 @@ export default function Sidebar() {
                 <div
                   className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
                   style={{
-                    fontFamily: "var(--font-acumin)",
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
                     fontSize: "clamp(20px, 1.8vw, 27px)",
                     lineHeight: "1",
@@ -1274,10 +1257,7 @@ export default function Sidebar() {
                 (_, index) => (
                   <div
                     key={`sidebar-skeleton-${index}`}
-                    className={`min-h-[40px] bg-white/10 overflow-hidden ${onTestPage
-                      ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl"
-                      : "w-[88%] rounded-xl"
-                      }`}
+                    className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
                     style={{
                       marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                     }}

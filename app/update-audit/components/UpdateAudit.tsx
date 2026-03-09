@@ -385,11 +385,11 @@ export default function UpdateAudit() {
         const auditWithSummary = audit as Presentation & {
           summary?: {
             categoryRecommendations?:
-              | string
-              | Array<{ categoryId: string; recommendation: string }>;
+            | string
+            | Array<{ categoryId: string; recommendation: string }>;
             nextSteps?:
-              | string
-              | Array<{ type: string; content: string; fileUrl?: string }>;
+            | string
+            | Array<{ type: string; content: string; fileUrl?: string }>;
             overallDetails?: string | null;
           } | null;
         };
@@ -443,8 +443,8 @@ export default function UpdateAudit() {
           const allCategoryRecommendations = audit.categories.map((cat) => {
             const existing = Array.isArray(categoryRecommendations)
               ? categoryRecommendations.find(
-                  (rec: { categoryId: string }) => rec.categoryId === cat.id,
-                )
+                (rec: { categoryId: string }) => rec.categoryId === cat.id,
+              )
               : null;
             return (
               existing || {
@@ -1093,20 +1093,20 @@ export default function UpdateAudit() {
               options:
                 Array.isArray(q.options) && q.options.length === 5
                   ? q.options.map((opt) => ({
-                      id: opt.id, // Include option ID if it exists
-                      text: opt.text.trim(),
-                      points: opt.points,
-                    }))
+                    id: opt.id, // Include option ID if it exists
+                    text: opt.text.trim(),
+                    points: opt.points,
+                  }))
                   : [
-                      "Very Minimal",
-                      "Just Starting",
-                      "Good progress",
-                      "Excellent",
-                      "Very Excellent",
-                    ].map((text, i) => ({
-                      text: text,
-                      points: i + 1,
-                    })),
+                    "Very Minimal",
+                    "Just Starting",
+                    "Good progress",
+                    "Excellent",
+                    "Very Excellent",
+                  ].map((text, i) => ({
+                    text: text,
+                    points: i + 1,
+                  })),
             }))
             .filter((q) => q.text.length > 0);
 
@@ -1281,7 +1281,7 @@ export default function UpdateAudit() {
               disabled={!titleEditable}
               className="w-full bg-[#4569871A] pr-12 pl-6 py-[12px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
               style={{
-                fontFamily: "var(--font-acumin), sans-serif",
+                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
