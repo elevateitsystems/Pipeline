@@ -11,9 +11,12 @@ import { UpdateProfileData } from "@/validation/update-profile.validation";
 import { CustomButton } from "@/components/common";
 
 export default function ProfilePage() {
+  const PROFILE_CARD_WIDTH = 764;
+  const PROFILE_CARD_HEIGHT = 965;
   const { user, isInvitedUser } = useUser();
   const router = useRouter();
   const updateProfileMutation = useUpdateProfile();
+  const [viewportWidth, setViewportWidth] = useState(1863);
   const [message, setMessage] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [companyLogo, setCompanyLogo] = useState<File | null>(null);
@@ -29,24 +32,24 @@ export default function ProfilePage() {
     passCode: "",
     pin: "",
     companyName: "",
-    primaryColor:  "#456987",
+    primaryColor: "#456987",
     secondaryColor: "#F7AF41",
     profileImageUrl: "",
     companyLogoUrl: "",
   });
-  const [pinDigits, setPinDigits] = useState(['', '', '', '']);
+  const [pinDigits, setPinDigits] = useState(["", "", "", ""]);
 
   const handlePinChange = (index: number, value: string) => {
     if (value.length > 1) return; // Only allow single digit
     if (!/^\d*$/.test(value)) return; // Only allow numbers
-    
+
     const newPin = [...pinDigits];
     newPin[index] = value;
     setPinDigits(newPin);
-    
+
     // Update formData pin
-    const pinValue = newPin.join('');
-    setFormData(prev => ({ ...prev, pin: pinValue }));
+    const pinValue = newPin.join("");
+    setFormData((prev) => ({ ...prev, pin: pinValue }));
 
     // Auto-focus next input
     if (value && index < 3) {
@@ -55,12 +58,26 @@ export default function ProfilePage() {
     }
   };
 
-  const handlePinKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !pinDigits[index] && index > 0) {
+  const handlePinKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (e.key === "Backspace" && !pinDigits[index] && index > 0) {
       const prevInput = document.getElementById(`profile-pin-${index - 1}`);
       prevInput?.focus();
     }
   };
+
+  useEffect(() => {
+    const updateViewportWidth = () => {
+      setViewportWidth(window.innerWidth);
+    };
+
+    updateViewportWidth();
+    window.addEventListener("resize", updateViewportWidth);
+
+    return () => window.removeEventListener("resize", updateViewportWidth);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -85,7 +102,7 @@ export default function ProfilePage() {
   }, [user]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -93,7 +110,7 @@ export default function ProfilePage() {
 
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "profile" | "company"
+    type: "profile" | "company",
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -119,12 +136,12 @@ export default function ProfilePage() {
     uploadData.append("file", file);
     uploadData.append(
       "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
     );
 
     const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      uploadData
+      uploadData,
     );
     return response.data.secure_url;
   };
@@ -200,7 +217,8 @@ export default function ProfilePage() {
       }, 1000);
     } catch (error) {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      const errorMessage = axiosError.response?.data?.error || "An error occurred";
+      const errorMessage =
+        axiosError.response?.data?.error || "An error occurred";
       setMessage(errorMessage);
       toast.error(errorMessage);
     }
@@ -210,26 +228,86 @@ export default function ProfilePage() {
     router.push("/");
   };
 
+  const profileCardLayout =
+    viewportWidth <= 768
+      ? { left: 168, top: 28, scale: 0.84 }
+      : viewportWidth <= 900
+        ? { left: 208, top: 32, scale: 0.92 }
+        : viewportWidth <= 1024
+          ? { left: 288, top: 30, scale: 1.05 }
+      : viewportWidth <= 1280
+        ? { left: 278, top: 50, scale: 0.9 }
+        : viewportWidth <= 1440
+          ? { left: 360, top: 52, scale: 1.02 }
+          : { left: 383, top: 45, scale: 1 };
+
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-full items-center justify-center bg-white">
         <div className="text-gray-600">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-full p-8 bg-white">
+    <div className="relative h-full w-full bg-white">
       {/* Form Card */}
-      <div className="max-w-[764px] w-full bg-white rounded-2xl shadow p-8 border border-gray-200">
-        <h2 className="text-2xl text-[#2d3e50] mb-8 tracking-wide">
+      <div
+        className="absolute"
+        style={{
+          left: `${profileCardLayout.left}px`,
+          top: `${profileCardLayout.top}px`,
+          width: `${PROFILE_CARD_WIDTH * profileCardLayout.scale}px`,
+          height: `${PROFILE_CARD_HEIGHT * profileCardLayout.scale}px`,
+        }}
+      >
+        <div
+          className="rounded-[20px] border border-[#CFCFCF] bg-white"
+          style={{
+            width: `${PROFILE_CARD_WIDTH}px`,
+            height: `${PROFILE_CARD_HEIGHT}px`,
+            transform: `scale(${profileCardLayout.scale})`,
+            transformOrigin: "top left",
+          }}
+        >
+        <h2
+          className="
+      absolute 
+      top-[50px] 
+      left-[44px] 
+      w-[482px] 
+      h-[24px] 
+      text-[34px] 
+      leading-[39px] 
+      font-[400] 
+      text-[#2D2D2D] 
+      uppercase 
+      tracking-[0.006em]
+    "
+          style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+        >
           EDIT YOUR PROFILE
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-0.5">
+        <form
+          onSubmit={handleSubmit}
+          className="
+    absolute 
+    top-[130px]   
+    left-[44px]  
+    w-[676px] 
+    h-auto 
+    flex flex-col 
+    gap-[28px]
+  "
+        >
           {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm text-[#2d3e50] mb-2">
+          <div className="flex h-[73px] w-[676px] flex-col gap-[10px]">
+            <label
+              htmlFor="name"
+              className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+              style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+            >
               Name
             </label>
             <input
@@ -239,13 +317,23 @@ export default function ProfilePage() {
               required
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
+              className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none focus:ring-1 focus:ring-gray-300"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontSize: "18px",
+                fontWeight: 500,
+                lineHeight: "22px",
+              }}
             />
           </div>
 
           {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm text-[#2d3e50] mb-2">
+          <div className="flex h-[73px] w-[676px] flex-col gap-[10px]">
+            <label
+              htmlFor="email"
+              className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+              style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+            >
               Email Address
             </label>
             <input
@@ -255,87 +343,130 @@ export default function ProfilePage() {
               required
               value={formData.email}
               disabled
-              className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-not-allowed"
+              className="h-[50px] w-full cursor-not-allowed rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontSize: "18px",
+                fontWeight: 500,
+                lineHeight: "22px",
+              }}
             />
           </div>
 
-          {/* Passcode */}
-          <div>
-            <label htmlFor="passCode" className="block text-sm text-[#2d3e50] mb-2">
-              Passcode
-            </label>
-            <div className="relative">
-              <input
-                id="passCode"
-                name="passCode"
-                type={showPassword ? "text" : "password"}
-                value={formData.passCode}
-                onChange={handleInputChange}
-                placeholder="Enter new passcode (leave empty to keep current)"
-                className="w-full bg-[#f5f5f5] border-0 rounded-md pl-10 pr-10 p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          {/* Passcode & PIN Row */}
+          <div className="flex h-[73px] w-[676px] flex-row gap-[24px]">
+            {/* Passcode */}
+            <div className="flex h-[73px] w-[326px] shrink-0 flex-col gap-[10px]">
+              <label
+                htmlFor="passCode"
+                className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
               >
-                {showPassword ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.59 21.59 0 014.29-5.94M9.53 9.53A3 3 0 0114.47 14.47M1 1l22 22" />
-                  </svg>
-                ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* PIN */}
-          <div>
-            <label htmlFor="pin" className="block text-sm text-[#2d3e50] mb-2">
-              PIN (Optional - 4 digits)
-            </label>
-            <div className="flex gap-2 justify-center">
-              {pinDigits.map((digit, index) => (
+                Passcode
+              </label>
+              <div className="relative">
                 <input
-                  key={index}
-                  id={`profile-pin-${index}`}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handlePinChange(index, e.target.value)}
-                  onKeyDown={(e) => handlePinKeyDown(index, e)}
-                  className="w-10 h-10 text-center text-xl font-semibold bg-[#f5f5f5] border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+                  id="passCode"
+                  name="passCode"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.passCode}
+                  onChange={handleInputChange}
+                  placeholder="Enter passcode"
+                  className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] pr-[45px] text-[#1F1F1F] focus:outline-none focus:ring-0"
+                  style={{
+                    fontFamily: "'Acumin Variable Concept', sans-serif",
+                    fontSize: "18px",
+                    fontWeight: 500,
+                    lineHeight: "22px",
+                  }}
                 />
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-[16px] top-1/2 z-20 -translate-y-1/2 text-[#7B7B7B]"
+                >
+                  {showPassword ? (
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.59 21.59 0 014.29-5.94M9.53 9.53A3 3 0 0114.47 14.47M1 1l22 22" />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1 text-center">
-              Enter new PIN (leave empty to keep current) - Use PIN for faster login
-            </p>
+
+            {/* PIN */}
+            <div className="flex w-[326px] shrink-0 flex-col gap-[10px]">
+              <label
+                htmlFor="pin"
+                className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+              >
+                PIN (Optional)
+              </label>
+              <div className="flex h-[50px] items-center justify-start gap-[8px]">
+                {pinDigits.map((digit, index) => (
+                  <input
+                    key={index}
+                    id={`profile-pin-${index}`}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handlePinChange(index, e.target.value)}
+                    onKeyDown={(e) => handlePinKeyDown(index, e)}
+                    className="h-[50px] w-[50px] rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] text-center text-[#1F1F1F] focus:outline-none focus:ring-0"
+                    style={{
+                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontSize: "18px",
+                      fontWeight: 500,
+                      lineHeight: "22px",
+                    }}
+                  />
+                ))}
+              </div>
+              <p
+                className="text-[#2D2D2D]/70"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  lineHeight: "18px",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Enter new PIN (leave empty to keep current) - Use PIN for
+                faster login
+              </p>
+            </div>
           </div>
 
-          {/* Company Name - Hidden for invited users */}
+          {/* Company Name */}
           {!isInvitedUser && (
-            <div>
-              <label htmlFor="companyName" className="block text-sm text-[#2d3e50] mb-2">
+            <div className="flex h-[73px] w-[676px] flex-col gap-[10px]">
+              <label
+                htmlFor="companyName"
+                className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+              >
                 Company Name
               </label>
               <input
@@ -344,173 +475,272 @@ export default function ProfilePage() {
                 type="text"
                 value={formData.companyName}
                 onChange={handleInputChange}
-                className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none focus:ring-1 focus:ring-gray-300"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  lineHeight: "22px",
+                }}
               />
             </div>
           )}
 
-          {/* Colors and Images Row */}
-          <div className={`grid gap-2 ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-2'}`}>
-            {/* Primary Color - Hidden for invited users */}
-            {!isInvitedUser && (
-              <div>
-                <label className="block text-sm text-[#2d3e50] mb-2">
+          {/* Colors row */}
+          {!isInvitedUser && (
+            <div className="flex h-[73px] w-[676px] flex-row gap-[24px]">
+              {/* Primary Color */}
+              <div className="flex h-[73px] w-[326px] flex-col gap-[10px]">
+                <label
+                  className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+                >
                   Primary Color
                 </label>
-                <div className="relative">
+                <div className="relative flex h-[46px] w-[326px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
                   <input
-                    id="primaryColor"
-                    name="primaryColor"
                     type="color"
-                    value={formData.primaryColor}
-                    onChange={handleInputChange}
-                    className="absolute opacity-0 w-full h-full cursor-pointer"
+                    value={formData.primaryColor || "#000000"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        primaryColor: e.target.value,
+                      }))
+                    }
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
-                  <div className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer">
-                    <span className="flex items-center gap-2">
-                      <div
-                        className="w-5 h-5 rounded border border-gray-300"
-                        style={{ backgroundColor: formData.primaryColor }}
-                      />
-                      <span className="text-gray-800">{formData.primaryColor}</span>
+                  <div
+                    className="h-[46px] w-[44px] shrink-0"
+                    style={{ backgroundColor: formData.primaryColor }}
+                  />
+                  <div className="flex h-[46px] w-[282px] items-center gap-[12px] px-[14px]">
+                    <span
+                      className="flex items-center text-[#2D2D2D] uppercase"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "19px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
+                      {formData.primaryColor}
                     </span>
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Secondary Color - Hidden for invited users */}
-            {!isInvitedUser && (
-              <div>
-                <label className="block text-sm text-[#2d3e50] mb-2">
+              {/* Secondary Color */}
+              <div className="flex h-[73px] w-[326px] flex-col gap-[10px]">
+                <label
+                  className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+                >
                   Secondary Color
                 </label>
-                <div className="relative">
+                <div className="relative flex h-[46px] w-[326px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7]">
                   <input
-                    id="secondaryColor"
-                    name="secondaryColor"
                     type="color"
-                    value={formData.secondaryColor}
-                    onChange={handleInputChange}
-                    className="absolute opacity-0 w-full h-full cursor-pointer"
+                    value={formData.secondaryColor || "#000000"}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        secondaryColor: e.target.value,
+                      }))
+                    }
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
-                  <div className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer">
-                    <span className="flex items-center gap-2">
-                      <div
-                        className="w-5 h-5 rounded border border-gray-300"
-                        style={{ backgroundColor: formData.secondaryColor }}
-                      />
-                      <span className="text-gray-800">{formData.secondaryColor}</span>
+                  <div
+                    className="h-[46px] w-[44px] shrink-0"
+                    style={{ backgroundColor: formData.secondaryColor }}
+                  />
+                  <div className="flex h-[46px] w-[282px] items-center gap-[12px] px-[14px]">
+                    <span
+                      className="flex items-center text-[#2D2D2D] uppercase"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "19px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
+                      {formData.secondaryColor}
                     </span>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Company Logo - Hidden for invited users */}
-            {!isInvitedUser && (
-              <div>
-                <label className="block text-sm text-[#2d3e50] mb-2">
+          {/* Logos Row */}
+          {!isInvitedUser && (
+            <div className="flex h-[186px] w-[676px] flex-row gap-[20px]">
+              {/* Company Logo */}
+              <div className="flex h-[171px] w-[328px] flex-col gap-[10px]">
+                <label
+                  className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+                >
                   Company Logo
                 </label>
-                <div className="relative">
+                <div className="relative flex h-[48px] w-[328px] items-center gap-[10px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[8px] py-[7px]">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleFileChange(e, "company")}
-                    className="absolute opacity-0 w-full h-full cursor-pointer"
+                    className="absolute opacity-0 w-full h-full cursor-pointer z-10"
                     id="companyLogo"
                   />
                   <label
                     htmlFor="companyLogo"
-                    className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer"
+                    className="flex w-full cursor-pointer items-center gap-[10px]"
                   >
-                    <span className="truncate">
-                      {logoPreview ? "File selected" : "No files chosen"}
-                    </span>
-                    <span className="bg-white px-3 py-1 rounded text-xs border border-gray-300 ml-2 whitespace-nowrap">
+                    <span
+                      className="flex h-[33px] w-[114px] items-center justify-center whitespace-nowrap rounded-[6px] border border-[#E3E3E3] bg-gradient-to-b from-[#F4F4F4] to-[#DEDEDE] text-[#2D2D2D]"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "18px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
                       Choose File
+                    </span>
+                    <span
+                      className="truncate text-[#2D2D2D]/50"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "18px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
+                      {companyLogo ? "File selected" : "No files chosen"}
                     </span>
                   </label>
                 </div>
                 {uploadingLogo && (
-                  <p className="text-xs text-[#2d3e50] mt-1">Uploading...</p>
+                  <p className="text-xs text-[#2d3e50]">Uploading...</p>
                 )}
                 {logoPreview && !uploadingLogo && (
-                  <div className="mt-2">
+                  <div className="flex h-[86px] w-[249px] items-center justify-start overflow-hidden">
                     <Image
                       src={logoPreview}
                       alt="Company Logo"
-                      width={64}
-                      height={64}
-                      className="h-16 w-auto object-contain"
+                      width={249}
+                      height={86}
+                      className="max-h-[86px] w-auto max-w-[249px] object-contain object-left"
                     />
                   </div>
                 )}
               </div>
-            )}
 
-            {/* Profile Photo */}
-            <div>
-              <label className="block text-sm text-[#2d3e50] mb-2">
-                Profile Photo
-              </label>
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e, "profile")}
-                  className="absolute opacity-0 w-full h-full cursor-pointer"
-                  id="profilePhoto"
-                />
+              {/* Profile Photo */}
+              <div className="flex h-[186px] w-[328px] flex-col gap-[10px]">
                 <label
-                  htmlFor="profilePhoto"
-                  className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer"
+                  className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
+                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                 >
-                  <span className="truncate">
-                    {profilePreview ? "File selected" : "No files chosen"}
-                  </span>
-                  <span className="bg-white px-3 py-1 rounded text-xs border border-gray-300 ml-2 whitespace-nowrap">
-                    Choose File
-                  </span>
+                  Profile Photo
                 </label>
-              </div>
-              {uploadingProfile && (
-                <p className="text-xs text-[#2d3e50] mt-1">Uploading...</p>
-              )}
-              {profilePreview && !uploadingProfile && (
-                <div className="mt-2">
-                  <Image
-                    src={profilePreview}
-                    alt="Profile"
-                    width={100}
-                    height={100}
-                    className="h-24 w-24 rounded object-cover"
+                <div className="relative flex h-[48px] w-[328px] items-center gap-[10px] overflow-hidden rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[8px] py-[7px]">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, "profile")}
+                    className="absolute opacity-0 w-full h-full cursor-pointer z-10"
+                    id="profilePhoto"
                   />
+                  <label
+                    htmlFor="profilePhoto"
+                    className="flex w-full cursor-pointer items-center gap-[10px]"
+                  >
+                    <span
+                      className="flex h-[33px] w-[114px] items-center justify-center whitespace-nowrap rounded-[6px] border border-[#E3E3E3] bg-gradient-to-b from-[#F4F4F4] to-[#DEDEDE] text-[#2D2D2D]"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "18px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
+                      Choose File
+                    </span>
+                    <span
+                      className="truncate text-[#2D2D2D]/50"
+                      style={{
+                        fontFamily: "'Acumin Variable Concept', sans-serif",
+                        fontSize: "18px",
+                        fontWeight: 400,
+                        lineHeight: "100%",
+                        letterSpacing: "-0.021em",
+                      }}
+                    >
+                      {profileImage ? "File selected" : "No files chosen"}
+                    </span>
+                  </label>
                 </div>
-              )}
+                {uploadingProfile && (
+                  <p className="text-xs text-[#2d3e50]">Uploading...</p>
+                )}
+                {profilePreview && !uploadingProfile && (
+                  <div className="flex h-[92px] w-[92px] items-center justify-start overflow-hidden">
+                    <Image
+                      src={profilePreview}
+                      alt="Profile"
+                      width={92}
+                      height={92}
+                      className="h-[92px] w-[92px] object-cover"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Action Buttons */}
-          <div className="flex gap-4 mt-6">
+          <div className="mt-[10px] flex h-[52px] w-[676px] flex-row items-center gap-[28px]">
             <button
               type="button"
               onClick={handleBack}
-              className="w-[200px] bg-gray-300 text-black py-3 cursor-pointer rounded-full font-medium  transition-all shadow-md"
+              className="flex h-[52px] w-[183px] cursor-pointer items-center justify-center rounded-[30px] bg-[#CECECE] px-[26px] py-[18px] text-[#212121] transition-opacity hover:opacity-90"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontSize: "23px",
+                fontWeight: 400,
+                lineHeight: "100%",
+                letterSpacing: "0.02em",
+              }}
             >
               No, Back
             </button>
-            <CustomButton
-              variant="primary"
-              size="md"
-              className="flex-1"
-              fullRounded={true}
-              disabled={updateProfileMutation.isPending || uploadingProfile || uploadingLogo}
+            <button
+              type="submit"
+              disabled={
+                updateProfileMutation.isPending ||
+                uploadingProfile ||
+                uploadingLogo
+              }
               onClick={handleSubmit}
+              className="flex h-[50px] w-[465px] cursor-pointer items-center justify-center rounded-[30px] bg-[#F7AF41] px-[26px] py-[17px] text-[#2D2D2D] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              style={{
+                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontSize: "23px",
+                fontWeight: 400,
+                lineHeight: "100%",
+                letterSpacing: "0.02em",
+              }}
             >
-              {updateProfileMutation.isPending || uploadingProfile || uploadingLogo ? "Saving..." : "Save it"}
-            </CustomButton>
+              {updateProfileMutation.isPending ||
+              uploadingProfile ||
+              uploadingLogo
+                ? "Saving..."
+                : "Save it"}
+            </button>
           </div>
 
           {message && (
@@ -523,6 +753,7 @@ export default function ProfilePage() {
             </p>
           )}
         </form>
+        </div>
       </div>
     </div>
   );
