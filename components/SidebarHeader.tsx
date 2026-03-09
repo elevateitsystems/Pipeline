@@ -49,7 +49,7 @@ const SidebarHeader = ({
           height={60}
           style={{
             width: "clamp(120px, 15vw, 168px)",
-            height: "clamp(40px, 8vw, 60px)",
+            height: "clamp(40px, 8vw, 57px)",
             objectFit: "contain",
           }}
         />

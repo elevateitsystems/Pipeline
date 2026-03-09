@@ -65,7 +65,7 @@ const SidebarFooter = ({
           <div className="grid grid-cols-2 items-center justify-center gap-2 mb-8 mt-4 sidebar-bottom-info">
             <CustomButton
               onClick={handleLogout}
-              className="flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
+              className="text-[23px] flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
               style={{ fontSize: "inherit" }}
             >
               Logout

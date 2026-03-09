@@ -1232,11 +1232,11 @@ export default function Sidebar() {
 
       {/* Navigation - Scrollable section */}
       <nav
-        className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
+        className="pt-7 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
         style={{
           position: "relative",
           zIndex: 2,
-          gap: "clamp(0.5rem, 1.25vw, 1rem)",
+          gap: "24px",
           display: "flex",
           flexDirection: "column",
         }}
