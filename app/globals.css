@@ -34,7 +34,12 @@
     --radius: 0.5rem;
   }
 
-  html {
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    /* Prevent scrolling and hide overflowing content */
     font-family: var(--font-acumin), sans-serif;
     letter-spacing: -0.01em;
   }
@@ -172,6 +177,23 @@
   min-width: 650px !important;
 }
 
-.audit-status-button {
+/* .audit-status-button {
   width: 130px;
+} */
+
+@media (min-width: 768px) {
+  .audit-question-col {
+    width: 38% !important;
+    min-width: 300px !important;
+  }
+
+  .audit-answer-col {
+    width: 62% !important;
+    min-width: 300px !important;
+  }
+
+  .audit-status-button {
+    width: fit-content !important;
+  }
+
 }
