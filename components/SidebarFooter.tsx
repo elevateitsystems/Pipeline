@@ -93,8 +93,8 @@ const SidebarFooter = ({
                 height={230}
                 onClick={() => router.push("/profile")}
                 style={{
-                  width: "clamp(100px, 18vw, 210px)",
-                  height: "clamp(120px, 25vh, 230px)",
+                  width: "clamp(130px, 38vw, 210px)",
+                  height: "clamp(150px, 28vh, 230px)",
                   objectPosition: "center 20%",
                   border: `5px solid ${user.secondaryColor}`,
                 }}
@@ -104,8 +104,8 @@ const SidebarFooter = ({
                 className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
                 onClick={() => router.push("/profile")}
                 style={{
-                  width: "clamp(100px, 18vw, 210px)",
-                  height: "clamp(120px, 25vh, 230px)",
+                  width: "clamp(130px, 38vw, 210px)",
+                  height: "clamp(150px, 28vh, 230px)",
                 }}
               >
                 <span

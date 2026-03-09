@@ -5,7 +5,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ReactQueryProvider } from "@/lib/react-query";
 import { getSession } from "@/lib/session";
-import Sidebar from "@/components/Sidebar";
+import ResponsiveSidebar from "@/components/ResponsiveSidebar";
 import SidebarSkeleton from "@/components/SidebarSkeleton";
 import BackgroundWrapper from "@/components/BackgroundWrapper";
 import { Toaster } from "react-hot-toast";
@@ -53,7 +53,7 @@ export default async function RootLayout({
                   {session ? (
                     <div className="flex h-full w-full">
                       <Suspense fallback={<SidebarSkeleton />}>
-                        <Sidebar />
+                        <ResponsiveSidebar />
                       </Suspense>
                       <main className="flex-1">{children}</main>
                     </div>

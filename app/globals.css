@@ -86,6 +86,13 @@
   width: 300px;
 }
 
+@media (max-width: 639px) {
+  .sidebar-profile-image {
+    width: 160px !important;
+    height: 180px !important;
+  }
+}
+
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
     width: 350px !important;
