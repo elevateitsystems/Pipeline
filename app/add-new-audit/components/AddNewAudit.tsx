@@ -570,11 +570,7 @@ export default function AddNewAudit() {
       if (typeof window !== "undefined") {
         sessionStorage.clear();
 
-<<<<<<< HEAD
         // Dispatch  to update sidebar
-=======
-        // Dispatch event to update sidebar
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
         window.dispatchEvent(new Event("categoryNameUpdated"));
       }
       // Redirect to home page after successful creation
@@ -696,52 +692,35 @@ export default function AddNewAudit() {
           <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             answers
           </p>
-<<<<<<< HEAD
-  {/* <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
+          {/* <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             score
           </p> */}
-=======
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
         </div >
       </header >
-    <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
-      <div className="flex gap items-center justify-between mb-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Presentation Name"
-<<<<<<< HEAD
-            className="w-full bg-[#4569871A] px-6 py-[11px] border border-[#3b5163] rounded-xl outline-none"
-            style={{
-              fontFamily: "var(--font-acumin), sans-serif",
-=======
-              className="w-full bg-[#4569871A] px-6 py-[12px] border border-[#3b5163] rounded-xl outline-none"
+      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
+        <div className="flex gap items-center justify-between mb-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Presentation Name"
+              className="w-full bg-[#4569871A] px-6 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
-                fontFamily: "'Acumin Variable Concept', sans-serif",
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
-              fontWeight: 400,
-              fontSize: "clamp(20px, 1.8vw, 23px)",
-              letterSpacing: "-0.025em",
-              lineHeight: "1",
-              fontVariationSettings: "'wdth' 85, 'wght' 400",
-            }}
-          />
-        </div>
-<<<<<<< HEAD
-          <div className="w-px h-[30px] bg-[#3b5163] mx-7"></div>
-          <div className="flex gap-3">
-            <button
-              onClick={() => router.push("/")}
-              className="px-[20px] py-[11px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer"
-=======
+                fontFamily: "var(--font-acumin), sans-serif",
+                fontWeight: 400,
+                fontSize: "clamp(20px, 1.8vw, 23px)",
+                letterSpacing: "-0.025em",
+                lineHeight: "1",
+                fontVariationSettings: "'wdth' 85, 'wght' 400",
+              }}
+            />
+          </div>
           <div className="w-px h-0 bg-[#3b5163] mx-7"></div>
           <div className="flex gap-3">
             <button
               onClick={() => router.push("/")}
               className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer"
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
             >
               Back to List
             </button>
@@ -755,43 +734,39 @@ export default function AddNewAudit() {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-<<<<<<< HEAD
-  <div className="flex items-center justify-center px-[20px] py-[11px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
-=======
             <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
-      <input
-        type="file"
-        accept=".csv,.xlsx,.xls"
-        onChange={handleFileUpload}
-        className="hidden"
-        id="auditUpload"
-      />
+              <input
+                type="file"
+                accept=".csv,.xlsx,.xls"
+                onChange={handleFileUpload}
+                className="hidden"
+                id="auditUpload"
+              />
 
-      <label htmlFor="auditUpload">Upload File</label>
-    </div>
-  </div>
+              <label htmlFor="auditUpload">Upload File</label>
+            </div>
+          </div>
         </div >
 
-    { currentCategory === 8 ? (
-    <SummarySection
-      editId={null}
-      isCreateMode={true}
-      sessionStorageCategories={sessionStorageCategories}
-      onRecommendationChange={handleCategoryRecommendationChange}
-    />
-  ) : (
-    <div className="mt-8">
-      <AuditTable
-        currentCategory={currentCategory}
-        onQuestionsChange={setTableQuestions}
-        onStatusChange={(rowIndex, labels) =>
-          setStatusMap((prev) => ({ ...prev, [rowIndex]: labels }))
+        {currentCategory === 8 ? (
+          <SummarySection
+            editId={null}
+            isCreateMode={true}
+            sessionStorageCategories={sessionStorageCategories}
+            onRecommendationChange={handleCategoryRecommendationChange}
+          />
+        ) : (
+          <div className="mt-8">
+            <AuditTable
+              currentCategory={currentCategory}
+              onQuestionsChange={setTableQuestions}
+              onStatusChange={(rowIndex, labels) =>
+                setStatusMap((prev) => ({ ...prev, [rowIndex]: labels }))
+              }
+            />
+          </div>
+        )
         }
-      />
-    </div>
-  )
-}
       </main >
     </div >
   );

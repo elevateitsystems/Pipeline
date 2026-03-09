@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-<<<<<<< HEAD
 import localFont from "next/font/local";
-=======
->>>>>>> 9add2ecb30e1cd46e821ab494116988ac8b06ee8
 import { UserProvider } from "@/contexts/UserContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ReactQueryProvider } from "@/lib/react-query";
@@ -58,7 +55,7 @@ export default async function RootLayout({
                       <Suspense fallback={<SidebarSkeleton />}>
                         <Sidebar />
                       </Suspense>
-                      <main className="flex-1 h-screen overflow-y-hidden hide-scrollbar">{children}</main>
+                      <main className="flex-1">{children}</main>
                     </div>
                   ) : (
                     <main className="h-full w-full bg-[#2B4055B2]">
