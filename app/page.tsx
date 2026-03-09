@@ -198,8 +198,8 @@ export default function Home() {
       <div className="p-14 bg-white h-full">
         <div className="">
           <h1
-            className="text-gray-900 mb-2 font-normal capitalize"
-            style={{ fontSize: "clamp(1.25rem, 4vw, 1.6875rem)" }}
+            className="text-gray-900 mb-2 capitalize font-normal text-[20px] md:text-[24px] lg:text-[27px]"
+          // style={{ fontSize: "27px", fontWeight: 400 }}
           >
             Hello, {user.name.split(" ")[0]}!
           </h1>
@@ -217,14 +217,13 @@ export default function Home() {
                 }}
               />
               <p
-                className="text-[#2D2D2D] mb-2 font-normal"
+                className="font-normal"
                 style={{ fontSize: "clamp(.5rem, 4vw, 2rem)" }}
               >
                 NO AUDIT CREATED
               </p>
               <p
-                className="text-[#2D2D2D] mb-2 font-normal"
-                style={{ fontSize: "clamp(1rem, 4vw, 1.2rem)" }}
+                className="text-[20px] sm:text-[22px] xl:text-[26px] font-[300]"
               >
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
@@ -234,12 +233,12 @@ export default function Home() {
                 <CustomButton
                   variant="primary"
                   size="lg"
+                  className="text-[18px] sm:text-[20px] lg:text-[23px] font-normal mt-4 sm:mt-6 lg:mt-10"
                   style={{
                     width: "318px",
                     height: "50px",
                     padding:
-                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-                    fontSize: "clamp(0.875rem, 2.5vw, 1rem)",
+                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)"
                   }}
                   onClick={() => {
                     clearAuditSessionStorage();
@@ -264,22 +263,17 @@ export default function Home() {
         <div className="flex justify-between items-start mb-4">
           <div>
             <h1
-              className="text-[#2d3e50] text-3xl mb-2"
+              className="text-[40px] font-normal"
               style={{
-                fontFamily: "var(--font-acumin), sans-serif",
-                fontWeight: 700,
-                fontVariationSettings: "'wdth' 85, 'wght' 700",
+                // fontVariationSettings: "'wdth' 85, 'wght' 700",
               }}
             >
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-gray-600 text-[20px]"
+              className="text-[26px]"
               style={{
-                fontFamily: "var(--font-acumin), sans-serif",
-
-                fontWeight: 400,
-                fontVariationSettings: "'wdth' 85, 'wght' 400",
+                fontWeight: 300,
               }}
             >
               Track and compare all your AUDIT reports in one place. View

@@ -55,7 +55,7 @@ export default async function RootLayout({
                       <Suspense fallback={<SidebarSkeleton />}>
                         <Sidebar />
                       </Suspense>
-                      <main className="flex-1">{children}</main>
+                      <main className="flex-1 hide-">{children}</main>
                     </div>
                   ) : (
                     <main className="h-full w-full bg-[#2B4055B2]">
