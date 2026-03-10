@@ -291,8 +291,8 @@ export default function Home() {
                 }}
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontWeight: 600,
-                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                  fontWeight: 500,
+                  fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
               >
                 Create New AUDIT
