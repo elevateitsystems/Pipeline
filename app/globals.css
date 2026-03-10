@@ -155,6 +155,24 @@
     padding-left: 1px !important;
     padding-right: 1px !important;
   }
+
+  /* Gap after header circles without shifting layout too far down */
+  .test-circle-row {
+    margin-bottom: 12px !important;
+  }
+
+  .test-grade-scale {
+    margin-top: -16px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .test-qa-bar {
+    margin-top: 0px !important;
+  }
+
+  .test-main {
+    padding-top: 0px !important;
+  }
 }
 
 /* Common audit table styles for all desktop screens */
