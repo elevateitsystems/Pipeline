@@ -3,7 +3,11 @@
 import { useEffect, useState, ReactNode } from "react";
 
 export default function ScalingWrapper({ children }: { children: ReactNode }) {
-    const [scales, setScales] = useState({ x: 1, y: 1 });
+    const [layout, setLayout] = useState({
+        scale: 1,
+        canvasWidth: 1920,
+        canvasHeight: 1080,
+    });
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
@@ -11,9 +15,21 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
             const targetWidth = 1920;
             const targetHeight = 1080;
 
-            const widthScale = window.innerWidth / targetWidth;
-            const heightScale = window.innerHeight / targetHeight;
-            setScales({ x: widthScale, y: heightScale });
+            const scaleX = window.innerWidth / targetWidth;
+            const scaleY = window.innerHeight / targetHeight;
+
+            // Use uniform scale — pick the SMALLER ratio so content
+            // always fits without distortion.
+            const uniformScale = Math.min(scaleX, scaleY);
+
+            // Expand the canvas to fill whichever dimension has leftover
+            // space.  For example on a tall viewport the canvas height
+            // grows so the layout can use the extra room instead of
+            // leaving an empty stripe.
+            const canvasWidth = window.innerWidth / uniformScale;
+            const canvasHeight = window.innerHeight / uniformScale;
+
+            setLayout({ scale: uniformScale, canvasWidth, canvasHeight });
             setIsReady(true);
         };
 
@@ -26,7 +42,6 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
         <div
             className="scaling-outer-container"
             style={{
-                // width: '100vw',
                 width: '100vw',
                 height: '100vh',
                 overflow: 'hidden',
@@ -42,9 +57,9 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
             <div
                 className="scaling-inner-canvas"
                 style={{
-                    width: '1920px',
-                    height: '1080px',
-                    transform: `scale(${scales.x}, ${scales.y})`,
+                    width: `${layout.canvasWidth}px`,
+                    height: `${layout.canvasHeight}px`,
+                    transform: `scale(${layout.scale})`,
                     transformOrigin: 'top left',
                     position: 'absolute',
                     top: 0,
