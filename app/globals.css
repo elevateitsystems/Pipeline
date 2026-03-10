@@ -97,7 +97,7 @@
 
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
-    width: 350px !important;
+    width: 300px !important;
   }
 
   /* Profile image larger at 1024px */
