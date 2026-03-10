@@ -261,12 +261,12 @@ const SidebarItem = memo(
               {(!isActive ||
                 (isCategoryItem && itemCategoryNumber !== null)) && (
                   <div
-                    className={`flex items-center mr-3 justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
                   >
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&
                       getCategoryIcon(itemCategoryNumber)
-                      ? renderIcon(getCategoryIcon(itemCategoryNumber))
+                      ? <span className='mr-3'> {renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
                       : item.icon}
                   </div>
                 )}
