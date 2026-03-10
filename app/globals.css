@@ -170,6 +170,8 @@
 
   .test-qa-bar {
     margin-top: 0px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
   }
 
   .test-main {

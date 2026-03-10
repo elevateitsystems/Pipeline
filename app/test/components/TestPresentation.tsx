@@ -658,7 +658,18 @@ export default function TestPresentation() {
         )}
 
         <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
-          <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">
+          <p
+            className="font-medium uppercase line-clamp-1"
+            style={{
+              fontFamily: "'Acumin Variable Concept', sans-serif",
+              fontWeight: 500,
+              fontStyle: "normal",
+              fontSize: "17px",
+              lineHeight: "100%",
+              letterSpacing: "-0.027em",
+              color: "#212121",
+            }}
+          >
             GRADING SCALE (1-5)
           </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
@@ -676,27 +687,63 @@ export default function TestPresentation() {
 
         <div
           className="test-qa-bar px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
-          style={{ width: "100%" }}
+          style={{
+            width: "100%",
+            paddingTop: "6px",
+            paddingBottom: "6px",
+            alignItems: "center",
+          }}
         >
           <p
             className="text-[20px] text-white capitalize font-500 leading-normal font-medium"
             style={{ width: "100px" }}
           ></p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
+            className="font-medium"
+            style={{
+              width: "calc(50% - 100px)",
+              color: "#F4F4F4",
+              fontFamily: "'Acumin Variable Concept', sans-serif",
+              fontWeight: 500,
+              fontSize: "22px",
+              lineHeight: "100%",
+              letterSpacing: "0.016em",
+              textTransform: "capitalize",
+              textAlign: "left",
+              paddingLeft: "24px",
+            }}
           >
             questions
           </p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
-            style={{ width: "calc(50% - 100px)" }}
+            className="font-medium"
+            style={{
+              width: "calc(50% - 100px)",
+              color: "#F4F4F4",
+              fontFamily: "'Acumin Variable Concept', sans-serif",
+              fontWeight: 500,
+              fontSize: "22px",
+              lineHeight: "100%",
+              letterSpacing: "0.016em",
+              textTransform: "capitalize",
+              textAlign: "left",
+              paddingLeft: "16px",
+            }}
           >
             answers
           </p>
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium text-center"
-            style={{ width: "100px" }}
+            className="text-center font-medium"
+            style={{
+              width: "100px",
+              color: "#F4F4F4",
+              fontFamily: "'Acumin Variable Concept', sans-serif",
+              fontWeight: 500,
+              fontSize: "22px",
+              lineHeight: "100%",
+              letterSpacing: "0.016em",
+              textTransform: "capitalize",
+            }}
           >
             score
           </p>
@@ -746,15 +793,15 @@ export default function TestPresentation() {
                       >
                         <div className="w-full  px-4 border-[#E8E8E8] rounded-xl flex items-center">
                           <span
-                            className="text-gray-900"
+                            className="text-[#212121]"
                             style={{
                               fontFamily:
                                 "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
+                              fontStyle: "normal",
                               fontSize: "23px",
                               lineHeight: "100%",
                               letterSpacing: "-0.025em",
-                              fontVariationSettings: "'wdth' 85, 'wght' 400",
                             }}
                           >
                             {question.text}
@@ -915,9 +962,9 @@ export default function TestPresentation() {
 
           {/* Score Interpretation Blocks */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="relative bottom-4 mt-2 grid grid-cols-3 gap-0 ">
+            <div className="relative bottom-4 mt-2 mb-3 grid grid-cols-3 gap-0 ">
               {/* Block 1: Low Score */}
-              <div className="bg-white rounded-tl-xl  border-r-2  border-white ">
+              <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
                   className={`rounded-tl-xl text-center py-1 ${
                     currentCategoryScore >= 1 &&
@@ -928,9 +975,10 @@ export default function TestPresentation() {
                   }`}
                 >
                   <h3
-                    className="text-base font-semibold"
+                    className="text-base font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 500,
                     }}
                   >
                     Score: 1 - {Math.floor(currentCategoryMaxScore * 0.4)}
@@ -938,9 +986,12 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    className="text-[16px] px-4 font-medium text-gray-700 leading-relaxed"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      width: "455px",
+                      height: "94px",
+                      color: "#212121",
                     }}
                   >
                     This score range indicates areas that require urgent
@@ -952,7 +1003,7 @@ export default function TestPresentation() {
               </div>
 
               {/* Block 2: Medium Score */}
-              <div className="bg-white">
+              <div className="bg-white border-r-2 border-white">
                 <div
                   className={`text-center py-1 ${
                     currentCategoryScore >
@@ -964,9 +1015,10 @@ export default function TestPresentation() {
                   }`}
                 >
                   <h3
-                    className="text-base font-semibold"
+                    className="text-base font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 500,
                     }}
                   >
                     Score: {Math.floor(currentCategoryMaxScore * 0.4) + 1} -{" "}
@@ -975,9 +1027,12 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    className="text-[16px] px-4 font-medium text-gray-700 leading-relaxed"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      width: "455px",
+                      height: "94px",
+                      color: "#212121",
                     }}
                   >
                     This score range represents average performance with room
@@ -991,7 +1046,7 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${
+                  className={`text-center py-1 rounded-tr-xl ${
                     currentCategoryScore >
                     Math.floor(currentCategoryMaxScore * 0.8)
                       ? "bg-[#2BD473] text-white"
@@ -999,20 +1054,24 @@ export default function TestPresentation() {
                   }`}
                 >
                   <h3
-                    className="text-base font-semibold"
+                    className="text-base font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontWeight: 500,
                     }}
                   >
                     Score: {Math.floor(currentCategoryMaxScore * 0.8) + 1} -{" "}
                     {currentCategoryMaxScore}
                   </h3>
                 </div>
-                <div className="mt-1 border-l-2 border-gray-200">
+                <div className="mt-1">
                   <p
-                    className="text-[16px] px-4 border-r-2 font-medium border-gray-200 text-gray-700 leading-relaxed"
+                    className="text-[16px] px-4 font-medium text-gray-700 leading-relaxed"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
+                      width: "455px",
+                      height: "94px",
+                      color: "#212121",
                     }}
                   >
                     This score range demonstrates excellent performance and
@@ -1028,8 +1087,17 @@ export default function TestPresentation() {
           {currentCategoryData && currentCategoryMaxScore > 0 && (
             <div className="mt-1 pt-1 px-4 pb-5 bg-[#D8DEE2]  bottom-4 relative">
               <h3
-                className="text-base font-semibold text-gray-800 mb-3 uppercase"
-                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+                className="mb-3 uppercase"
+                style={{
+                  fontFamily: "'Acumin Variable Concept', sans-serif",
+                  fontWeight: 500,
+                  fontStyle: "normal",
+                  fontSize: "21px",
+                  lineHeight: "100%",
+                  letterSpacing: "-0.007em",
+                  color: "#212121",
+                  paddingTop: "4px",
+                }}
               >
                 {currentCategoryData.name.toUpperCase()} SCORE (
                 {currentCategoryScore} / {currentCategoryMaxScore})
