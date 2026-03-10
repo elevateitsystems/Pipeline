@@ -512,18 +512,19 @@ export default function Home() {
               );
             })}
           </tbody>
-        </table>
-      </div>
+        </table >
+      </div >
 
       {/* Delete Confirmation Modal */}
-      <ConfirmationModal
+      < ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
           if (!deleteAuditMutation.isPending) {
             setDeleteModalOpen(false);
             setAuditToDelete(null);
           }
-        }}
+        }
+        }
         onConfirm={handleDeleteConfirm}
         title="Delete Audit"
         message="Are you sure you want to delete this audit? This action cannot be undone."
@@ -534,18 +535,20 @@ export default function Home() {
       />
 
       {/* Invite Audit Modal */}
-      {auditToInvite && (
-        <InviteAuditModal
-          isOpen={inviteModalOpen}
-          onClose={() => {
-            setInviteModalOpen(false);
-            setAuditToInvite(null);
-          }}
-          onInvite={handleInvite}
-          auditTitle={auditToInvite.title}
-          loading={sendInviteMutation.isPending}
-        />
-      )}
-    </div>
+      {
+        auditToInvite && (
+          <InviteAuditModal
+            isOpen={inviteModalOpen}
+            onClose={() => {
+              setInviteModalOpen(false);
+              setAuditToInvite(null);
+            }}
+            onInvite={handleInvite}
+            auditTitle={auditToInvite.title}
+            loading={sendInviteMutation.isPending}
+          />
+        )
+      }
+    </div >
   );
 }

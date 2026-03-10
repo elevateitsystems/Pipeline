@@ -53,18 +53,18 @@ export default function TestPresentation() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-          auditData as Presentation & {
-            summary?: {
-              categoryRecommendations?:
-                | string
-                | Array<{ categoryId: string; recommendation: string }>;
-              nextSteps?:
-                | string
-                | Array<{ type: string; content: string; fileUrl?: string }>;
-              overallDetails?: string | null;
-            } | null;
-          }
-        )?.summary || null
+        auditData as Presentation & {
+          summary?: {
+            categoryRecommendations?:
+            | string
+            | Array<{ categoryId: string; recommendation: string }>;
+            nextSteps?:
+            | string
+            | Array<{ type: string; content: string; fileUrl?: string }>;
+            overallDetails?: string | null;
+          } | null;
+        }
+      )?.summary || null
       : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
@@ -520,7 +520,7 @@ export default function TestPresentation() {
             })}
             {/* Summary Icon */}
             <div
-              className="flex flex-col items-center ml-4 cursor-pointer"
+              className="flex flex-col items-center cursor-pointer"
               onClick={async () => {
                 if (
                   typeof window !== "undefined" &&
@@ -635,11 +635,11 @@ export default function TestPresentation() {
                   alt="Summary Overview"
                   width={48}
                   height={48}
-                  className="w-12 h-12 mr-20"
+                  className="w-12 h-12"
                 />
               </div>
               <p
-                className="mr-20 pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
+                className="pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
@@ -756,6 +756,7 @@ export default function TestPresentation() {
               className="w-full border-collapse border-gray-300"
               style={{ tableLayout: "fixed" }}
             >
+              {/* start */}
               <tbody>
                 {displayedQuestions.map((question, index) => {
                   const selectedOptionId = answers[question.id];
@@ -788,8 +789,8 @@ export default function TestPresentation() {
                         </span>
                       </td>
                       <td
-                        className="px-4 align-middle border-r border-[#E8E8E8]"
-                        style={{ width: "calc(50% - 100px)" }}
+                        className="px-4 align-middle border-r  border-[#E8E8E8]"
+                        style={{ width: "65%" }}
                       >
                         <div className="w-full  px-4 border-[#E8E8E8] rounded-xl flex items-center">
                           <span
@@ -809,8 +810,8 @@ export default function TestPresentation() {
                         </div>
                       </td>
                       <td
-                        className="border-r border-gray-300 px-4 align-middle"
-                        style={{ width: "calc(50% - 100px)" }}
+                        className="border-r border-gray-300  px-4 align-middle"
+                        style={{ width: "35%" }}
                       >
                         <div
                           className="relative py-2.5"
@@ -937,8 +938,14 @@ export default function TestPresentation() {
                 {/* Total Score Row */}
                 {currentCategoryData && (
                   <tr className=" border-r border-[#E8E8E8] ">
-                    <td className="border-r border-gray-300 px-4 text-center align-middle w-16"></td>
-                    <td className="px-4  align-middle border-r border-[#E8E8E8] w-full"></td>
+                    <td
+                      className="border-r border-gray-300 px-4 text-center align-middle"
+                      style={{ width: "100px" }}
+                    ></td>
+                    <td
+                      className="px-4  align-middle border-r border-[#E8E8E8]"
+                      style={{ width: "calc(70% - 100px)" }}
+                    ></td>
                     <td className="border-r border-gray-300 px-4  align-middle">
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
                         <span
@@ -949,7 +956,10 @@ export default function TestPresentation() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-2 text-center align-middle w-16">
+                    <td
+                      className="px-4 py-2 text-center align-middle"
+                      style={{ width: "100px" }}
+                    >
                       <span className="px-3 py-1 text-[22px] rounded text-sm font-bold text-gray-900">
                         {currentCategoryScore}
                       </span>
@@ -966,13 +976,12 @@ export default function TestPresentation() {
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
-                  className={`rounded-tl-xl text-center py-1 ${
-                    currentCategoryScore >= 1 &&
-                    currentCategoryScore <=
+                  className={`rounded-tl-xl text-center py-1 ${currentCategoryScore >= 1 &&
+                      currentCategoryScore <=
                       Math.floor(currentCategoryMaxScore * 0.4)
                       ? "bg-[#F65355] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    }`}
                 >
                   <h3
                     className="text-base font-medium"
@@ -1005,14 +1014,13 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white border-r-2 border-white">
                 <div
-                  className={`text-center py-1 ${
-                    currentCategoryScore >
+                  className={`text-center py-1 ${currentCategoryScore >
                       Math.floor(currentCategoryMaxScore * 0.4) &&
-                    currentCategoryScore <=
+                      currentCategoryScore <=
                       Math.floor(currentCategoryMaxScore * 0.8)
                       ? "bg-[#F7AF41] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    }`}
                 >
                   <h3
                     className="text-base font-medium"
@@ -1046,12 +1054,11 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 rounded-tr-xl ${
-                    currentCategoryScore >
-                    Math.floor(currentCategoryMaxScore * 0.8)
+                  className={`text-center py-1 rounded-tr-xl ${currentCategoryScore >
+                      Math.floor(currentCategoryMaxScore * 0.8)
                       ? "bg-[#2BD473] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                  }`}
+                    }`}
                 >
                   <h3
                     className="text-base font-medium"
