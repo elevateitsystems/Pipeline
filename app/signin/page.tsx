@@ -91,7 +91,7 @@ export default function SigninPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
+    <div className="w-fit mx-auto relative min-h-screen flex items-center justify-center">
       {/* Content */}
       <div className="flex flex-col items-center relative z-10 lg:w-[728px]">
         {/* Logo */}
@@ -196,7 +196,7 @@ export default function SigninPage() {
             <button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full bg-yellow text-black font-normal h-14 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 shadow-sm"
+              className="w-full bg-yellow text-black font-normal h-12 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 shadow-sm"
             >
               {loginMutation.isPending ? "Logging in..." : "Login"}
             </button>

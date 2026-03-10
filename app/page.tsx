@@ -263,7 +263,7 @@ export default function Home() {
         <div className="flex justify-between items-start mb-4">
           <div>
             <h1
-              className="text-[40px] font-normal"
+              className="text-[25px] lg:text-[30px] xl:text-[35px] font-normal"
               style={{
                 // fontVariationSettings: "'wdth' 85, 'wght' 700",
               }}
@@ -271,7 +271,7 @@ export default function Home() {
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-[26px]"
+              className="text-[20px] lg:text-[22px] xl:text-[25px]"
               style={{
                 fontWeight: 300,
               }}
@@ -303,49 +303,49 @@ export default function Home() {
       </div>
 
       {/* Table */}
-      <div className="border overflow-hidden rounded-lg">
+      <div className="border overflow-hidden">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="">
             <tr>
               <th
-                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontSize: "24px",
-                  fontWeight: 600,
+                  fontSize: "23px",
+                  fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
               >
                 AUDIT Name
               </th>
               <th
-                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontSize: "24px",
-                  fontWeight: 600,
+                  fontSize: "23px",
+                  fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
               >
                 Creation Date
               </th>
               <th
-                className="px-6 py-4 border-r text-left text-sm text-gray-700 border-b"
+                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontSize: "24px",
-                  fontWeight: 600,
+                  fontSize: "23px",
+                  fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
               >
                 Audit Score
               </th>
               <th
-                className="px-6 py-4 text-left text-sm text-gray-700 border-b"
+                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontSize: "24px",
-                  fontWeight: 600,
+                  fontSize: "23px",
+                  fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
                 }}
               >
@@ -353,24 +353,24 @@ export default function Home() {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-[#212121]">
             {audits.map((audit) => {
               const scoreColor = getScoreColor(audit.latestScore);
               return (
                 <tr
                   key={audit.id}
-                  className="border-b border-[#E0E0E0] hover:bg-gray-50"
+                  className="border-b border-[#E0E0E0] font-normal"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
-                    fontWeight: 400,
+                    // fontWeight: 400,
                     fontVariationSettings: "'wdth' 85, 'wght' 400",
                   }}
                 >
                   <td
-                    className="px-6 border-r py-4 text-gray-800"
+                    className="px-4 border-r py-5 font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
-                      fontWeight: 400,
+                      // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
                       letterSpacing: "-0.025em",
@@ -380,10 +380,10 @@ export default function Home() {
                     {audit.title}
                   </td>
                   <td
-                    className="px-6 border-r py-4 text-gray-600"
+                    className="px-4 border-r py-5 font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
-                      fontWeight: 400,
+                      // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
                       letterSpacing: "-0.025em",
@@ -393,7 +393,7 @@ export default function Home() {
                     {formatDate(audit.createdAt)}
                   </td>
                   <td
-                    className="px-6 border-r py-4"
+                    className="px-4 border-r py-5"
                     style={
                       audit.latestScore !== undefined
                         ? { backgroundColor: scoreColor.bg }
@@ -419,7 +419,7 @@ export default function Home() {
                       <span className="text-gray-400 text-sm">-</span>
                     )}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-4 py-5">
                     <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
                       {!isInvitedUser && (
                         <>

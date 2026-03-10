@@ -705,7 +705,7 @@ export default function AddNewAudit() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Presentation Name"
-              className="w-full bg-[#4569871A] px-6 py-[11px] border border-[#3b5163] rounded-xl outline-none"
+              className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
                 fontFamily: "var(--font-acumin), sans-serif",
                 fontWeight: 400,
@@ -716,11 +716,11 @@ export default function AddNewAudit() {
               }}
             />
           </div>
-          <div className="w-px h-0 bg-[#3b5163] mx-7"></div>
-          <div className="flex gap-3">
+          <div className="w-px h-9 bg-[#3b5163] mx-7"></div>
+          <div className="w-1/3 flex gap-3">
             <button
               onClick={() => router.push("/")}
-              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer"
+              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1"
             >
               Back to List
             </button>
@@ -734,7 +734,7 @@ export default function AddNewAudit() {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
+            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1">
               <input
                 type="file"
                 accept=".csv,.xlsx,.xls"
@@ -1088,11 +1088,11 @@ function AuditTable({
                 className={`border-b border-gray-300 ${draggedRowIndex === rowIndex ? "opacity-50" : ""} ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
+                  <div className="flex items-center justify-center gap-2 text-black">
+                    <span className="select-none cursor-grab active:cursor-grabbing">
                       =
                     </span>
-                    <span className="text-gray-700">{rowIndex}</span>
+                    <span className="font-[500] text-lg">{rowIndex}</span>
                   </div>
                 </td>
                 <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
@@ -1126,7 +1126,7 @@ function AuditTable({
                           onChange={(e) =>
                             setStatusValue(rowIndex, idx, e.target.value)
                           }
-                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-lg border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] px-1 lg:px-2 min-w-[50px] py-1.5 sm:py-[8px] lg:py-[10px] xl:py[12px]`}
+                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 min-w-[50px] py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] font-normal`}
                           style={{
                             fontFamily: "var(--font-acumin), sans-serif",
                             fontWeight: 400,

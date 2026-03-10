@@ -946,13 +946,14 @@ export default function SummarySection({
       <main className="flex-1 flex flex-wrap lg:flex-nowrap overflow-hidden px-6 py-4">
         {/* Left Side */}
         <div className="w-full lg:w-1/2 pr-0 lg:pr-6 flex flex-col overflow-hidden">
-          <h1 className="text-[24px] leading-[28px] tracking-[0.21px] uppercase mb-3 shrink-0">
+          <h1 className="text-[16px] sm:text-[20px] lg:text-[24px] leading-[28px] tracking-[0.21px] font-normal uppercase mb-3 shrink-0">
             IMPROVEMENT RECOMMENDATIONS
           </h1>
           <div className="flex flex-col flex-1 overflow-hidden gap-1.5">
             {categories.slice(0, 7).map((category, index) => (
               <div className="shrink-0" key={category.id}>
-                <label className="block text-lg text-[#2B4055] tracking-[0.4px] mb-1">
+                {/* <label className="block text-lg text-black tracking-[0.4px] mb-1"> */}
+                <label className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600">
                   {category.name}
                 </label>
                 <textarea
@@ -965,7 +966,7 @@ export default function SummarySection({
                     );
                   }}
                   placeholder="Recommendation"
-                  className="w-full h-[60px] min-h-[40px] p-2 text-sm text-[#2B4055] tracking-[0.4px] font-extralight border border-[#AAA] rounded-lg resize-none outline-none"
+                  className="w-full h-[60px] min-h-[40px] p-2 text-sm text-black tracking-[0.4px] font-light border border-[#AAA] rounded-lg resize-none bg-[#4569871A] outline-none"
                 />
               </div>
             ))}
@@ -980,7 +981,7 @@ export default function SummarySection({
             WHAT ARE THE NEXT STEPS?
           </h1>
 
-          <div className="bg-[#EFEFEF] p-4 rounded-2xl mt-4 flex flex-col flex-1 overflow-hidden">
+          <div className="bg-[#EFEFEF] h-fit p-4 rounded-2xl mt-4 flex flex-col flex-1 overflow-hidden">
             {/* Top Boxes */}
             <div className="flex flex-col sm:flex-row gap-3 mb-4 shrink-0">
               {[0, 1, 2].map((index) => (
@@ -1094,7 +1095,8 @@ export default function SummarySection({
                 value={overallDetails}
                 onChange={(e) => setOverallDetails(e.target.value)}
                 placeholder="Add overall next step details..."
-                className="w-full h-24 p-3 text-sm text-[#3b5163] border border-[#3b5163] rounded-lg resize-none outline-none bg-white"
+                className="w-full h-24 p-3 text-sm text-[#3b5163] border border-[#AAA] rounded-lg resize-none outline-none bg-[#4569871A]"
+              // w-full h-[60px] min-h-[40px] p-2 text-sm text-black tracking-[0.4px] font-light border border-[#AAA] rounded-lg resize-none bg-[#4569871A] outline-none
               />
             </div>
           </div>

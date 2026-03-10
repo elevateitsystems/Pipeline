@@ -102,7 +102,6 @@ import {
   List,
   CheckSquare,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 // Mapping for dynamic icon rendering without bundling the whole library
 const IconMap: Record<
@@ -205,13 +204,7 @@ type NavigationItem = {
   categoryNumber?: number;
 };
 
-export default function Sidebar({
-  className,
-  width,
-}: {
-  className?: string;
-  width?: number;
-} = {}) {
+export default function Sidebar() {
   const { user, isInvitedUser } = useUser();
   const router = useRouter();
   const pathname = usePathname();
@@ -1204,15 +1197,11 @@ export default function Sidebar({
 
   return (
     <div
-      className={cn(
-        "sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar",
-        className,
-      )}
+      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar bg-[rgba(31,43,52,0.6)]"
       style={{
-        width: width ? `${width}px` : undefined,
         overflowX: "hidden",
         position: "relative",
-        backgroundColor: "transparent",
+        // backgroundColor: "",
       }}
     >
       <SidebarHeader
@@ -1249,11 +1238,11 @@ export default function Sidebar({
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] my-3"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
-                    fontSize: "clamp(20px, 1.8vw, 27px)",
+                    // fontSize: "clamp(20px, 1.8vw, 27px)",
                     lineHeight: "1",
                     letterSpacing: "0.006em",
                     fontVariationSettings: "'wdth' 65, 'wght' 500",
@@ -1268,7 +1257,10 @@ export default function Sidebar({
                 (_, index) => (
                   <div
                     key={`sidebar-skeleton-${index}`}
-                    className=" min-h-[40px] w-[88%] rounded-xl bg-white/10 overflow-hidden"
+                    className={`min-h-[40px] bg-white/10 overflow-hidden ${onTestPage
+                      ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl"
+                      : "w-[88%] rounded-xl"
+                      }`}
                     style={{
                       marginLeft: "clamp(0.75rem, 2vw, 1rem)",
                     }}
