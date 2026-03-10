@@ -1197,7 +1197,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar bg-[rgba(31,43,52,0.6)]"
+      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar bg-[rgba(31,43,52,0.5)]"
       style={{
         overflowX: "hidden",
         position: "relative",
@@ -1238,7 +1238,7 @@ export default function Sidebar() {
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] my-3"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] my-2.5"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,

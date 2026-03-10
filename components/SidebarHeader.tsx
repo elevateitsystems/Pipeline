@@ -26,7 +26,7 @@ const SidebarHeader = ({
   return (
     <div>
       <div
-        className="py-11 border-b-2 flex justify-center shrink-0"
+        className="py-11 flex justify-center shrink-0"
         style={{
           position: "relative",
           zIndex: 2,
@@ -59,11 +59,11 @@ const SidebarHeader = ({
         )}
       </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke="#1F2F3D" stroke-width="1.50039" stroke-miterlimit="10" />
+      <svg xmlns="http://www.w3.org/2000/svg" width="350" height="2" viewBox="0 0 350 2" fill="none">
+        <path d="M0 0.750183H349.315" stroke="#1F2F3D" stroke-width="1.50039" stroke-miterlimit="10" />
       </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke="#456987" stroke-width="1.50039" stroke-miterlimit="10" />
+      <svg xmlns="http://www.w3.org/2000/svg" width="350" height="2" viewBox="0 0 350 2" fill="none">
+        <path d="M0 0.750183H349.315" stroke="#456987" stroke-width="1.50039" stroke-miterlimit="10" />
       </svg>
     </div>
   );
