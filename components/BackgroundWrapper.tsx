@@ -51,9 +51,9 @@ export default function BackgroundWrapper({
       {/* Dynamic Overlay */}
       <div
         className="absolute h-ful w-full inset-0 z-0 bg-[rgba(31,43,52,0.4)]"
-      // style={{
-      //   backgroundColor: overlayRgba,
-      // }}
+        style={{
+          backgroundColor: overlayRgba,
+        }}
       />
 
       {/* Content */}
