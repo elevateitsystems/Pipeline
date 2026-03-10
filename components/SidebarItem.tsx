@@ -99,8 +99,7 @@ const SidebarItem = memo(
             ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] border-r-0"
             : (isCategoryItem || isSummaryItem) && !useSecondary
               ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+1px)] rounded-l-[10px] border-r-0"
-              : "rounded-l-[10px]"
-          ,
+              : "rounded-l-[10px]",
           isDragging ? "opacity-50" : "", isDragOver ? "border-2 border-dashed border-white" : "", canDrag && !isSummaryItem ? "cursor-move" : "",
           useSecondary ? 'rounded-[10px] mr-2 border bg-[rgba(69,105,135,0.60)] opacity-70' : '',
           isActive && useSecondary ? 'opacity-100 pointer-events-none bg-[rgba(69,105,135,0.60)] text-white' : '',
@@ -131,6 +130,8 @@ const SidebarItem = memo(
               <path
                 d="M11.3154 53.2325H252.577C263.709 53.2325 269.87 54.5883 270.46 61.9261V0C270.175 9.17424 264.767 10.8348 252.577 10.8934H11.3154C5.0638 10.8934 0 15.9572 0 22.2088V41.917C0 48.1648 5.0638 53.2325 11.3154 53.2325Z"
                 fill="#ffffff"
+                stroke="#ffffff"
+                strokeWidth="2"
               />
             </svg>
           </div>
@@ -247,11 +248,12 @@ const SidebarItem = memo(
           <div
             className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""} ${isActive && useSecondary ? 'text-white' : ''}`}
           >
-            <div className={`flex-1 flex items-center justify-start gap-4`}>
+            <div className={`flex-1 flex items-center justify-start`}>
               {canDrag && !isSummaryItem && (
                 <span
                   onMouseDown={onMouseDownDrag}
-                  className={`text-xl font-light select-none mr-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  `}
+                  className={`text-xl font-light select-none ml-1 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  `}
+
                 >
                   =
                 </span>
@@ -259,7 +261,7 @@ const SidebarItem = memo(
               {(!isActive ||
                 (isCategoryItem && itemCategoryNumber !== null)) && (
                   <div
-                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
+                    className={`flex items-center mr-3 justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
                   >
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&

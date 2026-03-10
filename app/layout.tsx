@@ -55,10 +55,11 @@ export default async function RootLayout({
                       <Suspense fallback={<SidebarSkeleton />}>
                         <ResponsiveSidebar />
                       </Suspense>
-                      <main className="flex-1">{children}</main>
+                      <main className="flex-1 ">{children}</main>
                     </div>
                   ) : (
-                    <main className="h-full w-full bg-[#2B4055B2]">
+                    <main className="h-full w-full bg-[rgba(31,43,52,0.5)]">
+                      {/* <main className="h-full w-full "> */}
                       {children}
                     </main>
                   )}
