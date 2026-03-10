@@ -53,18 +53,18 @@ export default function TestPresentation() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-        auditData as Presentation & {
-          summary?: {
-            categoryRecommendations?:
-            | string
-            | Array<{ categoryId: string; recommendation: string }>;
-            nextSteps?:
-            | string
-            | Array<{ type: string; content: string; fileUrl?: string }>;
-            overallDetails?: string | null;
-          } | null;
-        }
-      )?.summary || null
+          auditData as Presentation & {
+            summary?: {
+              categoryRecommendations?:
+                | string
+                | Array<{ categoryId: string; recommendation: string }>;
+              nextSteps?:
+                | string
+                | Array<{ type: string; content: string; fileUrl?: string }>;
+              overallDetails?: string | null;
+            } | null;
+          }
+        )?.summary || null
       : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
@@ -409,9 +409,9 @@ export default function TestPresentation() {
     score: number;
     label: string;
   }) => {
-    const size = 80;
+    const size = 78.21546;
     const center = size / 2;
-    const radius = 32; // Adjusted to fit nicely in 80px circle
+    const radius = 39.108;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percentage / 100) * circumference;
 
@@ -425,22 +425,22 @@ export default function TestPresentation() {
             className="transform -rotate-90"
             width={size}
             height={size}
-            style={{ width: `${size}px`, height: `${size}px` }}
+            viewBox="-4 -4 89 89"
+            style={{ width: `${size}px`, height: `${size}px`, overflow: "visible" }}
           >
-            {/* Background circle */}
-            <circle
-              cx={center}
-              cy={center}
-              r={radius}
+            {/* Background circle from provided SVG */}
+            <path
+              d="M79.212 40.108C79.212 61.7034 61.7036 79.2157 40.1082 79.2157C18.5089 79.2157 1.00049 61.7034 1.00049 40.108C1.00049 18.5087 18.5089 1.00024 40.1082 1.00024C61.7036 1.00024 79.212 18.5087 79.212 40.108Z"
               stroke="#2B4055"
-              strokeWidth="3"
+              strokeWidth="2.00052"
+              strokeMiterlimit="10"
               fill="none"
             />
             {/* Progress circle */}
             <circle
-              cx={center}
-              cy={center}
-              r={radius}
+              cx="40.108"
+              cy="40.108"
+              r="39.108"
               stroke="#2CD573"
               strokeWidth="8"
               fill="none"
@@ -456,11 +456,11 @@ export default function TestPresentation() {
           {/* Score in center */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span
-              className="text-[#2d3e50]"
+              className="text-[#2B4055]"
               style={{
                 fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 600,
-                fontSize: "clamp(30px, 5vw, 46px)",
+                fontSize: "46px",
                 lineHeight: "100%",
                 letterSpacing: "0.003em",
                 fontVariationSettings: "'wdth' 65, 'wght' 600",
@@ -473,15 +473,17 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="mt-1 text-black text-center font-medium line-clamp-2 leading-tight"
+          className="text-[#2B4055] text-center font-medium leading-tight"
           style={{
+            marginTop: "17.41px",
+            width: "155px",
+            height: "13px",
             fontFamily: "'Acumin Variable Concept', sans-serif",
             fontWeight: 500,
             fontStyle: "normal",
             fontSize: "19px",
             lineHeight: "100%",
             letterSpacing: "0.003em",
-            fontVariationSettings: "'wdth' 65, 'wght' 600",
             textAlign: "center",
           }}
         >
@@ -503,7 +505,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="bg-white pt-1 px-12 grid grid-cols-8 gap-1 w-full ">
+          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-8 gap-1 w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -655,7 +657,7 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
+        <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
           <p className="text-[16px] uppercase font-500 tracking-[0.352px] leading-normal font-medium line-clamp-1">
             GRADING SCALE (1-5)
           </p>
@@ -673,7 +675,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          className="test-qa-bar px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
           style={{ width: "100%" }}
         >
           <p
@@ -700,7 +702,7 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+      <main className="test-main px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
         <div className="flex-1 flex flex-col">
           <div className="w-full flex-grow min-h-[640px]">
             <table
@@ -917,12 +919,13 @@ export default function TestPresentation() {
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl  border-r-2  border-white ">
                 <div
-                  className={`rounded-tl-xl text-center py-1 ${currentCategoryScore >= 1 &&
-                      currentCategoryScore <=
+                  className={`rounded-tl-xl text-center py-1 ${
+                    currentCategoryScore >= 1 &&
+                    currentCategoryScore <=
                       Math.floor(currentCategoryMaxScore * 0.4)
                       ? "bg-[#F65355] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                  }`}
                 >
                   <h3
                     className="text-base font-semibold"
@@ -951,13 +954,14 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 ${currentCategoryScore >
+                  className={`text-center py-1 ${
+                    currentCategoryScore >
                       Math.floor(currentCategoryMaxScore * 0.4) &&
-                      currentCategoryScore <=
+                    currentCategoryScore <=
                       Math.floor(currentCategoryMaxScore * 0.8)
                       ? "bg-[#F7AF41] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                  }`}
                 >
                   <h3
                     className="text-base font-semibold"
@@ -987,11 +991,12 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${currentCategoryScore >
-                      Math.floor(currentCategoryMaxScore * 0.8)
+                  className={`text-center py-1 rounded-tr-xl border-l-2 border-white ${
+                    currentCategoryScore >
+                    Math.floor(currentCategoryMaxScore * 0.8)
                       ? "bg-[#2BD473] text-white"
                       : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                  }`}
                 >
                   <h3
                     className="text-base font-semibold"
