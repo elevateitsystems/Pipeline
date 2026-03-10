@@ -305,10 +305,10 @@ export default function Home() {
       {/* Table */}
       <div className="border overflow-hidden">
         <table className="w-full">
-          <thead className="">
+          <thead className="font-[500]">
             <tr>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -319,7 +319,7 @@ export default function Home() {
                 AUDIT Name
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -330,7 +330,7 @@ export default function Home() {
                 Creation Date
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -341,7 +341,7 @@ export default function Home() {
                 Audit Score
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -367,7 +367,7 @@ export default function Home() {
                   }}
                 >
                   <td
-                    className="px-4 border-r py-5 font-normal"
+                    className="px-4 border-r py-4 font-[300] font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -380,7 +380,7 @@ export default function Home() {
                     {audit.title}
                   </td>
                   <td
-                    className="px-4 border-r py-5 font-normal"
+                    className="px-4 border-r py-4 font-[300] font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -393,7 +393,7 @@ export default function Home() {
                     {formatDate(audit.createdAt)}
                   </td>
                   <td
-                    className="px-4 border-r py-5"
+                    className="px-4 border-r py-4 font-[300]"
                     style={
                       audit.latestScore !== undefined
                         ? { backgroundColor: scoreColor.bg }
@@ -402,7 +402,7 @@ export default function Home() {
                   >
                     {audit.latestScore !== undefined ? (
                       <span
-                        className="px-3 py-2 text-center rounded font-medium"
+                        className="px-3 py-4 font-[300] text-center rounded font-medium"
                         style={{
                           color: scoreColor.text,
                           fontFamily: "'Acumin Variable Concept', sans-serif",
@@ -419,7 +419,7 @@ export default function Home() {
                       <span className="text-gray-400 text-sm">-</span>
                     )}
                   </td>
-                  <td className="px-4 py-5">
+                  <td className="px-4 py-1">
                     <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
                       {!isInvitedUser && (
                         <>
