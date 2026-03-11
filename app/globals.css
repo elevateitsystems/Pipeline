@@ -85,7 +85,7 @@
 
 /* Sidebar responsive for 1024px screens */
 .sidebar-width {
-  width: 260px;
+  width: 300px;
 }
 
 @media (max-width: 639px) {
