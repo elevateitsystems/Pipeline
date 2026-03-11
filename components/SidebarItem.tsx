@@ -296,7 +296,7 @@ const SidebarItem = memo(
                 style={{ color: "inherit" }}
                 aria-label="Edit category name"
               >
-                <FiEdit size={12} />
+                <FiEdit size={12} className="size-[19.5px]" />
               </button>
             )}
           </div>
