@@ -390,7 +390,7 @@ export default function TestResult() {
                         ) => (
                           <div
                             key={index}
-                            className="w-full h-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left min-h-30"
+                            className="w-full h-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left min-h-20"
                           >
                             {step.type === "file" && step.fileUrl ? (
                               <div className="flex items-center gap-2">
@@ -414,9 +414,9 @@ export default function TestResult() {
                     : [1, 2, 3].map((step) => (
                       <div
                         key={step}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left h-40"
+                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-center h-30"
                       >
-                        <p className="text-[20px] text-gray-400">
+                        <p className="text-[20px] text-gray-400 mt-[12%]">
                           Enter step {step} details
                         </p>
                       </div>
