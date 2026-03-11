@@ -416,7 +416,7 @@ export default function TestResult() {
                         key={step}
                         className="w-full px-2 border-2 border-gray-300 rounded-lg h-28 flex items-center justify-center"
                       >
-                        <p className="text-[20px] text-gray-400 font-[300]">
+                        <p className="text-[20px] text-gray-400 font-light">
                           Enter step {step} details
                         </p>
                       </div>
