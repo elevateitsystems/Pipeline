@@ -102,7 +102,7 @@ const SidebarItem = memo(
               : "rounded-l-[10px]",
           isDragging ? "opacity-50" : "", isDragOver ? "border-2 border-dashed border-white" : "", canDrag && !isSummaryItem ? "cursor-move" : "",
           useSecondary ? 'rounded-[10px] mr-2 border bg-[rgba(69,105,135,0.60)] opacity-70' : '',
-          isActive && useSecondary ? 'opacity-100 pointer-events-none bg-[rgba(69,105,135,0.60)] text-white' : '',
+          isActive && useSecondary ? 'opacity-100 bg-[rgba(69,105,135,0.60)] text-white' : '',
         )}
         style={{
           padding: "0 clamp(0.75rem, 3vw, 1rem)",
@@ -139,7 +139,7 @@ const SidebarItem = memo(
 
         {/* Secondary sidebar active */}
         {isActive && useSecondary && (
-          <div className="absolute inset-0 border rounded-l-[10px] border-[rgba(255,255,255,0.4)]">
+          <div className="absolute inset-0 pointer-events-none border rounded-l-[10px] border-[rgba(255,255,255,0.4)]">
           </div>
         )}
         {isEditing ? (
@@ -259,15 +259,16 @@ const SidebarItem = memo(
                 </span>
               )}
               {(!isActive ||
-                (isCategoryItem && itemCategoryNumber !== null)) && (
+                (isCategoryItem && itemCategoryNumber !== null)) &&
+                (isCategoryItem || item.icon) && (
                   <div
                     className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
                   >
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&
                       getCategoryIcon(itemCategoryNumber)
-                      ? <span className='mr-2'> {renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
-                      : <span className='mr-2'>{item.icon}</span>}
+                      ? <span className='mr-2'>{renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
+                      : item.icon ? <span className='mr-2'>{item.icon}</span> : null}
                   </div>
                 )}
               <div
@@ -295,7 +296,7 @@ const SidebarItem = memo(
                 style={{ color: "inherit" }}
                 aria-label="Edit category name"
               >
-                <FiEdit size={12} />
+                <FiEdit size={12} className="size-[19.5px]" />
               </button>
             )}
           </div>

@@ -1307,6 +1307,14 @@ export default function Sidebar() {
                 const isEditing =
                   itemCategoryNumber !== null &&
                   editingCategory === itemCategoryNumber;
+
+                // Immediately apply active styling when editing to avoid delay during route transition
+                if (isEditing) {
+                  isActive = true;
+                } else if (editingCategory !== null) {
+                  isActive = false;
+                }
+
                 const isNavigationItem =
                   !isCategoryItem && item.name !== "Summary";
 
