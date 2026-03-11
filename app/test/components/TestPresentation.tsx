@@ -686,7 +686,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="test-qa-bar px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          className="test-qa-bar audit-content-padding -mt-0.5 lg:max-xl:-mt-2 flex items-center"
           style={{
             width: "100%",
             paddingTop: "6px",
@@ -749,7 +749,7 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="test-main px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+      <main className="test-main audit-content-padding pt-3 bg-white flex-1 flex flex-col pb-12">
         <div className="flex-1 flex flex-col">
           <div className="w-full flex-grow min-h-[640px]">
             <table
