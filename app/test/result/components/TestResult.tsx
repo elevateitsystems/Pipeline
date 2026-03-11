@@ -155,11 +155,11 @@ export default function TestResult() {
           <div className="mb-6">
             <div className="flex justify-between items-start ">
               <div className="flex gap-20">
-                <h1 className="text-[2.19rem] text-nowrap text-[#2D2D2D] mb-1">
+                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
-                  <h2 className="text-[2.19rem]  text-[#2B4055] mb-1">
+                  <h2 className="text-[2rem]  text-[#2B4055] mb-1">
                     YOUR SALES CONVERSION SCORE
                   </h2>
                   <p className="text-gray-600 text-[1.56rem] leading-8">
@@ -286,8 +286,8 @@ export default function TestResult() {
           </div>
 
           {/* VISUAL BREAKDOWN RESULTS Section */}
-          <div className="mb-4 border-t pt-4 border-gray-300">
-            <h2 className="text-[2.19rem] text-[#2D2D2D] mb-3">
+          <div className="mb-3 border-t pt-4 border-gray-300">
+            <h2 className="text-[2rem] text-[#2D2D2D] mb-2">
               VISUAL BREAKDOWN RESULTS
             </h2>
             <div className="bg-[#EFEFEF] p-5 px-6 rounded-lg">
@@ -341,7 +341,7 @@ export default function TestResult() {
           <div className="grid grid-cols-2 gap-6 mb-2 border-y py-2 border-gray-300">
             {/* Left Column - IMPROVEMENT RECOMMENDATIONS */}
             <div className="border-r pr-6 border-gray-300">
-              <h2 className="text-[2.19rem] text-[#2D2D2D] mb-4">
+              <h2 className="text-[2rem] text-[#2D2D2D] mb-4">
                 IMPROVEMENT RECOMMENDATIONS
               </h2>
               <div className="space-y-4">
@@ -366,10 +366,10 @@ export default function TestResult() {
 
             {/* Right Column - WHAT ARE THE NEXT STEPS? */}
             <div>
-              <h2 className="text-[2.19rem] text-[#2D2D2D] mb-4">
+              <h2 className="text-[2rem] text-[#2D2D2D] mb-3">
                 WHAT ARE THE NEXT STEPS?
               </h2>
-              <div className="space-y-3 mb-4 grid grid-cols-3 gap-4">
+              <div className="space-y-3 mb-3 grid grid-cols-3 gap-4">
                 {(() => {
                   const nextSteps = summaryData?.nextSteps
                     ? typeof summaryData.nextSteps === "string"
@@ -414,9 +414,9 @@ export default function TestResult() {
                     : [1, 2, 3].map((step) => (
                       <div
                         key={step}
-                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-center h-30"
+                        className="w-full px-2 border-2 border-gray-300 rounded-lg h-28 flex items-center justify-center"
                       >
-                        <p className="text-[20px] text-gray-400 mt-[12%]">
+                        <p className="text-[20px] text-gray-400 font-light">
                           Enter step {step} details
                         </p>
                       </div>
@@ -431,17 +431,17 @@ export default function TestResult() {
           </div>
 
           {/* Want to Skip the Line? Section */}
-          <div className="text-center bg-[#EFEFEF] py-4 mt-5 rounded-xl">
+          <div className="text-center bg-[#EFEFEF] py-4 mt-4 rounded-xl">
             <h2 className="text-[28px] font-semibold text-[#2D2D2D] mb-2">
               Want to Skip the Line?
             </h2>
-            <p className="text-gray-600 text-[20px] leading-relaxed mb-4 max-w-7xl mx-auto">
+            <p className="text-gray-600 text-[20px] leading-relaxed mb-3 max-w-7xl mx-auto">
               For action-takers ready to eliminate their conversion leaks
               immediately, schedule a strategy call. We&apos;ll map out how your
               personalized Pipeline Conversion Kit could look-so you can start
               closing confidently without rewriting your offer
             </p>
-            <CustomButton className="px-6 py-1  text-black font-semibold rounded-full hover:bg-[#F7AF41]/90 transition-colors text-[23px]">
+            <CustomButton className="h-8 px-6 inline-block text-black font-base hover:bg-[#F7AF41]/90 transition-colors text-[23px] rounded-xl">
               Book Your Call Now
             </CustomButton>
           </div>
