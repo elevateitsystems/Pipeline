@@ -177,6 +177,36 @@
   .test-main {
     padding-top: 0px !important;
   }
+
+  /* Specific 1024px Empty State Scaling */
+  .invited-empty-image {
+    width: 420px !important;
+    height: auto !important;
+  }
+
+  .invited-empty-title {
+    font-size: 42px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .invited-empty-desc {
+    font-size: 28px !important;
+    max-width: 900px !important;
+  }
+}
+
+/* Default Empty State Styles (1440px and others) */
+.invited-empty-image {
+  width: clamp(220px, 20vw, 380px);
+  height: auto;
+}
+
+.invited-empty-title {
+  font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+}
+
+.invited-empty-desc {
+  font-size: clamp(16px, 1.5vw, 26px);
 }
 
 /* Common audit table styles for all desktop screens */
