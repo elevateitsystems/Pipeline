@@ -1198,11 +1198,10 @@ export default function Sidebar() {
   return (
     <div
       className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
-      // className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
       style={{
         overflowX: "hidden",
         position: "relative",
-        // backgroundColor: "",
+        backgroundColor: "transparent",
       }}
     >
       <SidebarHeader
@@ -1239,11 +1238,11 @@ export default function Sidebar() {
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-3.5"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
-                    // fontSize: "clamp(20px, 1.8vw, 27px)",
+                    fontSize: "clamp(20px, 1.8vw, 27px)",
                     lineHeight: "1",
                     letterSpacing: "0.006em",
                     fontVariationSettings: "'wdth' 65, 'wght' 500",

@@ -1,25 +1,25 @@
 "use client";
 
+import ConfirmationModal from "@/components/common/ConfirmationModal";
+import CustomButton from "@/components/common/CustomButton";
+import HomeSkeleton from "@/components/HomeSkeleton";
+import InviteAuditModal from "@/components/InviteAuditModal";
 import { useUser } from "@/contexts/UserContext";
-import { useEffect, useState, useMemo, use } from "react";
-import { useRouter } from "next/navigation";
-import notFoundImg from "@/public/notFound2.png";
-import editIcon from "@/public/Edit.png";
-import Image from "next/image";
 import {
-  useAuthCheck,
   useAudits,
+  useAuthCheck,
   useDeleteAudit,
   useSendAuditInvite,
 } from "@/lib/hooks";
 import { Presentation } from "@/lib/types";
-import { Trash2, Play, Mail } from "lucide-react";
+import editIcon from "@/public/Edit.png";
+import notFoundImg from "@/public/notFound2.png";
+import { Mail, Play, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
-import HomeSkeleton from "@/components/HomeSkeleton";
-import CustomButton from "@/components/common/CustomButton";
-import ConfirmationModal from "@/components/common/ConfirmationModal";
-import InviteAuditModal from "@/components/InviteAuditModal";
 
 interface AuditWithScore extends Presentation {
   latestScore?: number;
@@ -291,8 +291,8 @@ export default function Home() {
                 }}
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
-                  fontWeight: 600,
-                  fontVariationSettings: "'wdth' 85, 'wght' 600",
+                  fontWeight: 500,
+                  fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
               >
                 Create New AUDIT
@@ -305,10 +305,10 @@ export default function Home() {
       {/* Table */}
       <div className="border overflow-hidden">
         <table className="w-full">
-          <thead className="">
+          <thead className="font-[500]">
             <tr>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -319,7 +319,7 @@ export default function Home() {
                 AUDIT Name
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -330,7 +330,7 @@ export default function Home() {
                 Creation Date
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -341,7 +341,7 @@ export default function Home() {
                 Audit Score
               </th>
               <th
-                className="px-4 py-2.5 border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -367,7 +367,7 @@ export default function Home() {
                   }}
                 >
                   <td
-                    className="px-4 border-r py-5 font-normal"
+                    className="px-4 border-r py-4 font-[300] font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -380,7 +380,7 @@ export default function Home() {
                     {audit.title}
                   </td>
                   <td
-                    className="px-4 border-r py-5 font-normal"
+                    className="px-4 border-r py-4 font-[300] font-normal"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -393,7 +393,7 @@ export default function Home() {
                     {formatDate(audit.createdAt)}
                   </td>
                   <td
-                    className="px-4 border-r py-5"
+                    className="px-4 border-r py-4 font-[300]"
                     style={
                       audit.latestScore !== undefined
                         ? { backgroundColor: scoreColor.bg }
@@ -402,7 +402,7 @@ export default function Home() {
                   >
                     {audit.latestScore !== undefined ? (
                       <span
-                        className="px-3 py-2 text-center rounded font-medium"
+                        className="px-3 py-4 font-[300] text-center rounded font-medium"
                         style={{
                           color: scoreColor.text,
                           fontFamily: "'Acumin Variable Concept', sans-serif",
@@ -419,7 +419,7 @@ export default function Home() {
                       <span className="text-gray-400 text-sm">-</span>
                     )}
                   </td>
-                  <td className="px-4 py-5">
+                  <td className="px-4 py-1">
                     <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
                       {!isInvitedUser && (
                         <>
@@ -512,18 +512,19 @@ export default function Home() {
               );
             })}
           </tbody>
-        </table>
-      </div>
+        </table >
+      </div >
 
       {/* Delete Confirmation Modal */}
-      <ConfirmationModal
+      < ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
           if (!deleteAuditMutation.isPending) {
             setDeleteModalOpen(false);
             setAuditToDelete(null);
           }
-        }}
+        }
+        }
         onConfirm={handleDeleteConfirm}
         title="Delete Audit"
         message="Are you sure you want to delete this audit? This action cannot be undone."
@@ -534,18 +535,20 @@ export default function Home() {
       />
 
       {/* Invite Audit Modal */}
-      {auditToInvite && (
-        <InviteAuditModal
-          isOpen={inviteModalOpen}
-          onClose={() => {
-            setInviteModalOpen(false);
-            setAuditToInvite(null);
-          }}
-          onInvite={handleInvite}
-          auditTitle={auditToInvite.title}
-          loading={sendInviteMutation.isPending}
-        />
-      )}
-    </div>
+      {
+        auditToInvite && (
+          <InviteAuditModal
+            isOpen={inviteModalOpen}
+            onClose={() => {
+              setInviteModalOpen(false);
+              setAuditToInvite(null);
+            }}
+            onInvite={handleInvite}
+            auditTitle={auditToInvite.title}
+            loading={sendInviteMutation.isPending}
+          />
+        )
+      }
+    </div >
   );
 }

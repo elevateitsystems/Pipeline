@@ -76,9 +76,9 @@ export default function ResponsiveSidebar() {
     const fullHex =
       cleanHex.length === 3
         ? cleanHex
-            .split("")
-            .map((char) => char + char)
-            .join("")
+          .split("")
+          .map((char) => char + char)
+          .join("")
         : cleanHex;
 
     if (fullHex.length !== 6) return null;
@@ -98,67 +98,62 @@ export default function ResponsiveSidebar() {
   const mobileOverlay =
     mounted && isMobile
       ? createPortal(
-          <>
+        <>
+          <button
+            type="button"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="fixed left-4 top-4 z-[120] flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-[#23384C]/92 text-white shadow-[0_18px_40px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-transform hover:scale-[1.02]"
+          >
+            {isOpen ? (
+              <X className="h-6 w-6" strokeWidth={2.2} />
+            ) : (
+              <span className="flex flex-col gap-1.5">
+                <span className="block h-0.5 w-5 rounded-full bg-white" />
+                <span className="block h-0.5 w-5 rounded-full bg-white" />
+                <span className="block h-0.5 w-5 rounded-full bg-white" />
+              </span>
+            )}
+          </button>
+
+          <div
+            className={`fixed inset-0 z-[110] transition-opacity duration-300 ${isOpen
+              ? "pointer-events-auto opacity-100"
+              : "pointer-events-none opacity-0"
+              }`}
+          >
             <button
               type="button"
-              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isOpen}
-              onClick={() => setIsOpen((prev) => !prev)}
-              className="fixed left-4 top-4 z-[120] flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-[#23384C]/92 text-white shadow-[0_18px_40px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-transform hover:scale-[1.02]"
-            >
-              {isOpen ? (
-                <X className="h-6 w-6" strokeWidth={2.2} />
-              ) : (
-                <span className="flex flex-col gap-1.5">
-                  <span className="block h-0.5 w-5 rounded-full bg-white" />
-                  <span className="block h-0.5 w-5 rounded-full bg-white" />
-                  <span className="block h-0.5 w-5 rounded-full bg-white" />
-                </span>
-              )}
-            </button>
+              aria-label="Close navigation menu"
+              onClick={() => setIsOpen(false)}
+              className="absolute inset-0 bg-black/48 backdrop-blur-[2px]"
+            />
 
             <div
-              className={`fixed inset-0 z-[110] transition-opacity duration-300 ${
-                isOpen
-                  ? "pointer-events-auto opacity-100"
-                  : "pointer-events-none opacity-0"
-              }`}
-            >
-              <button
-                type="button"
-                aria-label="Close navigation menu"
-                onClick={() => setIsOpen(false)}
-                className="absolute inset-0 bg-black/48 backdrop-blur-[2px]"
-              />
-
-              <div
-                className={`absolute inset-y-0 left-0 transition-transform duration-300 ease-out ${
-                  isOpen ? "translate-x-0" : "-translate-x-full"
+              className={`absolute inset-y-0 left-0 transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
+            >
+              <div
+                className="relative h-full overflow-hidden border-r border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.30)]"
+                style={{
+                  width: `${sidebarWidth}px`,
+                  backgroundImage: "url(/bg-img-final.webp)",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
               >
                 <div
-                  className="relative h-full overflow-hidden border-r border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.30)]"
-                  style={{
-                    width: `${sidebarWidth}px`,
-                    backgroundImage: "url(/bg-img-final.webp)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
-                  <div
-                    className="absolute inset-0"
-                    style={{ backgroundColor: overlayColor }}
-                  />
-                  <Sidebar
-                    width={sidebarWidth}
-                    className="relative z-10 h-full"
-                  />
-                </div>
+                  className="absolute inset-0"
+                  style={{ backgroundColor: overlayColor }}
+                />
+                <Sidebar />
               </div>
             </div>
-          </>,
-          document.body,
-        )
+          </div>
+        </>,
+        document.body,
+      )
       : null;
 
   return (

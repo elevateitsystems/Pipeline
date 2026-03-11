@@ -26,7 +26,6 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
         <div
             className="scaling-outer-container"
             style={{
-                // width: '100vw',
                 width: '100vw',
                 height: '100vh',
                 overflow: 'hidden',
