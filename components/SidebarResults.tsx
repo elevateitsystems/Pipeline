@@ -19,9 +19,9 @@ const SidebarResults = ({
   secondaryColor,
 }: SidebarResultsProps) => {
   return (
-    <div className="px-4 mt-4">
+    <div className="px-4 mt-1">
       <h3
-        className="text-xl text-white mb-3 uppercase"
+        className="text-[1.75rem] leading-8 text-nowrap text-[#F7FCFF] mb-3"
         style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
       >
         Area Of Urgent Focus
