@@ -756,7 +756,7 @@ export default function AddNewAudit() {
             onRecommendationChange={handleCategoryRecommendationChange}
           />
         ) : (
-          <div className="mt-8">
+          <div className="mb-8">
             <AuditTable
               currentCategory={currentCategory}
               onQuestionsChange={setTableQuestions}

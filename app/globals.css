@@ -85,7 +85,7 @@
 
 /* Sidebar responsive for 1024px screens */
 .sidebar-width {
-  width: 260px;
+  width: 300px;
 }
 
 @media (max-width: 639px) {
@@ -139,23 +139,23 @@
   }
 
   .audit-question-col {
-    width: 50% !important;
-    min-width: 650px !important;
-    /* Balanced with answer column */
+    width: 42% !important;
+    min-width: 600px !important;
   }
 
   .audit-answer-col {
-    width: 50% !important;
-    min-width: 650px !important;
-    /* Ensure buttons fit */
+    width: 58% !important;
+    min-width: 880px !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
   }
 
-  /* Scale down status buttons at 1024px */
+  /* Refine status buttons for 1024px Frame */
   .audit-status-button {
-    width: 125px !important;
-    font-size: 15px !important;
-    padding-left: 1px !important;
-    padding-right: 1px !important;
+    width: 155px !important;
+    font-size: 17px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
   }
 
   /* Gap after header circles without shifting layout too far down */
@@ -177,6 +177,36 @@
   .test-main {
     padding-top: 0px !important;
   }
+
+  /* Specific 1024px Empty State Scaling */
+  .invited-empty-image {
+    width: 420px !important;
+    height: auto !important;
+  }
+
+  .invited-empty-title {
+    font-size: 42px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .invited-empty-desc {
+    font-size: 28px !important;
+    max-width: 900px !important;
+  }
+}
+
+/* Default Empty State Styles (1440px and others) */
+.invited-empty-image {
+  width: clamp(220px, 20vw, 380px);
+  height: auto;
+}
+
+.invited-empty-title {
+  font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+}
+
+.invited-empty-desc {
+  font-size: clamp(16px, 1.5vw, 26px);
 }
 
 /* Common audit table styles for all desktop screens */

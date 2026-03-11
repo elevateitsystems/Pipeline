@@ -1216,7 +1216,7 @@ export default function Sidebar() {
 
       {/* Navigation - Scrollable section */}
       <nav
-        className="py-4 flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar"
+        className=" flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar mt-[22px]"
         style={{
           position: "relative",
           zIndex: 2,
@@ -1239,7 +1239,7 @@ export default function Sidebar() {
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] my-2.5"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-3.5"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
@@ -1307,6 +1307,14 @@ export default function Sidebar() {
                 const isEditing =
                   itemCategoryNumber !== null &&
                   editingCategory === itemCategoryNumber;
+
+                // Immediately apply active styling when editing to avoid delay during route transition
+                if (isEditing) {
+                  isActive = true;
+                } else if (editingCategory !== null) {
+                  isActive = false;
+                }
+
                 const isNavigationItem =
                   !isCategoryItem && item.name !== "Summary";
 
@@ -1458,6 +1466,7 @@ export default function Sidebar() {
                     getCategoryName={getCategoryName}
                     getCategoryIcon={getCategoryIcon}
                     renderIcon={renderIcon}
+                    secondaryColor={secondaryColor}
                   />
                 );
               })}

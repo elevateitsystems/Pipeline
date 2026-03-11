@@ -473,7 +473,7 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="text-[#2B4055] text-center font-medium leading-tight"
+          className="text-[#2B4055] text-center font-medium leading-tight line-clamp-1"
           style={{
             marginTop: "17.41px",
             width: "155px",
@@ -505,7 +505,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-8 gap-1 w-full ">
+          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-8 gap-[2px] w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -686,7 +686,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="test-qa-bar px-24 -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          className="test-qa-bar audit-content-padding -mt-0.5 lg:max-xl:-mt-2 flex items-center"
           style={{
             width: "100%",
             paddingTop: "6px",
@@ -749,7 +749,7 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="test-main px-24 pt-3 bg-white flex-1 flex flex-col pb-12">
+      <main className="test-main audit-content-padding pt-3 bg-white flex-1 flex flex-col pb-12">
         <div className="flex-1 flex flex-col">
           <div className="w-full flex-grow min-h-[640px]">
             <table

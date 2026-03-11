@@ -8,13 +8,19 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import CustomButton from "@/components/common/CustomButton";
 import InvitedUsersSkeleton from "@/components/InvitedUsersSkeleton";
+import Image from "next/image";
+import notFoundImg from "@/public/notFound2.png";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function InvitedUsersPage() {
   const { user } = useUser();
   const router = useRouter();
   const { data: authData, isLoading: authLoading } = useAuthCheck();
-  const { data: invitations, isLoading: invitationsLoading, error: invitationsError } = useSentInvitations();
+  const {
+    data: invitations,
+    isLoading: invitationsLoading,
+    error: invitationsError,
+  } = useSentInvitations();
 
   useEffect(() => {
     if (!authLoading && authData) {
@@ -65,14 +71,17 @@ export default function InvitedUsersPage() {
   }
 
   return (
-    <div className="p-14 bg-white h-full">
+    <div className="p-14 bg-white h-full flex flex-col">
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-[#2d3e50] text-2xl sm:text-3xl lg:text-[35px] font-normal mb-2">INVITED USERS</h1>
+            <h1 className="text-[#2d3e50] text-2xl sm:text-3xl lg:text-[35px] font-normal mb-2">
+              INVITED USERS
+            </h1>
             <p className="text-gray-600 text-sm sm:text-base lg:text-[25px] font-[300]">
-              View all users you have invited to join your audits. Track invitation status and manage your invites.
+              View all users you have invited to join your audits. Track
+              invitation status and manage your invites.
             </p>
           </div>
           <CustomButton
@@ -86,12 +95,25 @@ export default function InvitedUsersPage() {
         </div>
       </div>
 
-      {/* Table */}
+      {/* Empty State */}
       {invitations && invitations.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20">
-          <p className="text-gray-500 text-lg mb-4">No invitations sent yet</p>
-          <p className="text-gray-400 text-sm">
-            When you invite users to take an audit, they will appear here.
+        <div className="flex-1 flex flex-col justify-center items-center py-4">
+          <Image
+            src={notFoundImg}
+            alt="No invitations"
+            width={380}
+            height={266}
+            style={{
+              objectFit: "contain",
+            }}
+            className="mb-6 invited-empty-image"
+          />
+          <p className="text-[#2D2D2D] mb-4 font-normal text-center uppercase invited-empty-title">
+            NO INVITATIONS SENT YET
+          </p>
+          <p className="font-[300] text-center max-w-3xl text-gray-500 px-6 invited-empty-desc">
+            When you invite team members to take an audit, their invitation
+            status and details will be listed here.
           </p>
         </div>
       ) : (
@@ -117,48 +139,56 @@ export default function InvitedUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {invitations && invitations.map((invitation) => {
-                const statusColor = getStatusColor(invitation.status);
-                const expired = isExpired(invitation.expiresAt);
-                const displayStatus = expired && invitation.status === "PENDING" ? "EXPIRED" : invitation.status;
+              {invitations &&
+                invitations.map((invitation) => {
+                  const statusColor = getStatusColor(invitation.status);
+                  const expired = isExpired(invitation.expiresAt);
+                  const displayStatus =
+                    expired && invitation.status === "PENDING"
+                      ? "EXPIRED"
+                      : invitation.status;
 
-                return (
-                  <tr
-                    key={invitation.id}
-                    className="border-b border-[#E0E0E0] hover:bg-gray-50"
-                  >
-                    <td className="px-6 border-r py-4 text-gray-800">
-                      {invitation.email}
-                    </td>
-                    <td className="px-6 border-r py-4 text-gray-600">
-                      {invitation.presentation ? (
-                        <span className="font-medium">{invitation.presentation.title}</span>
-                      ) : (
-                        <span className="text-gray-400 italic">General invitation</span>
-                      )}
-                    </td>
-                    <td className="px-6 border-r py-4">
-                      <span
-                        className="px-3 py-1 rounded text-sm font-medium"
-                        style={{
-                          backgroundColor: statusColor.bg,
-                          color: statusColor.text,
-                        }}
-                      >
-                        {displayStatus}
-                      </span>
-                    </td>
-                    <td className="px-6 border-r py-4 text-gray-600">
-                      {formatDate(invitation.createdAt)}
-                    </td>
-                    {/* <td className="px-6 py-4 text-gray-600">
+                  return (
+                    <tr
+                      key={invitation.id}
+                      className="border-b border-[#E0E0E0] hover:bg-gray-50"
+                    >
+                      <td className="px-6 border-r py-4 text-gray-800">
+                        {invitation.email}
+                      </td>
+                      <td className="px-6 border-r py-4 text-gray-600">
+                        {invitation.presentation ? (
+                          <span className="font-medium">
+                            {invitation.presentation.title}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 italic">
+                            General invitation
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 border-r py-4">
+                        <span
+                          className="px-3 py-1 rounded text-sm font-medium"
+                          style={{
+                            backgroundColor: statusColor.bg,
+                            color: statusColor.text,
+                          }}
+                        >
+                          {displayStatus}
+                        </span>
+                      </td>
+                      <td className="px-6 border-r py-4 text-gray-600">
+                        {formatDate(invitation.createdAt)}
+                      </td>
+                      {/* <td className="px-6 py-4 text-gray-600">
                       <span className={expired ? "text-red-600" : ""}>
                         {formatDate(invitation.expiresAt)}
                       </span>
                     </td> */}
-                  </tr>
-                );
-              })}
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
@@ -166,4 +196,3 @@ export default function InvitedUsersPage() {
     </div>
   );
 }
-
