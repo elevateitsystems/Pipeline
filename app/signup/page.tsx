@@ -197,7 +197,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
+    <div className="relative h-full w-full flex items-center justify-center">
       <div className="w-fit flex flex-col items-center relative z-10 px-4 py-16 lg:px-8 xl:px-12">
         {/* Logo */}
         <Image

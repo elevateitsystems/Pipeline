@@ -145,7 +145,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center"
+      className="relative h-full w-full flex items-center justify-center"
       style={{
         backgroundImage: "url(/bg-img.png)",
         backgroundSize: "contain",
