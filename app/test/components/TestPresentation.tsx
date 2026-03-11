@@ -768,7 +768,7 @@ export default function TestPresentation() {
                   return (
                     <tr
                       key={question.id}
-                      className="border-b border-r border-[#E8E8E8]"
+                      className="border-b border-[#E8E8E8]"
                     >
                       <td
                         className="border-r border-gray-300 px-4 text-center align-middle"
@@ -937,7 +937,7 @@ export default function TestPresentation() {
                 })}
                 {/* Total Score Row */}
                 {currentCategoryData && (
-                  <tr className=" border-r border-[#E8E8E8] ">
+                  <tr className="border-[#E8E8E8]">
                     <td
                       className="border-r border-gray-300 px-4 text-center align-middle"
                       style={{ width: "100px" }}
