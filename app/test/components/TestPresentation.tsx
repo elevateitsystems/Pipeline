@@ -473,7 +473,7 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="text-[#2B4055] text-center font-medium leading-tight"
+          className="text-[#2B4055] text-center font-medium leading-tight line-clamp-1"
           style={{
             marginTop: "17.41px",
             width: "155px",
@@ -505,7 +505,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-8 gap-1 w-full ">
+          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-8 gap-[2px] w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
