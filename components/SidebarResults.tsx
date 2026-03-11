@@ -19,8 +19,8 @@ const SidebarResults = ({
   secondaryColor,
 }: SidebarResultsProps) => {
   return (
-    <div className="px-4 border-t pt-6"
-      style={{ borderColor: secondaryColor || "#456987" }}>
+    <div className="px-4 pt-6"
+    >
       <h3
         className="text-[1.75rem] leading-8 text-nowrap text-[#F7FCFF] mb-[60px]"
         style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
