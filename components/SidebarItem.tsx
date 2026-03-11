@@ -144,7 +144,7 @@ const SidebarItem = memo(
         )}
         {isEditing ? (
           <div
-            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""}`}
+            className={cn(`w-full h-full flex items-center justify-start gap-2 relative z-30 ${isActive ? "top-[2px]" : ""}`, isActive && useSecondary ? 'text-white' : '')}
           >
             {canDrag && !isSummaryItem && (
               <span
@@ -266,8 +266,8 @@ const SidebarItem = memo(
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&
                       getCategoryIcon(itemCategoryNumber)
-                      ? <span className='mr-3'> {renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
-                      : item.icon}
+                      ? <span className='mr-2'> {renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
+                      : <span className='mr-2'>{item.icon}</span>}
                   </div>
                 )}
               <div

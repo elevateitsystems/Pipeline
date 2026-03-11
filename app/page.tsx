@@ -1,25 +1,25 @@
 "use client";
 
+import ConfirmationModal from "@/components/common/ConfirmationModal";
+import CustomButton from "@/components/common/CustomButton";
+import HomeSkeleton from "@/components/HomeSkeleton";
+import InviteAuditModal from "@/components/InviteAuditModal";
 import { useUser } from "@/contexts/UserContext";
-import { useEffect, useState, useMemo, use } from "react";
-import { useRouter } from "next/navigation";
-import notFoundImg from "@/public/notFound2.png";
-import editIcon from "@/public/Edit.png";
-import Image from "next/image";
 import {
-  useAuthCheck,
   useAudits,
+  useAuthCheck,
   useDeleteAudit,
   useSendAuditInvite,
 } from "@/lib/hooks";
 import { Presentation } from "@/lib/types";
-import { Trash2, Play, Mail } from "lucide-react";
+import editIcon from "@/public/Edit.png";
+import notFoundImg from "@/public/notFound2.png";
+import { Mail, Play, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
-import HomeSkeleton from "@/components/HomeSkeleton";
-import CustomButton from "@/components/common/CustomButton";
-import ConfirmationModal from "@/components/common/ConfirmationModal";
-import InviteAuditModal from "@/components/InviteAuditModal";
 
 interface AuditWithScore extends Presentation {
   latestScore?: number;
