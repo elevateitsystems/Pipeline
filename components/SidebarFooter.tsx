@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import { SessionUser } from "@/lib/session";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Image from "next/image";
 import { CustomButton } from "./common";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { SessionUser } from "@/lib/session";
 
 interface SidebarFooterProps {
   onResultPage: boolean;
@@ -65,7 +64,7 @@ const SidebarFooter = ({
           <div className="grid grid-cols-2 items-center justify-center gap-2 mb-8 mt-4 sidebar-bottom-info">
             <CustomButton
               onClick={handleLogout}
-              className="flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
+              className="text-[23px] flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
               style={{ fontSize: "inherit" }}
             >
               Logout
@@ -94,8 +93,8 @@ const SidebarFooter = ({
                 height={230}
                 onClick={() => router.push("/profile")}
                 style={{
-                  width: "clamp(100px, 18vw, 210px)",
-                  height: "clamp(120px, 25vh, 230px)",
+                  width: "clamp(130px, 38vw, 210px)",
+                  height: "clamp(150px, 28vh, 230px)",
                   objectPosition: "center 20%",
                   border: `5px solid ${user.secondaryColor}`,
                 }}
@@ -105,8 +104,8 @@ const SidebarFooter = ({
                 className="rounded bg-gray-300 flex items-center justify-center cursor-pointer"
                 onClick={() => router.push("/profile")}
                 style={{
-                  width: "clamp(100px, 18vw, 210px)",
-                  height: "clamp(120px, 25vh, 230px)",
+                  width: "clamp(130px, 38vw, 210px)",
+                  height: "clamp(150px, 28vh, 230px)",
                 }}
               >
                 <span

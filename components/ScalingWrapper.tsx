@@ -6,10 +6,10 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
     const [scales, setScales] = useState({ x: 1, y: 1 });
     const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      const targetWidth = 1920;
-      const targetHeight = 1080;
+    useEffect(() => {
+        const handleResize = () => {
+            const targetWidth = 1920;
+            const targetHeight = 1080;
 
             const widthScale = window.innerWidth / targetWidth;
             const heightScale = window.innerHeight / targetHeight;
@@ -17,10 +17,10 @@ export default function ScalingWrapper({ children }: { children: ReactNode }) {
             setIsReady(true);
         };
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     return (
         <div

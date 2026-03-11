@@ -91,44 +91,31 @@ export default function SigninPage() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
+    <div className="w-fit mx-auto relative min-h-screen flex items-center justify-center">
       {/* Content */}
-      <div className="flex flex-col items-center relative z-10">
+      <div className="flex flex-col items-center relative z-10 lg:w-[728px]">
         {/* Logo */}
         <Image
           src="/logo.png"
           alt="Pipeline Conversions"
-          width={180}
-          height={60}
-          className="mb-4"
+          width={191}
+          height={59}
+          className="h-[50px] sm:h-[60px] lg:h-[70px] xl:h-[59px] w-[150px] sm:w-[160px] lg:w-[170px] xl:w-[191px] mb-4 sm:mb-7 lg:mb-8 xl:mb-10"
         />
-        <h2
-          className="
-  font-['Acumin_Variable_Concept'] 
-  font-light 
-  text-[34px] 
-  leading-[39px] 
-  tracking-[0.006em] 
-  uppercase 
-  [text-box-trim:both] 
-  [text-box-edge:cap_alphabetic]
-  text-white
-  mb-6
-"
-        >
+        <h2 className="font-light text-[24px] sm:text-[34px] leading-[28px] sm:leading-[39px] uppercase text-white mb-5 sm:mb-7 lg:mb-8 xl:mb-10">
           {/* WELCOME BACK */}
           welcome back
         </h2>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl w-[380px] p-8">
-          <h3 className="text-center t  font-['Acumin_Variable_Concept'] font-light text-[24px] leading-[39px] tracking-[0.006em] uppercase [text-box-trim:both] [text-box-edge:cap_alphabetic] text-gray-700 mb-6">
+        <div className="bg-white rounded-[12px] sm:rounded-[20px] lg:rounded-[30px] px-[20px] sm:px-[46px] py-[20px] sm:py-[44px] flex flex-col items-start gap-2 sm:gap-3 xl:gap-5">
+          <h3 className="text-[20px] sm:text-[24px] lg:text-[30px] xl:text-[34px] leading-[28px] sm:leading-[39px] font-light xl:w-[482px]">
             LOGIN INTO YOUR ACCOUNT
           </h3>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1">
+          <form onSubmit={handleSubmit} className="w-full">
+            <div className="mb-[10px] sm:mb-[15px] xl:mb-[22px]">
+              <label className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600">
                 Email Address
               </label>
               <input
@@ -137,13 +124,13 @@ export default function SigninPage() {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
             </div>
 
-            <div>
+            <div className="mb-[10px] sm:mb-[15px] xl:mb-[22px]">
               <div className="flex items-center justify-between mb-1">
-                <label className="block text-sm font-medium text-gray-600">
+                <label className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600">
                   {usePin ? "PIN" : "Passcode"}
                 </label>
                 <button
@@ -170,7 +157,7 @@ export default function SigninPage() {
                       value={digit}
                       onChange={(e) => handlePinChange(index, e.target.value)}
                       onKeyDown={(e) => handlePinKeyDown(index, e)}
-                      className="w-10 h-10 text-center text-xl font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+                      className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                       required
                     />
                   ))}
@@ -184,7 +171,7 @@ export default function SigninPage() {
                     value={formData.passCode}
                     onChange={handleInputChange}
                     placeholder="Enter your passcode"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   />
                   <button
                     type="button"
@@ -197,10 +184,10 @@ export default function SigninPage() {
               )}
             </div>
 
-            <div className="text-right">
+            <div className="text-right my-[10px] sm:my-[22px]">
               <Link
                 href="/forgot-password"
-                className="text-xs text-[#2F68DF] hover:text-[#2F68DF/50] underline"
+                className="text-[12px] sm:text-[14px] xl:[18px] text-[#2F68DF] hover:text-[#2F68DF/50] underline"
               >
                 Forgot Passcode?
               </Link>
@@ -209,26 +196,25 @@ export default function SigninPage() {
             <button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full bg-linear-to-b from-yellow-400 to-yellow-500 text-gray-800 font-semibold py-2 rounded-lg shadow-md hover:opacity-90 transition-all disabled:opacity-70"
+              className="w-full bg-yellow text-black font-normal h-12 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 shadow-sm"
             >
               {loginMutation.isPending ? "Logging in..." : "Login"}
             </button>
-            <div className="text-center ">
+            <div className="text-center mt-[16px] sm:mt-[22px]">
               Create an account ?
               <Link
                 href="/signup"
-                className="text-sm px-1 text-[#2F68DF] hover:text-[#2F68DF/50] underline"
+                className="text-[14px] sm:text-[18px] px-1 text-[#2F68DF] hover:text-[#2F68DF/50] underline"
               >
                 Signup
               </Link>
             </div>
             {message && (
               <p
-                className={`text-center text-sm ${
-                  message.includes("failed") || message.includes("Invalid")
-                    ? "text-red-500"
-                    : "text-green-500"
-                }`}
+                className={`text-center text-sm ${message.includes("failed") || message.includes("Invalid")
+                  ? "text-red-500"
+                  : "text-green-500"
+                  }`}
               >
                 {message}
               </p>

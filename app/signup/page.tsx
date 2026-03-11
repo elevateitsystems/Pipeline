@@ -6,6 +6,7 @@ import { useInvite, useRegister } from "@/lib/hooks";
 import { useUser } from "@/contexts/UserContext";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
 
 interface InvitationData {
   email: string;
@@ -171,12 +172,12 @@ export default function SignupPage() {
         ...(token
           ? {}
           : {
-              companyName: formData.companyName || undefined,
-              companyLogoUrl: formData.companyLogoUrl || undefined,
-              // Only include colors if not using token (invited users get colors from inviter)
-              primaryColor: formData.primaryColor,
-              secondaryColor: formData.secondaryColor,
-            }),
+            companyName: formData.companyName || undefined,
+            companyLogoUrl: formData.companyLogoUrl || undefined,
+            // Only include colors if not using token (invited users get colors from inviter)
+            primaryColor: formData.primaryColor,
+            secondaryColor: formData.secondaryColor,
+          }),
         // Profile image can be included for both cases
         profileImageUrl: formData.profileImageUrl || undefined,
       };
@@ -197,22 +198,27 @@ export default function SignupPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center relative z-10 w-full px-4 py-16 lg:px-8 xl:px-12">
+      <div className="w-fit flex flex-col items-center relative z-10 px-4 py-16 lg:px-8 xl:px-12">
         {/* Logo */}
         <Image
           src="/logo.png"
           alt="Pipeline Conversions"
-          width={180}
-          height={60}
-          className="mb-4"
+          width={191}
+          height={59}
+          className="h-[50px] sm:h-[60px] lg:h-[70px] xl:h-[59px] w-[150px] sm:w-[160px] lg:w-[170px] xl:w-[191px] mb-[20px] sm:mb-[30px] lg:mb-[40px] xl:mb-[49px]"
         />
-        {/* Form Card */}
-        <div className="w-full max-w-[90%] sm:max-w-[500px] lg:max-w-[540px] xl:max-w-[580px] 2xl:max-w-[620px] bg-white rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-9">
-          <h2 className="text-2xl text-[#2d3e50] mb-8 tracking-wide">
-            CREATE YOUR ACCOUNT
-          </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-0.5">
+        {/* <h2 className="font-light text-[24px] sm:text-[34px] leading-[28px] sm:leading-[39px] uppercase text-white mb-[20px] sm:mb-[30px] lg:mb-[40px] xl:mb-[84px]">
+          create your account
+        </h2> */}
+
+        {/* Form Card */}
+        <div className="bg-white rounded-[12px] sm:rounded-[20px] lg:rounded-[30px] px-[20px] sm:px-[46px] py-[20px] sm:py-[44px] flex flex-col items-start gap-2 sm:gap-3 xl:gap-5 w-full">
+          <h3 className="text-[20px] sm:text-[24px] lg:text-[30px] xl:text-[34px] leading-[28px] sm:leading-[39px] font-light xl:w-[482px]">
+            CREATE NEW ACCOUNT
+          </h3>
+
+          <form onSubmit={handleSubmit} className="w-full space-y-3">
             {/* Show all fields if no token, only email and passCode if token exists */}
             {!token ? (
               <>
@@ -220,7 +226,7 @@ export default function SignupPage() {
                 <div>
                   <label
                     htmlFor="name"
-                    className="block text-sm text-[#2d3e50] mb-2"
+                    className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600"
                   >
                     Name
                   </label>
@@ -241,153 +247,147 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm text-[#2d3e50] mb-2"
+                className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600"
               >
                 Email Address
               </label>
-              <div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  disabled={!!token}
-                  className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 disabled:opacity-70 disabled:cursor-not-allowed"
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleInputChange}
+                disabled={!!token}
+                className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
             </div>
 
-            {/* Passcode */}
-            <div>
-              <label
-                htmlFor="passCode"
-                className="block text-sm text-[#2d3e50] mb-2"
-              >
-                Passcode
-              </label>
-              <div className="relative">
-                {/* Input field */}
-                <input
-                  id="passCode"
-                  name="passCode"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={formData.passCode}
-                  onChange={handleInputChange}
-                  className="w-full bg-[#f5f5f5] border-0 rounded-md pl-10 p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                />
-
-                {/* Show/Hide password toggle button */}
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            {/* Passcode and PIN */}
+            <div className="flex gap-3">
+              {/* Passcode */}
+              <div className="flex-1">
+                <label
+                  htmlFor="passCode"
+                  className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600"
                 >
-                  {showPassword ? (
-                    // Eye-off SVG (when password is visible)
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.59 21.59 0 014.29-5.94M9.53 9.53A3 3 0 0114.47 14.47M1 1l22 22" />
-                    </svg>
-                  ) : (
-                    // Eye SVG (when password is hidden)
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* PIN */}
-            <div>
-              <label
-                htmlFor="pin"
-                className="block text-sm text-[#2d3e50] mb-2"
-              >
-                PIN (Optional - 4 digits)
-              </label>
-              <div className="flex gap-2 justify-center">
-                {pinDigits.map((digit, index) => (
+                  Passcode
+                </label>
+                <div className="relative">
                   <input
-                    key={index}
-                    id={`signup-pin-${index}`}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handlePinChange(index, e.target.value)}
-                    onKeyDown={(e) => handlePinKeyDown(index, e)}
-                    className="w-10 h-10 text-center text-xl font-semibold bg-[#f5f5f5] border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+                    id="passCode"
+                    name="passCode"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={formData.passCode}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   />
-                ))}
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.59 21.59 0 014.29-5.94M9.53 9.53A3 3 0 0114.47 14.47M1 1l22 22" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
-              <p className="text-xs text-gray-500 mt-1 text-center">
-                You can use PIN instead of passcode for faster login
-              </p>
+
+              {/* PIN */}
+              <div className="flex-1">
+                <label
+                  htmlFor="pin"
+                  className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600"
+                >
+                  PIN (Optional - 4 digits)
+                </label>
+                <div className="flex gap-2">
+                  {pinDigits.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`signup-pin-${index}`}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handlePinChange(index, e.target.value)}
+                      onKeyDown={(e) => handlePinKeyDown(index, e)}
+                      className="w-10 h-10 text-xl font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+                    />
+                  ))}
+                </div>
+                <p className="text-[10px] sm:text-xs text-gray-600 mt-1">
+                  You can use PIN instead of passcode for faster login
+                </p>
+              </div>
             </div>
 
-            {/* Show additional fields only if no token */}
+
             {!token ? (
               <>
-                {/* Company Name */}
                 <div>
                   <label
                     htmlFor="companyName"
-                    className="block text-sm text-[#2d3e50] mb-2"
+                    className="block text-[12px] sm:text-[16px] xl:text-[20px] font-light text-gray-600"
                   >
                     Company Name
                   </label>
-                  <div>
-                    <input
-                      id="companyName"
-                      name="companyName"
-                      type="text"
-                      value={formData.companyName}
-                      onChange={handleInputChange}
-                      className="w-full bg-[#f5f5f5] border-0 rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                    />
-                  </div>
+                  <input
+                    id="companyName"
+                    name="companyName"
+                    type="text"
+                    value={formData.companyName}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-lg px-[8px] sm:px-[12px] xl:px-[16px] h-10 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  />
                 </div>
 
-                {/* Colors and Images Row */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-4">
                   {/* Primary Color */}
-                  <div>
-                    <label className="block text-sm text-[#2d3e50] mb-2">
+                  <div className="flex flex-col">
+                    <label className="text-[14px] sm:text-[18px] font-light text-gray-800">
                       Primary Color
                     </label>
-                    <div className="relative">
+                    <div className="relative h-10 w-full">
                       <input
                         id="primaryColor"
                         name="primaryColor"
                         type="color"
                         value={formData.primaryColor}
                         onChange={handleInputChange}
-                        className="absolute opacity-0 w-full h-full cursor-pointer"
+                        className="absolute opacity-0 w-full h-full cursor-pointer z-10"
                       />
-                      <div className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer">
-                        <span className="flex items-center gap-2">
+                      <div className="flex items-center w-full h-full bg-[#f8f8f8] border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-center w-[40px] sm:w-[50px] h-full rounded border border-gray-300 overflow-hidden bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEACJ0+e/M/AwMDIACHY0KWAicEIrALMZwRJM8KEuEDSFABfXAsvW09M7QAAAABJRU5ErkJggg==')]">
                           <div
-                            className="w-5 h-5 rounded border border-gray-300"
+                            className="w-full h-full"
                             style={{ backgroundColor: formData.primaryColor }}
                           />
+                        </div>
+                        <span className="ml-3 text-[12px] sm:text-[14px] text-gray-400 font-light truncate">
                           Chosen primary color
                         </span>
                       </div>
@@ -395,25 +395,27 @@ export default function SignupPage() {
                   </div>
 
                   {/* Secondary Color */}
-                  <div>
-                    <label className="block text-sm text-[#2d3e50] mb-2">
+                  <div className="flex flex-col">
+                    <label className="text-[14px] sm:text-[18px] font-light text-gray-800">
                       Secondary Color
                     </label>
-                    <div className="relative">
+                    <div className="relative h-10 w-full">
                       <input
                         id="secondaryColor"
                         name="secondaryColor"
                         type="color"
                         value={formData.secondaryColor}
                         onChange={handleInputChange}
-                        className="absolute opacity-0 w-full h-full cursor-pointer"
+                        className="absolute opacity-0 w-full h-full cursor-pointer z-10"
                       />
-                      <div className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer">
-                        <span className="flex items-center gap-2">
+                      <div className="flex items-center w-full h-full bg-[#f8f8f8] border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-center w-[40px] sm:w-[50px] h-full rounded border border-gray-300 overflow-hidden bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAACpJREFUGFdjZEACJ0+e/M/AwMDIACHY0KWAicEIrALMZwRJM8KEuEDSFABfXAsvW09M7QAAAABJRU5ErkJggg==')]">
                           <div
-                            className="w-5 h-5 rounded border border-gray-300"
+                            className="w-full h-full"
                             style={{ backgroundColor: formData.secondaryColor }}
                           />
+                        </div>
+                        <span className="ml-3 text-[12px] sm:text-[14px] text-gray-400 font-light truncate">
                           Chosen secondary color
                         </span>
                       </div>
@@ -421,106 +423,88 @@ export default function SignupPage() {
                   </div>
 
                   {/* Company Logo */}
-                  <div>
-                    <label className="block text-sm text-[#2d3e50] mb-2">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[14px] sm:text-[18px] font-light text-gray-800">
                       Company Logo
                     </label>
-                    <div className="relative">
+                    <div className="relative h-10 w-full">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleFileChange(e, "company")}
-                        className="absolute opacity-0 w-full h-full cursor-pointer"
+                        className="absolute opacity-0 w-full h-full cursor-pointer z-10"
                         id="companyLogo"
                       />
-                      <label
-                        htmlFor="companyLogo"
-                        className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer"
-                      >
-                        <span className="truncate">
+                      <div className="flex items-center w-full h-full bg-white border border-gray-200 rounded-lg px-2">
+                        <div className="bg-[#f0f0f0] border border-gray-300 rounded px-3 py-1 text-[11px] sm:text-[13px] text-black font-normal shadow-sm">
+                          Choose File
+                        </div>
+                        <span className="ml-3 text-[11px] sm:text-[13px] text-gray-400 font-light truncate">
                           {logoPreview ? "File selected" : "No files chosen"}
                         </span>
-                        <span className="bg-white px-3 py-1 rounded text-xs border border-gray-300 ml-2 whitespace-nowrap">
-                          Choose File
-                        </span>
-                      </label>
+                      </div>
                     </div>
-                    {uploadingLogo && (
-                      <p className="text-xs text-[#2d3e50] mt-1">
-                        Uploading...
-                      </p>
-                    )}
                   </div>
 
                   {/* Profile Photo */}
-                  <div>
-                    <label className="block text-sm text-[#2d3e50] mb-2">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[14px] sm:text-[18px] font-light text-gray-800">
                       Profile Photo
                     </label>
-                    <div className="relative">
+                    <div className="relative h-10 w-full">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleFileChange(e, "profile")}
-                        className="absolute opacity-0 w-full h-full cursor-pointer"
+                        className="absolute opacity-0 w-full h-full cursor-pointer z-10"
                         id="profilePhoto"
                       />
-                      <label
-                        htmlFor="profilePhoto"
-                        className="w-full bg-[#f5f5f5] border-0 rounded-md px-4 py-3 text-gray-500 text-sm flex items-center justify-between cursor-pointer"
-                      >
-                        <span className="truncate">
+                      <div className="flex items-center w-full h-full bg-white border border-gray-200 rounded-lg px-2">
+                        <div className="bg-[#f0f0f0] border border-gray-300 rounded px-3 py-1 text-[11px] sm:text-[13px] text-black font-normal shadow-sm">
+                          Choose File
+                        </div>
+                        <span className="ml-3 text-[11px] sm:text-[13px] text-gray-400 font-light truncate">
                           {profilePreview ? "File selected" : "No files chosen"}
                         </span>
-                        <span className="bg-white px-3 py-1 rounded text-xs border border-gray-300 ml-2 whitespace-nowrap">
-                          Choose File
-                        </span>
-                      </label>
+                      </div>
                     </div>
-                    {uploadingProfile && (
-                      <p className="text-xs text-[#2d3e50] mt-1">
-                        Uploading...
-                      </p>
-                    )}
                   </div>
                 </div>
               </>
-            ) : null}
+            ) : null
+            }
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={registerMutation.isPending || inviteLoading}
-              className="w-full mt-3 bg-[#ff9d00] text-white py-3 rounded-full font-medium hover:bg-[rgb(255,189,66)] transition-all shadow-md disabled:opacity-50"
+              className="w-full bg-yellow text-black font-normal h-12 text-[18px] sm:text-[20px] rounded-full hover:opacity-90 transition-all disabled:opacity-70 mt-3 shadow-sm"
             >
               {registerMutation.isPending ? "Creating Account..." : "Signup"}
             </button>
 
-            {message && (
-              <p
-                className={`text-center text-sm mt-3 ${
-                  message.includes("success")
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                {message}
-              </p>
-            )}
+            {
+              message && (
+                <p
+                  className={`text-center text-sm mt-3 ${message.includes("success") ? "text-green-600" : "text-red-600"
+                    }`}
+                >
+                  {message}
+                </p>
+              )
+            }
 
-            {/* Login Link */}
-            <p className="text-center text-sm text-gray-600 mt-4">
-              Dont have an account?{" "}
-              <a
+            <div className="text-center mt-3 w-full text-gray-800 text-[14px] sm:text-[16px]">
+              Already have an account?{" "}
+              <Link
                 href="/signin"
-                className="text-[#2d3e50] cursor-pointer hover:underline font-medium underline"
+                className="underline font-normal"
               >
                 Login
-              </a>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
+              </Link>
+            </div>
+          </form >
+        </div >
+      </div >
+    </div >
   );
 }

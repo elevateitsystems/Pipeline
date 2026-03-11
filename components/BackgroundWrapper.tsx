@@ -10,7 +10,7 @@ export default function BackgroundWrapper({
   const { user } = useUser();
 
   // Get the user's primary color, default to the original overlay color if not available
-  const overlayColor = user?.primaryColor || "#2B4055"; // rgba(43,64,85,0.70) converted to hex
+  const overlayColor = user?.primaryColor || "#1f2b3480"; // rgba(31,43,52,0.5) converted to hex
 
   // Convert hex to RGB for rgba overlay
   const hexToRgb = (hex: string): [number, number, number] | null => {
@@ -38,7 +38,7 @@ export default function BackgroundWrapper({
   const rgb = hexToRgb(overlayColor);
   const overlayRgba = rgb
     ? `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.70)`
-    : "rgba(43, 64, 85, 0.70)"; // Fallback to original color
+    : "rgba(31,43,52,0.5)"; // Fallback to original color
 
   return (
     <div
@@ -50,7 +50,7 @@ export default function BackgroundWrapper({
     >
       {/* Dynamic Overlay */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute h-ful w-full inset-0 z-0 bg-[rgba(31,43,52,0.4)]"
         style={{
           backgroundColor: overlayRgba,
         }}

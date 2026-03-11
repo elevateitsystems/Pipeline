@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import localFont from "next/font/local";
 import { UserProvider } from "@/contexts/UserContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ReactQueryProvider } from "@/lib/react-query";
 import { getSession } from "@/lib/session";
-import Sidebar from "@/components/Sidebar";
+import ResponsiveSidebar from "@/components/ResponsiveSidebar";
 import SidebarSkeleton from "@/components/SidebarSkeleton";
 import BackgroundWrapper from "@/components/BackgroundWrapper";
 import { Toaster } from "react-hot-toast";
@@ -17,6 +18,23 @@ export const metadata: Metadata = {
   description: "Simple Quiz App that summarizes you in a few questions",
 };
 
+const acumin = localFont({
+  src: [
+    {
+      path: "../public/fonts/AcuminVariableConcept.otf",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/AcuminVariableConcept.ttf",
+      weight: "100 900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-acumin",
+  display: "swap",
+});
+
 export default async function RootLayout({
   children,
 }: {
@@ -25,8 +43,8 @@ export default async function RootLayout({
   const session = await getSession();
 
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" className={acumin.variable}>
+      <body className="font-acumin">
         <ReactQueryProvider>
           <UserProvider user={session}>
             <ThemeProvider>
@@ -35,12 +53,13 @@ export default async function RootLayout({
                   {session ? (
                     <div className="flex h-full w-full">
                       <Suspense fallback={<SidebarSkeleton />}>
-                        <Sidebar />
+                        <ResponsiveSidebar />
                       </Suspense>
-                      <main className="flex-1">{children}</main>
+                      <main className="flex-1 ">{children}</main>
                     </div>
                   ) : (
-                    <main className="h-full w-full bg-[#2B4055B2]">
+                    <main className="h-full w-full bg-[rgba(31,43,52,0.5)]">
+                      {/* <main className="h-full w-full "> */}
                       {children}
                     </main>
                   )}

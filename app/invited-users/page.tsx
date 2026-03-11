@@ -70,14 +70,15 @@ export default function InvitedUsersPage() {
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-[#2d3e50] text-3xl font-bold mb-2">INVITED USERS</h1>
-            <p className="text-gray-600 text-base">
+            <h1 className="text-[#2d3e50] text-2xl sm:text-3xl lg:text-[35px] font-normal mb-2">INVITED USERS</h1>
+            <p className="text-gray-600 text-sm sm:text-base lg:text-[25px] font-[300]">
               View all users you have invited to join your audits. Track invitation status and manage your invites.
             </p>
           </div>
           <CustomButton
             variant="primary"
             size="lg"
+            className="w-[318px]"
             onClick={() => router.push("/")}
           >
             Back to Audits

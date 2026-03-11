@@ -1,68 +1,71 @@
 @import "tailwindcss";
 
+@theme {
+  --color-black: hsl(var(--black));
+  --color-yellow: hsl(var(--yollow));
+  --color-yollow: hsl(var(--yollow));
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 0 0% 17.6%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 0 0% 17.6%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --popover-foreground: 0 0% 17.6%;
+    --primary: 0 0% 17.6%;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary-foreground: 0 0% 17.6%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
     --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent-foreground: 0 0% 17.6%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
+    --black: 0, 0%, 18%;
+    --yollow: 36, 92%, 61%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 0 0% 17.6%;
     --radius: 0.5rem;
   }
 
-  html {
-    font-family: 'Acumin Variable Concept', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    /* Prevent scrolling and hide overflowing content */
+    font-family: var(--font-acumin), sans-serif;
     letter-spacing: -0.01em;
   }
 
   body {
     /* Background will be applied dynamically via BackgroundWrapper component */
-    font-family: 'Acumin Variable Concept', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-    letter-spacing: -0.01em !important;
+    font-family: var(--font-acumin), sans-serif !important;
+    font-style: normal !important;
+    letter-spacing: 0.162px !important;
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
   }
 }
 
-@font-face {
-  font-family: 'MyriadPro-Regular_0';
-  src: url('/fonts/MyriadPro-Regular_0.otf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+.font-acumin {
+  font-family: var(--font-acumin), sans-serif;
 }
 
-@font-face {
-  font-family: 'Acumin Variable Concept';
-  src: url('/fonts/Acumin Variable Concept.ttf') format('truetype');
-}
 
-@font-face {
-  font-family: 'Acumin Variable Concept';
-  src: url('/fonts/AcuminVariableConcept.otf') format('truetype');
-}
 
-/* Global font application - Acumin Variable Concept is now the default font */
 *,
 *::before,
 *::after {
-  font-family: 'Acumin Variable Concept', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-acumin), sans-serif !important;
+  font-style: normal !important;
+  letter-spacing: 0.162px !important;
 }
 
 /* Hide scrollbars */
@@ -82,12 +85,19 @@
 
 /* Sidebar responsive for 1024px screens */
 .sidebar-width {
-  width: 300px;
+  width: 260px;
+}
+
+@media (max-width: 639px) {
+  .sidebar-profile-image {
+    width: 160px !important;
+    height: 180px !important;
+  }
 }
 
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
-    width: 350px !important;
+    width: 300px !important;
   }
 
   /* Profile image larger at 1024px */
@@ -147,6 +157,26 @@
     padding-left: 1px !important;
     padding-right: 1px !important;
   }
+
+  /* Gap after header circles without shifting layout too far down */
+  .test-circle-row {
+    margin-bottom: 12px !important;
+  }
+
+  .test-grade-scale {
+    margin-top: -16px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .test-qa-bar {
+    margin-top: 0px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .test-main {
+    padding-top: 0px !important;
+  }
 }
 
 /* Common audit table styles for all desktop screens */
@@ -160,7 +190,9 @@
     padding-left: 40px !important;
     padding-right: 40px !important;
   }
+
 }
+
 
 .audit-index-col {
   width: 60px !important;
@@ -176,6 +208,23 @@
   min-width: 650px !important;
 }
 
-.audit-status-button {
+/* .audit-status-button {
   width: 130px;
+} */
+
+@media (min-width: 768px) {
+  .audit-question-col {
+    width: 38% !important;
+    min-width: 300px !important;
+  }
+
+  .audit-answer-col {
+    width: 62% !important;
+    min-width: 300px !important;
+  }
+
+  .audit-status-button {
+    width: fit-content !important;
+  }
+
 }

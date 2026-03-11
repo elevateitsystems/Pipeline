@@ -385,11 +385,11 @@ export default function UpdateAudit() {
         const auditWithSummary = audit as Presentation & {
           summary?: {
             categoryRecommendations?:
-              | string
-              | Array<{ categoryId: string; recommendation: string }>;
+            | string
+            | Array<{ categoryId: string; recommendation: string }>;
             nextSteps?:
-              | string
-              | Array<{ type: string; content: string; fileUrl?: string }>;
+            | string
+            | Array<{ type: string; content: string; fileUrl?: string }>;
             overallDetails?: string | null;
           } | null;
         };
@@ -443,8 +443,8 @@ export default function UpdateAudit() {
           const allCategoryRecommendations = audit.categories.map((cat) => {
             const existing = Array.isArray(categoryRecommendations)
               ? categoryRecommendations.find(
-                  (rec: { categoryId: string }) => rec.categoryId === cat.id,
-                )
+                (rec: { categoryId: string }) => rec.categoryId === cat.id,
+              )
               : null;
             return (
               existing || {
@@ -1093,20 +1093,20 @@ export default function UpdateAudit() {
               options:
                 Array.isArray(q.options) && q.options.length === 5
                   ? q.options.map((opt) => ({
-                      id: opt.id, // Include option ID if it exists
-                      text: opt.text.trim(),
-                      points: opt.points,
-                    }))
+                    id: opt.id, // Include option ID if it exists
+                    text: opt.text.trim(),
+                    points: opt.points,
+                  }))
                   : [
-                      "Very Minimal",
-                      "Just Starting",
-                      "Good progress",
-                      "Excellent",
-                      "Very Excellent",
-                    ].map((text, i) => ({
-                      text: text,
-                      points: i + 1,
-                    })),
+                    "Very Minimal",
+                    "Just Starting",
+                    "Good progress",
+                    "Excellent",
+                    "Very Excellent",
+                  ].map((text, i) => ({
+                    text: text,
+                    points: i + 1,
+                  })),
             }))
             .filter((q) => q.text.length > 0);
 
@@ -1245,13 +1245,13 @@ export default function UpdateAudit() {
             GRADING SCALE (1-5)
           </p>
           <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
               1-2 URGENT ATTENTION
             </p>
-            <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
+            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
               5 EXCELLENT AUDIT
             </p>
           </div>
@@ -1279,9 +1279,9 @@ export default function UpdateAudit() {
               onChange={handleTitleChange}
               placeholder="Presentation Name"
               disabled={!titleEditable}
-              className="w-full bg-[#4569871A] pr-12 pl-6 py-[12px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+              className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
               style={{
-                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontFamily: "var(--font-acumin), sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
@@ -1300,11 +1300,11 @@ export default function UpdateAudit() {
               <FiEdit size={12} />
             </button>
           </div>
-          <div className="w-px h-0 bg-[#3b5163] mx-7"></div>
-          <div className="flex gap-3">
+          <div className="w-px h-9 bg-[#3b5163] mx-7"></div>
+          <div className="w-1/3 flex gap-3">
             <button
               onClick={() => router.push("/")}
-              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer"
+              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1 text-center"
             >
               Back to List
             </button>

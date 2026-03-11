@@ -692,8 +692,11 @@ export default function AddNewAudit() {
           <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             answers
           </p>
-        </div>
-      </header>
+          {/* <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
+            score
+          </p> */}
+        </div >
+      </header >
       <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1">
@@ -702,9 +705,9 @@ export default function AddNewAudit() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Presentation Name"
-              className="w-full bg-[#4569871A] px-6 py-[12px] border border-[#3b5163] rounded-xl outline-none"
+              className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
-                fontFamily: "'Acumin Variable Concept', sans-serif",
+                fontFamily: "var(--font-acumin), sans-serif",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
@@ -713,11 +716,11 @@ export default function AddNewAudit() {
               }}
             />
           </div>
-          <div className="w-px h-0 bg-[#3b5163] mx-7"></div>
-          <div className="flex gap-3">
+          <div className="w-px h-9 bg-[#3b5163] mx-7"></div>
+          <div className="w-1/3 flex gap-3">
             <button
               onClick={() => router.push("/")}
-              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer"
+              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1"
             >
               Back to List
             </button>
@@ -731,7 +734,7 @@ export default function AddNewAudit() {
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer">
+            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1">
               <input
                 type="file"
                 accept=".csv,.xlsx,.xls"
@@ -743,7 +746,7 @@ export default function AddNewAudit() {
               <label htmlFor="auditUpload">Upload File</label>
             </div>
           </div>
-        </div>
+        </div >
 
         {currentCategory === 8 ? (
           <SummarySection
@@ -762,9 +765,10 @@ export default function AddNewAudit() {
               }
             />
           </div>
-        )}
-      </main>
-    </div>
+        )
+        }
+      </main >
+    </div >
   );
 }
 
@@ -1084,14 +1088,14 @@ function AuditTable({
                 className={`border-b border-gray-300 ${draggedRowIndex === rowIndex ? "opacity-50" : ""} ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
-                  <div className="flex items-center justify-center gap-2">
-                    <span className="text-gray-400 select-none cursor-grab active:cursor-grabbing">
+                  <div className="flex items-center justify-center gap-2 text-black">
+                    <span className="select-none cursor-grab active:cursor-grabbing">
                       =
                     </span>
-                    <span className="text-gray-700">{rowIndex}</span>
+                    <span className="font-[500] text-lg">{rowIndex}</span>
                   </div>
                 </td>
-                <td className="audit-question-col border-r border-gray-300 px-4 py-3 align-middle">
+                <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
                   <input
                     type="text"
                     value={questions[rowIndex] || ""}
@@ -1100,9 +1104,9 @@ function AuditTable({
                     onChange={(e) =>
                       handleQuestionChange(rowIndex, e.target.value)
                     }
-                    className="w-full bg-[#4569871A] px-4 h-[60px] border border-[#3b5163] rounded-xl outline-none"
+                    className="w-full bg-[#4569871A] px-2 sm:px-3 lg:px-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
+                      fontFamily: "var(--font-acumin), sans-serif",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -1111,9 +1115,9 @@ function AuditTable({
                     }}
                   />
                 </td>
-                <td className="audit-answer-col px-2 py-3 align-middle">
+                <td className="audit-answer-col px-1 sm:px-1.5 lg:px-2 lg:py-3 sm:py-2 py-1.5 align-middle">
                   {isActive ? (
-                    <div className="flex gap-2 items-center justify-center">
+                    <div className="flex gap-0.5 sm:gap-1 lg:gap-2 items-center justify-center">
                       {statusButtons.map((button, idx) => (
                         <input
                           key={button.label}
@@ -1122,16 +1126,16 @@ function AuditTable({
                           onChange={(e) =>
                             setStatusValue(rowIndex, idx, e.target.value)
                           }
-                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} px-3 rounded-lg border outline-none`}
+                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 min-w-[50px] py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] font-normal`}
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
+                            fontFamily: "var(--font-acumin), sans-serif",
                             fontWeight: 400,
-                            fontSize: "18px",
+                            // fontSize: "18px",
                             lineHeight: "100%",
                             letterSpacing: "-0.015em",
-                            fontVariationSettings: "'wdth' 55, 'wght' 700",
-                            paddingTop: "12px",
-                            paddingBottom: "12px",
+                            // fontVariationSettings: "'wdth' 55, 'wght' 700",
+                            // paddingTop: "12px",
+                            // paddingBottom: "12px",
                             textAlign: "center",
                             color: button.textColor.startsWith("#")
                               ? button.textColor
