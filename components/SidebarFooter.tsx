@@ -31,32 +31,30 @@ const SidebarFooter = ({
     >
       {onResultPage ? (
         <div
-          className="px-4 mt-6 border-t-2"
+          className="px-4 mt-6 border-t"
           style={{ borderColor: secondaryColor || "#456987" }}
         >
           <div className="mt-4">
-            <h3 className="text-2xl text-white mb-3  text-center">
+            <h3 className="text-[27px] text-white mb-3  text-center">
               Testimonials
             </h3>
             <div className="space-y-4">
               <div
-                className="rounded-lg p-3 text-center"
-                style={{ backgroundColor: secondaryColor || "#456987" }}
+                className="rounded-2xl h-[120px] p-3 text-center"
+                style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
               >
-                <p className="text-[#E8E8E8]  ">
-                  This audit system has transformed how we track and improve our
-                  processes. The comprehensive scoring and detailed
-                  recommendations help us identify areas for urgent attention.
+                <p className="text-[#E8E8E8] text-[16px] ">
+                  This system transformed our tracking. Detailed scoring helps
+                  identify urgent improvements.
                 </p>
               </div>
               <div
-                className="rounded-lg p-3 text-center"
-                style={{ backgroundColor: secondaryColor || "#456987" }}
+                className="rounded-2xl p-3 text-center h-[120px]"
+                style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
               >
-                <p className="text-[#E8E8E8]  font-normal">
-                  The category-based assessment structure makes it easy to focus
-                  on specific areas. The summary overview provides clear
-                  insights for continuous improvement.
+                <p className="text-[#E8E8E8] text-[16px] font-normal">
+                  Category-based assessments make it easy to focus and gain
+                  insights for improvement.
                 </p>
               </div>
             </div>
@@ -64,7 +62,7 @@ const SidebarFooter = ({
           <div className="grid grid-cols-2 items-center justify-center gap-2 mb-8 mt-4 sidebar-bottom-info">
             <CustomButton
               onClick={handleLogout}
-              className="text-[23px] flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
+              className="text-[18px] flex items-center gap-2 text-black hover:opacity-90 transition-colors rounded-full"
               style={{ fontSize: "inherit" }}
             >
               Logout
@@ -72,7 +70,7 @@ const SidebarFooter = ({
 
             <button
               onClick={() => router.push("/")}
-              className="w-full py-1 h-10 cursor-pointer rounded-full hover:bg-black/5 bg-transparent border border-white/50  text-white transition-colors text-center"
+              className="w-full h-10 py-2 cursor-pointer rounded-full hover:bg-black/5 bg-transparent border border-white/50 text-[18px]  text-white transition-colors text-center"
             >
               Exit
             </button>

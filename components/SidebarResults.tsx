@@ -19,9 +19,10 @@ const SidebarResults = ({
   secondaryColor,
 }: SidebarResultsProps) => {
   return (
-    <div className="px-4 mt-1">
+    <div className="px-4 border-t pt-6"
+      style={{ borderColor: secondaryColor || "#456987" }}>
       <h3
-        className="text-[1.75rem] leading-8 text-nowrap text-[#F7FCFF] mb-3"
+        className="text-[1.75rem] leading-8 text-nowrap text-[#F7FCFF] mb-[60px]"
         style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
       >
         Area Of Urgent Focus
@@ -47,7 +48,7 @@ const SidebarResults = ({
                 <div key={cs.categoryId} className="mb-4">
                   <div className="flex justify-between items-center mb-1">
                     <span
-                      className="text-white overflow-hidden text-xl text-nowrap"
+                      className="text-white overflow-hidden text-[25px] text-nowrap"
                       style={{
                         fontFamily: "'Acumin Variable Concept', sans-serif",
                       }}
