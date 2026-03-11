@@ -1258,8 +1258,8 @@ export default function Sidebar() {
                   <div
                     key={`sidebar-skeleton-${index}`}
                     className={`min-h-[40px] bg-white/10 overflow-hidden ${onTestPage
-                        ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl"
-                        : "w-[88%] rounded-xl"
+                      ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+2px)] rounded-l-xl"
+                      : "w-[88%] rounded-xl"
                       }`}
                     style={{
                       marginLeft: "clamp(0.75rem, 2vw, 1rem)",
@@ -1306,6 +1306,14 @@ export default function Sidebar() {
                 const isEditing =
                   itemCategoryNumber !== null &&
                   editingCategory === itemCategoryNumber;
+
+                // Immediately apply active styling when editing to avoid delay during route transition
+                if (isEditing) {
+                  isActive = true;
+                } else if (editingCategory !== null) {
+                  isActive = false;
+                }
+
                 const isNavigationItem =
                   !isCategoryItem && item.name !== "Summary";
 
