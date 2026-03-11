@@ -259,11 +259,14 @@ const AuditTable = React.memo(function AuditTable({
                 </td>
                 <td className="audit-answer-col px-1 sm:px-1.5 lg:px-2 lg:py-3 sm:py-2 py-1.5 align-middle">
                   {isActive ? (
-                    <div className="flex gap-0.5 sm:gap-1 lg:gap-2 items-center justify-start">
+                    <div className="flex gap-0.5 sm:gap-1 lg:gap-4 items-center justify-center">
                       {statusButtons.map((button, idx) => (
-                        <div key={button.label} className={`flex items-center gap-2 justify-center audit-status-button rounded-xl border text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} font-normal disabled:opacity-40`}>
+                        <div
+                          key={button.label}
+                          className={`flex items-center gap-2 justify-center audit-status-button rounded-xl border text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} font-normal disabled:opacity-40`}
+                        >
                           <input
-                            className="w-[50px] sm:w-[60px] md:w-[180px] lg:w-[100px] xl:w-[110px]"
+                            className="w-[50px] sm:w-[60px] md:w-[180px] lg:w-[125px] xl:w-[110px]"
                             type="text"
                             value={getOptionText(rowIndex, idx)}
                             onChange={(e) =>

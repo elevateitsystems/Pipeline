@@ -1270,8 +1270,8 @@ export default function UpdateAudit() {
           </p>
         </div>
       </header>
-      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
-        <div className="flex gap items-center justify-between mb-4">
+      <main className="audit-content-padding pt-5 bg-white pb-[120px] overflow-y-auto">
+        <div className="flex gap items-center justify-between mb-[60px]">
           <div className="flex-1 relative">
             <input
               type="text"
@@ -1329,7 +1329,7 @@ export default function UpdateAudit() {
             onRecommendationChange={handleCategoryRecommendationChange}
           />
         ) : (
-          <div className="mt-8">
+          <div className="mt-0">
             <AuditTable
               currentCategory={currentCategory}
               categoryData={currentCategoryData}
