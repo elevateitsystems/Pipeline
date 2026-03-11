@@ -41,6 +41,7 @@ interface SidebarItemProps {
   getCategoryName: (num: number) => string;
   getCategoryIcon: (num: number) => string | undefined;
   renderIcon: (iconName: string | undefined) => React.ReactNode;
+  secondaryColor?: string;
 }
 
 const SidebarItem = memo(
@@ -74,6 +75,7 @@ const SidebarItem = memo(
     getCategoryName,
     getCategoryIcon,
     renderIcon,
+    secondaryColor = "#456987",
   }: SidebarItemProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -85,6 +87,27 @@ const SidebarItem = memo(
       }
     }, [isEditing]);
 
+    // Helper to convert hex to rgba
+    const hexToRgba = (hex: string, alpha: number) => {
+      // Remove hash if present
+      hex = hex.replace(/^#/, '');
+
+      // Parse RGB values
+      let r, g, b;
+
+      if (hex.length === 3) {
+        r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
+        g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
+        b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
+      } else {
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+      }
+
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    };
+
     return (
       <div
         draggable={canDrag && !isSummaryItem}
@@ -94,20 +117,20 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={cn(`h-[58px] mt-3 cursor-pointer flex items-center relative bg-[${backgroundColor}]`,
+        className={cn(`h-[58px] mt-3 cursor-pointer flex items-center relative`,
           isActive
             ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] border-r-0"
             : (isCategoryItem || isSummaryItem) && !useSecondary
               ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+1px)] rounded-l-[10px] border-r-0"
               : "rounded-l-[10px]",
           isDragging ? "opacity-50" : "", isDragOver ? "border-2 border-dashed border-white" : "", canDrag && !isSummaryItem ? "cursor-move" : "",
-          useSecondary ? 'rounded-[10px] mr-2 border bg-[rgba(69,105,135,0.60)] opacity-70' : '',
-          isActive && useSecondary ? 'opacity-100 bg-[rgba(69,105,135,0.60)] text-white' : '',
+          useSecondary ? `rounded-[10px] mr-2 border opacity-70` : '',
+          isActive && useSecondary ? `opacity-100 text-white` : '',
         )}
         style={{
           padding: "0 clamp(0.75rem, 3vw, 1rem)",
           marginLeft: "clamp(0.75rem, 2vw, 1rem)",
-          // backgroundColor: backgroundColor,
+          backgroundColor: useSecondary ? hexToRgba(secondaryColor, 0.60) : (backgroundColor || "transparent"),
           color: textColor,
           border: isActive
             ? "none"
@@ -252,9 +275,7 @@ const SidebarItem = memo(
               {canDrag && !isSummaryItem && (
                 <span
                   onMouseDown={onMouseDownDrag}
-                  className={`text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  `}
-
-                >
+                  className={`text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  `}>
                   =
                 </span>
               )}

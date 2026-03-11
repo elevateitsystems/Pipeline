@@ -22,12 +22,13 @@ const SidebarFooter = ({
 }: SidebarFooterProps) => {
   return (
     <div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
+      {onResultPage ? (<><svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
         <path d="M0 0.750183H299.315" stroke="#1F2F3D" strokeWidth="1.50039" stroke-miterlimit="10" />
       </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" stroke-miterlimit="10" />
-      </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
+          <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" stroke-miterlimit="10" />
+        </svg></>) : ''
+      }
       <div
         className="pt-2 mt-auto overflow-hidden shrink-0"
         style={{
@@ -135,7 +136,7 @@ const SidebarFooter = ({
           </>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

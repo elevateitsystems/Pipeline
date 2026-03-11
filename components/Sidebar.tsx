@@ -1466,6 +1466,7 @@ export default function Sidebar() {
                     getCategoryName={getCategoryName}
                     getCategoryIcon={getCategoryIcon}
                     renderIcon={renderIcon}
+                    secondaryColor={secondaryColor}
                   />
                 );
               })}
