@@ -477,7 +477,6 @@ export default function TestPresentation() {
           style={{
             marginTop: "17.41px",
             width: "155px",
-            height: "13px",
             fontFamily: "'Acumin Variable Concept', sans-serif",
             fontWeight: 500,
             fontStyle: "normal",
@@ -686,7 +685,7 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="test-qa-bar audit-content-padding -mt-0.5 lg:max-xl:-mt-2 flex items-center"
+          className="test-qa-bar audit-content-padding flex items-center"
           style={{
             width: "100%",
             paddingTop: "6px",
@@ -706,7 +705,7 @@ export default function TestPresentation() {
               fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
               fontSize: "22px",
-              lineHeight: "100%",
+              // lineHeight: "100%",
               letterSpacing: "0.016em",
               textTransform: "capitalize",
               textAlign: "left",
@@ -727,6 +726,7 @@ export default function TestPresentation() {
               letterSpacing: "0.016em",
               textTransform: "capitalize",
               textAlign: "left",
+              marginLeft: '25%',
               paddingLeft: "16px",
             }}
           >
@@ -977,10 +977,10 @@ export default function TestPresentation() {
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
                   className={`rounded-tl-xl text-center py-1 ${currentCategoryScore >= 1 &&
-                      currentCategoryScore <=
-                      Math.floor(currentCategoryMaxScore * 0.4)
-                      ? "bg-[#F65355] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
+                    currentCategoryScore <=
+                    Math.floor(currentCategoryMaxScore * 0.4)
+                    ? "bg-[#F65355] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
                     }`}
                 >
                   <h3
@@ -1015,11 +1015,11 @@ export default function TestPresentation() {
               <div className="bg-white border-r-2 border-white">
                 <div
                   className={`text-center py-1 ${currentCategoryScore >
-                      Math.floor(currentCategoryMaxScore * 0.4) &&
-                      currentCategoryScore <=
-                      Math.floor(currentCategoryMaxScore * 0.8)
-                      ? "bg-[#F7AF41] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
+                    Math.floor(currentCategoryMaxScore * 0.4) &&
+                    currentCategoryScore <=
+                    Math.floor(currentCategoryMaxScore * 0.8)
+                    ? "bg-[#F7AF41] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
                     }`}
                 >
                   <h3
@@ -1055,9 +1055,9 @@ export default function TestPresentation() {
               <div className="bg-white">
                 <div
                   className={`text-center py-1 rounded-tr-xl ${currentCategoryScore >
-                      Math.floor(currentCategoryMaxScore * 0.8)
-                      ? "bg-[#2BD473] text-white"
-                      : "bg-[#E8E8E8] text-gray-800"
+                    Math.floor(currentCategoryMaxScore * 0.8)
+                    ? "bg-[#2BD473] text-white"
+                    : "bg-[#E8E8E8] text-gray-800"
                     }`}
                 >
                   <h3
