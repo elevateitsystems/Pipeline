@@ -697,7 +697,8 @@ export default function AddNewAudit() {
           </p> */}
         </div >
       </header >
-      <main className="audit-content-padding pt-5 bg-white pb-40 overflow-y-auto">
+
+      <main className="audit-content-padding pt-5 bg-white overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
           <div className="flex-1">
             <input

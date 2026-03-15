@@ -203,19 +203,22 @@ export default function Home() {
           >
             Hello, {user.name.split(" ")[0]}!
           </h1>
-          <div className="flex justify-center items-center h-[80vh]">
-            <div className="flex flex-col justify-center items-center ">
-              <Image
-                src={notFoundImg}
-                alt="Logo"
-                width={380}
-                height={266}
-                style={{
-                  width: "clamp(200px, 28vw, 480px)",
-                  height: "clamp(140px, 20vw, 366px)",
-                  objectFit: "contain",
-                }}
-              />
+          <div className="flex justify-center items-center min-h-[70vh]">
+            <div className="flex flex-col justify-center items-center">
+              <div className="flex justify-center items-center h-[345px] w-[483px] overflow-hidden ">
+                <Image
+                  src={notFoundImg}
+                  alt="Logo"
+                  width={380}
+                  height={266}
+                  style={{
+                    width: "clamp(200px, 28vw, 480px)",
+                    height: "clamp(140px, 20vw, 366px)",
+                    objectFit: "contain",
+                  }}
+                  className="h-full w-auto"
+                />
+              </div>
               <p
                 className="text-[#2D2D2D] mb-2 font-normal"
                 style={{ fontSize: "clamp(.5rem, 4vw, 2rem)" }}
@@ -223,7 +226,7 @@ export default function Home() {
                 NO AUDIT CREATED
               </p>
               <p
-                className="text-[20px] sm:text-[22px] xl:text-[26px] font-[300]"
+                className="text-[20px] sm:text-[22px] xl:text-[26px] font-light"
               >
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."

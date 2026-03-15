@@ -1197,7 +1197,8 @@ export default function Sidebar() {
 
   return (
     <div
-      className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
+      // className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
+      className="sidebar-width flex flex-col min-h-screen overflow-x-hidden relative hide-scrollbar"
       // className="sidebar-width flex flex-col h-full overflow-x-hidden relative hide-scrollbar"
       style={{
         overflowX: "hidden",

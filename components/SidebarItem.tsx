@@ -117,7 +117,7 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={cn(`h-[58px] cursor-pointer flex items-center relative`,
+        className={cn(`py-3 px-4 cursor-pointer flex items-center relative`,
           isActive
             ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] border-r-0"
             : (isCategoryItem || isSummaryItem) && !useSecondary
@@ -128,7 +128,7 @@ const SidebarItem = memo(
           isActive && useSecondary ? `opacity-100 text-white` : '',
         )}
         style={{
-          padding: "0 clamp(0.75rem, 3vw, 1rem)",
+          // padding: "clamp(0.75rem, 3vw, 1rem)",
           marginLeft: "clamp(0.75rem, 2vw, 1rem)",
           backgroundColor: useSecondary ? hexToRgba(secondaryColor, 0.60) : (backgroundColor || "transparent"),
           color: textColor,
