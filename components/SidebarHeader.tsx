@@ -26,7 +26,7 @@ const SidebarHeader = ({
   return (
     <>
       <div
-        className="pt-[51px] pb-10 flex justify-center shrink-0"
+        className="pt-[50px] xl:pt-[51px] pb-8 xl:pb-10 flex justify-center shrink-0"
         style={{
           position: "relative",
           zIndex: 2,
