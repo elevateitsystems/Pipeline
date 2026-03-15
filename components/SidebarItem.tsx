@@ -117,7 +117,7 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={cn(`py-2 px-3 cursor-pointer flex items-center relative`,
+        className={cn(`p-2 px-3 cursor-pointer flex items-center relative`,
           isActive
             ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] "
             : (isCategoryItem || isSummaryItem) && !useSecondary

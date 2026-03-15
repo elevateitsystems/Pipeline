@@ -297,6 +297,7 @@ export default function Home() {
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
+                className="flex-1 font-normal text-[18px] xl:text-[23px]"
               >
                 Create New AUDIT
               </CustomButton>
