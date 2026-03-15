@@ -505,7 +505,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="test-circle-row bg-white pt-1 px-12 grid grid-cols-[13.5%_13.5%_13.5%_13.5%_13.5%_13.5%_13.5%_8%] gap-[2px] w-full ">
+          <div className="test-circle-row bg-white pt-1 grid grid-cols-[13%_13%_13%_13%_13%_13%_13%_8%] pr-2 gap-[2px] w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -965,7 +965,7 @@ export default function TestPresentation() {
 
           {/* Score Interpretation Blocks */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="relative bottom-4 grid grid-cols-3 gap-0 ">
+            <div className="relative bottom-4 grid grid-cols-3 gap-0 sm:pt-4 pt-0 2xl:pt-0">
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
@@ -1123,7 +1123,7 @@ export default function TestPresentation() {
                 <div
                   className="absolute transition-all duration-500 z-30"
                   style={{
-                    left: `${currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4) 
+                    left: `${currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4)
                       ? (currentCategoryScore / Math.floor(currentCategoryMaxScore * 0.4)) * 33.33
                       : currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.8)
                         ? 33.33 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.4)) / (Math.floor(currentCategoryMaxScore * 0.8) - Math.floor(currentCategoryMaxScore * 0.4))) * 33.33
