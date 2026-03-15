@@ -460,7 +460,7 @@ export default function TestPresentation() {
               style={{
                 fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 600,
-                fontSize: "46px",
+                fontSize: "clamp(24px, 3.5vw, 46px)",
                 lineHeight: "100%",
                 letterSpacing: "0.003em",
                 fontVariationSettings: "'wdth' 65, 'wght' 600",
@@ -480,7 +480,7 @@ export default function TestPresentation() {
             fontFamily: "'Acumin Variable Concept', sans-serif",
             fontWeight: 500,
             fontStyle: "normal",
-            fontSize: "19px",
+            fontSize: "clamp(12px, 1.5vw, 19px)",
             lineHeight: "100%",
             letterSpacing: "0.003em",
             textAlign: "center",
@@ -644,7 +644,7 @@ export default function TestPresentation() {
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
-                  fontSize: "19px",
+                  fontSize: "clamp(12px, 1.5vw, 19px)",
                   lineHeight: "100%",
                   letterSpacing: "0.003em",
                   fontVariationSettings: "'wdth' 65, 'wght' 500",
@@ -659,17 +659,17 @@ export default function TestPresentation() {
 
         <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
           <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-            <p className=" text-[14px] xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
+            <p className=" text-[clamp(12px,1.2vw,17px)] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
               GRADING SCALE (1-5)
             </p>
             <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tl-xl text-nowrap">
+              <p className="w-full text-[clamp(12px,1.2vw,17px)] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tl-xl text-nowrap">
                 1-2 URGENT ATTENTION
               </p>
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2 pb-1 text-white text-nowrap">
+              <p className="w-full text-[clamp(12px,1.2vw,17px)] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2 pb-1 text-white text-nowrap">
                 3-4 AVERAGE AUDIT
               </p>
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tr-xl text-nowrap">
+              <p className="w-full text-[clamp(12px,1.2vw,17px)] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tr-xl text-nowrap">
                 5 EXCELLENT AUDIT
               </p>
             </div>
@@ -686,7 +686,7 @@ export default function TestPresentation() {
           }}
         >
           <p
-            className="text-[20px] text-white capitalize font-500 leading-normal font-medium"
+            className="text-[clamp(14px,1.5vw,20px)] text-white capitalize font-500 leading-normal font-medium"
             style={{ width: "100px" }}
           ></p>
           <p
@@ -696,7 +696,7 @@ export default function TestPresentation() {
               color: "#F4F4F4",
               fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
-              fontSize: "22px",
+              fontSize: "clamp(16px, 1.8vw, 22px)",
               // lineHeight: "100%",
               letterSpacing: "0.016em",
               textTransform: "capitalize",
@@ -713,7 +713,7 @@ export default function TestPresentation() {
               color: "#F4F4F4",
               fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
-              fontSize: "22px",
+              fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",
               textTransform: "capitalize",
@@ -731,7 +731,7 @@ export default function TestPresentation() {
               color: "#F4F4F4",
               fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
-              fontSize: "22px",
+              fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",
               textTransform: "capitalize",
@@ -771,7 +771,7 @@ export default function TestPresentation() {
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 500,
-                            fontSize: "21px",
+                            fontSize: "clamp(14px, 1.5vw, 21px)",
                             lineHeight: "100%",
                             letterSpacing: "-0.025em",
                             fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -792,7 +792,7 @@ export default function TestPresentation() {
                                 "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontStyle: "normal",
-                              fontSize: "23px",
+                              fontSize: "clamp(16px, 1.6vw, 23px)",
                               lineHeight: "100%",
                               letterSpacing: "-0.025em",
                               fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -822,7 +822,7 @@ export default function TestPresentation() {
                                 fontFamily:
                                   "'Acumin Variable Concept', sans-serif",
                                 fontWeight: 400,
-                                fontSize: "20px",
+                                fontSize: "clamp(14px, 1.5vw, 20px)",
                                 lineHeight: "100%",
                                 letterSpacing: "-0.015em",
                                 fontVariationSettings: "'wdth' 85, 'wght' 500",
@@ -855,7 +855,7 @@ export default function TestPresentation() {
                                         fontFamily:
                                           "'Acumin Variable Concept', sans-serif",
                                         fontWeight: 400,
-                                        fontSize: "16px",
+                                        fontSize: "clamp(12px, 1.2vw, 16px)",
                                         lineHeight: "100%",
                                         letterSpacing: "-0.015em",
                                         fontVariationSettings:
@@ -916,7 +916,7 @@ export default function TestPresentation() {
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
-                            fontSize: "23px",
+                            fontSize: "clamp(16px, 1.6vw, 23px)",
                             lineHeight: "100%",
                             letterSpacing: "-0.025em",
                             fontVariationSettings: "'wdth' 85, 'wght' 500",
@@ -942,7 +942,7 @@ export default function TestPresentation() {
                     <td className="border-r border-gray-300 align-middle">
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
                         <span
-                          className="text-gray-50 rounded-lg pt-1 px-2 font-medium text-[23px] mt-1"
+                          className="text-gray-50 rounded-lg pt-1 px-2 font-medium text-[clamp(16px,1.8vw,23px)] mt-1"
                           style={{ backgroundColor: primaryColor, fontVariationSettings: "'wdth' 90, 'wght' 400", }}
                         >
                           Total Score
@@ -953,7 +953,7 @@ export default function TestPresentation() {
                       className="px-4 py-2 text-center align-middle"
                       style={{ width: "100px" }}
                     >
-                      <span className="px-3 py-1 text-[22px] rounded text-sm font-bold text-gray-900">
+                      <span className="px-3 py-1 text-[clamp(16px,1.8vw,22px)] rounded font-bold text-gray-900">
                         {currentCategoryScore}
                       </span>
                     </td>
