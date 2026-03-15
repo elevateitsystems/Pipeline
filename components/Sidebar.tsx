@@ -1217,7 +1217,7 @@ export default function Sidebar() {
 
       {/* Navigation - Scrollable section */}
       <nav
-        className=" flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar mt-3 xl:mt-4"
+        className=" flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar mt-5"
         style={{
           position: "relative",
           zIndex: 2,
@@ -1240,7 +1240,7 @@ export default function Sidebar() {
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-8 mb-2"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-6"
                   style={{
                     fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,

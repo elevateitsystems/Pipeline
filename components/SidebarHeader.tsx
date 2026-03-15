@@ -24,7 +24,7 @@ const SidebarHeader = ({
   secondaryColor,
 }: SidebarHeaderProps) => {
   return (
-    <div>
+    <>
       <div
         className="pt-[51px] pb-10 flex justify-center shrink-0"
         style={{
@@ -65,7 +65,7 @@ const SidebarHeader = ({
       <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
         <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" strokeMiterlimit="10" />
       </svg>
-    </div>
+    </ >
   );
 };
 

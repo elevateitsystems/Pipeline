@@ -424,7 +424,7 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-4 py-1">
-                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6 overflow-x-auto xl:overflow-x-hidden`}>
+                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}>
                       {!isInvitedUser && (
                         <>
                           <button

@@ -154,8 +154,8 @@ export default function TestResult() {
           {/* SUMMARY SCORE Section */}
           <div className="mb-6">
             <div className="flex justify-between items-start ">
-              <div className="xl:flex gap-20">
-                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-4 xl:mb-1">
+              <div className="2xl:flex gap-20">
+                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-4 2xl:mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
