@@ -149,13 +149,13 @@ export default function TestResult() {
       }}
     >
       {/* Right Main Content - 80% width */}
-      <div className=" h-full bg-white pb-54">
+      <div className=" h-full bg-white">
         <div className="max-w-full mx-auto px-6 py-4">
           {/* SUMMARY SCORE Section */}
           <div className="mb-6">
             <div className="flex justify-between items-start ">
-              <div className="flex gap-20">
-                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-1">
+              <div className="2xl:flex gap-20">
+                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-4 2xl:mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
@@ -390,7 +390,7 @@ export default function TestResult() {
                         ) => (
                           <div
                             key={index}
-                            className="w-full h-full px-4 py-3 border-2 border-gray-300 rounded-lg text-left min-h-20"
+                            className="w-full h-full px-4 py-3 border-2 bg-[rgba(239,239,239,0.40)] rounded-lg text-left min-h-20"
                           >
                             {step.type === "file" && step.fileUrl ? (
                               <div className="flex items-center gap-2">

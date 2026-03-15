@@ -659,7 +659,7 @@ export default function TestPresentation() {
 
         <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
           <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-            <p className=" text-[clamp(12px,1.2vw,17px)] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
+            <p className="text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
               GRADING SCALE (1-5)
             </p>
             <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
