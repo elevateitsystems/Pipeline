@@ -24,9 +24,9 @@ const SidebarHeader = ({
   secondaryColor,
 }: SidebarHeaderProps) => {
   return (
-    <div>
+    <>
       <div
-        className="py-11 flex justify-center shrink-0"
+        className="pt-[50px] xl:pt-[51px] pb-8 xl:pb-10 flex justify-center shrink-0"
         style={{
           position: "relative",
           zIndex: 2,
@@ -37,7 +37,7 @@ const SidebarHeader = ({
 
         {onResultPage ? (
           <div className="flex items-center gap-3 px-4">
-            <Image src={summary} alt="Logo" width={70} height={60} />
+            <Image src={summary} alt="Logo" width={70} height={60} className="h-[72px] w-auto" />
             <span className="text-white text-[1.94rem]">
               Summary Overview
             </span>
@@ -65,7 +65,7 @@ const SidebarHeader = ({
       <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
         <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" strokeMiterlimit="10" />
       </svg>
-    </div>
+    </ >
   );
 };
 

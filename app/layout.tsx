@@ -49,21 +49,24 @@ export default async function RootLayout({
           <UserProvider user={session}>
             <ThemeProvider>
               <BackgroundWrapper>
-                <ScalingWrapper>
-                  {session ? (
-                    <div className="flex h-full w-full">
-                      <Suspense fallback={<SidebarSkeleton />}>
+                {/* <ScalingWrapper> */}
+                {session ? (
+                  <div className="flex h-screen overflow-hidden">
+                    <Suspense fallback={<SidebarSkeleton />}>
+                      <div className="h-screen overflow-y-auto hide-scrollbar">
                         <ResponsiveSidebar />
-                      </Suspense>
-                      <main className="flex-1 ">{children}</main>
-                    </div>
-                  ) : (
-                    <main className="h-full w-full bg-[rgba(31,43,52,0.5)]">
-                      {/* <main className="h-full w-full "> */}
-                      {children}
-                    </main>
-                  )}
-                </ScalingWrapper>
+                      </div>
+                    </Suspense>
+                    <main className="flex-1 overflow-y-auto">{children}</main>
+                  </div>
+                ) : (
+                  // <main className="h-full w-full bg-[rgba(31,43,52,0.5)]">
+                  <main className="min-h-screen w-full bg-[rgba(31,43,52,0.5)]">
+                    {/* <main className="h-full w-full "> */}
+                    {children}
+                  </main>
+                )}
+                {/* </ScalingWrapper> */}
               </BackgroundWrapper>
               <Toaster
                 position="top-right"

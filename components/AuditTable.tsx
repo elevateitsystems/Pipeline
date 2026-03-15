@@ -226,7 +226,7 @@ const AuditTable = React.memo(function AuditTable({
                         handleQuestionChange(rowIndex, e.target.value)
                       }
                       disabled={!editableQuestions.has(rowIndex)}
-                      className="w-full bg-[#4569871A] px-2 sm:px-3 lg:px-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
+                      className="w-full bg-[#4569871A] pl-2 xl:pl-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70 pr-10 "
                       style={{
                         fontFamily: "var(--font-acumin), sans-serif",
                         fontWeight: 400,
@@ -263,10 +263,11 @@ const AuditTable = React.memo(function AuditTable({
                       {statusButtons.map((button, idx) => (
                         <div
                           key={button.label}
-                          className={`flex items-center gap-2 justify-center audit-status-button rounded-xl border text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} font-normal disabled:opacity-40`}
+                          className={`flex flex-1 items-center gap-2 justify-center audit-status-button rounded-xl border text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} font-normal disabled:opacity-40`}
                         >
                           <input
-                            className="w-[50px] sm:w-[60px] md:w-[180px] lg:w-[125px] xl:w-[110px]"
+                            id={`status-input-${rowIndex}-${idx}`}
+                            className="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus:border-none p-0 m-0 truncate"
                             type="text"
                             value={getOptionText(rowIndex, idx)}
                             onChange={(e) =>
@@ -288,7 +289,8 @@ const AuditTable = React.memo(function AuditTable({
                           />
                           <button
                             type="button"
-                            onClick={() =>
+                            onClick={() => {
+                              const isEnabling = !(editableStatus[rowIndex]?.has(idx) ?? false);
                               setEditableStatus((prev) => {
                                 const next: Record<number, Set<number>> = {
                                   ...prev,
@@ -303,9 +305,15 @@ const AuditTable = React.memo(function AuditTable({
                                 }
                                 next[rowIndex] = existing;
                                 return next;
-                              })
-                            }
-                            className={`hover:opacity-80 rounded cursor-pointer`}
+                              });
+
+                              if (isEnabling) {
+                                setTimeout(() => {
+                                  document.getElementById(`status-input-${rowIndex}-${idx}`)?.focus();
+                                }, 0);
+                              }
+                            }}
+                            className={`hover:opacity-80 rounded cursor-pointer shrink-0`}
                             style={{
                               color: button.textColor.startsWith("#")
                                 ? button.textColor

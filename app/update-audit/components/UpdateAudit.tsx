@@ -1241,17 +1241,17 @@ export default function UpdateAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">
+          <p className=" text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
             GRADING SCALE (1-5)
           </p>
-          <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
+          <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2.5 text-white rounded-tl-xl text-nowrap">
               1-2 URGENT ATTENTION
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2.5 text-white text-nowrap">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2.5 text-white rounded-tr-xl text-nowrap">
               5 EXCELLENT AUDIT
             </p>
           </div>
@@ -1300,18 +1300,18 @@ export default function UpdateAudit() {
               <FiEdit size={12} />
             </button>
           </div>
-          <div className="w-px h-9 bg-[#3b5163] mx-7"></div>
-          <div className="w-1/3 flex gap-3">
+          <div className="w-px h-9 bg-[#3b5163] mx-3 xl:mx-7"></div>
+          <div className="flex-1 xl:w-1/3 flex gap-2 xl:gap-3">
             <button
               onClick={() => router.push("/")}
-              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1 text-center"
+              className="px-2 xl:px-5 py-3 bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[14px] xl:text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1 text-center"
             >
               Back to List
             </button>
             <CustomButton
               variant="primary"
               size="md"
-              className="flex-1"
+              className="flex-1 px-2 xl:px-5 py-3 text-[14px] xl:text-[18px]"
               fullRounded={true}
               disabled={submitting || updateAuditMutation.isPending}
               onClick={handleUpdate}

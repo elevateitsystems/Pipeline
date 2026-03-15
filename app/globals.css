@@ -38,7 +38,7 @@
   body {
     height: 100%;
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
     /* Prevent scrolling and hide overflowing content */
     font-family: var(--font-acumin), sans-serif;
     letter-spacing: -0.01em;
@@ -88,6 +88,12 @@
   width: 300px;
 }
 
+@media (max-width: 1440px) {
+  .sidebar-width {
+    width: 250px;
+  }
+}
+
 @media (max-width: 639px) {
   .sidebar-profile-image {
     width: 160px !important;
@@ -97,7 +103,7 @@
 
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
-    width: 300px !important;
+    width: 250px !important;
   }
 
   /* Profile image larger at 1024px */

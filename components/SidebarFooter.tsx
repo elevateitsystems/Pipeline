@@ -21,7 +21,7 @@ const SidebarFooter = ({
   secondaryColor,
 }: SidebarFooterProps) => {
   return (
-    <div>
+    <div className="mt-4">
       {onResultPage ? (<><svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
         <path d="M0 0.750183H299.315" stroke="#1F2F3D" strokeWidth="1.50039" strokeMiterlimit="10" />
       </svg>
@@ -39,7 +39,7 @@ const SidebarFooter = ({
       >
         {onResultPage ? (
           <div
-            className="px-4 mt-6"
+            className="px-4 mt-4"
           // style={{ borderColor: secondaryColor || "#456987" }}
           >
             <div className="mt-4">
@@ -48,19 +48,19 @@ const SidebarFooter = ({
               </h3>
               <div className="space-y-4">
                 <div
-                  className="rounded-2xl h-[120px] p-3 text-center"
+                  className="rounded-2xl p-3 text-center"
                   style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] ">
+                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
                     This system transformed our tracking. Detailed scoring helps
                     identify urgent improvements.
                   </p>
                 </div>
                 <div
-                  className="rounded-2xl p-3 text-center h-[120px]"
+                  className="rounded-2xl p-3 text-center"
                   style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] font-normal">
+                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
                     Category-based assessments make it easy to focus and gain
                     insights for improvement.
                   </p>
@@ -92,7 +92,7 @@ const SidebarFooter = ({
             >
               {user.profileImageUrl ? (
                 <Image
-                  className="sidebar-profile-image w-[210px] h-[230px] object-cover cursor-pointer"
+                  className="sidebar-profile-image w-[200px] h-[200px] object-cover cursor-pointer"
                   src={user.profileImageUrl}
                   alt="Profile"
                   width={210}

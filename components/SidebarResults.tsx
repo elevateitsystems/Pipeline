@@ -48,7 +48,7 @@ const SidebarResults = ({
                 <div key={cs.categoryId} className="mb-4">
                   <div className="flex justify-between items-center mb-1">
                     <span
-                      className="text-white overflow-hidden text-[25px] text-nowrap"
+                      className="text-white overflow-hidden text-[25px] text-nowrap truncate"
                       style={{
                         fontFamily: "'Acumin Variable Concept', sans-serif",
                       }}

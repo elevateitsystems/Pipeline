@@ -79,7 +79,7 @@ export default function InvitedUsersPage() {
             <h1 className="text-[#2d3e50] text-2xl sm:text-3xl lg:text-[35px] font-normal mb-2">
               INVITED USERS
             </h1>
-            <p className="text-gray-600 text-sm sm:text-base lg:text-[25px] font-[300]">
+            <p className="text-gray-600 text-sm xl:text-[25px] font-light">
               View all users you have invited to join your audits. Track
               invitation status and manage your invites.
             </p>
@@ -98,20 +98,23 @@ export default function InvitedUsersPage() {
       {/* Empty State */}
       {invitations && invitations.length === 0 ? (
         <div className="flex-1 flex flex-col justify-center items-center py-4">
-          <Image
-            src={notFoundImg}
-            alt="No invitations"
-            width={380}
-            height={266}
-            style={{
-              objectFit: "contain",
-            }}
-            className="mb-6 invited-empty-image"
-          />
-          <p className="text-[#2D2D2D] mb-4 font-normal text-center uppercase invited-empty-title">
+          <div className="flex justify-center items-center h-[345px] w-[483px] overflow-hidden ">
+            <Image
+              src={notFoundImg}
+              alt="No invitations"
+              width={380}
+              height={266}
+              style={{
+                objectFit: "contain",
+              }}
+              className="h-full w-auto"
+            />
+          </div>
+          <p className="text-[#2D2D2D] mb-4 font-normal text-center uppercase invited-empty-title text-2xl sm:text-3xl lg:text-[35px] ">
             NO INVITATIONS SENT YET
           </p>
-          <p className="font-[300] text-center max-w-3xl text-gray-500 px-6 invited-empty-desc">
+          <p className="font-light text-center max-w-3xl text-gray-500 px-6 text-sm sm:text-lg xl:text-[25px]"
+          >
             When you invite team members to take an audit, their invitation
             status and details will be listed here.
           </p>

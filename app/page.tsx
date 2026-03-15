@@ -203,19 +203,22 @@ export default function Home() {
           >
             Hello, {user.name.split(" ")[0]}!
           </h1>
-          <div className="flex justify-center items-center h-[80vh]">
-            <div className="flex flex-col justify-center items-center ">
-              <Image
-                src={notFoundImg}
-                alt="Logo"
-                width={380}
-                height={266}
-                style={{
-                  width: "clamp(200px, 28vw, 480px)",
-                  height: "clamp(140px, 20vw, 366px)",
-                  objectFit: "contain",
-                }}
-              />
+          <div className="flex justify-center items-center min-h-[70vh]">
+            <div className="flex flex-col justify-center items-center">
+              <div className="flex justify-center items-center h-[345px] w-[483px] overflow-hidden ">
+                <Image
+                  src={notFoundImg}
+                  alt="Logo"
+                  width={380}
+                  height={266}
+                  style={{
+                    width: "clamp(200px, 28vw, 480px)",
+                    height: "clamp(140px, 20vw, 366px)",
+                    objectFit: "contain",
+                  }}
+                  className="h-full w-auto"
+                />
+              </div>
               <p
                 className="text-[#2D2D2D] mb-2 font-normal"
                 style={{ fontSize: "clamp(.5rem, 4vw, 2rem)" }}
@@ -223,7 +226,7 @@ export default function Home() {
                 NO AUDIT CREATED
               </p>
               <p
-                className="text-[20px] sm:text-[22px] xl:text-[26px] font-[300]"
+                className="text-[20px] sm:text-[22px] xl:text-[26px] font-light"
               >
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
@@ -261,7 +264,7 @@ export default function Home() {
       {/* Header Section */}
       <div className="mb-8">
         <div className="flex justify-between items-start mb-4">
-          <div>
+          <div className="flex-1">
             <h1
               className="text-[25px] lg:text-[30px] xl:text-[35px] font-normal"
               style={{
@@ -271,7 +274,7 @@ export default function Home() {
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-[20px] lg:text-[22px] xl:text-[25px]"
+              className="text-sm xl:text-[25px]"
               style={{
                 fontWeight: 300,
               }}
@@ -294,6 +297,7 @@ export default function Home() {
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
+                className="flex-1 font-normal text-[18px] xl:text-[23px]"
               >
                 Create New AUDIT
               </CustomButton>
@@ -305,10 +309,10 @@ export default function Home() {
       {/* Table */}
       <div className="border overflow-hidden">
         <table className="w-full">
-          <thead className="font-[500]">
+          <thead className="font-medium">
             <tr>
               <th
-                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -319,7 +323,7 @@ export default function Home() {
                 AUDIT Name
               </th>
               <th
-                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -330,7 +334,7 @@ export default function Home() {
                 Creation Date
               </th>
               <th
-                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -341,7 +345,7 @@ export default function Home() {
                 Audit Score
               </th>
               <th
-                className="px-4 py-2 font-[500] border-r text-left text-sm text-[#212121] border-b"
+                className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
@@ -367,7 +371,7 @@ export default function Home() {
                   }}
                 >
                   <td
-                    className="px-4 border-r py-4 font-[300] font-normal"
+                    className="px-4 border-r py-4 font-light xl:text-nowrap"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -380,7 +384,7 @@ export default function Home() {
                     {audit.title}
                   </td>
                   <td
-                    className="px-4 border-r py-4 font-[300] font-normal"
+                    className="px-4 border-r py-4 font-light"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
@@ -393,7 +397,7 @@ export default function Home() {
                     {formatDate(audit.createdAt)}
                   </td>
                   <td
-                    className="px-4 border-r py-4 font-[300]"
+                    className="px-4 border-r py-4 font-light"
                     style={
                       audit.latestScore !== undefined
                         ? { backgroundColor: scoreColor.bg }
@@ -402,7 +406,7 @@ export default function Home() {
                   >
                     {audit.latestScore !== undefined ? (
                       <span
-                        className="px-3 py-4 font-[300] text-center rounded font-medium"
+                        className="px-3 py-4 font-light text-center rounded"
                         style={{
                           color: scoreColor.text,
                           fontFamily: "'Acumin Variable Concept', sans-serif",
@@ -420,7 +424,7 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-4 py-1">
-                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6`}>
+                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}>
                       {!isInvitedUser && (
                         <>
                           <button
@@ -451,7 +455,7 @@ export default function Home() {
                           </button>
                           <CustomButton
                             variant="redLight"
-                            className="w-full text-center  py-2 lg:gap-3 xl:gap-1"
+                            className="w-full text-center py-2 gap-1"
                             size="sm"
                             fullRounded={false}
                             leftIcon={<Trash2 size={18} />}
@@ -476,7 +480,7 @@ export default function Home() {
                             `/test?presentationId=${audit.id}&category=1`,
                           )
                         }
-                        className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3"
+                        className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3 text-nowrap"
                         style={{
                           fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
@@ -486,8 +490,8 @@ export default function Home() {
                           fontVariationSettings: "'wdth' 85, 'wght' 400",
                         }}
                       >
-                        <Play size={18} className="" />
-                        Start Audit
+                        <Play size={18} className="size-4" />
+                        <span className="">Start Audit</span>
                       </button>
                       {!isInvitedUser && (
                         <button
@@ -502,7 +506,7 @@ export default function Home() {
                             fontVariationSettings: "'wdth' 85, 'wght' 400",
                           }}
                         >
-                          <Mail size={18} />
+                          <Mail size={18} className="relative -top-[2px]" />
                           Invite
                         </button>
                       )}

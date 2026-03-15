@@ -966,7 +966,7 @@ export default function SummarySection({
                     );
                   }}
                   placeholder="Recommendation"
-                  className="w-full h-[60px] min-h-[40px] p-2 text-sm text-black tracking-[0.4px] font-light border border-[#AAA] rounded-lg resize-none bg-[#4569871A] outline-none"
+                  className="w-full max-h-[80px] min-h-[40px] p-2 text-5 text-black tracking-[0.4px] font-light border border-[#AAA] rounded-lg resize-none bg-[#4569871A] outline-none"
                 />
               </div>
             ))}
