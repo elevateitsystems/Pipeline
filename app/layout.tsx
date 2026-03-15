@@ -53,7 +53,7 @@ export default async function RootLayout({
                 {session ? (
                   <div className="flex h-screen overflow-hidden">
                     <Suspense fallback={<SidebarSkeleton />}>
-                      <div className="h-screen overflow-y-auto">
+                      <div className="h-screen overflow-y-auto hide-scrollbar">
                         <ResponsiveSidebar />
                       </div>
                     </Suspense>
