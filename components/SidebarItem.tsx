@@ -117,9 +117,9 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={cn(`py-3 px-4 cursor-pointer flex items-center relative`,
+        className={cn(`py-2 px-3 cursor-pointer flex items-center relative`,
           isActive
-            ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] border-r-0"
+            ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] "
             : (isCategoryItem || isSummaryItem) && !useSecondary
               ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+1px)] rounded-l-[10px] border-r-0"
               : "rounded-l-[10px]",
@@ -137,7 +137,7 @@ const SidebarItem = memo(
             : useSecondary
               ? "2px solid #899AA9"
               : "none",
-          borderRight: "none",
+          // borderRight: "none",
           overflow: "visible",
         }}
       >
@@ -167,12 +167,12 @@ const SidebarItem = memo(
         )}
         {isEditing ? (
           <div
-            className={cn(`w-full h-full flex items-center justify-start gap-1.5 relative z-30 ${isActive ? "top-[2px]" : ""}`, isActive && useSecondary ? 'text-white' : '')}
+            className={cn(`w-full h-full flex items-center justify-start gap-1.5 relative z-30 top-[2px]}`, isActive && useSecondary ? 'text-white' : '')}
           >
             {canDrag && !isSummaryItem && (
               <span
                 onMouseDown={onMouseDownDrag}
-                className={cn('text-xl font-light select-none cursor-grab active:cursor-grabbing', isActive ? "text-black/40" : "text-white/40", isActive && useSecondary ? 'text-white' : '')}
+                className={cn('text-xl font-light select-none cursor-grab active:cursor-grabbing', isActive ? "text-black/40" : "text-white/40", isActive && useSecondary ? 'text-white' : '', 'relative -top-[2px]')}
               >
                 =
               </span>
@@ -180,7 +180,7 @@ const SidebarItem = memo(
             <button
               data-icon-picker-trigger
               onClick={onIconPickerTrigger}
-              className={`flex items-center gap-0 shrink-0 hover:bg-black/5 rounded py-1 transition-colors ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
+              className={`flex items-center gap-0 shrink-0 hover:bg-black/5 rounded py-1 transition-colors ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}  relative -top-[2px]`}
               style={{ color: "inherit" }}
             >
               <div className="flex items-center justify-center">
@@ -269,13 +269,13 @@ const SidebarItem = memo(
           </div>
         ) : (
           <div
-            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 ${isActive ? "top-[2px]" : ""} ${isActive && useSecondary ? 'text-white' : ''}`}
+            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 top-[2px] ${isActive && useSecondary ? 'text-white' : ''}`}
           >
             <div className={`flex-1 flex items-center justify-start`}>
               {canDrag && !isSummaryItem && (
                 <span
                   onMouseDown={onMouseDownDrag}
-                  className={`text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  `}>
+                  className={` text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  relative -top-[2px]`}>
                   =
                 </span>
               )}
@@ -283,7 +283,7 @@ const SidebarItem = memo(
                 (isCategoryItem && itemCategoryNumber !== null)) &&
                 (isCategoryItem || item.icon) && (
                   <div
-                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}`}
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''} relative -top-[2px]`}
                   >
                     {isCategoryItem &&
                       itemCategoryNumber !== null &&
@@ -313,7 +313,7 @@ const SidebarItem = memo(
             {isCategoryItem && itemCategoryNumber !== null && onEditClick && (
               <button
                 onClick={onEditClick}
-                className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? 'text-white' : ''}`}
+                className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? 'text-white' : ''} relative -top-[2px]`}
                 style={{ color: "inherit" }}
                 aria-label="Edit category name"
               >

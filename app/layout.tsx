@@ -51,11 +51,13 @@ export default async function RootLayout({
               <BackgroundWrapper>
                 {/* <ScalingWrapper> */}
                 {session ? (
-                  <div className="flex h-full w-full">
+                  <div className="flex h-screen overflow-hidden">
                     <Suspense fallback={<SidebarSkeleton />}>
-                      <ResponsiveSidebar />
+                      <div className="h-screen overflow-y-auto">
+                        <ResponsiveSidebar />
+                      </div>
                     </Suspense>
-                    <main className="flex-1 ">{children}</main>
+                    <main className="flex-1 overflow-y-auto">{children}</main>
                   </div>
                 ) : (
                   // <main className="h-full w-full bg-[rgba(31,43,52,0.5)]">

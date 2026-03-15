@@ -21,7 +21,7 @@ const SidebarFooter = ({
   secondaryColor,
 }: SidebarFooterProps) => {
   return (
-    <div className="mt-5">
+    <div className="mt-4">
       {onResultPage ? (<><svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
         <path d="M0 0.750183H299.315" stroke="#1F2F3D" strokeWidth="1.50039" strokeMiterlimit="10" />
       </svg>
@@ -39,7 +39,7 @@ const SidebarFooter = ({
       >
         {onResultPage ? (
           <div
-            className="px-4 mt-6"
+            className="px-4 mt-4"
           // style={{ borderColor: secondaryColor || "#456987" }}
           >
             <div className="mt-4">
@@ -92,7 +92,7 @@ const SidebarFooter = ({
             >
               {user.profileImageUrl ? (
                 <Image
-                  className="sidebar-profile-image w-[210px] h-[230px] object-cover cursor-pointer"
+                  className="sidebar-profile-image w-[200px] h-[200px] object-cover cursor-pointer"
                   src={user.profileImageUrl}
                   alt="Profile"
                   width={210}
