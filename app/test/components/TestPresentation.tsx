@@ -658,18 +658,18 @@ export default function TestPresentation() {
         )}
 
         <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
-          <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-            <p className=" text-[14px] xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
+          <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
+            <p className=" text-[14px] xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
               GRADING SCALE (1-5)
             </p>
             <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2.5 text-white rounded-tl-xl text-nowrap">
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tl-xl text-nowrap">
                 1-2 URGENT ATTENTION
               </p>
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2.5 text-white text-nowrap">
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2 pb-1 text-white text-nowrap">
                 3-4 AVERAGE AUDIT
               </p>
-              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2.5 text-white rounded-tr-xl text-nowrap">
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2 pb-1 text-white rounded-tr-xl text-nowrap">
                 5 EXCELLENT AUDIT
               </p>
             </div>
@@ -764,10 +764,10 @@ export default function TestPresentation() {
                     >
                       <td
                         className="border-r border-gray-300 text-center align-middle"
-                        style={{ width: "4 0px" }}
+                        style={{ width: "40px" }}
                       >
                         <span
-                          className="text-gray-700"
+                          className="text-[#212121]"
                           style={{
                             fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 500,
@@ -817,7 +817,7 @@ export default function TestPresentation() {
                             }
                           >
                             <SelectTrigger
-                              className="w-full text-sm font-normal text-gray-700 ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
+                              className="w-full text-sm font-normal text-[#212121] ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
                               style={{
                                 fontFamily:
                                   "'Acumin Variable Concept', sans-serif",
@@ -832,7 +832,7 @@ export default function TestPresentation() {
                             >
                               <SelectValue
                                 placeholder=""
-                                className="text-gray-700 font-normal"
+                                className="text-[#212121] font-normal"
                               />
                             </SelectTrigger>
                             <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-md">
@@ -977,7 +977,7 @@ export default function TestPresentation() {
                     }`}
                 >
                   <h3
-                    className="text-[23px] font-medium"
+                    className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
@@ -988,10 +988,10 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[22px] px-4  text-gray-700 leading-relaxed text-center pb-3"
+                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
-                      width: "455px",
+                      width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
@@ -1015,7 +1015,7 @@ export default function TestPresentation() {
                     }`}
                 >
                   <h3
-                    className="text-[23px] font-medium"
+                    className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
@@ -1027,10 +1027,10 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1 border-x border-[#E8E8E8] ">
                   <p
-                    className="text-[22px] px-4  text-gray-700 leading-relaxed text-center pb-3"
+                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
-                      width: "455px",
+                      width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
@@ -1052,7 +1052,7 @@ export default function TestPresentation() {
                     }`}
                 >
                   <h3
-                    className="text-[23px] font-medium"
+                    className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
@@ -1064,10 +1064,10 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[22px] px-4  text-gray-700 leading-relaxed text-center"
+                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
-                      width: "455px",
+                      width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
@@ -1090,7 +1090,7 @@ export default function TestPresentation() {
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
-                  fontSize: "21px",
+                  fontSize: "clamp(16px, 1.8vw, 21px)",
                   lineHeight: "100%",
                   letterSpacing: "-0.007em",
                   color: "#212121",
@@ -1101,37 +1101,40 @@ export default function TestPresentation() {
                 {currentCategoryScore} / {currentCategoryMaxScore})
               </h3>
               <div className="relative w-full h-4 flex items-center">
-                {/* Red section - 0-40% of score (top layer) */}
+                {/* Green section - 80-100% of score (last layer under yellow, goes all the way) */}
+                <div
+                  className="absolute inset-y-0 h-4 bg-[#2BD473] z-0 rounded-full"
+                  style={{
+                    left: "0",
+                    width: "100%",
+                  }}
+                ></div>
+                {/* Yellow section - 40-80% of score (middle layer over green) */}
+                <div
+                  className="absolute inset-y-0 h-4 bg-[#F7AF41] z-10 rounded-full"
+                  style={{ left: "0", width: "66.66%" }}
+                ></div>
+                {/* Red section - 0-40% of score (top layer over yellow) */}
                 <div
                   className="absolute inset-y-0 left-0 h-4 bg-[#F65355] rounded-full z-20"
-                  style={{ width: "33.33%", borderRadius: "9999px 0 0 9999px" }}
-                ></div>
-                {/* Yellow section - 40-80% of score (middle layer) */}
-                <div
-                  className="absolute inset-y-0 h-4 bg-[#F7AF41] z-10"
-                  style={{ left: "33.33%", width: "33.33%" }}
-                ></div>
-                {/* Green section - 80-100% of score (last 20% of max value) (bottom layer) */}
-                <div
-                  className="absolute inset-y-0 h-4 bg-[#2BD473] z-0"
-                  style={{
-                    left: "66.66%",
-                    width: "33.33%",
-                    borderRadius: "0 9999px 9999px 0",
-                  }}
+                  style={{ width: "33.33%" }}
                 ></div>
                 {/* Score indicator circle */}
                 <div
                   className="absolute transition-all duration-500 z-30"
                   style={{
-                    left: `${Math.min((currentCategoryScore / currentCategoryMaxScore) * 100, 100)}%`,
+                    left: `${currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4) 
+                      ? (currentCategoryScore / Math.floor(currentCategoryMaxScore * 0.4)) * 33.33
+                      : currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.8)
+                        ? 33.33 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.4)) / (Math.floor(currentCategoryMaxScore * 0.8) - Math.floor(currentCategoryMaxScore * 0.4))) * 33.33
+                        : 66.66 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.8)) / (currentCategoryMaxScore - Math.floor(currentCategoryMaxScore * 0.8))) * 33.34}%`,
                     top: "50%",
                     transform: "translate(-50%, -50%)",
                   }}
                 >
                   <div className="">
                     <div className=" z-30 h-10 bg-[#456987] rounded-[18px] flex items-center justify-center  shadow-lg">
-                      <span className="text-white font-medium text-[33px] pt-2 px-3">
+                      <span className="text-white font-medium text-[clamp(20px,2vw,33px)] pt-1 px-3">
                         {currentCategoryScore}
                       </span>
                     </div>
