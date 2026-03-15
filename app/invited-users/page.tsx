@@ -79,7 +79,7 @@ export default function InvitedUsersPage() {
             <h1 className="text-[#2d3e50] text-2xl sm:text-3xl lg:text-[35px] font-normal mb-2">
               INVITED USERS
             </h1>
-            <p className="text-gray-600 text-sm sm:text-lg xl:text-[25px] font-light">
+            <p className="text-gray-600 text-sm xl:text-[25px] font-light">
               View all users you have invited to join your audits. Track
               invitation status and manage your invites.
             </p>

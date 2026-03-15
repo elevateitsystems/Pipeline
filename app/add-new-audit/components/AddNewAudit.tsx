@@ -665,17 +665,17 @@ export default function AddNewAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className="text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium">
+          <p className=" text-[14px] xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
             GRADING SCALE (1-5)
           </p>
-          <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F65355] px-[38px] py-2.5 text-white rounded-tl-xl">
+          <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2.5 text-white rounded-tl-xl text-nowrap">
               1-2 URGENT ATTENTION
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#F7AF41] px-[38px] py-2.5 text-white ">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2.5 text-white text-nowrap">
               3-4 AVERAGE AUDIT
             </p>
-            <p className="w-full text-[17px] uppercase font-medium bg-[#209150] px-[38px] py-2.5 text-white rounded-tr-xl">
+            <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2.5 text-white rounded-tr-xl text-nowrap">
               5 EXCELLENT AUDIT
             </p>
           </div>
@@ -708,7 +708,7 @@ export default function AddNewAudit() {
               placeholder="Presentation Name"
               className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
-                fontFamily: "var(--font-acumin), sans-serif",
+                fontFamily: "var(--font-acumin),",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
@@ -717,25 +717,25 @@ export default function AddNewAudit() {
               }}
             />
           </div>
-          <div className="w-px h-9 bg-[#3b5163] mx-7"></div>
-          <div className="w-1/3 flex gap-3">
+          <div className="w-px h-9 bg-[#3b5163] mx-3 xl:mx-7"></div>
+          <div className="flex-1 xl:w-1/3 flex gap-2 xl:gap-3">
             <button
               onClick={() => router.push("/")}
-              className="px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1"
+              className="px-2 xl:px-5 py-3 bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[14px] xl:text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1"
             >
               Back to List
             </button>
             <CustomButton
               variant="primary"
               size="md"
-              className="flex-1"
+              className="flex-1 px-2 xl:px-5 py-3 text-[14px] xl:text-[18px]"
               fullRounded={true}
               disabled={createAuditMutation.isPending}
               onClick={handleCreate}
             >
               {createAuditMutation.isPending ? "Creating..." : "Create Audit"}
             </CustomButton>
-            <div className="flex items-center justify-center px-[20px] py-[12px] bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1">
+            <div className="flex items-center justify-center px-2 xl:px-5 py-3 bg-[#CECECE] hover:bg-[#CECECE]/80 transition-all duration-300 rounded-full text-[14px] xl:text-[18px] tracking-[0.352px] leading-normal cursor-pointer flex-1">
               <input
                 type="file"
                 accept=".csv,.xlsx,.xls"
@@ -1086,14 +1086,14 @@ function AuditTable({
                 onDragOver={(e) => handleRowDragOver(e, rowIndex)}
                 onDragLeave={handleRowDragLeave}
                 onDrop={(e) => handleRowDrop(e, rowIndex)}
-                className={`border-b border-gray-300 ${draggedRowIndex === rowIndex ? "opacity-50" : ""} ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
+                className={`border-b border-gray-300  ${dragOverRowIndex === rowIndex ? "border-t-4 border-t-blue-500" : ""} cursor-move`}
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
                   <div className="flex items-center justify-center gap-2 text-black">
                     <span className="select-none cursor-grab active:cursor-grabbing">
                       =
                     </span>
-                    <span className="font-[500] text-lg">{rowIndex}</span>
+                    <span className="font-medium text-base xl:text-lg">{rowIndex}</span>
                   </div>
                 </td>
                 <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
@@ -1107,7 +1107,7 @@ function AuditTable({
                     }
                     className="w-full bg-[#4569871A] px-2 sm:px-3 lg:px-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none"
                     style={{
-                      fontFamily: "var(--font-acumin), sans-serif",
+                      fontFamily: "var(--font-acumin),",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -1118,7 +1118,7 @@ function AuditTable({
                 </td>
                 <td className="audit-answer-col px-1 sm:px-1.5 lg:px-2 lg:py-3 sm:py-2 py-1.5 align-middle">
                   {isActive ? (
-                    <div className="flex gap-0.5 sm:gap-1 lg:gap-2 items-center justify-center">
+                    <div className="flex gap-1 xl:gap-2 items-center justify-center">
                       {statusButtons.map((button, idx) => (
                         <input
                           key={button.label}
@@ -1127,9 +1127,9 @@ function AuditTable({
                           onChange={(e) =>
                             setStatusValue(rowIndex, idx, e.target.value)
                           }
-                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1 lg:px-2 xl:px-4 min-w-[50px] py-1.5 sm:py-[8px] lg:py-[12px] xl:py-[13px] font-normal`}
+                          className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1.5 xl:px-4 min-w-[50px] py-2 xl:py-[13px] font-normal`}
                           style={{
-                            fontFamily: "var(--font-acumin), sans-serif",
+                            fontFamily: "var(--font-acumin),",
                             fontWeight: 400,
                             // fontSize: "18px",
                             lineHeight: "100%",

@@ -657,30 +657,21 @@ export default function TestPresentation() {
         )}
 
         <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
-          <p
-            className="font-medium uppercase line-clamp-1"
-            style={{
-              fontFamily: "'Acumin Variable Concept', sans-serif",
-              fontWeight: 500,
-              fontStyle: "normal",
-              fontSize: "17px",
-              lineHeight: "100%",
-              letterSpacing: "-0.027em",
-              color: "#212121",
-            }}
-          >
-            GRADING SCALE (1-5)
-          </p>
-          <div className="grid grid-cols-3 gap-[1.89px]">
-            <p className="w-full text-[16px] uppercase font-medium bg-[#F65355] px-[38px] py-1 text-white rounded-tl-xl line-clamp-1">
-              1-2 URGENT ATTENTION
+          <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
+            <p className=" text-[14px] xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
+              GRADING SCALE (1-5)
             </p>
-            <p className="w-full text-[16px] uppercase font-medium bg-[#F7AF41] px-[38px] py-1 text-white line-clamp-1">
-              3-4 AVERAGE AUDIT
-            </p>
-            <p className="w-full text-[16px] uppercase font-medium bg-[#209150] px-[38px] py-1 text-white rounded-tr-xl line-clamp-1  ">
-              5 EXCELLENT AUDIT
-            </p>
+            <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F65355] px-5 xl:px-[38px] py-2.5 text-white rounded-tl-xl text-nowrap">
+                1-2 URGENT ATTENTION
+              </p>
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#F7AF41] px-5 xl:px-[38px] py-2.5 text-white text-nowrap">
+                3-4 AVERAGE AUDIT
+              </p>
+              <p className="w-full text-[14px] xl:text-[17px] uppercase font-medium bg-[#209150] px-5 xl:px-[38px] py-2.5 text-white rounded-tr-xl text-nowrap">
+                5 EXCELLENT AUDIT
+              </p>
+            </div>
           </div>
         </div>
 

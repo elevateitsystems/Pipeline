@@ -77,7 +77,7 @@ export default function CustomButton({
       disabled={disabled || loading}
       {...props}
     >
-      {leftIcon ? <span className="inline-flex">{leftIcon}</span> : null}
+      {leftIcon ? <span className="inline-flex relative -top-[3px]">{leftIcon}</span> : null}
       <span>{loading ? "Please wait..." : children}</span>
       {rightIcon ? <span className="ml-2 inline-flex">{rightIcon}</span> : null}
     </button>

@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       to: email,
       subject: "Password Reset OTP - Pipeline Conversions",
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <div style="font-family: Arial,; padding: 20px; color: #333;">
           <h2 style="color: #2b4055;">Password Reset Request</h2>
           <p>You requested to reset your password for your Pipeline Conversions account.</p>
           <p>Your 6-digit OTP is:</p>
