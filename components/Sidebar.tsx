@@ -1217,7 +1217,7 @@ export default function Sidebar() {
 
       {/* Navigation - Scrollable section */}
       <nav
-        className=" flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar mt-[22px]"
+        className=" flex-1 overflow-y-auto overflow-x-hidden hide-scrollbar xl:mt-[20px]"
         style={{
           position: "relative",
           zIndex: 2,
