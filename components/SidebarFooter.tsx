@@ -48,19 +48,19 @@ const SidebarFooter = ({
               </h3>
               <div className="space-y-4">
                 <div
-                  className="rounded-2xl h-[120px] p-3 text-center"
+                  className="rounded-2xl p-3 text-center"
                   style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] ">
+                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
                     This system transformed our tracking. Detailed scoring helps
                     identify urgent improvements.
                   </p>
                 </div>
                 <div
-                  className="rounded-2xl p-3 text-center h-[120px]"
+                  className="rounded-2xl p-3 text-center"
                   style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] font-normal">
+                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
                     Category-based assessments make it easy to focus and gain
                     insights for improvement.
                   </p>

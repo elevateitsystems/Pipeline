@@ -37,7 +37,7 @@ const SidebarHeader = ({
 
         {onResultPage ? (
           <div className="flex items-center gap-3 px-4">
-            <Image src={summary} alt="Logo" width={70} height={60} />
+            <Image src={summary} alt="Logo" width={70} height={60} className="h-[72px] w-auto" />
             <span className="text-white text-[1.94rem]">
               Summary Overview
             </span>
