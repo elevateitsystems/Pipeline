@@ -505,7 +505,7 @@ export default function Home() {
                             fontVariationSettings: "'wdth' 85, 'wght' 400",
                           }}
                         >
-                          <Mail size={18} />
+                          <Mail size={18} className="relative -top-[2px]" />
                           Invite
                         </button>
                       )}
