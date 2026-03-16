@@ -409,7 +409,7 @@ export default function TestPresentation() {
     score: number;
     label: string;
   }) => {
-    const size = 78.21546;
+    const size = 70;
     const center = size / 2;
     const radius = 39.108;
     const circumference = 2 * Math.PI * radius;
@@ -501,7 +501,7 @@ export default function TestPresentation() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
@@ -520,7 +520,7 @@ export default function TestPresentation() {
             })}
             {/* Summary Icon */}
             <div
-              className="flex flex-col items-center cursor-pointer"
+              className="flex -mt-2 flex-col items-center cursor-pointer"
               onClick={async () => {
                 if (
                   typeof window !== "undefined" &&
@@ -639,7 +639,7 @@ export default function TestPresentation() {
                 />
               </div>
               <p
-                className="pb-3 text-black text-center font-medium max-w-[100px] leading-tight"
+                className="pb-1 text-black text-center font-medium max-w-[100px] leading-tight"
                 style={{
                   fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
@@ -741,9 +741,9 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="test-main audit-content-padding pt-3 bg-white flex-1 flex flex-col pb-12">
+      <main className="test-main audit-content-padding pt-3 bg-white flex-1 overflow-y-auto min-h-0 flex flex-col pb-12">
         <div className="flex-1 flex flex-col">
-          <div className="w-full min-h-[594px]">
+          <div className="w-full">
             <table
               className="w-full border-collapse border-gray-300"
               style={{ tableLayout: "fixed" }}
@@ -965,7 +965,7 @@ export default function TestPresentation() {
 
           {/* Score Interpretation Blocks */}
           {currentCategoryData && currentCategoryMaxScore > 0 && (
-            <div className="relative bottom-4 grid grid-cols-3 gap-0 sm:pt-4 pt-0 2xl:pt-0">
+            <div className="relative bottom-4 grid grid-cols-3 gap-0 pt-4">
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
@@ -988,7 +988,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
@@ -996,8 +996,7 @@ export default function TestPresentation() {
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
                   >
-                    This score indicates areas requiring urgent attention.
-                    Critical gaps have been identified and must be prioritized
+                    Urgent attention is required. Prioritize critical gaps
                     immediately to enhance overall performance and compliance.
                   </p>
                 </div>
@@ -1027,7 +1026,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1 border-x border-[#E8E8E8] ">
                   <p
-                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
@@ -1035,9 +1034,8 @@ export default function TestPresentation() {
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
                   >
-                    This score indicates an average level of performance with
-                    significant room for enhancement. Opportunities exist to
-                    strengthen processes much better outcomes.
+                    This average score shows significant room for enhancement.
+                    Strengthen processes to achieve much better outcomes.
                   </p>
                 </div>
               </div>
@@ -1064,7 +1062,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,22px)] px-4  text-[#212121] leading-relaxed text-center"
+                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center"
                     style={{
                       fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
@@ -1072,9 +1070,8 @@ export default function TestPresentation() {
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
                   >
-                    This score demonstrates excellent performance and strong
-                    compliance. Outstanding results with well-established
-                    processes and best practices in place and best outcomes.
+                    Demonstrates excellent performance and strong compliance.
+                    Well-established processes and best practices yield outstanding results.
                   </p>
                 </div>
               </div>
