@@ -22,13 +22,40 @@ const SidebarFooter = ({
 }: SidebarFooterProps) => {
   return (
     <div className="mt-4">
-      {onResultPage ? (<><svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke="#1F2F3D" strokeWidth="1.50039" strokeMiterlimit="10" />
-      </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-          <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" strokeMiterlimit="10" />
-        </svg></>) : ''
-      }
+      {onResultPage ? (
+        <>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="300"
+            height="2"
+            viewBox="0 0 300 2"
+            fill="none"
+          >
+            <path
+              d="M0 0.750183H299.315"
+              stroke="#1F2F3D"
+              strokeWidth="1.50039"
+              strokeMiterlimit="10"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="300"
+            height="2"
+            viewBox="0 0 300 2"
+            fill="none"
+          >
+            <path
+              d="M0 0.750183H299.315"
+              stroke={secondaryColor}
+              strokeWidth="1.50039"
+              strokeMiterlimit="10"
+            />
+          </svg>
+        </>
+      ) : (
+        ""
+      )}
       <div
         className="pt-2 mt-auto overflow-hidden shrink-0"
         style={{
@@ -40,27 +67,31 @@ const SidebarFooter = ({
         {onResultPage ? (
           <div
             className="px-4 mt-4"
-          // style={{ borderColor: secondaryColor || "#456987" }}
+            // style={{ borderColor: secondaryColor || "#456987" }}
           >
             <div className="mt-4">
-              <h3 className="text-[27px] text-white mb-3  text-center">
+              <h3 className="text-[20px] 2xl:text-[27px] text-white mb-3  text-center">
                 Testimonials
               </h3>
               <div className="space-y-4">
                 <div
                   className="rounded-2xl p-3 text-center"
-                  style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
+                  style={{
+                    backgroundColor: (secondaryColor || "#456987") + "80",
+                  }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
+                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[22px] font-normal">
                     This system transformed our tracking. Detailed scoring helps
                     identify urgent improvements.
                   </p>
                 </div>
                 <div
                   className="rounded-2xl p-3 text-center"
-                  style={{ backgroundColor: (secondaryColor || "#456987") + "80" }}
+                  style={{
+                    backgroundColor: (secondaryColor || "#456987") + "80",
+                  }}
                 >
-                  <p className="text-[#E8E8E8] text-[16px] xl:text-[20px] font-normal">
+                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[22px] font-normal">
                     Category-based assessments make it easy to focus and gain
                     insights for improvement.
                   </p>
@@ -136,7 +167,7 @@ const SidebarFooter = ({
           </>
         )}
       </div>
-    </div >
+    </div>
   );
 };
 

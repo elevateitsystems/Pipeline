@@ -32,18 +32,18 @@ export default function TestResult() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-        auditData as Presentation & {
-          summary?: {
-            categoryRecommendations?:
-            | string
-            | Array<{ categoryId: string; recommendation: string }>;
-            nextSteps?:
-            | string
-            | Array<{ type: string; content: string; fileUrl?: string }>;
-            overallDetails?: string | null;
-          } | null;
-        }
-      )?.summary || null
+          auditData as Presentation & {
+            summary?: {
+              categoryRecommendations?:
+                | string
+                | Array<{ categoryId: string; recommendation: string }>;
+              nextSteps?:
+                | string
+                | Array<{ type: string; content: string; fileUrl?: string }>;
+              overallDetails?: string | null;
+            } | null;
+          }
+        )?.summary || null
       : null;
 
   useEffect(() => {
@@ -155,18 +155,18 @@ export default function TestResult() {
           <div className="mb-6">
             <div className="flex justify-between items-start ">
               <div className="2xl:flex gap-20">
-                <h1 className="text-[2rem] text-nowrap text-[#2D2D2D] mb-4 2xl:mb-1">
+                <h1 className="text-[1.75rem] 2xl:text-[2rem] text-nowrap text-[#2D2D2D] mb-3 2xl:mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
-                  <h2 className="text-[2rem]  text-[#2B4055] mb-1">
+                  <h2 className="text-[1.60rem] 2xl:text-[2rem]  text-[#2B4055] mb-1">
                     YOUR SALES CONVERSION SCORE
                   </h2>
-                  <p className="text-gray-600 text-[1.56rem] leading-8">
-                    Your overall performance score based on the audit
-                    . This score reflects your current standing across
-                    all evaluated categories and provides insight into your
-                    sales conversion effectiveness.
+                  <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-8 mb-3 2xl:mb-0">
+                    Your overall performance score based on the audit . This
+                    score reflects your current standing across all evaluated
+                    categories and provides insight into your sales conversion
+                    effectiveness.
                   </p>
                 </div>
               </div>
@@ -247,7 +247,7 @@ export default function TestResult() {
 
             {/* AUDIT TOTAL SCORE Progress Bar */}
             <div className="relative rounded-lg">
-              <h3 className="text-[21px] font-semibold text-gray-800  uppercase">
+              <h3 className="text-[1.20rem] 2xl:text-[21px] font-semibold text-gray-800  uppercase">
                 AUDIT TOTAL SCORE ({totalScore} / {totalMaxScore})
               </h3>
               <div className="relative w-full h-[18px] mt-2 flex items-center rounded-full ">
@@ -276,9 +276,7 @@ export default function TestResult() {
                   }}
                 >
                   <div className="px-2 h-[42px] bg-[#456987] rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white text-[2rem]">
-                      {totalScore}
-                    </span>
+                    <span className="text-white text-[2rem]">{totalScore}</span>
                   </div>
                 </div>
               </div>
@@ -287,7 +285,7 @@ export default function TestResult() {
 
           {/* VISUAL BREAKDOWN RESULTS Section */}
           <div className="mb-3 border-t pt-4 border-gray-300">
-            <h2 className="text-[2rem] text-[#2D2D2D] mb-2">
+            <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-2">
               VISUAL BREAKDOWN RESULTS
             </h2>
             <div className="bg-[#EFEFEF] p-5 px-6 rounded-lg">
@@ -325,7 +323,7 @@ export default function TestResult() {
                   );
                 })}
               </div>
-              <p className="text-gray-600 text-[20px] leading-relaxed">
+              <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
                 The visual breakdown above represents your performance across
                 the top four categories. Each category is color-coded based on
                 your score: red indicates areas requiring urgent attention,
@@ -341,7 +339,7 @@ export default function TestResult() {
           <div className="grid grid-cols-2 gap-6 mb-2 border-y py-2 border-gray-300">
             {/* Left Column - IMPROVEMENT RECOMMENDATIONS */}
             <div className="border-r pr-6 border-gray-300">
-              <h2 className="text-[2rem] text-[#2D2D2D] mb-4">
+              <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-4">
                 IMPROVEMENT RECOMMENDATIONS
               </h2>
               <div className="space-y-4">
@@ -354,8 +352,11 @@ export default function TestResult() {
                       key={cs.categoryId}
                       className={`pb-1 ${index === lastThreeCategories.length - 1 ? "" : "border-b min-h-20 line-clamp-3 border-gray-300"}`}
                     >
-                      <p className="text-gray-600 text-[20px] leading-relaxed">
-                        <span className="text-[#2B4055] font-bold">{cs.categoryName}:</span> {recommendation ||
+                      <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
+                        <span className="text-[#2B4055] font-bold">
+                          {cs.categoryName}:
+                        </span>{" "}
+                        {recommendation ||
                           "No specific recommendations available for this category."}
                       </p>
                     </div>
@@ -366,7 +367,7 @@ export default function TestResult() {
 
             {/* Right Column - WHAT ARE THE NEXT STEPS? */}
             <div>
-              <h2 className="text-[2rem] text-[#2D2D2D] mb-3">
+              <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-3">
                 WHAT ARE THE NEXT STEPS?
               </h2>
               <div className="space-y-3 mb-3 grid grid-cols-3 gap-4">
@@ -377,9 +378,7 @@ export default function TestResult() {
                       : summaryData.nextSteps
                     : [];
                   return Array.isArray(nextSteps) && nextSteps.length > 0
-                    ? nextSteps
-                      .slice(0, 3)
-                      .map(
+                    ? nextSteps.slice(0, 3).map(
                         (
                           step: {
                             type: string;
@@ -412,18 +411,18 @@ export default function TestResult() {
                         ),
                       )
                     : [1, 2, 3].map((step) => (
-                      <div
-                        key={step}
-                        className="w-full px-2 border-2 border-gray-300 rounded-lg h-28 flex items-center justify-center"
-                      >
-                        <p className="text-[20px] text-gray-400 font-light">
-                          Enter step {step} details
-                        </p>
-                      </div>
-                    ));
+                        <div
+                          key={step}
+                          className="w-full px-2 border-2 border-gray-300 rounded-lg h-28 flex items-center justify-center"
+                        >
+                          <p className="text-[17px] 2xl:text-[22px] text-gray-400 font-light">
+                            Enter step {step} details
+                          </p>
+                        </div>
+                      ));
                 })()}
               </div>
-              <p className="text-gray-600 text-[20px] leading-relaxed">
+              <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
                 {summaryData?.overallDetails ||
                   "Based on your audit results, focus on implementing the recommended improvements in the areas with the lowest scores. Start with the most critical categories that require urgent attention, then work through the next steps systematically. Regular follow-up assessments will help you track your progress and ensure continuous improvement across all evaluated areas."}
               </p>
@@ -431,17 +430,17 @@ export default function TestResult() {
           </div>
 
           {/* Want to Skip the Line? Section */}
-          <div className="text-center bg-[#EFEFEF] py-4 mt-4 rounded-xl">
-            <h2 className="text-[28px] font-semibold text-[#2D2D2D] mb-2">
+          <div className="text-center bg-[#EFEFEF] py-3 2xl:py-4 mt-2 2xl:mt-4 rounded-xl">
+            <h2 className="text-[1.5rem] 2xl:text-[2rem] font-semibold text-[#2D2D2D] mb-2">
               Want to Skip the Line?
             </h2>
-            <p className="text-gray-600 text-[20px] leading-relaxed mb-3 max-w-7xl mx-auto">
+            <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed mb-3 max-w-7xl mx-auto">
               For action-takers ready to eliminate their conversion leaks
               immediately, schedule a strategy call. We&apos;ll map out how your
               personalized Pipeline Conversion Kit could look-so you can start
               closing confidently without rewriting your offer
             </p>
-            <CustomButton className="h-8 px-6 inline-block text-black font-base hover:bg-[#F7AF41]/90 transition-colors text-[23px] rounded-xl">
+            <CustomButton className="h-7 2xl:h-8 px-5 2xl:px-6 inline-block text-black font-base hover:bg-[#F7AF41]/90 transition-colors text-[18px] 2xl:text-[23px] rounded-xl">
               Book Your Call Now
             </CustomButton>
           </div>
