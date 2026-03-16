@@ -1,10 +1,8 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { SessionUser } from "@/lib/session";
-import { StaticImageData } from "next/image";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import Image, { StaticImageData } from "next/image";
 
 interface SidebarHeaderProps {
   onResultPage: boolean;
@@ -26,19 +24,23 @@ const SidebarHeader = ({
   return (
     <>
       <div
-        className="pt-[50px] xl:pt-[51px] pb-8 xl:pb-10 flex justify-center shrink-0"
+        className="pt-10 2xl:pt-[51px] pb-7 2xl:pb-10 flex justify-center shrink-0"
         style={{
           position: "relative",
           zIndex: 2,
           // borderColor: "#456987",
         }}
       >
-
-
         {onResultPage ? (
           <div className="flex items-center gap-3 px-4">
-            <Image src={summary} alt="Logo" width={70} height={60} className="h-[72px] w-auto" />
-            <span className="text-white text-[1.94rem]">
+            <Image
+              src={summary}
+              alt="Logo"
+              width={70}
+              height={60}
+              className="2xl:h-[72px] h-[50px] w-auto"
+            />
+            <span className="text-white text-[1.5rem] 2xl:text-[1.94rem]">
               Summary Overview
             </span>
           </div>
@@ -59,13 +61,35 @@ const SidebarHeader = ({
         )}
       </div>
 
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke="#1F2F3D" strokeWidth="1.50039" strokeMiterlimit="10" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="300"
+        height="2"
+        viewBox="0 0 300 2"
+        fill="none"
+      >
+        <path
+          d="M0 0.750183H299.315"
+          stroke="#1F2F3D"
+          strokeWidth="1.50039"
+          strokeMiterlimit="10"
+        />
       </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="2" viewBox="0 0 300 2" fill="none">
-        <path d="M0 0.750183H299.315" stroke={secondaryColor} strokeWidth="1.50039" strokeMiterlimit="10" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="300"
+        height="2"
+        viewBox="0 0 300 2"
+        fill="none"
+      >
+        <path
+          d="M0 0.750183H299.315"
+          stroke={secondaryColor}
+          strokeWidth="1.50039"
+          strokeMiterlimit="10"
+        />
       </svg>
-    </ >
+    </>
   );
 };
 
