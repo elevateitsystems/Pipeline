@@ -741,7 +741,7 @@ export default function TestPresentation() {
           </p>
         </div>
       </header>
-      <main className="test-main audit-content-padding pt-3 bg-white flex-1 overflow-y-auto min-h-0 flex flex-col pb-12">
+      <main className="test-main audit-content-padding pt-3 bg-white flex-1 overflow-y-auto min-h-0 flex flex-col">
         <div className="flex-1 flex flex-col">
           <div className="w-full">
             <table
@@ -1131,7 +1131,7 @@ export default function TestPresentation() {
                 >
                   <div className="">
                     <div className=" z-30 h-10 bg-[#456987] rounded-[18px] flex items-center justify-center  shadow-lg">
-                      <span className="text-white font-medium text-[clamp(20px,2vw,33px)] pt-1 px-3">
+                      <span className="text-white font-medium text-[clamp(20px,2vw,28px)] pt-1 px-3">
                         {currentCategoryScore}
                       </span>
                     </div>
