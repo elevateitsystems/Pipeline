@@ -567,7 +567,11 @@ export default function Sidebar() {
     categoryNumber: number,
     newName: string,
   ) => {
-    const finalName = newName.trim() || `Category ${categoryNumber}`;
+    let finalName = newName.trim() || `Category ${categoryNumber}`;
+    const words = finalName.split(/\s+/);
+    if (words.length > 2) {
+      finalName = words.slice(0, 2).join(" ");
+    }
 
     // Update state
     setCategoryNames((prev) => ({ ...prev, [categoryNumber]: finalName }));
@@ -1362,7 +1366,7 @@ export default function Sidebar() {
 
                 return (
                   <SidebarItem
-                    key={item.name}
+                    key={item.href}
                     item={item}
                     isActive={isActive}
                     isEditing={isEditing}

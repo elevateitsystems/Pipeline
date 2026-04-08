@@ -47,7 +47,7 @@ export default function AddNewAudit() {
           );
           setSessionStorageCategories(categories);
         }
-      } catch { }
+      } catch {}
     }
   };
 
@@ -75,7 +75,7 @@ export default function AddNewAudit() {
           setTitle(parsed.title);
         }
       }
-    } catch { }
+    } catch {}
   }, []);
 
   // Hydrate category name and icon from sessionStorage on mount or category change
@@ -238,7 +238,7 @@ export default function AddNewAudit() {
               merged.categories = prev.categories;
           }
         }
-      } catch { }
+      } catch {}
     }
 
     const trimmedTitle = title.trim();
@@ -430,19 +430,19 @@ export default function AddNewAudit() {
               options:
                 Array.isArray(q.options) && q.options.length === 5
                   ? q.options.map((opt) => ({
-                    text: opt.text.trim(),
-                    points: opt.points,
-                  }))
+                      text: opt.text.trim(),
+                      points: opt.points,
+                    }))
                   : [
-                    "Very Minimal",
-                    "Just Starting",
-                    "Good progress",
-                    "Excellent",
-                    "Very Excellent",
-                  ].map((text, i) => ({
-                    text: text,
-                    points: i + 1,
-                  })),
+                      "Very Minimal",
+                      "Just Starting",
+                      "Good progress",
+                      "Excellent",
+                      "Very Excellent",
+                    ].map((text, i) => ({
+                      text: text,
+                      points: i + 1,
+                    })),
             }))
             .filter((q) => q.text.length > 0);
 
@@ -481,7 +481,9 @@ export default function AddNewAudit() {
           // Check for category recommendations
           const recMap = new Map();
           if (Array.isArray(parsed.categoryRecommendations)) {
-            parsed.categoryRecommendations.forEach((r: any) => recMap.set(r.categoryId, r.recommendation));
+            parsed.categoryRecommendations.forEach((r: any) =>
+              recMap.set(r.categoryId, r.recommendation),
+            );
           }
 
           // Filter active categories (same logic as 'categories' variable but keeping IDs)
@@ -489,7 +491,7 @@ export default function AddNewAudit() {
             .map((cat, index) => ({ ...cat, originalIndex: index })) // Keep original index for temp ID generation
             .filter((cat, index) => index < 7)
             .filter((cat) =>
-              cat.questions.some((q) => q.text && q.text.trim().length > 0)
+              cat.questions.some((q) => q.text && q.text.trim().length > 0),
             );
 
           const missingRecs = activeCategoriesWithIds.some((cat) => {
@@ -499,7 +501,9 @@ export default function AddNewAudit() {
           });
 
           if (missingRecs) {
-            toast.error("Please fill the summary recommendations for all categories");
+            toast.error(
+              "Please fill the summary recommendations for all categories",
+            );
             return;
           }
 
@@ -695,8 +699,8 @@ export default function AddNewAudit() {
           {/* <p className="audit-answer-col text-[22px] text-white capitalize font-500 tracking-[0.352px] leading-normal font-medium text-center">
             score
           </p> */}
-        </div >
-      </header >
+        </div>
+      </header>
 
       <main className="audit-content-padding pt-5 bg-white overflow-y-auto">
         <div className="flex gap items-center justify-between mb-4">
@@ -747,7 +751,7 @@ export default function AddNewAudit() {
               <label htmlFor="auditUpload">Upload File</label>
             </div>
           </div>
-        </div >
+        </div>
 
         {currentCategory === 8 ? (
           <SummarySection
@@ -766,10 +770,9 @@ export default function AddNewAudit() {
               }
             />
           </div>
-        )
-        }
-      </main >
-    </div >
+        )}
+      </main>
+    </div>
   );
 }
 
@@ -870,7 +873,7 @@ function AuditTable({
         if (hasQ || hasS) rowsToActivate.add(i);
       }
       setActiveRows(rowsToActivate);
-    } catch { }
+    } catch {}
   }, [currentCategory]);
 
   useEffect(() => {
@@ -915,7 +918,7 @@ function AuditTable({
           sessionStorage.setItem(key, JSON.stringify(row));
           onStatusChange?.(rowIndex, row);
         }
-      } catch { }
+      } catch {}
 
       return next;
     });
@@ -933,7 +936,7 @@ function AuditTable({
           value,
         );
       }
-    } catch { }
+    } catch {}
 
     // Auto-add options for this question if not present yet, using current status labels (defaults)
     if (!statusLabels[rowIndex] || statusLabels[rowIndex].length !== 5) {
@@ -946,7 +949,7 @@ function AuditTable({
             JSON.stringify(defaults),
           );
         }
-      } catch { }
+      } catch {}
       onStatusChange?.(rowIndex, defaults);
     }
   };
@@ -1024,7 +1027,7 @@ function AuditTable({
             );
           }
         }
-      } catch { }
+      } catch {}
     });
 
     setQuestions(newQuestions);
@@ -1093,12 +1096,15 @@ function AuditTable({
                     <span className="select-none cursor-grab active:cursor-grabbing">
                       =
                     </span>
-                    <span className="font-medium text-base xl:text-lg">{rowIndex}</span>
+                    <span className="font-medium text-base xl:text-lg">
+                      {rowIndex}
+                    </span>
                   </div>
                 </td>
                 <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
                   <input
                     type="text"
+                    maxLength={65}
                     value={questions[rowIndex] || ""}
                     placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                     onClick={() => handleQuestionClick(rowIndex)}

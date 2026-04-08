@@ -4,6 +4,7 @@ import React, { memo, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { FiEdit } from "react-icons/fi";
 import IconPicker from "./IconPicker";
+import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 
 interface SidebarItemProps {
@@ -108,6 +109,26 @@ const SidebarItem = memo(
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
+    const [inputValue, setInputValue] = React.useState(getCategoryName(itemCategoryNumber as number));
+
+    useEffect(() => {
+      setInputValue(getCategoryName(itemCategoryNumber as number));
+    }, [isEditing, itemCategoryNumber, getCategoryName]);
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      const words = value.trim().split(/\s+/);
+      if (words.length <= 2) {
+        setInputValue(value);
+      } else {
+        // If it's the 3rd word being started (trailing space after 2nd word),
+        // or a 3rd word pasted, we truncate to 2 words.
+        const truncated = words.slice(0, 2).join(" ");
+        setInputValue(truncated);
+        toast.error("Category name restricted to 2 words");
+      }
+    };
+
     return (
       <div
         draggable={canDrag && !isSummaryItem}
@@ -195,14 +216,15 @@ const SidebarItem = memo(
             <input
               ref={inputRef}
               type="text"
-              defaultValue={getCategoryName(itemCategoryNumber as number)}
+              value={inputValue}
+              onChange={handleNameChange}
               onBlur={(e) => {
                 if (itemCategoryNumber !== null) {
                   const isIconTrigger = (
                     e.relatedTarget as HTMLElement
                   )?.closest("[data-icon-picker-trigger]");
 
-                  onCategoryNameUpdate(e.target.value);
+                  onCategoryNameUpdate(inputValue);
 
                   if (!isIconTrigger) {
                     setEditingCategory(null);
@@ -212,7 +234,7 @@ const SidebarItem = memo(
               onKeyDown={(e) => {
                 if (itemCategoryNumber !== null) {
                   if (e.key === "Enter") {
-                    onCategoryNameUpdate(e.currentTarget.value);
+                    onCategoryNameUpdate(inputValue);
                     setEditingCategory(null);
                   } else if (e.key === "Escape") {
                     setEditingCategory(null);

@@ -219,6 +219,7 @@ const AuditTable = React.memo(function AuditTable({
                   <div className="relative">
                     <input
                       type="text"
+                      maxLength={65}
                       value={getQuestionText(rowIndex)}
                       placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                       onClick={() => handleQuestionClick(rowIndex)}
@@ -290,7 +291,9 @@ const AuditTable = React.memo(function AuditTable({
                           <button
                             type="button"
                             onClick={() => {
-                              const isEnabling = !(editableStatus[rowIndex]?.has(idx) ?? false);
+                              const isEnabling = !(
+                                editableStatus[rowIndex]?.has(idx) ?? false
+                              );
                               setEditableStatus((prev) => {
                                 const next: Record<number, Set<number>> = {
                                   ...prev,
@@ -309,7 +312,11 @@ const AuditTable = React.memo(function AuditTable({
 
                               if (isEnabling) {
                                 setTimeout(() => {
-                                  document.getElementById(`status-input-${rowIndex}-${idx}`)?.focus();
+                                  document
+                                    .getElementById(
+                                      `status-input-${rowIndex}-${idx}`,
+                                    )
+                                    ?.focus();
                                 }, 0);
                               }
                             }}
