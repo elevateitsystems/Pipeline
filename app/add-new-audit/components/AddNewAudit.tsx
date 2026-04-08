@@ -1104,7 +1104,7 @@ function AuditTable({
                 <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
                   <input
                     type="text"
-                    maxLength={65}
+                    maxLength={66}
                     value={questions[rowIndex] || ""}
                     placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                     onClick={() => handleQuestionClick(rowIndex)}

@@ -219,7 +219,7 @@ const AuditTable = React.memo(function AuditTable({
                   <div className="relative">
                     <input
                       type="text"
-                      maxLength={65}
+                      maxLength={66}
                       value={getQuestionText(rowIndex)}
                       placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                       onClick={() => handleQuestionClick(rowIndex)}
