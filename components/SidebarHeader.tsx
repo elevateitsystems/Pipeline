@@ -32,17 +32,19 @@ const SidebarHeader = ({
         }}
       >
         {onResultPage ? (
-          <div className="flex items-center gap-3 px-4">
-            <Image
-              src={summary}
-              alt="Logo"
-              width={70}
-              height={60}
-              className="2xl:h-[72px] h-[50px] w-auto"
-            />
-            <span className="text-white text-[1.5rem] 2xl:text-[1.94rem]">
-              Summary Overview
-            </span>
+          <div className="flex justify-center px-4">
+            <div className="flex items-center gap-3 text-center">
+              <Image
+                src={summary}
+                alt="Logo"
+                width={70}
+                height={60}
+                className="2xl:h-[72px] h-[50px] w-auto object-contain"
+              />
+              <span className="text-white font-normal text-[1.5rem] 2xl:text-[1.94rem] leading-none">
+                Summary Overview
+              </span>
+            </div>
           </div>
         ) : (
           <Image

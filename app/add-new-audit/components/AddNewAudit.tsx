@@ -669,7 +669,7 @@ export default function AddNewAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className=" text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
+          <p className="text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
             GRADING SCALE (1-5)
           </p>
           <div className="flex xl:grid grid-cols-3 gap-[1.89px]">

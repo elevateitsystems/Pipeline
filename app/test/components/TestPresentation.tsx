@@ -409,7 +409,7 @@ export default function TestPresentation() {
     score: number;
     label: string;
   }) => {
-    const size = 70;
+    const size = 78;
     const center = size / 2;
     const radius = 39.108;
     const circumference = 2 * Math.PI * radius;
@@ -476,7 +476,7 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="text-[#2B4055] text-center font-medium leading-tight  line-clamp-1 "
+          className="text-[#2B4055] text-center text-[19px] font-medium leading-tight  line-clamp-1 "
           style={{
             marginTop: "17px",
             // width: "160px",
@@ -743,7 +743,7 @@ export default function TestPresentation() {
         <div className="flex-1 flex flex-col">
           <div className="w-full">
             <table
-              className="w-full border-collapse border-gray-300"
+              className="w-full border-collapse border-gray-300 text-[23px]"
               style={{ tableLayout: "fixed" }}
             >
               {/* start */}
@@ -767,7 +767,7 @@ export default function TestPresentation() {
                         <span
                           className="text-[#212121]"
                           style={{
-                            fontWeight: 500,
+                            fontWeight: 400,
                             fontSize: "clamp(14px, 1.5vw, 21px)",
                             lineHeight: "100%",
                             letterSpacing: "-0.025em",
@@ -981,7 +981,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       width: "100%",
                       color: "#212121",
@@ -1018,7 +1018,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1 border-x border-[#E8E8E8] ">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
                       width: "100%",
                       color: "#212121",
@@ -1053,7 +1053,7 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center"
                     style={{
                       width: "100%",
                       color: "#212121",
