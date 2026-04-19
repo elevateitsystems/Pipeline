@@ -209,9 +209,6 @@ const AuditTable = React.memo(function AuditTable({
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
                   <div className="flex items-center justify-center gap-2 text-black">
-                    <span className="select-none cursor-grab active:cursor-grabbing">
-                      =
-                    </span>
                     <span className="font-medium text-lg">{rowIndex}</span>
                   </div>
                 </td>

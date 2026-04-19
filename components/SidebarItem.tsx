@@ -190,14 +190,7 @@ const SidebarItem = memo(
           <div
             className={cn(`w-full h-full flex items-center justify-start gap-1.5 relative z-30 top-[2px]}`, isActive && useSecondary ? 'text-white' : '')}
           >
-            {canDrag && !isSummaryItem && (
-              <span
-                onMouseDown={onMouseDownDrag}
-                className={cn('text-xl font-light select-none cursor-grab active:cursor-grabbing', isActive ? "text-black/40" : "text-white/40", isActive && useSecondary ? 'text-white' : '', 'relative -top-[2px]')}
-              >
-                =
-              </span>
-            )}
+
             <button
               data-icon-picker-trigger
               onClick={onIconPickerTrigger}
@@ -293,13 +286,7 @@ const SidebarItem = memo(
             className={`w-full h-full flex items-center justify-start gap-2 relative z-10 top-[2px] ${isActive && useSecondary ? 'text-white' : ''}`}
           >
             <div className={`flex-1 flex items-center justify-start`}>
-              {canDrag && !isSummaryItem && (
-                <span
-                  onMouseDown={onMouseDownDrag}
-                  className={` text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  relative -top-[2px]`}>
-                  =
-                </span>
-              )}
+
               {(!isActive ||
                 (isCategoryItem && itemCategoryNumber !== null)) &&
                 (isCategoryItem || item.icon) && (
@@ -330,7 +317,7 @@ const SidebarItem = memo(
               </div>
             </div>
 
-            {isCategoryItem && itemCategoryNumber !== null && onEditClick && (
+            {isCategoryItem && itemCategoryNumber !== null && onEditClick && isActive && (
               <button
                 onClick={onEditClick}
                 className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? 'text-white' : ''} relative -top-[2px]`}
