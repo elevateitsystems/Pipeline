@@ -53,18 +53,18 @@ export default function TestPresentation() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-        auditData as Presentation & {
-          summary?: {
-            categoryRecommendations?:
-            | string
-            | Array<{ categoryId: string; recommendation: string }>;
-            nextSteps?:
-            | string
-            | Array<{ type: string; content: string; fileUrl?: string }>;
-            overallDetails?: string | null;
-          } | null;
-        }
-      )?.summary || null
+          auditData as Presentation & {
+            summary?: {
+              categoryRecommendations?:
+                | string
+                | Array<{ categoryId: string; recommendation: string }>;
+              nextSteps?:
+                | string
+                | Array<{ type: string; content: string; fileUrl?: string }>;
+              overallDetails?: string | null;
+            } | null;
+          }
+        )?.summary || null
       : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
@@ -426,7 +426,11 @@ export default function TestPresentation() {
             width={size}
             height={size}
             viewBox="-4 -4 89 89"
-            style={{ width: `${size}px`, height: `${size}px`, overflow: "visible" }}
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              overflow: "visible",
+            }}
           >
             {/* Background circle from provided SVG */}
             <path
@@ -718,7 +722,7 @@ export default function TestPresentation() {
               letterSpacing: "0.016em",
               textTransform: "capitalize",
               textAlign: "left",
-              marginLeft: '25%',
+              marginLeft: "25%",
               paddingLeft: "16px",
             }}
           >
@@ -943,7 +947,10 @@ export default function TestPresentation() {
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
                         <span
                           className="text-gray-50 rounded-lg pt-1 px-2 font-medium text-[clamp(16px,1.8vw,23px)] mt-1"
-                          style={{ backgroundColor: primaryColor, fontVariationSettings: "'wdth' 90, 'wght' 400", }}
+                          style={{
+                            backgroundColor: primaryColor,
+                            fontVariationSettings: "'wdth' 90, 'wght' 400",
+                          }}
                         >
                           Total Score
                         </span>
@@ -969,12 +976,13 @@ export default function TestPresentation() {
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
-                  className={`rounded-tl-xl text-center pt-1 ${currentCategoryScore >= 1 &&
+                  className={`rounded-tl-xl text-center pt-1 ${
+                    currentCategoryScore >= 1 &&
                     currentCategoryScore <=
-                    Math.floor(currentCategoryMaxScore * 0.4)
-                    ? "bg-[#F65355] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      Math.floor(currentCategoryMaxScore * 0.4)
+                      ? "bg-[#F65355] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
@@ -1005,13 +1013,14 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white border-r-2 border-white">
                 <div
-                  className={`text-center pt-1 ${currentCategoryScore >
-                    Math.floor(currentCategoryMaxScore * 0.4) &&
+                  className={`text-center pt-1 ${
+                    currentCategoryScore >
+                      Math.floor(currentCategoryMaxScore * 0.4) &&
                     currentCategoryScore <=
-                    Math.floor(currentCategoryMaxScore * 0.8)
-                    ? "bg-[#F7AF41] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      Math.floor(currentCategoryMaxScore * 0.8)
+                      ? "bg-[#F7AF41] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
@@ -1043,11 +1052,12 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center pt-1 rounded-tr-xl ${currentCategoryScore >
+                  className={`text-center pt-1 rounded-tr-xl ${
+                    currentCategoryScore >
                     Math.floor(currentCategoryMaxScore * 0.8)
-                    ? "bg-[#2BD473] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      ? "bg-[#2BD473] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
@@ -1071,7 +1081,8 @@ export default function TestPresentation() {
                     }}
                   >
                     Demonstrates excellent performance and strong compliance.
-                    Well-established processes and best practices yield outstanding results.
+                    Well-established processes and best practices yield
+                    outstanding results.
                   </p>
                 </div>
               </div>
@@ -1120,11 +1131,27 @@ export default function TestPresentation() {
                 <div
                   className="absolute transition-all duration-500 z-30"
                   style={{
-                    left: `${currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4)
-                      ? (currentCategoryScore / Math.floor(currentCategoryMaxScore * 0.4)) * 33.33
-                      : currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.8)
-                        ? 33.33 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.4)) / (Math.floor(currentCategoryMaxScore * 0.8) - Math.floor(currentCategoryMaxScore * 0.4))) * 33.33
-                        : 66.66 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.8)) / (currentCategoryMaxScore - Math.floor(currentCategoryMaxScore * 0.8))) * 33.34}%`,
+                    left: `${
+                      currentCategoryScore <=
+                      Math.floor(currentCategoryMaxScore * 0.4)
+                        ? (currentCategoryScore /
+                            Math.floor(currentCategoryMaxScore * 0.4)) *
+                          33.33
+                        : currentCategoryScore <=
+                            Math.floor(currentCategoryMaxScore * 0.8)
+                          ? 33.33 +
+                            ((currentCategoryScore -
+                              Math.floor(currentCategoryMaxScore * 0.4)) /
+                              (Math.floor(currentCategoryMaxScore * 0.8) -
+                                Math.floor(currentCategoryMaxScore * 0.4))) *
+                              33.33
+                          : 66.66 +
+                            ((currentCategoryScore -
+                              Math.floor(currentCategoryMaxScore * 0.8)) /
+                              (currentCategoryMaxScore -
+                                Math.floor(currentCategoryMaxScore * 0.8))) *
+                              33.34
+                    }%`,
                     top: "50%",
                     transform: "translate(-50%, -50%)",
                   }}

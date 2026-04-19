@@ -63,7 +63,7 @@ const SidebarHeader = ({
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="300"
+        width="100%"
         height="2"
         viewBox="0 0 300 2"
         fill="none"
@@ -77,7 +77,7 @@ const SidebarHeader = ({
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="300"
+        width="100%"
         height="2"
         viewBox="0 0 300 2"
         fill="none"

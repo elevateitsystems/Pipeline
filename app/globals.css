@@ -85,12 +85,12 @@
 
 /* Sidebar responsive for 1024px screens */
 .sidebar-width {
-  width: 300px;
+  width: 301.08px;
 }
 
 @media (max-width: 1440px) {
   .sidebar-width {
-    width: 250px;
+    width: 301.08px;
   }
 }
 
@@ -103,7 +103,7 @@
 
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
-    width: 250px !important;
+    width: 301.08px !important;
   }
 
   /* Profile image larger at 1024px */
