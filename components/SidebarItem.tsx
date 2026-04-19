@@ -240,7 +240,7 @@ const SidebarItem = memo(
                 color: "inherit",
                 fontWeight: 500,
                 fontVariationSettings: "'wdth' 65, 'wght' 500",
-                fontSize: "clamp(20px, 1.8vw, 27px)",
+                fontSize: "clamp(21px, 1.4vw, 26px)",
                 letterSpacing: "0.006em",
                 lineHeight: 1,
               }}
@@ -307,7 +307,7 @@ const SidebarItem = memo(
                   className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                   style={{
                     fontWeight: 500,
-                    fontSize: "clamp(20px, 1.8vw, 27px)",
+                    fontSize: "clamp(21px, 1.4vw, 26px)",
                     letterSpacing: "0.006em",
                     fontVariationSettings: "'wdth' 65, 'wght' 500",
                   }}
