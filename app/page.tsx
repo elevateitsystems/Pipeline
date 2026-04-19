@@ -199,7 +199,7 @@ export default function Home() {
         <div className="">
           <h1
             className="text-gray-900 mb-2 capitalize font-normal text-[20px] md:text-[24px] lg:text-[27px]"
-          // style={{ fontSize: "27px", fontWeight: 400 }}
+            // style={{ fontSize: "27px", fontWeight: 400 }}
           >
             Hello, {user.name.split(" ")[0]}!
           </h1>
@@ -225,9 +225,7 @@ export default function Home() {
               >
                 NO AUDIT CREATED
               </p>
-              <p
-                className="text-[20px] sm:text-[22px] xl:text-[26px] font-light"
-              >
+              <p className="text-[20px] sm:text-[22px] xl:text-[26px] font-light">
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
                   : "Start your first audit to see your performance insights here."}
@@ -241,7 +239,7 @@ export default function Home() {
                     width: "318px",
                     height: "50px",
                     padding:
-                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)"
+                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
                   }}
                   onClick={() => {
                     clearAuditSessionStorage();
@@ -267,14 +265,16 @@ export default function Home() {
           <div className="flex-1">
             <h1
               className="text-[25px] lg:text-[30px] xl:text-[35px] font-normal"
-              style={{
-                // fontVariationSettings: "'wdth' 85, 'wght' 700",
-              }}
+              style={
+                {
+                  // fontVariationSettings: "'wdth' 85, 'wght' 700",
+                }
+              }
             >
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-sm xl:text-[25px]"
+              className="text-[20px] xl:text-[25px]"
               style={{
                 fontWeight: 300,
               }}
@@ -415,7 +415,9 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-4 py-1">
-                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}>
+                    <div
+                      className={`grid ${isInvitedUser ? "grid-cols-1" : "grid-cols-[15%_30%_30%_25%]"} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}
+                    >
                       {!isInvitedUser && (
                         <>
                           <button
@@ -501,19 +503,18 @@ export default function Home() {
               );
             })}
           </tbody>
-        </table >
-      </div >
+        </table>
+      </div>
 
       {/* Delete Confirmation Modal */}
-      < ConfirmationModal
+      <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
           if (!deleteAuditMutation.isPending) {
             setDeleteModalOpen(false);
             setAuditToDelete(null);
           }
-        }
-        }
+        }}
         onConfirm={handleDeleteConfirm}
         title="Delete Audit"
         message="Are you sure you want to delete this audit? This action cannot be undone."
@@ -524,20 +525,18 @@ export default function Home() {
       />
 
       {/* Invite Audit Modal */}
-      {
-        auditToInvite && (
-          <InviteAuditModal
-            isOpen={inviteModalOpen}
-            onClose={() => {
-              setInviteModalOpen(false);
-              setAuditToInvite(null);
-            }}
-            onInvite={handleInvite}
-            auditTitle={auditToInvite.title}
-            loading={sendInviteMutation.isPending}
-          />
-        )
-      }
-    </div >
+      {auditToInvite && (
+        <InviteAuditModal
+          isOpen={inviteModalOpen}
+          onClose={() => {
+            setInviteModalOpen(false);
+            setAuditToInvite(null);
+          }}
+          onInvite={handleInvite}
+          auditTitle={auditToInvite.title}
+          loading={sendInviteMutation.isPending}
+        />
+      )}
+    </div>
   );
 }

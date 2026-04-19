@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 interface SidebarResultsProps {
   testResultData: {
     categoryScores: Array<{
@@ -30,18 +28,21 @@ const SidebarResults = ({
     .slice(0, 3);
 
   return (
-    <div className="px-4 pt-4 2xl:pt-6">
-      <h3 className="text-[1.5rem] 2xl:text-[1.75rem] leading-8 2xl:text-nowrap text-[#F7FCFF] mb-4 2xl:mb-[60px]">
+    <div className="px-4 pt-4 2xl:pt-6 mb-28 2xl:mb-32">
+      <h3 className="text-[1.5rem] 2xl:text-[1.75rem] leading-8 2xl:text-nowrap text-[#F7FCFF] mb-4 2xl:mb-13">
         Area Of Urgent Focus
       </h3>
       <div className="space-y-2 2xl:space-y-3">
         {urgentCategories.map((cs) => {
-          const percentage = cs.maxScore > 0 ? (cs.score / cs.maxScore) * 100 : 0;
+          const percentage =
+            cs.maxScore > 0 ? (cs.score / cs.maxScore) * 100 : 0;
           return (
             <div key={cs.categoryId} className="mb-4">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-white overflow-hidden text-[20px] 2xl:text-[25px] text-nowrap truncate">
-                  {cs.categoryName}
+                <span className="text-white overflow-hidden text-[20px] xl:text-[22px] 2xl:text-[25px]">
+                  {cs.categoryName
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
                 </span>
               </div>
               <div

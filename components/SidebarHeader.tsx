@@ -32,8 +32,8 @@ const SidebarHeader = ({
         }}
       >
         {onResultPage ? (
-          <div className="flex justify-center px-4">
-            <div className="flex items-center gap-3 text-center">
+          <div className="flex justify-center px-10">
+            <div className="flex items-center gap-3">
               <Image
                 src={summary}
                 alt="Logo"
