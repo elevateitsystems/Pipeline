@@ -245,7 +245,6 @@ const SidebarItem = memo(
               className="flex-1 bg-transparent outline-none border-none text-left min-w-0 p-0"
               style={{
                 color: "inherit",
-                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 500,
                 fontVariationSettings: "'wdth' 65, 'wght' 500",
                 fontSize: "clamp(20px, 1.8vw, 27px)",
@@ -320,7 +319,6 @@ const SidebarItem = memo(
                 <span
                   className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
                     fontSize: "clamp(20px, 1.8vw, 27px)",
                     letterSpacing: "0.006em",

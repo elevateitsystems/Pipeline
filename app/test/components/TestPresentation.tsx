@@ -462,7 +462,6 @@ export default function TestPresentation() {
             <span
               className="text-[#2B4055]"
               style={{
-                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 600,
                 fontSize: "clamp(24px, 3.5vw, 46px)",
                 lineHeight: "100%",
@@ -481,7 +480,6 @@ export default function TestPresentation() {
           style={{
             marginTop: "17px",
             // width: "160px",
-            fontFamily: "'Acumin Variable Concept', sans-serif",
             fontWeight: 500,
             fontStyle: "normal",
             fontSize: "clamp(12px, 1.5vw, 19px)",
@@ -645,7 +643,6 @@ export default function TestPresentation() {
               <p
                 className="pb-1 text-black text-center font-medium max-w-[100px] leading-tight"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
                   fontSize: "clamp(12px, 1.5vw, 19px)",
@@ -698,7 +695,6 @@ export default function TestPresentation() {
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               // lineHeight: "100%",
@@ -715,7 +711,6 @@ export default function TestPresentation() {
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
@@ -733,7 +728,6 @@ export default function TestPresentation() {
             style={{
               width: "100px",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 500,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
@@ -773,7 +767,6 @@ export default function TestPresentation() {
                         <span
                           className="text-[#212121]"
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 500,
                             fontSize: "clamp(14px, 1.5vw, 21px)",
                             lineHeight: "100%",
@@ -792,8 +785,6 @@ export default function TestPresentation() {
                           <span
                             className="text-[#212121]"
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontStyle: "normal",
                               fontSize: "clamp(16px, 1.6vw, 23px)",
@@ -823,8 +814,6 @@ export default function TestPresentation() {
                             <SelectTrigger
                               className="w-full text-sm font-normal text-[#212121] ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
                               style={{
-                                fontFamily:
-                                  "'Acumin Variable Concept', sans-serif",
                                 fontWeight: 400,
                                 fontSize: "clamp(14px, 1.5vw, 20px)",
                                 lineHeight: "100%",
@@ -856,8 +845,6 @@ export default function TestPresentation() {
                                       style={{
                                         backgroundColor: backgroundColor,
                                         color: textColor,
-                                        fontFamily:
-                                          "'Acumin Variable Concept', sans-serif",
                                         fontWeight: 400,
                                         fontSize: "clamp(12px, 1.2vw, 16px)",
                                         lineHeight: "100%",
@@ -918,7 +905,6 @@ export default function TestPresentation() {
                         <span
                           className={`px-3 rounded font-medium text-gray-900`}
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "clamp(16px, 1.6vw, 23px)",
                             lineHeight: "100%",
@@ -987,7 +973,6 @@ export default function TestPresentation() {
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -998,7 +983,6 @@ export default function TestPresentation() {
                   <p
                     className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -1025,7 +1009,6 @@ export default function TestPresentation() {
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -1037,7 +1020,6 @@ export default function TestPresentation() {
                   <p
                     className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -1062,7 +1044,6 @@ export default function TestPresentation() {
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -1074,7 +1055,6 @@ export default function TestPresentation() {
                   <p
                     className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -1095,7 +1075,6 @@ export default function TestPresentation() {
               <h3
                 className="mb-3 uppercase"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
                   fontSize: "clamp(16px, 1.8vw, 21px)",

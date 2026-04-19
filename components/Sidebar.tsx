@@ -1246,7 +1246,6 @@ export default function Sidebar() {
                 <div
                   className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-6"
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
                     // fontSize: "clamp(20px, 1.8vw, 27px)",
                     lineHeight: "1",

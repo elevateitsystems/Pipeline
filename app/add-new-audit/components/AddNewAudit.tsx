@@ -712,7 +712,7 @@ export default function AddNewAudit() {
               placeholder="Presentation Name"
               className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
-                fontFamily: "var(--font-acumin),",
+                fontFamily: "var(--font-acumin)",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
@@ -1113,7 +1113,7 @@ function AuditTable({
                     }
                     className="w-full bg-[#4569871A] px-2 sm:px-3 lg:px-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none"
                     style={{
-                      fontFamily: "var(--font-acumin),",
+                      fontFamily: "var(--font-acumin)",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -1135,7 +1135,7 @@ function AuditTable({
                           }
                           className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1.5 xl:px-4 min-w-[50px] py-2 xl:py-[13px] font-normal`}
                           style={{
-                            fontFamily: "var(--font-acumin),",
+                            fontFamily: "var(--font-acumin)",
                             fontWeight: 400,
                             // fontSize: "18px",
                             lineHeight: "100%",

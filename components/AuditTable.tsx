@@ -229,7 +229,7 @@ const AuditTable = React.memo(function AuditTable({
                       disabled={!editableQuestions.has(rowIndex)}
                       className="w-full bg-[#4569871A] pl-2 xl:pl-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70 pr-10 "
                       style={{
-                        fontFamily: "var(--font-acumin), sans-serif",
+                        fontFamily: "var(--font-acumin)",
                         fontWeight: 400,
                         fontSize: "23px",
                         lineHeight: "100%",
@@ -278,7 +278,7 @@ const AuditTable = React.memo(function AuditTable({
                               !(editableStatus[rowIndex]?.has(idx) ?? false)
                             }
                             style={{
-                              fontFamily: "var(--font-acumin), sans-serif",
+                              fontFamily: "var(--font-acumin)",
                               fontWeight: 400,
                               lineHeight: "100%",
                               letterSpacing: "-0.015em",

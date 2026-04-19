@@ -22,7 +22,6 @@ const SidebarResults = ({
     <div className="px-4 pt-4 2xl:pt-6">
       <h3
         className="text-[1.5rem] 2xl:text-[1.75rem] leading-8 2xl:text-nowrap text-[#F7FCFF] mb-4 2xl:mb-[60px]"
-        style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
       >
         Area Of Urgent Focus
       </h3>
@@ -48,9 +47,6 @@ const SidebarResults = ({
                   <div className="flex justify-between items-center mb-1">
                     <span
                       className="text-white overflow-hidden text-[20px] 2xl:text-[25px] text-nowrap truncate"
-                      style={{
-                        fontFamily: "'Acumin Variable Concept', sans-serif",
-                      }}
                     >
                       {cs.categoryName}
                     </span>

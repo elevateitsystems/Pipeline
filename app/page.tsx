@@ -293,7 +293,6 @@ export default function Home() {
                   router.push("/add-new-audit/?category=1");
                 }}
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
@@ -314,7 +313,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -325,7 +323,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -336,7 +333,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -347,7 +343,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -365,7 +360,6 @@ export default function Home() {
                   key={audit.id}
                   className="border-b border-[#E0E0E0] font-normal"
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     // fontWeight: 400,
                     fontVariationSettings: "'wdth' 85, 'wght' 400",
                   }}
@@ -373,7 +367,6 @@ export default function Home() {
                   <td
                     className="px-4 border-r py-4 font-light xl:text-nowrap"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -386,7 +379,6 @@ export default function Home() {
                   <td
                     className="px-4 border-r py-4 font-light"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -409,7 +401,6 @@ export default function Home() {
                         className="px-3 py-4 font-light text-center rounded"
                         style={{
                           color: scoreColor.text,
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "23px",
                           lineHeight: "100%",
@@ -435,8 +426,6 @@ export default function Home() {
                             }
                             className="w-full px-2 py-2 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-1 xl:gap-1"
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -461,8 +450,6 @@ export default function Home() {
                             leftIcon={<Trash2 size={18} />}
                             onClick={() => handleDeleteClick(audit.id)}
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -482,7 +469,6 @@ export default function Home() {
                         }
                         className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3 text-nowrap"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "24px",
                           lineHeight: "100%",
@@ -498,7 +484,6 @@ export default function Home() {
                           onClick={() => handleInviteClick(audit)}
                           className="w-full px-3 cursor-pointer py-2 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "24px",
                             lineHeight: "100%",

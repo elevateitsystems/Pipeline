@@ -277,20 +277,7 @@ export default function ProfilePage() {
           }}
         >
           <h2
-            className="
-      absolute 
-      top-[50px] 
-      left-[44px] 
-      w-[482px] 
-      h-[24px] 
-      text-[34px] 
-      leading-[39px] 
-      font-[400] 
-      text-[#2D2D2D] 
-      uppercase 
-      tracking-[0.006em]
-    "
-            style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
+            className="absolute top-[50px] left-[44px] w-[482px] h-[24px] text-[34px] leading-[39px] font-[400] text-[#2D2D2D] uppercase tracking-[0.006em]"
           >
             EDIT YOUR PROFILE
           </h2>
@@ -312,7 +299,6 @@ export default function ProfilePage() {
               <label
                 htmlFor="name"
                 className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
               >
                 Name
               </label>
@@ -325,7 +311,6 @@ export default function ProfilePage() {
                 onChange={handleInputChange}
                 className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none focus:ring-1 focus:ring-gray-300"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "18px",
                   fontWeight: 500,
                   lineHeight: "22px",
@@ -338,7 +323,6 @@ export default function ProfilePage() {
               <label
                 htmlFor="email"
                 className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
               >
                 Email Address
               </label>
@@ -351,7 +335,6 @@ export default function ProfilePage() {
                 disabled
                 className="h-[50px] w-full cursor-not-allowed rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "18px",
                   fontWeight: 500,
                   lineHeight: "22px",
@@ -366,7 +349,6 @@ export default function ProfilePage() {
                 <label
                   htmlFor="passCode"
                   className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                 >
                   Passcode
                 </label>
@@ -380,7 +362,6 @@ export default function ProfilePage() {
                     placeholder="Enter passcode"
                     className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] pr-[45px] text-[#1F1F1F] focus:outline-none focus:ring-0"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontSize: "18px",
                       fontWeight: 500,
                       lineHeight: "22px",
@@ -424,7 +405,6 @@ export default function ProfilePage() {
                 <label
                   htmlFor="pin"
                   className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                 >
                   PIN (Optional)
                 </label>
@@ -441,7 +421,6 @@ export default function ProfilePage() {
                       onKeyDown={(e) => handlePinKeyDown(index, e)}
                       className="h-[50px] w-[50px] rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] text-center text-[#1F1F1F] focus:outline-none focus:ring-0"
                       style={{
-                        fontFamily: "'Acumin Variable Concept', sans-serif",
                         fontSize: "18px",
                         fontWeight: 500,
                         lineHeight: "22px",
@@ -452,7 +431,6 @@ export default function ProfilePage() {
                 <p
                   className="text-[#2D2D2D]/70"
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontSize: "14px",
                     fontWeight: 400,
                     lineHeight: "18px",
@@ -471,7 +449,6 @@ export default function ProfilePage() {
                 <label
                   htmlFor="companyName"
                   className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                  style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                 >
                   Company Name
                 </label>
@@ -483,7 +460,6 @@ export default function ProfilePage() {
                   onChange={handleInputChange}
                   className="h-[50px] w-full rounded-[8px] border border-[#E3E3E3] bg-[#F7F7F7] px-[16px] py-[14px] text-[#1F1F1F] focus:outline-none focus:ring-1 focus:ring-gray-300"
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontSize: "18px",
                     fontWeight: 500,
                     lineHeight: "22px",
@@ -499,7 +475,6 @@ export default function ProfilePage() {
                 <div className="flex h-[73px] w-[326px] flex-col gap-[10px]">
                   <label
                     className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                    style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                   >
                     Primary Color
                   </label>
@@ -523,7 +498,6 @@ export default function ProfilePage() {
                       <span
                         className="flex h-full items-center text-[#2D2D2D] uppercase"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "19px",
                           fontWeight: 400,
                           lineHeight: "1",
@@ -540,7 +514,6 @@ export default function ProfilePage() {
                 <div className="flex h-[73px] w-[326px] flex-col gap-[10px]">
                   <label
                     className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                    style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                   >
                     Secondary Color
                   </label>
@@ -564,7 +537,6 @@ export default function ProfilePage() {
                       <span
                         className="flex h-full items-center text-[#2D2D2D] uppercase"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "19px",
                           fontWeight: 400,
                           lineHeight: "1",
@@ -586,7 +558,6 @@ export default function ProfilePage() {
                 <div className="flex h-[171px] w-[328px] flex-col gap-[10px]">
                   <label
                     className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                    style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                   >
                     Company Logo
                   </label>
@@ -605,7 +576,6 @@ export default function ProfilePage() {
                       <span
                         className="flex h-[33px] w-[114px] items-center justify-center whitespace-nowrap rounded-[6px] border border-[#E3E3E3] bg-gradient-to-b from-[#F4F4F4] to-[#DEDEDE] text-[#2D2D2D]"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "18px",
                           fontWeight: 400,
                           lineHeight: "100%",
@@ -617,7 +587,6 @@ export default function ProfilePage() {
                       <span
                         className="truncate text-[#2D2D2D]/50"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "18px",
                           fontWeight: 400,
                           lineHeight: "100%",
@@ -648,7 +617,6 @@ export default function ProfilePage() {
                 <div className="flex h-[186px] w-[328px] flex-col gap-[10px]">
                   <label
                     className="text-[25px] font-[300] tracking-[-0.021em] text-[#2D2D2D] leading-[100%]"
-                    style={{ fontFamily: "'Acumin Variable Concept', sans-serif" }}
                   >
                     Profile Photo
                   </label>
@@ -667,7 +635,6 @@ export default function ProfilePage() {
                       <span
                         className="flex h-[33px] w-[114px] items-center justify-center whitespace-nowrap rounded-[6px] border border-[#E3E3E3] bg-gradient-to-b from-[#F4F4F4] to-[#DEDEDE] text-[#2D2D2D]"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "18px",
                           fontWeight: 400,
                           lineHeight: "100%",
@@ -679,7 +646,6 @@ export default function ProfilePage() {
                       <span
                         className="truncate text-[#2D2D2D]/50"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontSize: "18px",
                           fontWeight: 400,
                           lineHeight: "100%",
@@ -715,7 +681,6 @@ export default function ProfilePage() {
                 onClick={handleBack}
                 className="flex h-[52px] w-[183px] cursor-pointer items-center justify-center rounded-[30px] bg-[#CECECE] px-[26px] py-[18px] text-[#212121] transition-opacity hover:opacity-90"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 400,
                   lineHeight: "100%",
@@ -734,7 +699,6 @@ export default function ProfilePage() {
                 onClick={handleSubmit}
                 className="flex h-[50px] w-[465px] cursor-pointer items-center justify-center rounded-[30px] bg-[#F7AF41] px-[26px] py-[17px] text-[#2D2D2D] transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 400,
                   lineHeight: "100%",
