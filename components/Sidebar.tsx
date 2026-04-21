@@ -1107,6 +1107,13 @@ export default function Sidebar() {
   const onTestPage = pathname === "/test";
   const onResultPage = pathname === "/test/result";
   const onMainPage = pathname === "/";
+  const sidebarMode = onNewAuditPage
+    ? "create"
+    : onUpdateAuditPage
+      ? "edit"
+      : onTestPage || onResultPage
+        ? "test"
+        : "view";
   const shouldShowTestSkeleton =
     (onTestPage || onUpdateAuditPage) && isTestSidebarLoading;
 
@@ -1311,7 +1318,8 @@ export default function Sidebar() {
                   const isTestPageCategory = onTestPage && isCategoryItem;
                   const isEditing =
                     itemCategoryNumber !== null &&
-                    editingCategory === itemCategoryNumber;
+                    (editingCategory === itemCategoryNumber ||
+                      (onNewAuditPage && isActive));
 
                   // Immediately apply active styling when editing to avoid delay during route transition
                   if (isEditing) {
@@ -1370,6 +1378,7 @@ export default function Sidebar() {
                       item={item}
                       isActive={isActive}
                       isEditing={isEditing}
+                      mode={sidebarMode}
                       isCategoryItem={isCategoryItem}
                       itemCategoryNumber={itemCategoryNumber}
                       backgroundColor={backgroundColor}

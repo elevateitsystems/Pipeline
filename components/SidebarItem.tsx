@@ -142,7 +142,11 @@ const SidebarItem = memo(
         onClick={onItemClick}
         className={cn(
           `p-2 px-3 cursor-pointer flex items-center relative`,
-          isActive && "w-[calc(100%+2px)] mr-0 rounded-l-[12px] ",
+          isActive
+            ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] "
+            : (isCategoryItem || isSummaryItem) && !useSecondary
+              ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+1px)] rounded-l-[10px] border-r-0"
+              : "rounded-l-[10px]",
           isDragging ? "opacity-50" : "",
           isDragOver ? "border-2 border-dashed border-white" : "",
           canDrag && !isSummaryItem ? "cursor-move" : "",
