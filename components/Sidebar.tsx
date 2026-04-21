@@ -1244,13 +1244,13 @@ export default function Sidebar() {
               onTestPage) &&
               !onMainPage && (
                 <div
-                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-6"
+                  className="sidebar-header-text px-8 text-center text-[#fffef7] uppercase text-[20px] lg:text-[25px] mt-6 lg:mb-1.5"
                   style={{
                     fontWeight: 500,
                     // fontSize: "clamp(20px, 1.8vw, 27px)",
                     lineHeight: "1",
                     letterSpacing: "0.006em",
-                    fontVariationSettings: "'wdth' 65, 'wght' 500",
+                    fontVariationSettings: "'wdth' 65, 'wght' 400",
                   }}
                 >
                   AUDIT CATGORIES

@@ -152,15 +152,15 @@ export default function IconPicker({
   // Filter icons based on search query
   const filteredLucideIcons = searchQuery.trim()
     ? POPULAR_ICONS.filter((icon) =>
-      icon.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+        icon.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
     : POPULAR_ICONS;
 
   const customIcons = iconesData?.data || [];
   const filteredCustomIcons = searchQuery.trim()
     ? customIcons.filter((icon) =>
-      icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+        icon.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      )
     : customIcons;
 
   // Close dropdown when clicking outside
@@ -365,8 +365,9 @@ export default function IconPicker({
             )}
           </div>
           <svg
-            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${isOpen ? "rotate-180" : ""
-              }`}
+            className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${
+              isOpen ? "rotate-180" : ""
+            }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -419,13 +420,12 @@ export default function IconPicker({
             <div className="p-3 border-b border-gray-100 flex items-center gap-2">
               {/* Search Input */}
               <div className="flex-1 relative">
-                <LucideIcons.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search icon"
-                  className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-500"
                   autoFocus
                 />
               </div>
@@ -435,7 +435,7 @@ export default function IconPicker({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="p-2 bg-gray-900 hover:bg-gray-800 text-white rounded-full transition-colors shrink-0 disabled:opacity-50"
+                className="size-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-xl transition-colors shrink-0 disabled:opacity-50"
                 title="Upload custom icon"
               >
                 {uploading ? (
@@ -453,7 +453,7 @@ export default function IconPicker({
                   setIsOpen(false);
                   if (onClose) onClose();
                 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors shrink-0"
+                className="size-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-xl transition-colors shrink-0 disabled:opacity-50"
               >
                 <LucideIcons.X className="w-4 h-4 text-gray-500" />
               </button>
@@ -477,10 +477,11 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleCustomIconSelect(icon.iconUrl);
                         }}
-                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === icon.iconUrl
-                          ? "ring-2 ring-blue-500 bg-blue-50"
-                          : "border border-gray-200"
-                          }`}
+                        className={`p-2 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
+                          value === icon.iconUrl
+                            ? "ring-2 ring-blue-500 bg-blue-50"
+                            : "border border-gray-200"
+                        }`}
                         title={icon.name}
                       >
                         <Image
@@ -528,10 +529,11 @@ export default function IconPicker({
                           e.stopPropagation();
                           handleIconSelect(iconName);
                         }}
-                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${value === iconName
-                          ? "ring-2 ring-blue-500 bg-blue-50"
-                          : "border border-gray-200"
-                          }`}
+                        className={`p-2 text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors aspect-square ${
+                          value === iconName
+                            ? "ring-2 ring-blue-500 bg-blue-50"
+                            : "border border-gray-200"
+                        }`}
                         title={iconName}
                       >
                         <IconComponent className="w-5 h-5" />

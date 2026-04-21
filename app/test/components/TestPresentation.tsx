@@ -409,7 +409,7 @@ export default function TestPresentation() {
     score: number;
     label: string;
   }) => {
-    const size = 78;
+    const size = 90;
     const center = size / 2;
     const radius = 39.108;
     const circumference = 2 * Math.PI * radius;
@@ -418,17 +418,18 @@ export default function TestPresentation() {
     return (
       <div className="flex flex-col items-center">
         <div
-          className="relative"
-          style={{ width: `${size}px`, height: `${size}px` }}
+          className={`relative xl:size-${size}px lg:size-${size - 10}px size-${size - 20}px`}
+          // style={{ width: `${size}px`, height: `${size}px` }}
         >
+          {/* Big circle for xl screen */}
           <svg
-            className="transform -rotate-90"
+            className="transform -rotate-90 hidden 2xl:block"
             width={size}
             height={size}
             viewBox="-4 -4 89 89"
             style={{
-              width: `${size}px`,
-              height: `${size}px`,
+              width: `size-${size}px`,
+              height: `size-${size}px`,
               overflow: "visible",
             }}
           >
@@ -457,6 +458,45 @@ export default function TestPresentation() {
               }}
             />
           </svg>
+
+          {/* Small circle for lg screen */}
+          <svg
+            className="transform -rotate-90 2xl:hidden"
+            width={size - 20}
+            height={size - 20}
+            viewBox="-4 -4 89 89"
+            style={{
+              width: `size-${size - 20}px`,
+              height: `size-${size - 20}px`,
+              overflow: "visible",
+            }}
+          >
+            {/* Background circle from provided SVG */}
+            <path
+              d="M79.212 40.108C79.212 61.7034 61.7036 79.2157 40.1082 79.2157C18.5089 79.2157 1.00049 61.7034 1.00049 40.108C1.00049 18.5087 18.5089 1.00024 40.1082 1.00024C61.7036 1.00024 79.212 18.5087 79.212 40.108Z"
+              stroke="#2B4055"
+              strokeWidth="2.00052"
+              strokeMiterlimit="10"
+              fill="none"
+            />
+            {/* Progress circle */}
+            <circle
+              cx="40.108"
+              cy="40.108"
+              r="39.108"
+              stroke="#2CD573"
+              strokeWidth="8"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+              style={{
+                transition:
+                  "stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            />
+          </svg>
+
           {/* Score in center */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span
@@ -466,7 +506,7 @@ export default function TestPresentation() {
                 fontSize: "clamp(24px, 3.5vw, 46px)",
                 lineHeight: "100%",
                 letterSpacing: "0.003em",
-                fontVariationSettings: "'wdth' 65, 'wght' 600",
+                fontVariationSettings: "'wdth' 65, 'wght' 700",
                 textAlign: "center",
               }}
             >
@@ -476,17 +516,17 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="text-[#2B4055] text-center text-[19px] font-medium leading-tight  line-clamp-1 "
+          className="text-[#2B4055] text-center text-[19px] leading-tight line-clamp-1 "
           style={{
             marginTop: "17px",
             // width: "160px",
-            fontWeight: 500,
+            fontWeight: 600,
             fontStyle: "normal",
             fontSize: "clamp(12px, 1.5vw, 19px)",
             lineHeight: "100%",
             letterSpacing: "0.003em",
             textAlign: "center",
-            fontVariationSettings: "'wdth' 65, 'wght' 500",
+            fontVariationSettings: "'wdth' 65, 'wght' 550",
           }}
         >
           {label}
@@ -507,7 +547,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="test-circle-row bg-white pt-1 grid grid-cols-[13%_13%_13%_13%_13%_13%_13%_8%] pr-2 gap-[2px] w-full ">
+          <div className="lg:pl-4 2xl:pl-10 test-circle-row bg-white pt-1 grid grid-cols-[13%_13%_13%_13%_13%_13%_13%_8%] pr-2 gap-[2px] w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -631,13 +671,13 @@ export default function TestPresentation() {
                 }
               }}
             >
-              <div className="w-24 h-24 flex items-center justify-center">
+              <div className="size-20 2xl:size-24 flex items-center justify-center">
                 <NextImage
                   src="/searchIcon.png"
                   alt="Summary Overview"
                   width={48}
                   height={48}
-                  className="w-12 h-12"
+                  className="size-10 2xl:size-12"
                 />
               </div>
               <p
@@ -658,9 +698,9 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
+        <div className="bg-white -mt-1 lg:max-xl:-mt-8 pt-4 2xl:pt-6 flex items-center justify-center gap-2 w-full ">
           <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-            <p className="text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
+            <p className="text-[14px] 2xl:text-[17px] uppercase tracking-[0.352px] leading-normal font-semibold pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
               GRADING SCALE (1-5)
             </p>
             <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
@@ -678,11 +718,11 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="test-qa-bar audit-content-padding flex items-center"
+          className="flex items-center"
           style={{
             width: "100%",
-            paddingTop: "3px",
-            paddingBottom: "1px",
+            // paddingTop: "1px",
+            // paddingBottom: "1px",
             alignItems: "center",
           }}
         >
@@ -691,11 +731,10 @@ export default function TestPresentation() {
             style={{ width: "100px" }}
           ></p>
           <p
-            className="font-medium"
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               // lineHeight: "100%",
               letterSpacing: "0.016em",
@@ -707,11 +746,10 @@ export default function TestPresentation() {
             questions
           </p>
           <p
-            className="font-medium"
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",
@@ -724,11 +762,11 @@ export default function TestPresentation() {
             answers
           </p>
           <p
-            className="text-center font-medium"
+            className="text-center"
             style={{
               width: "100px",
               color: "#F4F4F4",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",

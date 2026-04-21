@@ -49,14 +49,14 @@ const SidebarHeader = ({
         ) : (
           <Image
             onClick={() => router.push("/")}
-            className="cursor-pointer sidebar-logo"
+            className=""
             src={user?.company?.logoUrl || logo}
             alt="Logo"
             width={168}
             height={60}
             style={{
-              width: "clamp(120px, 15vw, 168px)",
-              height: "clamp(40px, 8vw, 57px)",
+              // width: "clamp(120px, 15vw, 168px)",
+              // height: "clamp(40px, 8vw, 57px)",
               objectFit: "contain",
             }}
           />
