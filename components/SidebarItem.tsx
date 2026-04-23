@@ -91,7 +91,7 @@ const SidebarItem = memo(
     // Helper to convert hex to rgba
     const hexToRgba = (hex: string, alpha: number) => {
       // Remove hash if present
-      hex = hex.replace(/^#/, '');
+      hex = hex.replace(/^#/, "");
 
       // Parse RGB values
       let r, g, b;
@@ -109,7 +109,9 @@ const SidebarItem = memo(
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
-    const [inputValue, setInputValue] = React.useState(getCategoryName(itemCategoryNumber as number));
+    const [inputValue, setInputValue] = React.useState(
+      getCategoryName(itemCategoryNumber as number),
+    );
 
     useEffect(() => {
       setInputValue(getCategoryName(itemCategoryNumber as number));
@@ -138,20 +140,25 @@ const SidebarItem = memo(
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         onClick={onItemClick}
-        className={cn(`p-2 px-3 cursor-pointer flex items-center relative`,
+        className={cn(
+          `p-2 px-3 cursor-pointer flex items-center relative`,
           isActive
             ? "w-[calc(100%+2px)] mr-0 rounded-l-[10px] "
             : (isCategoryItem || isSummaryItem) && !useSecondary
               ? "w-[calc(100%-clamp(0.75rem,2vw,1rem)+1px)] rounded-l-[10px] border-r-0"
               : "rounded-l-[10px]",
-          isDragging ? "opacity-50" : "", isDragOver ? "border-2 border-dashed border-white" : "", canDrag && !isSummaryItem ? "cursor-move" : "",
-          useSecondary ? `rounded-[10px] mr-2 border opacity-70` : '',
-          isActive && useSecondary ? `opacity-100 text-white` : '',
+          isDragging ? "opacity-50" : "",
+          isDragOver ? "border-2 border-dashed border-white" : "",
+          canDrag && !isSummaryItem ? "cursor-move" : "",
+          useSecondary ? `rounded-[10px] mr-2 border opacity-70` : "",
+          isActive && useSecondary ? `opacity-100 text-white` : "",
         )}
         style={{
           // padding: "clamp(0.75rem, 3vw, 1rem)",
           marginLeft: "clamp(0.75rem, 2vw, 1rem)",
-          backgroundColor: useSecondary ? hexToRgba(secondaryColor, 0.60) : (backgroundColor || "transparent"),
+          backgroundColor: useSecondary
+            ? hexToRgba(secondaryColor, 0.6)
+            : backgroundColor || "transparent",
           color: textColor,
           border: isActive
             ? "none"
@@ -183,35 +190,30 @@ const SidebarItem = memo(
 
         {/* Secondary sidebar active */}
         {isActive && useSecondary && (
-          <div className="absolute inset-0 pointer-events-none border rounded-l-[10px] border-[rgba(255,255,255,0.4)]">
-          </div>
+          <div className="absolute inset-0 pointer-events-none border rounded-l-[10px] border-[rgba(255,255,255,0.4)]"></div>
         )}
+
         {isEditing ? (
           <div
-            className={cn(`w-full h-full flex items-center justify-start gap-1.5 relative z-30 top-[2px]}`, isActive && useSecondary ? 'text-white' : '')}
-          >
-            {canDrag && !isSummaryItem && (
-              <span
-                onMouseDown={onMouseDownDrag}
-                className={cn('text-xl font-light select-none cursor-grab active:cursor-grabbing', isActive ? "text-black/40" : "text-white/40", isActive && useSecondary ? 'text-white' : '', 'relative -top-[2px]')}
-              >
-                =
-              </span>
+            className={cn(
+              `w-full h-full flex items-center justify-start gap-1.5 relative z-30 top-[2px]}`,
+              isActive && useSecondary ? "text-white" : "",
             )}
+          >
             <button
               data-icon-picker-trigger
               onClick={onIconPickerTrigger}
-              className={`flex items-center gap-0 shrink-0 hover:bg-black/5 rounded py-1 transition-colors ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''}  relative -top-[2px]`}
+              className={`flex items-center gap-0 shrink-0 hover:bg-black/5 rounded py-1 transition-colors ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? "text-white" : ""}  relative -top-[2px]`}
               style={{ color: "inherit" }}
             >
               <div className="flex items-center justify-center">
                 {isCategoryItem &&
-                  itemCategoryNumber !== null &&
-                  getCategoryIcon(itemCategoryNumber)
+                itemCategoryNumber !== null &&
+                getCategoryIcon(itemCategoryNumber)
                   ? renderIcon(getCategoryIcon(itemCategoryNumber))
                   : item.icon}
               </div>
-              <ChevronDown size={14} />
+              <ChevronDown size={14} className="relative left-0.5" />
             </button>
             <input
               ref={inputRef}
@@ -242,13 +244,12 @@ const SidebarItem = memo(
                 }
               }}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 bg-transparent outline-none border-none text-left min-w-0 p-0"
+              className="flex-1 bg-transparent outline-none border-none text-left min-w-0 p-0 m-0"
               style={{
                 color: "inherit",
-                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 500,
                 fontVariationSettings: "'wdth' 65, 'wght' 500",
-                fontSize: "clamp(20px, 1.8vw, 27px)",
+                fontSize: "clamp(21px, 1.4vw, 26px)",
                 letterSpacing: "0.006em",
                 lineHeight: 1,
               }}
@@ -288,30 +289,35 @@ const SidebarItem = memo(
                 />
               </div>
             )}
+
+            <button
+              onClick={onEditClick}
+              className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? "text-white" : ""} relative -top-[2px]`}
+              style={{ color: "inherit" }}
+              aria-label="Edit category name"
+            >
+              <FiEdit size={12} className="size-[19.5px]" />
+            </button>
           </div>
         ) : (
           <div
-            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 top-[2px] ${isActive && useSecondary ? 'text-white' : ''}`}
+            className={`w-full h-full flex items-center justify-start gap-2 relative z-10 top-[2px] ${isActive && useSecondary ? "text-white" : ""}`}
           >
             <div className={`flex-1 flex items-center justify-start`}>
-              {canDrag && !isSummaryItem && (
-                <span
-                  onMouseDown={onMouseDownDrag}
-                  className={` text-xl font-light select-none mr-2 cursor-grab active:cursor-grabbing ${isActive ? "text-black/40" : "text-white/40"} ${isActive && useSecondary ? 'text-white' : ''}  relative -top-[2px]`}>
-                  =
-                </span>
-              )}
-              {(!isActive ||
-                (isCategoryItem && itemCategoryNumber !== null)) &&
+              {(!isActive || (isCategoryItem && itemCategoryNumber !== null)) &&
                 (isCategoryItem || item.icon) && (
                   <div
-                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? 'text-white' : ''} relative -top-[2px]`}
+                    className={`flex items-center justify-center shrink-0 ${isActive ? "text-black" : "text-white"} ${isActive && useSecondary ? "text-white" : ""} relative -top-[2px]`}
                   >
                     {isCategoryItem &&
-                      itemCategoryNumber !== null &&
-                      getCategoryIcon(itemCategoryNumber)
-                      ? <span className='mr-2'>{renderIcon(getCategoryIcon(itemCategoryNumber))}</span>
-                      : item.icon ? <span className='mr-2'>{item.icon}</span> : null}
+                    itemCategoryNumber !== null &&
+                    getCategoryIcon(itemCategoryNumber) ? (
+                      <span className="mr-2">
+                        {renderIcon(getCategoryIcon(itemCategoryNumber))}
+                      </span>
+                    ) : item.icon ? (
+                      <span className="mr-2">{item.icon}</span>
+                    ) : null}
                   </div>
                 )}
               <div
@@ -320,9 +326,8 @@ const SidebarItem = memo(
                 <span
                   className={`${isActive ? "text-left" : "flex-1 text-left"} uppercase wrap-break-word leading-none line-clamp-1`}
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 500,
-                    fontSize: "clamp(20px, 1.8vw, 27px)",
+                    fontSize: "clamp(21px, 1.4vw, 26px)",
                     letterSpacing: "0.006em",
                     fontVariationSettings: "'wdth' 65, 'wght' 500",
                   }}
@@ -332,16 +337,19 @@ const SidebarItem = memo(
               </div>
             </div>
 
-            {isCategoryItem && itemCategoryNumber !== null && onEditClick && (
-              <button
-                onClick={onEditClick}
-                className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? 'text-white' : ''} relative -top-[2px]`}
-                style={{ color: "inherit" }}
-                aria-label="Edit category name"
-              >
-                <FiEdit size={12} className="size-[19.5px]" />
-              </button>
-            )}
+            {isCategoryItem &&
+              itemCategoryNumber !== null &&
+              onEditClick &&
+              isActive && (
+                <button
+                  onClick={onEditClick}
+                  className={`p-1 mr-1 rounded hover:bg-white/20 cursor-pointer flex items-center shrink-0 ${isActive && useSecondary ? "text-white" : ""} relative -top-[2px]`}
+                  style={{ color: "inherit" }}
+                  aria-label="Edit category name"
+                >
+                  <FiEdit size={12} className="size-[19.5px]" />
+                </button>
+              )}
           </div>
         )}
       </div>

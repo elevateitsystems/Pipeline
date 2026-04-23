@@ -87,7 +87,6 @@ const QuestionRow = React.memo(function QuestionRow({
             disabled={!isEditable}
             className="w-full bg-[#4569871A] pr-12 pl-4 h-[60px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
             style={{
-              fontFamily: "'Acumin Variable Concept', sans-serif",
               fontWeight: 400,
               fontSize: "23px",
               lineHeight: "100%",
@@ -123,7 +122,6 @@ const QuestionRow = React.memo(function QuestionRow({
                   disabled={!editableOptions.has(idx)}
                   className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""}  rounded-lg border outline-none disabled:opacity-70`}
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     fontWeight: 400,
                     fontSize: "18px",
                     lineHeight: "100%",

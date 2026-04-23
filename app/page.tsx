@@ -199,7 +199,7 @@ export default function Home() {
         <div className="">
           <h1
             className="text-gray-900 mb-2 capitalize font-normal text-[20px] md:text-[24px] lg:text-[27px]"
-          // style={{ fontSize: "27px", fontWeight: 400 }}
+            // style={{ fontSize: "27px", fontWeight: 400 }}
           >
             Hello, {user.name.split(" ")[0]}!
           </h1>
@@ -225,9 +225,7 @@ export default function Home() {
               >
                 NO AUDIT CREATED
               </p>
-              <p
-                className="text-[20px] sm:text-[22px] xl:text-[26px] font-light"
-              >
+              <p className="text-[20px] sm:text-[22px] xl:text-[26px] font-light">
                 {isInvitedUser
                   ? "You have been invited to take an audit. Please wait for the audit to be shared with you."
                   : "Start your first audit to see your performance insights here."}
@@ -241,7 +239,7 @@ export default function Home() {
                     width: "318px",
                     height: "50px",
                     padding:
-                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)"
+                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
                   }}
                   onClick={() => {
                     clearAuditSessionStorage();
@@ -267,14 +265,16 @@ export default function Home() {
           <div className="flex-1">
             <h1
               className="text-[25px] lg:text-[30px] xl:text-[35px] font-normal"
-              style={{
-                // fontVariationSettings: "'wdth' 85, 'wght' 700",
-              }}
+              style={
+                {
+                  // fontVariationSettings: "'wdth' 85, 'wght' 700",
+                }
+              }
             >
               ALL AUDIT AUDITS
             </h1>
             <p
-              className="text-sm xl:text-[25px]"
+              className="text-[20px] xl:text-[25px]"
               style={{
                 fontWeight: 300,
               }}
@@ -293,7 +293,6 @@ export default function Home() {
                   router.push("/add-new-audit/?category=1");
                 }}
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 500",
                 }}
@@ -314,7 +313,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -325,7 +323,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -336,7 +333,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -347,7 +343,6 @@ export default function Home() {
               <th
                 className="px-4 py-2 font-medium border-r text-left text-sm text-[#212121] border-b"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontSize: "23px",
                   fontWeight: 500,
                   fontVariationSettings: "'wdth' 85, 'wght' 600",
@@ -365,7 +360,6 @@ export default function Home() {
                   key={audit.id}
                   className="border-b border-[#E0E0E0] font-normal"
                   style={{
-                    fontFamily: "'Acumin Variable Concept', sans-serif",
                     // fontWeight: 400,
                     fontVariationSettings: "'wdth' 85, 'wght' 400",
                   }}
@@ -373,7 +367,6 @@ export default function Home() {
                   <td
                     className="px-4 border-r py-4 font-light xl:text-nowrap"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -386,7 +379,6 @@ export default function Home() {
                   <td
                     className="px-4 border-r py-4 font-light"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       // fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -409,7 +401,6 @@ export default function Home() {
                         className="px-3 py-4 font-light text-center rounded"
                         style={{
                           color: scoreColor.text,
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "23px",
                           lineHeight: "100%",
@@ -424,7 +415,9 @@ export default function Home() {
                     )}
                   </td>
                   <td className="px-4 py-1">
-                    <div className={`grid ${isInvitedUser ? 'grid-cols-1' : 'grid-cols-[15%_30%_30%_25%]'} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}>
+                    <div
+                      className={`grid ${isInvitedUser ? "grid-cols-1" : "grid-cols-[15%_30%_30%_25%]"} gap-2 pr-6 overflow-x-auto 2xl:overflow-x-hidden`}
+                    >
                       {!isInvitedUser && (
                         <>
                           <button
@@ -435,8 +428,6 @@ export default function Home() {
                             }
                             className="w-full px-2 py-2 text-center cursor-pointer bg-[#DBDBDB] text-black hover:bg-[#DBDBDB]/80 rounded-md flex items-center justify-center gap-1 lg:gap-1 xl:gap-1"
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -461,8 +452,6 @@ export default function Home() {
                             leftIcon={<Trash2 size={18} />}
                             onClick={() => handleDeleteClick(audit.id)}
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontSize: "24px",
                               lineHeight: "100%",
@@ -482,7 +471,6 @@ export default function Home() {
                         }
                         className="w-full px-3 py-2 cursor-pointer bg-green-600 text-white rounded-md hover:bg-green-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-3 text-nowrap"
                         style={{
-                          fontFamily: "'Acumin Variable Concept', sans-serif",
                           fontWeight: 400,
                           fontSize: "24px",
                           lineHeight: "100%",
@@ -498,7 +486,6 @@ export default function Home() {
                           onClick={() => handleInviteClick(audit)}
                           className="w-full px-3 cursor-pointer py-2 text-center bg-blue-600 text-white rounded-md hover:bg-blue-700 flex justify-center items-center gap-1 lg:gap-3 xl:gap-1"
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "24px",
                             lineHeight: "100%",
@@ -516,19 +503,18 @@ export default function Home() {
               );
             })}
           </tbody>
-        </table >
-      </div >
+        </table>
+      </div>
 
       {/* Delete Confirmation Modal */}
-      < ConfirmationModal
+      <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => {
           if (!deleteAuditMutation.isPending) {
             setDeleteModalOpen(false);
             setAuditToDelete(null);
           }
-        }
-        }
+        }}
         onConfirm={handleDeleteConfirm}
         title="Delete Audit"
         message="Are you sure you want to delete this audit? This action cannot be undone."
@@ -539,20 +525,18 @@ export default function Home() {
       />
 
       {/* Invite Audit Modal */}
-      {
-        auditToInvite && (
-          <InviteAuditModal
-            isOpen={inviteModalOpen}
-            onClose={() => {
-              setInviteModalOpen(false);
-              setAuditToInvite(null);
-            }}
-            onInvite={handleInvite}
-            auditTitle={auditToInvite.title}
-            loading={sendInviteMutation.isPending}
-          />
-        )
-      }
-    </div >
+      {auditToInvite && (
+        <InviteAuditModal
+          isOpen={inviteModalOpen}
+          onClose={() => {
+            setInviteModalOpen(false);
+            setAuditToInvite(null);
+          }}
+          onInvite={handleInvite}
+          auditTitle={auditToInvite.title}
+          loading={sendInviteMutation.isPending}
+        />
+      )}
+    </div>
   );
 }

@@ -110,11 +110,10 @@ export default function InvitedUsersPage() {
               className="h-full w-auto"
             />
           </div>
-          <p className="text-[#2D2D2D] mb-4 font-normal text-center uppercase invited-empty-title text-2xl sm:text-3xl lg:text-[35px] ">
+          <p className="text-[#2D2D2D] mb-4 font-normal text-center uppercase invited-empty-title text-2xl sm:text-3xl lg:text-[40px] ">
             NO INVITATIONS SENT YET
           </p>
-          <p className="font-light text-center max-w-3xl text-gray-500 px-6 text-sm sm:text-lg xl:text-[25px]"
-          >
+          <p className="font-light text-center max-w-3xl px-6 text-sm sm:text-lg xl:text-[26px]">
             When you invite team members to take an audit, their invitation
             status and details will be listed here.
           </p>

@@ -66,10 +66,10 @@ const SidebarFooter = ({
       >
         {onResultPage ? (
           <div
-            className="px-4 mt-4"
+            className="px-4 mt-3"
             // style={{ borderColor: secondaryColor || "#456987" }}
           >
-            <div className="mt-4">
+            <div className="mt-3">
               <h3 className="text-[20px] 2xl:text-[27px] text-white mb-3  text-center">
                 Testimonials
               </h3>
@@ -80,7 +80,7 @@ const SidebarFooter = ({
                     backgroundColor: (secondaryColor || "#456987") + "80",
                   }}
                 >
-                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[22px] font-normal">
+                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[20px] font-normal">
                     This system transformed our tracking. Detailed scoring helps
                     identify urgent improvements.
                   </p>
@@ -91,7 +91,7 @@ const SidebarFooter = ({
                     backgroundColor: (secondaryColor || "#456987") + "80",
                   }}
                 >
-                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[22px] font-normal">
+                  <p className="text-[#E8E8E8] text-[17px] 2xl:text-[20px] font-normal">
                     Category-based assessments make it easy to focus and gain
                     insights for improvement.
                   </p>

@@ -669,7 +669,7 @@ export default function AddNewAudit() {
     <div className="">
       <header className="">
         <div className="bg-white pt-5 flex items-center justify-center gap-2.5 w-full ">
-          <p className=" text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
+          <p className="text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 xl:pl-0 text-nowrap">
             GRADING SCALE (1-5)
           </p>
           <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
@@ -712,7 +712,7 @@ export default function AddNewAudit() {
               placeholder="Presentation Name"
               className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none"
               style={{
-                fontFamily: "var(--font-acumin),",
+                fontFamily: "var(--font-acumin)",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",
@@ -1093,9 +1093,6 @@ function AuditTable({
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
                   <div className="flex items-center justify-center gap-2 text-black">
-                    <span className="select-none cursor-grab active:cursor-grabbing">
-                      =
-                    </span>
                     <span className="font-medium text-base xl:text-lg">
                       {rowIndex}
                     </span>
@@ -1104,7 +1101,7 @@ function AuditTable({
                 <td className="audit-question-col border-r border-gray-300 px-4 py-[10px] align-middle">
                   <input
                     type="text"
-                    maxLength={65}
+                    maxLength={66}
                     value={questions[rowIndex] || ""}
                     placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                     onClick={() => handleQuestionClick(rowIndex)}
@@ -1113,7 +1110,7 @@ function AuditTable({
                     }
                     className="w-full bg-[#4569871A] px-2 sm:px-3 lg:px-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none"
                     style={{
-                      fontFamily: "var(--font-acumin),",
+                      fontFamily: "var(--font-acumin)",
                       fontWeight: 400,
                       fontSize: "23px",
                       lineHeight: "100%",
@@ -1135,7 +1132,7 @@ function AuditTable({
                           }
                           className={`audit-status-button ${button.color} ${button.borderColor} ${!button.textColor.startsWith("#") ? button.textColor : ""} rounded-xl border outline-none opacity-55 text-[10px] sm:text-[16px] lg:text-[18px] xl:text-[21px] px-1.5 xl:px-4 min-w-[50px] py-2 xl:py-[13px] font-normal`}
                           style={{
-                            fontFamily: "var(--font-acumin),",
+                            fontFamily: "var(--font-acumin)",
                             fontWeight: 400,
                             // fontSize: "18px",
                             lineHeight: "100%",

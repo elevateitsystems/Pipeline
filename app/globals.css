@@ -40,13 +40,13 @@
     margin: 0;
     overflow-x: hidden;
     /* Prevent scrolling and hide overflowing content */
-    font-family: var(--font-acumin), sans-serif;
+    font-family: var(--font-acumin);
     letter-spacing: -0.01em;
   }
 
   body {
     /* Background will be applied dynamically via BackgroundWrapper component */
-    font-family: var(--font-acumin), sans-serif !important;
+    font-family: var(--font-acumin) !important;
     font-style: normal !important;
     letter-spacing: 0.162px !important;
     background-color: hsl(var(--background));
@@ -55,7 +55,7 @@
 }
 
 .font-acumin {
-  font-family: var(--font-acumin), sans-serif;
+  font-family: var(--font-acumin);
 }
 
 
@@ -63,7 +63,7 @@
 *,
 *::before,
 *::after {
-  font-family: var(--font-acumin), sans-serif !important;
+  font-family: var(--font-acumin) !important;
   font-style: normal !important;
   letter-spacing: 0.162px !important;
 }
@@ -85,12 +85,12 @@
 
 /* Sidebar responsive for 1024px screens */
 .sidebar-width {
-  width: 300px;
+  width: 301.08px;
 }
 
 @media (max-width: 1440px) {
   .sidebar-width {
-    width: 250px;
+    width: 301.08px;
   }
 }
 
@@ -103,7 +103,7 @@
 
 @media (min-width: 1024px) and (max-width: 1024px) {
   .sidebar-width {
-    width: 250px !important;
+    width: 301.08px !important;
   }
 
   /* Profile image larger at 1024px */
@@ -172,12 +172,6 @@
   .test-grade-scale {
     margin-top: -16px !important;
     margin-bottom: 10px !important;
-  }
-
-  .test-qa-bar {
-    margin-top: 0px !important;
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
   }
 
   .test-main {

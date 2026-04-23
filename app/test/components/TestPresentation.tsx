@@ -53,18 +53,18 @@ export default function TestPresentation() {
   const summaryData =
     auditData && "summary" in auditData
       ? (
-        auditData as Presentation & {
-          summary?: {
-            categoryRecommendations?:
-            | string
-            | Array<{ categoryId: string; recommendation: string }>;
-            nextSteps?:
-            | string
-            | Array<{ type: string; content: string; fileUrl?: string }>;
-            overallDetails?: string | null;
-          } | null;
-        }
-      )?.summary || null
+          auditData as Presentation & {
+            summary?: {
+              categoryRecommendations?:
+                | string
+                | Array<{ categoryId: string; recommendation: string }>;
+              nextSteps?:
+                | string
+                | Array<{ type: string; content: string; fileUrl?: string }>;
+              overallDetails?: string | null;
+            } | null;
+          }
+        )?.summary || null
       : null;
 
   const [answers, setAnswers] = useState<Record<string, string>>({}); // questionId -> optionId
@@ -409,7 +409,7 @@ export default function TestPresentation() {
     score: number;
     label: string;
   }) => {
-    const size = 70;
+    const size = 90;
     const center = size / 2;
     const radius = 39.108;
     const circumference = 2 * Math.PI * radius;
@@ -418,15 +418,20 @@ export default function TestPresentation() {
     return (
       <div className="flex flex-col items-center">
         <div
-          className="relative"
-          style={{ width: `${size}px`, height: `${size}px` }}
+          className={`relative xl:size-${size}px lg:size-${size - 10}px size-${size - 20}px`}
+          // style={{ width: `${size}px`, height: `${size}px` }}
         >
+          {/* Big circle for xl screen */}
           <svg
-            className="transform -rotate-90"
+            className="transform -rotate-90 hidden 2xl:block"
             width={size}
             height={size}
             viewBox="-4 -4 89 89"
-            style={{ width: `${size}px`, height: `${size}px`, overflow: "visible" }}
+            style={{
+              width: `size-${size}px`,
+              height: `size-${size}px`,
+              overflow: "visible",
+            }}
           >
             {/* Background circle from provided SVG */}
             <path
@@ -453,17 +458,55 @@ export default function TestPresentation() {
               }}
             />
           </svg>
+
+          {/* Small circle for lg screen */}
+          <svg
+            className="transform -rotate-90 2xl:hidden"
+            width={size - 20}
+            height={size - 20}
+            viewBox="-4 -4 89 89"
+            style={{
+              width: `size-${size - 20}px`,
+              height: `size-${size - 20}px`,
+              overflow: "visible",
+            }}
+          >
+            {/* Background circle from provided SVG */}
+            <path
+              d="M79.212 40.108C79.212 61.7034 61.7036 79.2157 40.1082 79.2157C18.5089 79.2157 1.00049 61.7034 1.00049 40.108C1.00049 18.5087 18.5089 1.00024 40.1082 1.00024C61.7036 1.00024 79.212 18.5087 79.212 40.108Z"
+              stroke="#2B4055"
+              strokeWidth="2.00052"
+              strokeMiterlimit="10"
+              fill="none"
+            />
+            {/* Progress circle */}
+            <circle
+              cx="40.108"
+              cy="40.108"
+              r="39.108"
+              stroke="#2CD573"
+              strokeWidth="8"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+              style={{
+                transition:
+                  "stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+            />
+          </svg>
+
           {/* Score in center */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span
               className="text-[#2B4055]"
               style={{
-                fontFamily: "'Acumin Variable Concept', sans-serif",
                 fontWeight: 600,
                 fontSize: "clamp(24px, 3.5vw, 46px)",
                 lineHeight: "100%",
                 letterSpacing: "0.003em",
-                fontVariationSettings: "'wdth' 65, 'wght' 600",
+                fontVariationSettings: "'wdth' 65, 'wght' 700",
                 textAlign: "center",
               }}
             >
@@ -473,18 +516,17 @@ export default function TestPresentation() {
         </div>
         {/* Category label */}
         <p
-          className="text-[#2B4055] text-center font-medium leading-tight  line-clamp-1 "
+          className="text-[#2B4055] text-center text-[19px] leading-tight line-clamp-1 "
           style={{
             marginTop: "17px",
             // width: "160px",
-            fontFamily: "'Acumin Variable Concept', sans-serif",
-            fontWeight: 500,
+            fontWeight: 600,
             fontStyle: "normal",
             fontSize: "clamp(12px, 1.5vw, 19px)",
             lineHeight: "100%",
             letterSpacing: "0.003em",
             textAlign: "center",
-            fontVariationSettings: "'wdth' 65, 'wght' 500",
+            fontVariationSettings: "'wdth' 65, 'wght' 550",
           }}
         >
           {label}
@@ -505,7 +547,7 @@ export default function TestPresentation() {
       <header className="">
         {/* Category Progress Circles */}
         {presentation && presentation.categories.length > 0 && (
-          <div className="test-circle-row bg-white pt-1 grid grid-cols-[13%_13%_13%_13%_13%_13%_13%_8%] pr-2 gap-[2px] w-full ">
+          <div className="lg:pl-4 2xl:pl-10 test-circle-row bg-white pt-1 grid grid-cols-[13%_13%_13%_13%_13%_13%_13%_8%] pr-2 gap-[2px] w-full ">
             {filteredCategories(presentation.categories)?.map((category) => {
               const categoryScore = categoryScores[category.id] || 0;
               const percentage = getCategoryPercentage(category.id);
@@ -629,19 +671,18 @@ export default function TestPresentation() {
                 }
               }}
             >
-              <div className="w-24 h-24 flex items-center justify-center">
+              <div className="size-20 2xl:size-24 flex items-center justify-center">
                 <NextImage
                   src="/searchIcon.png"
                   alt="Summary Overview"
                   width={48}
                   height={48}
-                  className="w-12 h-12"
+                  className="size-10 2xl:size-12"
                 />
               </div>
               <p
                 className="pb-1 text-black text-center font-medium max-w-[100px] leading-tight"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
                   fontSize: "clamp(12px, 1.5vw, 19px)",
@@ -657,9 +698,9 @@ export default function TestPresentation() {
           </div>
         )}
 
-        <div className="test-grade-scale bg-white -mt-1 lg:max-xl:-mt-8 flex items-center justify-center gap-2 w-full ">
+        <div className="bg-white -mt-1 lg:max-xl:-mt-8 pt-4 2xl:pt-6 flex items-center justify-center gap-2 w-full ">
           <div className="bg-white flex items-center justify-center gap-2.5 w-full ">
-            <p className="text-[14px] 2xl:text-[17px] uppercase font-500 tracking-[0.352px] leading-normal font-medium pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
+            <p className="text-[14px] 2xl:text-[17px] uppercase tracking-[0.352px] leading-normal font-semibold pl-4 pt-1 xl:pl-0 text-nowrap text-[#212121]">
               GRADING SCALE (1-5)
             </p>
             <div className="flex xl:grid grid-cols-3 gap-[1.89px]">
@@ -677,11 +718,11 @@ export default function TestPresentation() {
         </div>
 
         <div
-          className="test-qa-bar audit-content-padding flex items-center"
+          className="flex items-center"
           style={{
             width: "100%",
-            paddingTop: "3px",
-            paddingBottom: "1px",
+            // paddingTop: "1px",
+            // paddingBottom: "1px",
             alignItems: "center",
           }}
         >
@@ -690,12 +731,10 @@ export default function TestPresentation() {
             style={{ width: "100px" }}
           ></p>
           <p
-            className="font-medium"
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               // lineHeight: "100%",
               letterSpacing: "0.016em",
@@ -707,30 +746,27 @@ export default function TestPresentation() {
             questions
           </p>
           <p
-            className="font-medium"
             style={{
               width: "calc(50% - 100px)",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",
               textTransform: "capitalize",
               textAlign: "left",
-              marginLeft: '25%',
+              marginLeft: "25%",
               paddingLeft: "16px",
             }}
           >
             answers
           </p>
           <p
-            className="text-center font-medium"
+            className="text-center"
             style={{
               width: "100px",
               color: "#F4F4F4",
-              fontFamily: "'Acumin Variable Concept', sans-serif",
-              fontWeight: 500,
+              fontWeight: 400,
               fontSize: "clamp(16px, 1.8vw, 22px)",
               lineHeight: "100%",
               letterSpacing: "0.016em",
@@ -745,7 +781,7 @@ export default function TestPresentation() {
         <div className="flex-1 flex flex-col">
           <div className="w-full">
             <table
-              className="w-full border-collapse border-gray-300"
+              className="w-full border-collapse border-gray-300 text-[23px]"
               style={{ tableLayout: "fixed" }}
             >
               {/* start */}
@@ -769,8 +805,7 @@ export default function TestPresentation() {
                         <span
                           className="text-[#212121]"
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
-                            fontWeight: 500,
+                            fontWeight: 400,
                             fontSize: "clamp(14px, 1.5vw, 21px)",
                             lineHeight: "100%",
                             letterSpacing: "-0.025em",
@@ -788,8 +823,6 @@ export default function TestPresentation() {
                           <span
                             className="text-[#212121]"
                             style={{
-                              fontFamily:
-                                "'Acumin Variable Concept', sans-serif",
                               fontWeight: 400,
                               fontStyle: "normal",
                               fontSize: "clamp(16px, 1.6vw, 23px)",
@@ -806,22 +839,24 @@ export default function TestPresentation() {
                         className="border-r border-gray-300 px-4 align-middle"
                         style={{ width: "35%" }}
                       >
-                        <div
-                          className="relative py-2"
-                          data-question-id={question.id}
-                        >
+                        <div className="py-2" data-question-id={question.id}>
                           <Select
                             value={selectedOptionId || undefined}
                             onValueChange={(value) =>
                               handleAnswerChange(question.id, value)
                             }
                           >
+                            {/* 🔹 Trigger */}
                             <SelectTrigger
-                              className="w-full text-sm font-normal text-[#212121] ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
+                              className="
+    relative w-full bg-[#E8E8E8] text-[#212121] border-none rounded-md px-3 pr-10
+    outline-none ring-0
+    focus:outline-none focus:ring-0 focus:border-transparent
+    focus-visible:outline-none focus-visible:ring-0 focus-visible:border-transparent
+    data-[state=open]:ring-0 data-[state=open]:outline-none data-[state=open]:border-transparent
+    [&>svg]:hidden
+  "
                               style={{
-                                fontFamily:
-                                  "'Acumin Variable Concept', sans-serif",
-                                fontWeight: 400,
                                 fontSize: "clamp(14px, 1.5vw, 20px)",
                                 lineHeight: "100%",
                                 letterSpacing: "-0.015em",
@@ -832,79 +867,53 @@ export default function TestPresentation() {
                             >
                               <SelectValue
                                 placeholder=""
-                                className="text-[#212121] font-normal"
+                                className="text-[#212121]"
                               />
+
+                              {/* 🔹 Right Color + Arrow */}
+                              <div
+                                className="absolute right-0 top-0 h-full w-11 flex items-center justify-center rounded-md pointer-events-none"
+                                style={{
+                                  backgroundColor: selectedOption
+                                    ? getOptionColor(selectedOption.points)
+                                    : "transparent",
+                                }}
+                              >
+                                <svg
+                                  className="w-4 h-[9px]"
+                                  style={{
+                                    color: selectedOption ? "white" : "#606060",
+                                  }}
+                                  fill="currentColor"
+                                  viewBox="0 0 12 8"
+                                >
+                                  <path d="M6 8L0 0h12L6 8z" />
+                                </svg>
+                              </div>
                             </SelectTrigger>
+
+                            {/* 🔹 Dropdown */}
                             <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-md">
                               {[...question.options]
                                 .sort((a, b) => a.points - b.points)
-                                .map((option) => {
-                                  const backgroundColor =
-                                    getOptionBackgroundColor(option.points);
-                                  const textColor = getOptionTextColor(
-                                    option.points,
-                                  );
-                                  return (
-                                    <SelectItem
-                                      key={option.id}
-                                      value={option.id}
-                                      className="cursor-pointer rounded-sm px-3 py-2 text-sm focus:outline-none"
-                                      style={{
-                                        backgroundColor: backgroundColor,
-                                        color: textColor,
-                                        fontFamily:
-                                          "'Acumin Variable Concept', sans-serif",
-                                        fontWeight: 400,
-                                        fontSize: "clamp(12px, 1.2vw, 16px)",
-                                        lineHeight: "100%",
-                                        letterSpacing: "-0.015em",
-                                        fontVariationSettings:
-                                          "'wdth' 85, 'wght' 400",
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        const target = e.currentTarget;
-                                        target.style.opacity = "0.9";
-                                        target.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        const target = e.currentTarget;
-                                        target.style.opacity = "1";
-                                        target.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                      onFocus={(e) => {
-                                        e.currentTarget.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                    >
-                                      <span style={{ color: textColor }}>
-                                        {option.text}
-                                      </span>
-                                    </SelectItem>
-                                  );
-                                })}
+                                .map((option) => (
+                                  <SelectItem
+                                    key={option.id}
+                                    value={option.id}
+                                    className="cursor-pointer rounded-sm px-3 py-2 hover:bg-gray-100 transition-colors font-semibold"
+                                    style={{
+                                      fontSize: "clamp(13px, 1.5vw, 18px)",
+                                      lineHeight: "100%",
+                                      letterSpacing: "-0.015em",
+                                      fontVariationSettings:
+                                        "'wdth' 85, 'wght' 600",
+                                    }}
+                                  >
+                                    {option.text}
+                                  </SelectItem>
+                                ))}
                             </SelectContent>
                           </Select>
-                          <div
-                            className="absolute right-0 top-3 h-[55%] w-11 flex items-center justify-center rounded-md pointer-events-none"
-                            style={{
-                              backgroundColor: selectedOption
-                                ? getOptionColor(selectedOption.points)
-                                : "transparent",
-                            }}
-                          >
-                            <svg
-                              className="w-4 h-[9px] mt-1"
-                              style={{
-                                color: selectedOption ? "white" : "#606060",
-                              }}
-                              fill="currentColor"
-                              viewBox="0 0 12 8"
-                            >
-                              <path d="M6 8L0 0h12L6 8z" />
-                            </svg>
-                          </div>
                         </div>
                       </td>
                       <td
@@ -914,7 +923,6 @@ export default function TestPresentation() {
                         <span
                           className={`px-3 rounded font-medium text-gray-900`}
                           style={{
-                            fontFamily: "'Acumin Variable Concept', sans-serif",
                             fontWeight: 400,
                             fontSize: "clamp(16px, 1.6vw, 23px)",
                             lineHeight: "100%",
@@ -943,7 +951,10 @@ export default function TestPresentation() {
                       <div className="w-full px-4 border-[#E8E8E8] rounded-xl flex items-center justify-end">
                         <span
                           className="text-gray-50 rounded-lg pt-1 px-2 font-medium text-[clamp(16px,1.8vw,23px)] mt-1"
-                          style={{ backgroundColor: primaryColor, fontVariationSettings: "'wdth' 90, 'wght' 400", }}
+                          style={{
+                            backgroundColor: primaryColor,
+                            fontVariationSettings: "'wdth' 90, 'wght' 400",
+                          }}
                         >
                           Total Score
                         </span>
@@ -969,17 +980,17 @@ export default function TestPresentation() {
               {/* Block 1: Low Score */}
               <div className="bg-white rounded-tl-xl border-r-2 border-white">
                 <div
-                  className={`rounded-tl-xl text-center pt-1 ${currentCategoryScore >= 1 &&
+                  className={`rounded-tl-xl text-center pt-1 ${
+                    currentCategoryScore >= 1 &&
                     currentCategoryScore <=
-                    Math.floor(currentCategoryMaxScore * 0.4)
-                    ? "bg-[#F65355] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      Math.floor(currentCategoryMaxScore * 0.4)
+                      ? "bg-[#F65355] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -988,9 +999,8 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -1005,18 +1015,18 @@ export default function TestPresentation() {
               {/* Block 2: Medium Score */}
               <div className="bg-white border-r-2 border-white">
                 <div
-                  className={`text-center pt-1 ${currentCategoryScore >
-                    Math.floor(currentCategoryMaxScore * 0.4) &&
+                  className={`text-center pt-1 ${
+                    currentCategoryScore >
+                      Math.floor(currentCategoryMaxScore * 0.4) &&
                     currentCategoryScore <=
-                    Math.floor(currentCategoryMaxScore * 0.8)
-                    ? "bg-[#F7AF41] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      Math.floor(currentCategoryMaxScore * 0.8)
+                      ? "bg-[#F7AF41] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -1026,9 +1036,8 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1 border-x border-[#E8E8E8] ">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center pb-3"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
@@ -1043,16 +1052,16 @@ export default function TestPresentation() {
               {/* Block 3: High Score */}
               <div className="bg-white">
                 <div
-                  className={`text-center pt-1 rounded-tr-xl ${currentCategoryScore >
+                  className={`text-center pt-1 rounded-tr-xl ${
+                    currentCategoryScore >
                     Math.floor(currentCategoryMaxScore * 0.8)
-                    ? "bg-[#2BD473] text-white"
-                    : "bg-[#E8E8E8] text-gray-800"
-                    }`}
+                      ? "bg-[#2BD473] text-white"
+                      : "bg-[#E8E8E8] text-gray-800"
+                  }`}
                 >
                   <h3
                     className="text-[clamp(16px,1.8vw,23px)] font-medium"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       fontWeight: 500,
                     }}
                   >
@@ -1062,16 +1071,16 @@ export default function TestPresentation() {
                 </div>
                 <div className="mt-1">
                   <p
-                    className="text-[clamp(14px,1.5vw,20px)] px-4  text-[#212121] leading-relaxed text-center"
+                    className="text-[clamp(16px,1.6vw,22px)] px-4  text-[#212121] leading-relaxed text-center"
                     style={{
-                      fontFamily: "'Acumin Variable Concept', sans-serif",
                       width: "100%",
                       color: "#212121",
                       fontVariationSettings: "'wdth' 85, 'wght' 400",
                     }}
                   >
                     Demonstrates excellent performance and strong compliance.
-                    Well-established processes and best practices yield outstanding results.
+                    Well-established processes and best practices yield
+                    outstanding results.
                   </p>
                 </div>
               </div>
@@ -1084,7 +1093,6 @@ export default function TestPresentation() {
               <h3
                 className="mb-3 uppercase"
                 style={{
-                  fontFamily: "'Acumin Variable Concept', sans-serif",
                   fontWeight: 500,
                   fontStyle: "normal",
                   fontSize: "clamp(16px, 1.8vw, 21px)",
@@ -1120,11 +1128,27 @@ export default function TestPresentation() {
                 <div
                   className="absolute transition-all duration-500 z-30"
                   style={{
-                    left: `${currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.4)
-                      ? (currentCategoryScore / Math.floor(currentCategoryMaxScore * 0.4)) * 33.33
-                      : currentCategoryScore <= Math.floor(currentCategoryMaxScore * 0.8)
-                        ? 33.33 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.4)) / (Math.floor(currentCategoryMaxScore * 0.8) - Math.floor(currentCategoryMaxScore * 0.4))) * 33.33
-                        : 66.66 + ((currentCategoryScore - Math.floor(currentCategoryMaxScore * 0.8)) / (currentCategoryMaxScore - Math.floor(currentCategoryMaxScore * 0.8))) * 33.34}%`,
+                    left: `${
+                      currentCategoryScore <=
+                      Math.floor(currentCategoryMaxScore * 0.4)
+                        ? (currentCategoryScore /
+                            Math.floor(currentCategoryMaxScore * 0.4)) *
+                          33.33
+                        : currentCategoryScore <=
+                            Math.floor(currentCategoryMaxScore * 0.8)
+                          ? 33.33 +
+                            ((currentCategoryScore -
+                              Math.floor(currentCategoryMaxScore * 0.4)) /
+                              (Math.floor(currentCategoryMaxScore * 0.8) -
+                                Math.floor(currentCategoryMaxScore * 0.4))) *
+                              33.33
+                          : 66.66 +
+                            ((currentCategoryScore -
+                              Math.floor(currentCategoryMaxScore * 0.8)) /
+                              (currentCategoryMaxScore -
+                                Math.floor(currentCategoryMaxScore * 0.8))) *
+                              33.34
+                    }%`,
                     top: "50%",
                     transform: "translate(-50%, -50%)",
                   }}

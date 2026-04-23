@@ -1281,7 +1281,7 @@ export default function UpdateAudit() {
               disabled={!titleEditable}
               className="w-full bg-[#4569871A] px-5 py-[11px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70"
               style={{
-                fontFamily: "var(--font-acumin), sans-serif",
+                fontFamily: "var(--font-acumin)",
                 fontWeight: 400,
                 fontSize: "clamp(20px, 1.8vw, 23px)",
                 letterSpacing: "-0.025em",

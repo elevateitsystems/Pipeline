@@ -145,7 +145,6 @@ export default function TestResult() {
       className=""
       style={{
         backgroundColor: "#f5f5f5",
-        fontFamily: "'Acumin Variable Concept', sans-serif",
       }}
     >
       {/* Right Main Content - 80% width */}
@@ -155,14 +154,14 @@ export default function TestResult() {
           <div className="mb-6">
             <div className="flex justify-between items-start ">
               <div className="2xl:flex gap-20">
-                <h1 className="text-[1.75rem] 2xl:text-[2rem] text-nowrap text-[#2D2D2D] mb-3 2xl:mb-1">
+                <h1 className="text-[1.75rem] 2xl:text-[35px] text-nowrap text-[#2D2D2D] mb-3 2xl:mb-1">
                   SUMMARY SCORE
                 </h1>
                 <div>
-                  <h2 className="text-[1.60rem] 2xl:text-[2rem]  text-[#2B4055] mb-1">
+                  <h2 className="text-[1.60rem] 2xl:text-[35px] text-[#2B4055] mb-1">
                     YOUR SALES CONVERSION SCORE
                   </h2>
-                  <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-8 mb-3 2xl:mb-0">
+                  <p className="text-gray-600 text-[17px] 2xl:text-[25px] leading-8 mb-3 2xl:mb-0">
                     Your overall performance score based on the audit . This
                     score reflects your current standing across all evaluated
                     categories and provides insight into your sales conversion
@@ -247,7 +246,7 @@ export default function TestResult() {
 
             {/* AUDIT TOTAL SCORE Progress Bar */}
             <div className="relative rounded-lg">
-              <h3 className="text-[1.20rem] 2xl:text-[21px] font-semibold text-gray-800  uppercase">
+              <h3 className="text-[1.20rem] 2xl:text-[21px] font-normal text-gray-800  uppercase">
                 AUDIT TOTAL SCORE ({totalScore} / {totalMaxScore})
               </h3>
               <div className="relative w-full h-[18px] mt-2 flex items-center rounded-full ">
@@ -285,7 +284,7 @@ export default function TestResult() {
 
           {/* VISUAL BREAKDOWN RESULTS Section */}
           <div className="mb-3 border-t pt-4 border-gray-300">
-            <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-2">
+            <h2 className="text-[1.5rem] 2xl:text-[35px] text-[#2D2D2D] mb-2">
               VISUAL BREAKDOWN RESULTS
             </h2>
             <div className="bg-[#EFEFEF] p-5 px-6 rounded-lg">
@@ -323,7 +322,7 @@ export default function TestResult() {
                   );
                 })}
               </div>
-              <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
+              <p className="text-[17px] 2xl:text-[20px] font-light">
                 The visual breakdown above represents your performance across
                 the top four categories. Each category is color-coded based on
                 your score: red indicates areas requiring urgent attention,
@@ -339,10 +338,10 @@ export default function TestResult() {
           <div className="grid grid-cols-2 gap-6 mb-2 border-y py-2 border-gray-300">
             {/* Left Column - IMPROVEMENT RECOMMENDATIONS */}
             <div className="border-r pr-6 border-gray-300">
-              <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-4">
+              <h2 className="text-[1.5rem] 2xl:text-[35px] text-[#2D2D2D] mb-4">
                 IMPROVEMENT RECOMMENDATIONS
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {lastThreeCategories.map((cs, index) => {
                   const recommendation = getRecommendationForCategory(
                     cs.categoryId,
@@ -352,7 +351,7 @@ export default function TestResult() {
                       key={cs.categoryId}
                       className={`pb-1 ${index === lastThreeCategories.length - 1 ? "" : "border-b min-h-20 line-clamp-3 border-gray-300"}`}
                     >
-                      <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
+                      <p className="text-gray-600 text-[17px] 2xl:text-[20px] leading-relaxed">
                         <span className="text-[#2B4055] font-bold">
                           {cs.categoryName}:
                         </span>{" "}
@@ -367,7 +366,7 @@ export default function TestResult() {
 
             {/* Right Column - WHAT ARE THE NEXT STEPS? */}
             <div>
-              <h2 className="text-[1.5rem] 2xl:text-[2rem] text-[#2D2D2D] mb-3">
+              <h2 className="text-[1.5rem] 2xl:text-[35 px] text-[#2D2D2D] mb-3">
                 WHAT ARE THE NEXT STEPS?
               </h2>
               <div className="space-y-3 mb-3 grid grid-cols-3 gap-4">
@@ -389,7 +388,7 @@ export default function TestResult() {
                         ) => (
                           <div
                             key={index}
-                            className="w-full h-full px-4 py-3 border-2 bg-[rgba(239,239,239,0.40)] rounded-lg text-left min-h-20"
+                            className="w-full h-full px-4 py-3 border-2 rounded-lg text-left min-h-20"
                           >
                             {step.type === "file" && step.fileUrl ? (
                               <div className="flex items-center gap-2">
@@ -413,16 +412,16 @@ export default function TestResult() {
                     : [1, 2, 3].map((step) => (
                         <div
                           key={step}
-                          className="w-full px-2 border-2 border-gray-300 rounded-lg h-28 flex items-center justify-center"
+                          className="w-full px-2 border-2 border-gray-400 bg-[rgba(0,0,0,0.04)] rounded-lg h-28 flex items-center justify-center"
                         >
-                          <p className="text-[17px] 2xl:text-[22px] text-gray-400 font-light">
+                          <p className="text-[17px] 2xl:text-[22px] font-light">
                             Enter step {step} details
                           </p>
                         </div>
                       ));
                 })()}
               </div>
-              <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed">
+              <p className="text-gray-600 text-[17px] 2xl:text-[20px] font-light">
                 {summaryData?.overallDetails ||
                   "Based on your audit results, focus on implementing the recommended improvements in the areas with the lowest scores. Start with the most critical categories that require urgent attention, then work through the next steps systematically. Regular follow-up assessments will help you track your progress and ensure continuous improvement across all evaluated areas."}
               </p>
@@ -431,18 +430,18 @@ export default function TestResult() {
 
           {/* Want to Skip the Line? Section */}
           <div className="text-center bg-[#EFEFEF] py-3 2xl:py-4 mt-2 2xl:mt-4 rounded-xl">
-            <h2 className="text-[1.5rem] 2xl:text-[2rem] font-semibold text-[#2D2D2D] mb-2">
+            <h2 className="text-[1.5rem] 2xl:text-[1.8rem] font-semibold text-[#2D2D2D] mb-2">
               Want to Skip the Line?
             </h2>
-            <p className="text-gray-600 text-[17px] 2xl:text-[22px] leading-relaxed mb-3 max-w-7xl mx-auto">
+            <p className="text-[17px] 2xl:text-[19px] mb-3 max-w-7xl mx-auto">
               For action-takers ready to eliminate their conversion leaks
               immediately, schedule a strategy call. We&apos;ll map out how your
               personalized Pipeline Conversion Kit could look-so you can start
               closing confidently without rewriting your offer
             </p>
-            <CustomButton className="h-7 2xl:h-8 px-5 2xl:px-6 inline-block text-black font-base hover:bg-[#F7AF41]/90 transition-colors text-[18px] 2xl:text-[23px] rounded-xl">
+            <button className="h-8 2xl:px-6 text-black font-base bg-[#F7AF41] hover:bg-[#F7AF41]/90 text-[23px] rounded-xl">
               Book Your Call Now
-            </CustomButton>
+            </button>
           </div>
         </div>
       </div>

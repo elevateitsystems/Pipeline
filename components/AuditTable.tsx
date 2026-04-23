@@ -209,9 +209,6 @@ const AuditTable = React.memo(function AuditTable({
               >
                 <td className="audit-index-col border-r border-gray-300 px-4 py-3 text-center align-middle">
                   <div className="flex items-center justify-center gap-2 text-black">
-                    <span className="select-none cursor-grab active:cursor-grabbing">
-                      =
-                    </span>
                     <span className="font-medium text-lg">{rowIndex}</span>
                   </div>
                 </td>
@@ -219,7 +216,7 @@ const AuditTable = React.memo(function AuditTable({
                   <div className="relative">
                     <input
                       type="text"
-                      maxLength={65}
+                      maxLength={66}
                       value={getQuestionText(rowIndex)}
                       placeholder={`Question ${rowIndex.toString().padStart(2, "0")}`}
                       onClick={() => handleQuestionClick(rowIndex)}
@@ -229,7 +226,7 @@ const AuditTable = React.memo(function AuditTable({
                       disabled={!editableQuestions.has(rowIndex)}
                       className="w-full bg-[#4569871A] pl-2 xl:pl-4 py-[10.5px] sm:py-[10px] lg:py-[12px] xl:py-[14px] border border-[#3b5163] rounded-xl outline-none disabled:opacity-70 pr-10 "
                       style={{
-                        fontFamily: "var(--font-acumin), sans-serif",
+                        fontFamily: "var(--font-acumin)",
                         fontWeight: 400,
                         fontSize: "23px",
                         lineHeight: "100%",
@@ -278,7 +275,7 @@ const AuditTable = React.memo(function AuditTable({
                               !(editableStatus[rowIndex]?.has(idx) ?? false)
                             }
                             style={{
-                              fontFamily: "var(--font-acumin), sans-serif",
+                              fontFamily: "var(--font-acumin)",
                               fontWeight: 400,
                               lineHeight: "100%",
                               letterSpacing: "-0.015em",

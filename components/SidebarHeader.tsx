@@ -32,29 +32,31 @@ const SidebarHeader = ({
         }}
       >
         {onResultPage ? (
-          <div className="flex items-center gap-3 px-4">
-            <Image
-              src={summary}
-              alt="Logo"
-              width={70}
-              height={60}
-              className="2xl:h-[72px] h-[50px] w-auto"
-            />
-            <span className="text-white text-[1.5rem] 2xl:text-[1.94rem]">
-              Summary Overview
-            </span>
+          <div className="flex justify-center px-10">
+            <div className="flex items-center gap-3">
+              <Image
+                src={summary}
+                alt="Logo"
+                width={70}
+                height={60}
+                className="2xl:h-[72px] h-[50px] w-auto object-contain"
+              />
+              <span className="text-white font-normal text-[1.5rem] 2xl:text-[1.94rem] leading-none">
+                Summary Overview
+              </span>
+            </div>
           </div>
         ) : (
           <Image
             onClick={() => router.push("/")}
-            className="cursor-pointer sidebar-logo"
+            className=""
             src={user?.company?.logoUrl || logo}
             alt="Logo"
             width={168}
             height={60}
             style={{
-              width: "clamp(120px, 15vw, 168px)",
-              height: "clamp(40px, 8vw, 57px)",
+              // width: "clamp(120px, 15vw, 168px)",
+              // height: "clamp(40px, 8vw, 57px)",
               objectFit: "contain",
             }}
           />
@@ -63,7 +65,7 @@ const SidebarHeader = ({
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="300"
+        width="100%"
         height="2"
         viewBox="0 0 300 2"
         fill="none"
@@ -77,7 +79,7 @@ const SidebarHeader = ({
       </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="300"
+        width="100%"
         height="2"
         viewBox="0 0 300 2"
         fill="none"
