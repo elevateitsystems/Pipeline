@@ -172,12 +172,12 @@ export default function SignupPage() {
         ...(token
           ? {}
           : {
-            companyName: formData.companyName || undefined,
-            companyLogoUrl: formData.companyLogoUrl || undefined,
-            // Only include colors if not using token (invited users get colors from inviter)
-            primaryColor: formData.primaryColor,
-            secondaryColor: formData.secondaryColor,
-          }),
+              companyName: formData.companyName || undefined,
+              companyLogoUrl: formData.companyLogoUrl || undefined,
+              // Only include colors if not using token (invited users get colors from inviter)
+              primaryColor: formData.primaryColor,
+              secondaryColor: formData.secondaryColor,
+            }),
         // Profile image can be included for both cases
         profileImageUrl: formData.profileImageUrl || undefined,
       };
@@ -335,7 +335,7 @@ export default function SignupPage() {
                       value={digit}
                       onChange={(e) => handlePinChange(index, e.target.value)}
                       onKeyDown={(e) => handlePinKeyDown(index, e)}
-                      className="w-10 h-10 text-xl font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
+                      className="size-10 text-center text-xl font-semibold leading-none border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
                     />
                   ))}
                 </div>
@@ -344,7 +344,6 @@ export default function SignupPage() {
                 </p>
               </div>
             </div>
-
 
             {!token ? (
               <>
@@ -471,8 +470,7 @@ export default function SignupPage() {
                   </div>
                 </div>
               </>
-            ) : null
-            }
+            ) : null}
 
             <button
               type="submit"
@@ -482,29 +480,27 @@ export default function SignupPage() {
               {registerMutation.isPending ? "Creating Account..." : "Signup"}
             </button>
 
-            {
-              message && (
-                <p
-                  className={`text-center text-sm mt-3 ${message.includes("success") ? "text-green-600" : "text-red-600"
-                    }`}
-                >
-                  {message}
-                </p>
-              )
-            }
+            {message && (
+              <p
+                className={`text-center text-sm mt-3 ${
+                  message.includes("success")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {message}
+              </p>
+            )}
 
             <div className="text-center mt-3 w-full text-gray-800 text-[14px] sm:text-[16px]">
               Already have an account?{" "}
-              <Link
-                href="/signin"
-                className="underline font-normal"
-              >
+              <Link href="/signin" className="underline font-normal">
                 Login
               </Link>
             </div>
-          </form >
-        </div >
-      </div >
-    </div >
+          </form>
+        </div>
+      </div>
+    </div>
   );
 }

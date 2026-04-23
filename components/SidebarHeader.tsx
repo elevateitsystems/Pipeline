@@ -52,7 +52,7 @@ const SidebarHeader = ({
             className=""
             src={user?.company?.logoUrl || logo}
             alt="Logo"
-            width={168}
+            width={70}
             height={60}
             style={{
               // width: "clamp(120px, 15vw, 168px)",
