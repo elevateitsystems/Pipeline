@@ -1378,7 +1378,6 @@ export default function Sidebar() {
                       item={item}
                       isActive={isActive}
                       isEditing={isEditing}
-                      mode={sidebarMode}
                       isCategoryItem={isCategoryItem}
                       itemCategoryNumber={itemCategoryNumber}
                       backgroundColor={backgroundColor}

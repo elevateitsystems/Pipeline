@@ -839,20 +839,24 @@ export default function TestPresentation() {
                         className="border-r border-gray-300 px-4 align-middle"
                         style={{ width: "35%" }}
                       >
-                        <div
-                          className="relative py-2"
-                          data-question-id={question.id}
-                        >
+                        <div className="py-2" data-question-id={question.id}>
                           <Select
                             value={selectedOptionId || undefined}
                             onValueChange={(value) =>
                               handleAnswerChange(question.id, value)
                             }
                           >
+                            {/* 🔹 Trigger */}
                             <SelectTrigger
-                              className="w-full text-sm font-normal text-[#212121] ring-0 outline-none focus:ring-0 focus:ring-offset-0 bg-[#E8E8E8] border-none rounded-md [&>svg]:hidden px-3 pr-10"
+                              className="
+    relative w-full bg-[#E8E8E8] text-[#212121] border-none rounded-md px-3 pr-10
+    outline-none ring-0
+    focus:outline-none focus:ring-0 focus:border-transparent
+    focus-visible:outline-none focus-visible:ring-0 focus-visible:border-transparent
+    data-[state=open]:ring-0 data-[state=open]:outline-none data-[state=open]:border-transparent
+    [&>svg]:hidden
+  "
                               style={{
-                                fontWeight: 400,
                                 fontSize: "clamp(14px, 1.5vw, 20px)",
                                 lineHeight: "100%",
                                 letterSpacing: "-0.015em",
@@ -863,77 +867,53 @@ export default function TestPresentation() {
                             >
                               <SelectValue
                                 placeholder=""
-                                className="text-[#212121] font-normal"
+                                className="text-[#212121]"
                               />
+
+                              {/* 🔹 Right Color + Arrow */}
+                              <div
+                                className="absolute right-0 top-0 h-full w-11 flex items-center justify-center rounded-md pointer-events-none"
+                                style={{
+                                  backgroundColor: selectedOption
+                                    ? getOptionColor(selectedOption.points)
+                                    : "transparent",
+                                }}
+                              >
+                                <svg
+                                  className="w-4 h-[9px]"
+                                  style={{
+                                    color: selectedOption ? "white" : "#606060",
+                                  }}
+                                  fill="currentColor"
+                                  viewBox="0 0 12 8"
+                                >
+                                  <path d="M6 8L0 0h12L6 8z" />
+                                </svg>
+                              </div>
                             </SelectTrigger>
+
+                            {/* 🔹 Dropdown */}
                             <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-md">
                               {[...question.options]
                                 .sort((a, b) => a.points - b.points)
-                                .map((option) => {
-                                  const backgroundColor =
-                                    getOptionBackgroundColor(option.points);
-                                  const textColor = getOptionTextColor(
-                                    option.points,
-                                  );
-                                  return (
-                                    <SelectItem
-                                      key={option.id}
-                                      value={option.id}
-                                      className="cursor-pointer rounded-sm px-3 py-2 text-sm focus:outline-none"
-                                      style={{
-                                        backgroundColor: backgroundColor,
-                                        color: textColor,
-                                        fontWeight: 400,
-                                        fontSize: "clamp(12px, 1.2vw, 16px)",
-                                        lineHeight: "100%",
-                                        letterSpacing: "-0.015em",
-                                        fontVariationSettings:
-                                          "'wdth' 85, 'wght' 400",
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        const target = e.currentTarget;
-                                        target.style.opacity = "0.9";
-                                        target.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        const target = e.currentTarget;
-                                        target.style.opacity = "1";
-                                        target.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                      onFocus={(e) => {
-                                        e.currentTarget.style.backgroundColor =
-                                          backgroundColor;
-                                      }}
-                                    >
-                                      <span style={{ color: textColor }}>
-                                        {option.text}
-                                      </span>
-                                    </SelectItem>
-                                  );
-                                })}
+                                .map((option) => (
+                                  <SelectItem
+                                    key={option.id}
+                                    value={option.id}
+                                    className="cursor-pointer rounded-sm px-3 py-2 hover:bg-gray-100 transition-colors font-semibold"
+                                    style={{
+                                      fontSize: "clamp(13px, 1.5vw, 18px)",
+                                      lineHeight: "100%",
+                                      letterSpacing: "-0.015em",
+                                      fontVariationSettings:
+                                        "'wdth' 85, 'wght' 600",
+                                    }}
+                                  >
+                                    {option.text}
+                                  </SelectItem>
+                                ))}
                             </SelectContent>
                           </Select>
-                          <div
-                            className="absolute right-0 top-3 h-[55%] w-11 flex items-center justify-center rounded-md pointer-events-none"
-                            style={{
-                              backgroundColor: selectedOption
-                                ? getOptionColor(selectedOption.points)
-                                : "transparent",
-                            }}
-                          >
-                            <svg
-                              className="w-4 h-[9px] mt-1"
-                              style={{
-                                color: selectedOption ? "white" : "#606060",
-                              }}
-                              fill="currentColor"
-                              viewBox="0 0 12 8"
-                            >
-                              <path d="M6 8L0 0h12L6 8z" />
-                            </svg>
-                          </div>
                         </div>
                       </td>
                       <td
