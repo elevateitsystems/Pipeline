@@ -525,11 +525,6 @@ export default function AddNewAudit() {
       // IMPORTANT: Summary is sent as a separate field, NOT as part of categories array
       // Categories array only contains categories 1-7, summary is completely separate
 
-      console.log("Categories array only contains categories 1-7,", {
-        title: (auditData.title || title).trim(),
-        categories, // Only categories 1-7, excludes summary
-        ...(summaryData && { summary: summaryData }), // Summary is separate from categories
-      });
       const createdAudit = await createAuditMutation.mutateAsync({
         title: (auditData.title || title).trim(),
         categories, // Only categories 1-7, excludes summary
@@ -646,7 +641,7 @@ export default function AddNewAudit() {
 
       const formattedData = convertToFormat(rows);
 
-      console.log("Converted JSON:", formattedData);
+      // console.log("Converted JSON:", formattedData);
 
       // 👉 Save it to state or send directly
       const createdAudit = await createAuditMutation.mutateAsync(formattedData);

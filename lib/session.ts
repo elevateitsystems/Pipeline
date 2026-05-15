@@ -68,7 +68,7 @@ export async function getSession(): Promise<SessionUser | null> {
   const sessionId = cookieStore.get(COOKIE_NAME)?.value;
 
   if (!sessionId) {
-    console.log("No session ID found in cookies");
+    // console.log("No session ID found in cookies");
     return null;
   }
 
@@ -78,7 +78,7 @@ export async function getSession(): Promise<SessionUser | null> {
     const sessionData = await redis.get(sessionKey);
 
     if (!sessionData) {
-      console.log(`No session found in Redis for key: ${sessionKey}`);
+      // console.log(`No session found in Redis for key: ${sessionKey}`);
       return null;
     }
 
@@ -102,7 +102,7 @@ export async function getSession(): Promise<SessionUser | null> {
     const encodedSessionData = cookieStore.get(SESSION_DATA_COOKIE_NAME)?.value;
     
     if (!encodedSessionData) {
-      console.log("No session data found in cookies");
+      // console.log("No session data found in cookies");
       return null;
     }
 

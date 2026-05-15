@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) : Promise<NextResponse> {
   }
 
   const ip = req.headers.get("x-forwarded-for") ?? "anonymous";
-  console.log("IP:", ip);
+  // console.log("IP:", ip);
   const { success } = await ratelimit.limit(ip);
 
   if (!success) {

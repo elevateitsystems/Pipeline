@@ -4,7 +4,7 @@ import { withCache } from '@/lib/cache';
 
 export async function GET() : Promise<NextResponse>  {
   const session = await getSession();
-  console.log("Session in user route:", session);
+  // console.log("Session in user route:", session);
 
   if (!session) {
     return NextResponse.json(

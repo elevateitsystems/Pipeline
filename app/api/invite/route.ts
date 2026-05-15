@@ -89,7 +89,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       text : `Invitation link: ${process.env.APP_URL}/signup?token=${token}`
   })
 
-    console.log(mail);
+    // console.log(mail);
 
     return NextResponse.json(
       {

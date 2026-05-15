@@ -132,7 +132,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     invitedUserIds.forEach(id => userIdsToInvalidate.add(id));
     
     // Log for debugging
-    console.log(`[UPDATE_TEST_SCORE] Invalidating caches for users:`, Array.from(userIdsToInvalidate));
+    // console.log(`[UPDATE_TEST_SCORE] Invalidating caches for users:`, Array.from(userIdsToInvalidate));
     
     // Invalidate all relevant caches in parallel
     await Promise.all(

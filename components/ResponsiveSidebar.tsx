@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useSearchParams } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import DemoSidebar from "@/components/DemoSidebar";
 import { useUser } from "@/contexts/UserContext";
 import { X } from "lucide-react";
 
@@ -13,6 +14,8 @@ export default function ResponsiveSidebar() {
   const { user } = useUser();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isDemoPage = pathname.startsWith("/demo");
+
   const routeKey = useMemo(
     () => `${pathname}?${searchParams.toString()}`,
     [pathname, searchParams],
@@ -147,7 +150,7 @@ export default function ResponsiveSidebar() {
                   className="absolute inset-0"
                   style={{ backgroundColor: overlayColor }}
                 />
-                <Sidebar />
+                {isDemoPage ? <DemoSidebar /> : <Sidebar />}
               </div>
             </div>
           </div>
@@ -158,7 +161,7 @@ export default function ResponsiveSidebar() {
 
   return (
     <>
-      {!isMobile && <Sidebar />}
+      {!isMobile && (isDemoPage ? <DemoSidebar /> : <Sidebar />)}
       {mobileOverlay}
     </>
   );

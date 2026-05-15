@@ -44,7 +44,7 @@ export default function Home() {
     id: string;
     title: string;
   } | null>(null);
-  console.log({ auditsData });
+  // console.log({ auditsData });
 
   useEffect(() => {
     if (!authLoading && authData) {
@@ -231,23 +231,36 @@ export default function Home() {
                   : "Start your first audit to see your performance insights here."}
               </p>
               {!isInvitedUser && (
-                <CustomButton
-                  variant="primary"
-                  size="lg"
-                  className="text-[18px] sm:text-[20px] lg:text-[23px] font-normal mt-4 sm:mt-6 lg:mt-10"
-                  style={{
-                    width: "318px",
-                    height: "50px",
-                    padding:
-                      "clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem)",
-                  }}
-                  onClick={() => {
-                    clearAuditSessionStorage();
-                    router.push("/add-new-audit/?category=1");
-                  }}
-                >
-                  Start New Audit
-                </CustomButton>
+                <div className="flex flex-wrap gap-4 items-start mt-4 sm:mt-6 lg:mt-10">
+                  <CustomButton
+                    variant="primary"
+                    size="lg"
+                    className="text-[18px] sm:text-[20px] lg:text-[23px] font-normal w-fit h-fit whitespace-nowrap"
+                    style={{
+                      padding: "12px 24px",
+                    }}
+                    onClick={() => {
+                      clearAuditSessionStorage();
+                      router.push("/demo?category=1");
+                    }}
+                  >
+                    Demo Presentation
+                  </CustomButton>
+                  <CustomButton
+                    variant="primary"
+                    size="lg"
+                    className="text-[18px] sm:text-[20px] lg:text-[23px] font-normal w-fit h-fit whitespace-nowrap"
+                    style={{
+                      padding: "12px 24px",
+                    }}
+                    onClick={() => {
+                      clearAuditSessionStorage();
+                      router.push("/add-new-audit/?category=1");
+                    }}
+                  >
+                    Create New AUDIT
+                  </CustomButton>
+                </div>
               )}
             </div>
           </div>
@@ -283,23 +296,42 @@ export default function Home() {
               scores, dates, and improvement insights instantly.
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 items-start">
             {!isInvitedUser && (
-              <CustomButton
-                variant="primary"
-                size="lg"
-                onClick={() => {
-                  clearAuditSessionStorage();
-                  router.push("/add-new-audit/?category=1");
-                }}
-                style={{
-                  fontWeight: 500,
-                  fontVariationSettings: "'wdth' 85, 'wght' 500",
-                }}
-                className="flex-1 font-normal text-[18px] xl:text-[23px]"
-              >
-                Create New AUDIT
-              </CustomButton>
+              <>
+                <CustomButton
+                  variant="primary"
+                  size="lg"
+                  onClick={() => {
+                    clearAuditSessionStorage();
+                    router.push("/demo?category=1");
+                  }}
+                  style={{
+                    fontWeight: 500,
+                    fontVariationSettings: "'wdth' 85, 'wght' 500",
+                    padding: "12px 24px",
+                  }}
+                  className="font-normal text-[18px] xl:text-[23px] w-fit h-fit whitespace-nowrap"
+                >
+                  Demo Presentation
+                </CustomButton>
+                <CustomButton
+                  variant="primary"
+                  size="lg"
+                  onClick={() => {
+                    clearAuditSessionStorage();
+                    router.push("/add-new-audit/?category=1");
+                  }}
+                  style={{
+                    fontWeight: 500,
+                    fontVariationSettings: "'wdth' 85, 'wght' 500",
+                    padding: "12px 24px",
+                  }}
+                  className="font-normal text-[18px] xl:text-[23px] w-fit h-fit whitespace-nowrap"
+                >
+                  Create New AUDIT
+                </CustomButton>
+              </>
             )}
           </div>
         </div>

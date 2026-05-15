@@ -105,7 +105,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           });
         } catch (error) {
           // Ignore error if share already exists (shouldn't happen, but safe to ignore)
-          console.log("SharedAudit might already exist:", error);
+          // console.log("SharedAudit might already exist:", error);
         }
       }
     } else {

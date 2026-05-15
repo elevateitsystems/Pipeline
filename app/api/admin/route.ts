@@ -3,7 +3,7 @@ import { getSession } from '@/lib/session';
 
 export async function GET() {
   const session = await getSession();
-  console.log('Admin route accessed by user:', session);
+  // console.log('Admin route accessed by user:', session);
 
   if (!session) {
     return NextResponse.json(

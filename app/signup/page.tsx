@@ -89,7 +89,7 @@ export default function SignupPage() {
     isLoading: inviteLoading,
   } = useInvite(token);
   const registerMutation = useRegister();
-  console.log(inviteData);
+  // console.log(inviteData);
   useEffect(() => {
     if (inviteData && token) {
       const inviteEmail = (inviteData as unknown as InvitationData).email;

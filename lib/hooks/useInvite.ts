@@ -16,7 +16,7 @@ export function useInvite(token: string | null) {
       const response = await apiClient.get<{ data: unknown }>('/invite', {
         params: { token },
       });
-      console.log(response);
+      // console.log(response);
       return response.data;
     },
     enabled: !!token,
